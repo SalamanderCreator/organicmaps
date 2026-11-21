@@ -1,0 +1,85 @@
+# Kartenapp fork: installable arm64 test APK for every pull request.
+# Kept in its own file so upstream Organic Maps updates merge without conflicts.
+name: Kartenapp Test-APK
+on:
+  workflow_dispatch: # Manual trigger
+  pull_request:
+  push:
+    branches:
+      - master # Populates the ccache that pull requests read
+
+env:
+  JAVA_HOME: /usr/lib/jvm/temurin-21-jdk-amd64
+
+jobs:
+  test-apk:
+    name: Test-APK (F-Droid Beta, arm64)
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Install build tools and dependencies
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build
+
+      - name: Checkout sources
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 200 # Needed for the versioning script
+
+      - name: Restore signing key
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KARTENAPP_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KARTENAPP_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "::error::Secrets KARTENAPP_KEYSTORE_BASE64 und KARTENAPP_KEYSTORE_PASSWORD fehlen (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          cat > android/app/secure.properties <<EOF
+          ext {
+            spropStoreFile = 'release.keystore'
+            spropStorePassword = '$KEYSTORE_PASSWORD'
+            spropKeyAlias = 'kartenapp'
+            spropKeyPassword = '$KEYSTORE_PASSWORD'
+          }
+          EOF
+
+      - name: Set up Gradle
+        uses: ./.github/actions/setup-gradle
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+
+      - name: Parallel submodules checkout
+        shell: bash
+        run: git submodule update --depth 1 --init --recursive --jobs=$(($(nproc) * 20))
+
+      - name: Configure ccache
+        uses: hendrikmuhs/ccache-action@v1.2.24
+        with:
+          key: ${{ github.workflow }}
+          save: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Compile
+        shell: bash
+        working-directory: android
+        env:
+          CMAKE_C_COMPILER_LAUNCHER: ccache
+          CMAKE_CXX_COMPILER_LAUNCHER: ccache
+        run: |
+          echo "ANDROID_CODE=$(../tools/unix/version.sh android_code)" >> "$GITHUB_ENV"
+          ./gradlew -Parm64 assembleFdroidBeta
+
+      - name: Upload test APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: Kartenapp-${{ env.ANDROID_CODE }}-arm64.apk
+          path: android/app/build/outputs/apk/fdroid/beta/OrganicMaps-${{ env.ANDROID_CODE }}-fdroid-beta.apk
+          archive: false
+          if-no-files-found: error
+          retention-days: 30
