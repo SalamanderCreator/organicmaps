@@ -40,6 +40,9 @@ double GetDistance(location::GpsInfo const & from, location::GpsInfo const & to)
   return ms::DistanceOnEarth(from.m_latitude, from.m_longitude, to.m_latitude, to.m_longitude);
 }
 
+// Slower than walking: the phone reports 0 while standing still.
+double constexpr kStandingSpeed = 0.3;  // m / sec
+
 // Faster than any recorded movement, also a paraglider with tailwind or a car on a motorway.
 double constexpr kMaxPlausibleSpeed = 200 / 3.6;  // m / sec
 
@@ -92,6 +95,9 @@ std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::G
       return l.m_timestamp < r.m_timestamp;
     return l.m_horizontalAccuracy < r.m_horizontalAccuracy;
   });
+  // While the phone reports standing still, the position drifts by tens of meters with a good accuracy.
+  std::erase_if(points, [](auto const & p) { return p.HasSpeed() && p.m_speed < kStandingSpeed; });
+
   // Keep the most accurate fix of each time.
   points.erase(std::unique(points.begin(), points.end(),
                            [](auto const & l, auto const & r) { return l.m_timestamp == r.m_timestamp; }),

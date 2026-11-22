@@ -206,6 +206,17 @@ UNIT_TEST(SelectAccurateTrackPoints_FirstFixIsJump)
   TEST_EQUAL(Times(SelectAccurateTrackPoints(points)), (std::vector<double>{10, 20, 30, 40, 50, 60}), ());
 }
 
+UNIT_TEST(SelectAccurateTrackPoints_DropsStandingFixes)
+{
+  // Standing at the start, the position drifts 30 m away with a good accuracy.
+  Points points = {MakeAt(0, 0, 3), MakeAt(10, 30, 3), MakeAt(20, 60, 3), MakeAt(30, 90, 3)};
+  points[1].m_speed = 0;
+  points[2].m_speed = 0.1;
+  // Without a speed the fix is kept.
+  points[3].m_speed = -1;
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(points)), (std::vector<double>{0, 30}), ());
+}
+
 UNIT_TEST(SelectAccurateTrackPoints_SameTimeKeepsMoreAccurateFix)
 {
   Points const points = {MakeAt(0, 0, 5), MakeAt(5, 50, 9), MakeAt(5, 80, 3)};
