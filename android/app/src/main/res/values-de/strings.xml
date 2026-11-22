@@ -938,6 +938,14 @@
     <string name="track_recording_stop_and_save">Beenden und speichern</string>
     <!-- Track recording home screen widget button: opens the app to save or delete the recorded track. -->
     <string name="track_recording_finish">Beenden</string>
+    <!-- Settings: title of the GPS accuracy limit for track recording -->
+    <string name="track_recording_accuracy_title">Track-Aufzeichnung: GPS-Genauigkeit</string>
+    <!-- Settings: summary of the GPS accuracy limit for track recording. %s is the selected limit, e.g. 25 m -->
+    <string name="track_recording_accuracy_description">%s. Positionen mit schlechterer GPS-Genauigkeit werden nicht aufgezeichnet. Gilt ab der nächsten Aufzeichnung.</string>
+    <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
+    <string name="track_recording_gps_accuracy">GPS-Genauigkeit: ±%s</string>
+    <!-- Shown while a track is being recorded and the GPS is worse than the limit in the settings. %s is the current GPS accuracy, e.g. 40 m -->
+    <string name="track_recording_gps_inaccurate">GPS ungenau (±%s): Positionen werden übersprungen</string>
     <!-- Accessibility label for the button that reverses the complete planned route, including intermediate stops. -->
     <string name="reverse_route">Route umkehren</string>
     <!-- Title of the transit route details screen, shown when the user taps the public transport summary tile. -->
