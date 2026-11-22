@@ -46079,8 +46079,8 @@ de = GPS ungenau (±%s), keine Warnung möglich
 [off_track_alarm_title]
 comment = Notification title when the user left the watched track
 tags = android-app
-en = You left the track
-de = Du hast den Track verlassen
+en = Off the track
+de = Trackabweichung
 
 [off_track_alarm_text]
 comment = Notification text when the user left the watched track. %s is the distance, e.g. 60 m
@@ -46091,14 +46091,20 @@ de = %s vom Track entfernt
 [off_track_alarm_speech]
 comment = Voice announcement when the user left the watched track
 tags = android-app
-en = Attention, you left the track.
-de = Achtung, du hast den Track verlassen.
+en = Attention, off the track.
+de = Achtung, Trackabweichung.
 
 [off_track_back_speech]
 comment = Voice announcement when the user is back on the watched track
 tags = android-app
 en = Back on the track.
-de = Wieder auf dem Track.
+de = Zurück auf dem Track.
+
+[off_track_banner]
+comment = Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m
+tags = android-app
+en = Off the track: %s
+de = Trackabweichung: %s
 
 [off_track_threshold_title]
 comment = Settings: title of the off-track alarm distance

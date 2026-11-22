@@ -542,6 +542,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
       else if (Boolean.FALSE.equals(recording) && uiShown)
         stopTrackRecording();
     });
+    final TextView offTrackBanner = findViewById(R.id.off_track_banner);
+    ViewCompat.setOnApplyWindowInsetsListener(offTrackBanner, BaselinePaddingInsetsListener.excludeBottom());
+    OffTrackService.getOffTrackText().observe(this, text -> {
+      offTrackBanner.setText(text);
+      UiUtils.showIf(text != null, offTrackBanner);
+    });
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
     mMapButtonsViewModel.getLayoutMode().observe(this, this::initNavigationButtons);
