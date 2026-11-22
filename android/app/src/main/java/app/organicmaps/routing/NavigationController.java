@@ -2,7 +2,6 @@ package app.organicmaps.routing;
 
 import static app.organicmaps.sdk.util.Utils.dimen;
 
-import android.location.Location;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProvider;
-import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
 import app.organicmaps.maplayer.MapButtonsViewModel;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.Router;
-import app.organicmaps.sdk.bookmarks.data.MapObject;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
-import app.organicmaps.sdk.util.StringUtils;
 import app.organicmaps.sdk.widget.roadshield.RoadShieldUtils;
-import app.organicmaps.sdk.widgets.lanes.LanesView;
-import app.organicmaps.sdk.widgets.speedlimit.CombinedSpeedView;
-import app.organicmaps.sdk.widgets.speedlimit.CombinedSpeedViewController;
-import app.organicmaps.sdk.widgets.speedlimit.Shape;
 import app.organicmaps.util.UiUtils;
 import app.organicmaps.util.Utils;
 import app.organicmaps.util.WindowInsetUtils;
@@ -49,13 +41,6 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
 
   private final View mStreetFrame;
   private final TextView mNextStreet;
-
-  @NonNull
-  private final LanesView mLanesView;
-  @NonNull
-  private final CombinedSpeedView mSpeedView;
-  @NonNull
-  private final CombinedSpeedViewController mSpeedController;
 
   private final MapButtonsViewModel mMapButtonsViewModel;
   private final ViewGroup mTopFrame;
@@ -89,12 +74,6 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
 
     mStreetFrame = mTopFrame.findViewById(R.id.street_frame);
     mNextStreet = mStreetFrame.findViewById(R.id.street);
-
-    mLanesView = mTopFrame.findViewById(R.id.lanes);
-
-    mSpeedView = mTopFrame.findViewById(R.id.nav_speed_limit);
-    mSpeedController = new CombinedSpeedViewController(mSpeedView);
-    updateCurrentSpeed();
 
     // Blank rectangle below the navbar that hides menu content behind it.
     final View navigationBarBackground = mFrame.findViewById(R.id.nav_bottom_sheet_nav_bar);
@@ -162,10 +141,6 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
     UiUtils.showIf(showNextNextTurn, mNextNextTurnFrame);
     if (showNextNextTurn)
       mNextNextTurnImage.setImageResource(info.nextCarDirection.getTurnRes());
-
-    mLanesView.setLanes(info.lanes);
-
-    updateSpeedLimit(info);
   }
 
   private void updatePedestrian(@NonNull RoutingInfo info)
@@ -177,8 +152,6 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
   public void update(@Nullable RoutingInfo info)
   {
     final boolean isPedestrian = Router.get() == Router.Pedestrian;
-    UiUtils.showIf(!isPedestrian, mSpeedView);
-
     if (info == null)
       return;
 
@@ -211,7 +184,6 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
     if (show && !UiUtils.isVisible(mFrame))
     {
       collapseNavMenu();
-      updateSpeedLimitSignType();
       // Seed the panel from the already-built route so it isn't empty until the first GPS fix arrives.
       update(RoutingController.get().getCachedRoutingInfo());
     }
@@ -306,36 +278,5 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
   public void onStopClicked()
   {
     RoutingController.get().cancel();
-  }
-
-  private void updateSpeedLimit(@NonNull final RoutingInfo info)
-  {
-    updateCurrentSpeed();
-    mSpeedController.setSpeedLimit(info.speedLimitMps > 0 ? StringUtils.nativeFormatSpeed(info.speedLimitMps) : null);
-    mSpeedController.setAlertForced(info.isSpeedCamLimitExceeded());
-  }
-
-  private void updateSpeedLimitSignType()
-  {
-    final Location location = MwmApplication.from(mFrame.getContext()).getLocationHelper().getSavedLocation();
-    @Framework.SpeedLimitSignType
-    int type = Framework.SpeedLimitSignType.VIENNA;
-    if (location != null)
-      type = Framework.nativeGetSpeedLimitSignType(location.getLatitude(), location.getLongitude());
-    else
-    {
-      final MapObject startPoint = RoutingController.get().getStartPoint();
-      if (startPoint != null)
-        type = Framework.nativeGetSpeedLimitSignType(startPoint.getLat(), startPoint.getLon());
-    }
-    mSpeedController.setShape(type == Framework.SpeedLimitSignType.MUTCD ? Shape.Square : Shape.Circle);
-  }
-
-  private void updateCurrentSpeed()
-  {
-    final Location location = MwmApplication.from(mFrame.getContext()).getLocationHelper().getSavedLocation();
-    mSpeedController.setUnits(StringUtils.nativeGetLocalizedSpeedUnits());
-    mSpeedController.setSpeed(
-        StringUtils.nativeFormatSpeed(location != null && location.hasSpeed() ? location.getSpeed() : 0));
   }
 }

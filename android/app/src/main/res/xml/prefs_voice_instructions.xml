@@ -43,8 +43,10 @@
       android:persistent="false"
       android:selectable="true"
       android:summary="@string/prefs_languages_information_off_link" />
+  <!-- Maps&Fly hides the speed camera warning together with car routing. -->
   <ListPreference
       android:key="@string/pref_tts_speed_cameras"
+      app:isPreferenceVisible="false"
       android:title="@string/speedcams_alert_title"
       app:singleLineTitle="false"
       android:entries="@array/speed_cameras"

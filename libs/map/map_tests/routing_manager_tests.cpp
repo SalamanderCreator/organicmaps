@@ -469,14 +469,23 @@ UNIT_TEST(RoutingManager_SavedRouterFallback)
   settings::Set("router", routing::ToString(routing::RouterType::Pedestrian));
   TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Pedestrian, ());
 
+  settings::Set("router", routing::ToString(routing::RouterType::Bicycle));
+  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Bicycle, ());
+
+  // Maps&Fly hides car and public transport routing.
+  settings::Set("router", routing::ToString(routing::RouterType::Vehicle));
+  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Pedestrian, ());
+  settings::Set("router", routing::ToString(routing::RouterType::Transit));
+  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Pedestrian, ());
+
   settings::Set("router", std::string("future-router"));
-  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Vehicle, ());
+  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Pedestrian, ());
   std::string retained;
   TEST(settings::Get("router", retained), ());
   TEST_EQUAL(retained, "future-router", ());
 
   settings::Delete("router");
-  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Vehicle, ());
+  TEST_EQUAL(manager.GetLastUsedRouter(), routing::RouterType::Pedestrian, ());
 }
 
 UNIT_TEST(RoutingManager_RulerPreservesMeasurementOrder)

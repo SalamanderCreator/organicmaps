@@ -97,6 +97,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
   private static final String TRACK_FRAGMENT_TAG = "TRACK_FRAGMENT_TAG";
   private static final String TRACK_RECORDING_FRAGMENT_TAG = "TRACK_RECORDING_FRAGMENT_TAG";
   private static final String PRODUCTS_FRAGMENT_TAG = "PRODUCTS_FRAGMENT_TAG";
+  private static final boolean SHOW_OSM_EDITOR = false;
   private static final String WIKIPEDIA_FRAGMENT_TAG = "WIKIPEDIA_FRAGMENT_TAG";
   private static final String PHONE_FRAGMENT_TAG = "PHONE_FRAGMENT_TAG";
   private static final String OPENING_HOURS_FRAGMENT_TAG = "OPENING_HOURS_FRAGMENT_TAG";
@@ -495,7 +496,8 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
 
   private boolean hasProductsEntry()
   {
-    return Framework.nativeShouldShowProducts();
+    // Maps&Fly hides the Organic Maps product and donation offers on the place page.
+    return false;
   }
 
   private void updateProductsView()
@@ -718,7 +720,8 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
         mIvRouteRef.setImageResource(R.drawable.ic_category_bus);
     }
 
-    if (RoutingController.get().isNavigating() || RoutingController.get().isPlanning())
+    // Maps&Fly hides the OpenStreetMap editor; the code stays for upstream updates.
+    if (!SHOW_OSM_EDITOR || RoutingController.get().isNavigating() || RoutingController.get().isPlanning())
     {
       UiUtils.hide(mEditPlace, mAddOrganisation, mAddPlace, mEditTopSpace);
     }

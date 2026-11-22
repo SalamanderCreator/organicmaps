@@ -29,9 +29,6 @@
 # https://github.com/organicmaps/organicmaps/issues/6559#issuecomment-1812039926
 -dontoptimize
 
-# Room: keep no-arg constructors for generated _Impl classes (room-runtime:2.6.1 rule is insufficient for R8 full mode)
-# Used only when Firebase is enabled.
+# Room: keep no-arg constructors for generated _Impl classes (room-runtime:2.6.1 rule is insufficient for R8 full mode).
+# WorkManager stores its jobs in a Room database and creates it at app start.
 -keep class * extends androidx.room.RoomDatabase { <init>(); }
-
-# Firebase: keep no-arg constructors for component registrars (fixed in firebase-components:19.0.0, needed for 18.0.0)
--keep class * implements com.google.firebase.components.ComponentRegistrar { <init>(); }
