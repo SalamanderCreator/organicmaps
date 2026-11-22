@@ -956,6 +956,8 @@
     <string name="track_follow_no_location">Waiting for your location…</string>
     <!-- Toast when the chosen point is the end of the track -->
     <string name="track_follow_nothing_left">Nothing left to follow: this is the track end</string>
+    <!-- Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads -->
+    <string name="track_follow_direct">Follow directly (straight line to the closest track point)</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
     <string name="off_track_monitor_start">Follow track</string>
     <!-- Place page and notification button: stop the off-track alarm -->
