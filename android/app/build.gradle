@@ -1,28 +1,6 @@
-// Detect flavors from the task name.
-def taskName = getGradle().getStartParameter().getTaskRequests().toString().toLowerCase()
-def isFdroid = taskName.contains('fdroid')
-def isBeta = taskName.contains('beta')
-
-// Firebase Crashlytics compile-time feature flag: -Pfirebase=true|false
-def googleFirebaseServicesFlag = findProperty('firebase')
-// Enable Firebase for all beta flavors except fdroid only if google-services.json exists.
-def googleFirebaseServicesDefault = isBeta && !isFdroid && file("$projectDir/google-services.json").exists()
-ext.googleFirebaseServicesEnabled = googleFirebaseServicesFlag != null ?
-    googleFirebaseServicesFlag == '' || googleFirebaseServicesFlag.toBoolean() :
-    googleFirebaseServicesDefault
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'ru.cian.huawei-publish-gradle-plugin'
-
-if (googleFirebaseServicesEnabled) {
-  println('Building with Google Firebase Services')
-  apply plugin: 'com.google.gms.google-services'
-  apply plugin: 'com.google.firebase.crashlytics'
-  apply plugin: 'com.google.firebase.appdistribution'
-} else {
-  println('Building without Google Firebase Services')
-}
 
 apply from: "${rootProject.rootDir}/groovy/common-config.gradle"
 apply from: "${rootProject.rootDir}/groovy/application-signing.gradle"
@@ -33,10 +11,6 @@ import com.android.build.api.variant.ResValue
 import com.github.triplet.gradle.androidpublisher.ReleaseStatus
 import ru.cian.huawei.publish.ReleaseNote
 import ru.cian.huawei.publish.ReleaseNotesExtension
-
-def getCommitMessage() {
-  return run(['git', '--no-pager', 'show', '-s', '--format=%s%n%n%b', 'HEAD']).trim()
-}
 
 android {
   namespace = 'app.organicmaps'
@@ -132,12 +106,6 @@ android {
 
   buildTypes {
     debug {
-      if (googleFirebaseServicesEnabled) {
-        firebaseCrashlytics {
-          nativeSymbolUploadEnabled true
-        }
-      }
-
       // Enable jni debug build
       jniDebuggable true
     }
@@ -148,12 +116,6 @@ android {
       // Includes the default ProGuard rules files that are packaged with the Android Gradle plugin.
       // To learn more, go to the documentation section about R8 configuration files.
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-      if (googleFirebaseServicesEnabled) {
-        firebaseCrashlytics {
-          nativeSymbolUploadEnabled true
-        }
-      }
     }
 
     beta {
@@ -163,18 +125,6 @@ android {
       // To learn more, go to the documentation section about R8 configuration files.
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-      if (googleFirebaseServicesEnabled) {
-        firebaseCrashlytics {
-          nativeSymbolUploadEnabled true
-        }
-        firebaseAppDistribution {
-          // A new beta release is created for each commit.
-          // Use the last commit message for the release notes.
-          releaseNotes = getCommitMessage()
-          groups = 'qa' // Notify only selected people.
-          serviceCredentialsFile = "$projectDir/firebase-app-distribution.json"
-        }
-      }
     }
 
     // Release-like build for performance/battery profiling.
@@ -221,13 +171,11 @@ dependencies {
   implementation project(':libs:api')
   implementation project(':libs:branding')
   implementation project(':libs:downloader')
-  implementation project(':libs:car')
   implementation project(':libs:googleassistant')
   implementation project(':libs:routing')
   implementation project(':libs:utils')
 
   implementation project(':sdk')
-  implementation project(':sdk:car')
   implementation project(':sdk:widgets:lanes')
   implementation project(':sdk:widgets:speedlimit')
   // World maps
@@ -245,21 +193,12 @@ dependencies {
 
   coreLibraryDesugaring libs.android.tools.desugaring
 
-  // Google Firebase Services
-  if (googleFirebaseServicesEnabled) {
-    implementation platform(libs.google.firebase.bom)
-    implementation libs.google.firebase.crashlytics
-    implementation libs.google.firebase.crashlytics.ndk
-  }
-
   // Workaround for a duplicate-classes error caused by some outdated dependency:
   // > A failure occurred while executing com.android.build.gradle.internal.tasks.CheckDuplicatesRunnable
   // See https://stackoverflow.com/a/75719642
   implementation libs.androidx.core
   implementation libs.androidx.annotation
   implementation libs.androidx.appcompat
-  implementation libs.androidx.car.app
-  implementation libs.androidx.car.app.projected
   implementation libs.androidx.constraintlayout
   implementation libs.androidx.fragment
   implementation libs.androidx.preference
@@ -295,9 +234,6 @@ def allowedPermissions = [
     "name='android.permission.POST_NOTIFICATIONS'",
     // wake lock
     "name='android.permission.WAKE_LOCK'",
-    // Android Auto
-    "name='androidx.car.app.NAVIGATION_TEMPLATES'",
-    "name='androidx.car.app.ACCESS_SURFACE'",
     // storage
     "name='android.permission.READ_EXTERNAL_STORAGE' maxSdkVersion='22'",
     // internal permissions

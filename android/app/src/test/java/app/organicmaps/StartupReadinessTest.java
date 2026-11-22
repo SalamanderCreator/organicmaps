@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import app.organicmaps.base.BaseMwmFragment;
 import app.organicmaps.base.BaseMwmFragmentActivity;
-import app.organicmaps.car.screens.permissions.RequestPermissionsActivity;
 import app.organicmaps.sdk.MapsReadiness;
 import app.organicmaps.sdk.OrganicMaps;
 import app.organicmaps.sdk.display.DisplayManager;
@@ -107,21 +106,6 @@ public class StartupReadinessTest
       assertNull(shadowOf(splash.get()).getNextStartedActivity());
       assertNotNull(ShadowDialog.getLatestDialog());
       assertTrue(ShadowDialog.getLatestDialog().isShowing());
-    }
-  }
-
-  @Test
-  public void carPermissionActivityRequestsPermissionWhileMapsLoad()
-  {
-    try (ActivityController<RequestPermissionsActivity> host =
-             Robolectric.buildActivity(RequestPermissionsActivity.class))
-    {
-      host.get().setTheme(R.style.MwmTheme);
-      host.create();
-      assertFalse(host.get().isFinishing());
-      assertEquals("android.content.pm.action.REQUEST_PERMISSIONS",
-                   shadowOf(host.get()).getNextStartedActivity().getAction());
-      assertNotNull(shadowOf(host.get()).getLastRequestedPermission());
     }
   }
 

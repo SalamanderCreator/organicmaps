@@ -1,7 +1,6 @@
 // Keep the publication and documentation on the same module set.
 ext.sdkArtifacts = [
     ':sdk': 'sdk',
-    ':sdk:car': 'car',
     ':sdk:location:core': 'location-core',
     ':sdk:location:gms:google': 'location-google',
     ':sdk:location:gms:foss': 'location-foss',
