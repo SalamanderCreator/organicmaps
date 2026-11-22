@@ -1000,10 +1000,12 @@ void RoutingManager::CloseRouting(bool removeRoutePoints)
   RemoveRoute(true /* deactivateFollowing */);
 
   if (removeRoutePoints)
+  {
     RemoveRoutePoints();
-
-  if (m_followedTrack)
-    SetFollowedTrack(nullptr);
+    // Maps&Fly: BuildRoute() closes the previous route without removing the points; the track stays then.
+    if (m_followedTrack)
+      SetFollowedTrack(nullptr);
+  }
 }
 
 void RoutingManager::SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track)

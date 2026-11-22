@@ -122,8 +122,9 @@ public:
   routing::RoutingSession & RoutingSession() { return m_routingSession; }
   void SetRouter(routing::RouterType type);
   routing::RouterType GetRouter() const { return m_currentRouterType; }
-  /// Maps&Fly: routes follow |track| (pedestrian or bicycle profile) instead of the roads until CloseRouting().
-  /// The route points must be the start and the track end. nullptr returns to normal routing.
+  /// Maps&Fly: routes follow |track| (pedestrian or bicycle profile) instead of the roads until
+  /// CloseRouting(true) removes the route points. The route points must be the start and the track end.
+  /// nullptr returns to normal routing.
   void SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track);
   bool IsFollowingTrack() const { return m_followedTrack != nullptr; }
   bool IsRoutingActive() const { return m_routingSession.IsActive(); }
