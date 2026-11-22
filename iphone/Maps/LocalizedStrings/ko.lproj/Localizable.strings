@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "연산자: %@";
 "editor_category_unsuitable_title" = "적합한 카테고리를 찾을 수 없나요?";
-"editor_category_unsuitable_text" = "Organic Maps 단순한 지점 카테고리만 추가할 수 있습니다. 즉, 도시, 도로, 호수, 건물 윤곽선 등은 추가할 수 없습니다. 이러한 카테고리는 <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>에 직접 추가해 주십시오. 자세한 단계별 안내는 <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">가이드를</a> 확인해 주세요.";
+"editor_category_unsuitable_text" = "Maps&Fly 단순한 지점 카테고리만 추가할 수 있습니다. 즉, 도시, 도로, 호수, 건물 윤곽선 등은 추가할 수 없습니다. 이러한 카테고리는 <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>에 직접 추가해 주십시오. 자세한 단계별 안내는 <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">가이드를</a> 확인해 주세요.";
 "downloader_no_downloaded_maps_title" = "지도를 다운로드하지 않았습니다";
 "downloader_no_downloaded_maps_message" = "오프라인으로 위치를 검색하려면 지도를 다운로드하세요.";
 "current_location_unknown_error_title" = "현재 위치를 알 수 없습니다.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "북마크가 너무 많을 경우 지도에 북마크 이름을 표시하면 앱 속도가 느려질 수 있습니다.";
 "show_to_the_right" = "오른쪽에 표시";
 "show_at_the_bottom" = "하단에 표시";
-"enable_logging_warning_message" = "이 옵션은 진단을 목적으로 로그를 엽니다 이를 통해 앱에 대한 문제를 분석하는 우리의 스탭을 도울 수 있습니다 이 옵션은 오직 Organic Maps 지원 요청에서만 가능합니다.";
+"enable_logging_warning_message" = "이 옵션은 진단을 목적으로 로그를 엽니다 이를 통해 앱에 대한 문제를 분석하는 우리의 스탭을 도울 수 있습니다 이 옵션은 오직 Maps&Fly 지원 요청에서만 가능합니다.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "자동차";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "우리의 주요 목표는 귀하가 좋아할 빠르고 개인 정보 보호에 중점을 두고 사용하기 쉬운 지도를 구축하는 것입니다.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "현재 휴대폰 화면에서 Organic Maps을 이용 중입니다";
+"car_used_on_the_phone_screen" = "현재 휴대폰 화면에서 Maps&Fly을 이용 중입니다";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "현재 차량 화면에서 Organic Maps을 이용 중입니다";
+"car_used_on_the_car_screen" = "현재 차량 화면에서 Maps&Fly을 이용 중입니다";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "전화기에서 계속";

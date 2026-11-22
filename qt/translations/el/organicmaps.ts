@@ -47,8 +47,8 @@
 <translation>Η λήψη απέτυχε</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Σχετικά με το Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Σχετικά με το Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

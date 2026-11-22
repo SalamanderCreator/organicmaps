@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "İşletici: %@";
 "editor_category_unsuitable_title" = "Uygun kategori bulamıyor musunuz?";
-"editor_category_unsuitable_text" = "Organic Maps yalnızca basit nokta kategorilerini eklemeyi sağlar. Yani kasaba, yol, göl, bina vb. çizgi/alan verisi ekleme desteği yoktur. Lütfen bu tür kategorileri doğrudan <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> üzerinden ekleyin. Adım adım ayrıntılı yönergeler için <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">yönergemize</a> göz atabilirsiniz.";
+"editor_category_unsuitable_text" = "Maps&Fly yalnızca basit nokta kategorilerini eklemeyi sağlar. Yani kasaba, yol, göl, bina vb. çizgi/alan verisi ekleme desteği yoktur. Lütfen bu tür kategorileri doğrudan <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> üzerinden ekleyin. Adım adım ayrıntılı yönergeler için <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">yönergemize</a> göz atabilirsiniz.";
 "downloader_no_downloaded_maps_title" = "Hiç harita indirmediniz";
 "downloader_no_downloaded_maps_message" = "Çevrim dışı olarak adres bulmak ve gezinmek için haritaları indirin.";
 "current_location_unknown_error_title" = "Geçerli konum bilinmiyor.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Temel amacımız hızlı, gizlilik odaklı, kullanımı kolay, seveceğiniz bir harita uygulaması oluşturmaktır.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Artık Organic Maps'i telefon ekranında kullanıyorsunuz";
+"car_used_on_the_phone_screen" = "Artık Maps&Fly'i telefon ekranında kullanıyorsunuz";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Şu anda araç ekranında Organic Maps kullanıyorsunuz";
+"car_used_on_the_car_screen" = "Şu anda araç ekranında Maps&Fly kullanıyorsunuz";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Telefonda sürdür";

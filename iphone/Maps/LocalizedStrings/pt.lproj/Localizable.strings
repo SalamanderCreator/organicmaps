@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operador: %@";
 "editor_category_unsuitable_title" = "Não encontra uma categoria adequada?";
-"editor_category_unsuitable_text" = "O Organic Maps permite-lhe adicionar apenas categorias de pontos simples, ou seja, nada de cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente ao <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Consulte o nosso <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guia</a> para instruções detalhadas passo a passo.";
+"editor_category_unsuitable_text" = "O Maps&Fly permite-lhe adicionar apenas categorias de pontos simples, ou seja, nada de cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente ao <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Consulte o nosso <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guia</a> para instruções detalhadas passo a passo.";
 "downloader_no_downloaded_maps_title" = "Não descarregou quaisquer mapas";
 "downloader_no_downloaded_maps_message" = "Descarregar mapas para encontrar a localização e navegar offline.";
 "current_location_unknown_error_title" = "A localização atual é desconhecida.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Se houver muitos favoritos, exibir seus nomes no mapa pode deixar o aplicativo lento.";
 "show_to_the_right" = "Mostrar à direita";
 "show_at_the_bottom" = "Mostrar na parte inferior";
-"enable_logging_warning_message" = "Esta opção ativa o registo das ações para diagnóstico. Pode ser útil para os programadores descobrirem o problema na aplicação. Ative esta opção apenas a pedido dos programadores do Organic Maps.";
+"enable_logging_warning_message" = "Esta opção ativa o registo das ações para diagnóstico. Pode ser útil para os programadores descobrirem o problema na aplicação. Ative esta opção apenas a pedido dos programadores do Maps&Fly.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "De carro";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Nosso principal objetivo é construir mapas rápidos, focados na privacidade e fáceis de usar que vai adorar.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Está agora a utilizar o Organic Maps no ecrã do telemóvel";
+"car_used_on_the_phone_screen" = "Está agora a utilizar o Maps&Fly no ecrã do telemóvel";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Está agora a utilizar o Organic Maps no ecrã do automóvel";
+"car_used_on_the_car_screen" = "Está agora a utilizar o Maps&Fly no ecrã do automóvel";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Continuar no telemóvel";

@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operatorius: %@";
 "editor_category_unsuitable_title" = "Nerandate tinkamos kategorijos?";
-"editor_category_unsuitable_text" = "„Organic Maps“ leidžia pridėti tik paprastų kategorijų taškus – jokių miestų, kelių, ežerų, pastatų kontūrų ir pan. šia programėle pridėti negalima. Šių kategorijų objektus pridėkite naudodamiesi <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> svetaine. Žvilgtelėkite į mūsų <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">vadovą</a>, kuriame rasite išsamias pažingsnines instrukcijas.";
+"editor_category_unsuitable_text" = "„Maps&Fly“ leidžia pridėti tik paprastų kategorijų taškus – jokių miestų, kelių, ežerų, pastatų kontūrų ir pan. šia programėle pridėti negalima. Šių kategorijų objektus pridėkite naudodamiesi <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> svetaine. Žvilgtelėkite į mūsų <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">vadovą</a>, kuriame rasite išsamias pažingsnines instrukcijas.";
 "downloader_no_downloaded_maps_title" = "Nesate atsiuntę jokių žemėlapių";
 "downloader_no_downloaded_maps_message" = "Atsiųskite žemėlapius, kad galėtumėte ieškoti vietų ir keliauti neprisijungę prie tinklo.";
 "current_location_unknown_error_title" = "Dabartinė vieta nežinoma.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Mūsų pagrindinis tikslas – sukurti spartų, privatų ir paprastą naudotis žemėlapį, kuris patiktų visiems.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Dabar naudojatės „Organic Maps“ telefono ekrane";
+"car_used_on_the_phone_screen" = "Dabar naudojatės „Maps&Fly“ telefono ekrane";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Dabar naudojatės „Organic Maps“ automobilio ekrane";
+"car_used_on_the_car_screen" = "Dabar naudojatės „Maps&Fly“ automobilio ekrane";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Tęsti telefone";

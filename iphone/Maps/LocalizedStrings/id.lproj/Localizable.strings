@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operator: %@";
 "editor_category_unsuitable_title" = "Tidak dapat menemukan kategori yang sesuai?";
-"editor_category_unsuitable_text" = "Organic Maps hanya memungkinkan untuk menambahkan kategori titik sederhana, yang berarti tidak ada kota, jalan, danau, garis besar bangunan, dll. Silahkan tambahkan kategori tersebut secara langsung ke <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Lihat <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">panduan</a> kami untuk petunjuk langkah demi langkah yang terperinci.";
+"editor_category_unsuitable_text" = "Maps&Fly hanya memungkinkan untuk menambahkan kategori titik sederhana, yang berarti tidak ada kota, jalan, danau, garis besar bangunan, dll. Silahkan tambahkan kategori tersebut secara langsung ke <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Lihat <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">panduan</a> kami untuk petunjuk langkah demi langkah yang terperinci.";
 "downloader_no_downloaded_maps_title" = "Tidak ada peta apa pun yang diunduh";
 "downloader_no_downloaded_maps_message" = "Unduh peta untuk menemukan lokasi dan bernavigasi secara offline.";
 "current_location_unknown_error_title" = "Lokasi saat ini tidak diketahui.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Jika ada terlalu banyak penanda, menampilkan nama mereka di peta dapat memperlambat aplikasi.";
 "show_to_the_right" = "Tampilkan di sebelah kanan";
 "show_at_the_bottom" = "Tampilkan di bagian bawah";
-"enable_logging_warning_message" = "Opsi ini mengaktifkan pencatatan untuk tujuan diagnostik. Bisa amat membantu bagi staf dukungan kami yang memecahkan masalah dalam aplikasi. Aktifkan opsi ini hanya saat diminta oleh dukungan Organic Maps.";
+"enable_logging_warning_message" = "Opsi ini mengaktifkan pencatatan untuk tujuan diagnostik. Bisa amat membantu bagi staf dukungan kami yang memecahkan masalah dalam aplikasi. Aktifkan opsi ini hanya saat diminta oleh dukungan Maps&Fly.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Mengemudi";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Tujuan utama kami adalah membuat peta yang cepat, berfokus pada privasi, dan mudah digunakan yang akan Anda sukai.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Anda sekarang menggunakan Organic Maps pada layar ponsel";
+"car_used_on_the_phone_screen" = "Anda sekarang menggunakan Maps&Fly pada layar ponsel";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Anda sekarang menggunakan Organic Maps pada layar mobil";
+"car_used_on_the_car_screen" = "Anda sekarang menggunakan Maps&Fly pada layar mobil";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Lanjutkan di telepon";

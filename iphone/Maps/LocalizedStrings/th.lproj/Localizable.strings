@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "ตัวดำเนินการ: %@";
 "editor_category_unsuitable_title" = "ไม่พบหมวดหมู่ที่เหมาะสมใช่ไหม?";
-"editor_category_unsuitable_text" = "Organic Maps อนุญาตให้เพิ่มหมวดหมู่จุดแบบง่ายเท่านั้น ซึ่งหมายถึงไม่สามารถเพิ่มเมือง ถนน ทะเลสาบ เส้นขอบอาคาร ฯลฯ ได้ กรุณาเพิ่มหมวดหมู่ดังกล่าวโดยตรงที่ <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> โปรดตรวจสอบ<a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">คู่มือ</a>ของเราสำหรับคำแนะนำแบบละเอียดทีละขั้นตอน";
+"editor_category_unsuitable_text" = "Maps&Fly อนุญาตให้เพิ่มหมวดหมู่จุดแบบง่ายเท่านั้น ซึ่งหมายถึงไม่สามารถเพิ่มเมือง ถนน ทะเลสาบ เส้นขอบอาคาร ฯลฯ ได้ กรุณาเพิ่มหมวดหมู่ดังกล่าวโดยตรงที่ <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> โปรดตรวจสอบ<a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">คู่มือ</a>ของเราสำหรับคำแนะนำแบบละเอียดทีละขั้นตอน";
 "downloader_no_downloaded_maps_title" = "คุณยังไม่ได้ดาวน์โหลดแผนที่";
 "downloader_no_downloaded_maps_message" = "ดาวน์โหลดแผนที่เพื่อค้นหาสถานที่ และนำทางแบบออฟไลน์";
 "current_location_unknown_error_title" = "ไม่ทราบชื่อของที่ตั้งปัจจุบัน";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "หากมีบุ๊กมาร์กมากเกินไป การแสดงชื่อของบุ๊กมาร์กบนแผนที่อาจทำให้แอปทำงานช้าลง";
 "show_to_the_right" = "แสดงทางขวา";
 "show_at_the_bottom" = "แสดงที่ด้านล่าง";
-"enable_logging_warning_message" = "ออปชันเพื่อเปิดการบันทึกประวัติการทำงานเพื่อการวินิจฉัย ประวัติดังกล่าวอาจเป็นประโยชน์กับทีมงานช่วยเหลือของเราที่คอยจัดการกับปัญหาที่เจอระหว่างแอปทำงาน โปรดเปิดออปชันดังกล่าวจากการร้องข้อการสนับสนุนจาก Organic Maps เท่านั้น";
+"enable_logging_warning_message" = "ออปชันเพื่อเปิดการบันทึกประวัติการทำงานเพื่อการวินิจฉัย ประวัติดังกล่าวอาจเป็นประโยชน์กับทีมงานช่วยเหลือของเราที่คอยจัดการกับปัญหาที่เจอระหว่างแอปทำงาน โปรดเปิดออปชันดังกล่าวจากการร้องข้อการสนับสนุนจาก Maps&Fly เท่านั้น";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "ขับรถ";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "เป้าหมายหลักของเราคือการสร้างแผนที่ที่รวดเร็ว เน้นความเป็นส่วนตัว และใช้งานง่ายที่คุณจะหลงรัก";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "ขณะนี้คุณกำลังใช้ Organic Maps บนหน้าจอโทรศัพท์";
+"car_used_on_the_phone_screen" = "ขณะนี้คุณกำลังใช้ Maps&Fly บนหน้าจอโทรศัพท์";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "ขณะนี้คุณกำลังใช้ Organic Maps บนหน้าจอรถยนต์";
+"car_used_on_the_car_screen" = "ขณะนี้คุณกำลังใช้ Maps&Fly บนหน้าจอรถยนต์";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "ดำเนินการต่อบนโทรศัพท์";

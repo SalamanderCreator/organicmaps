@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Mwendeshaji: %@";
 "editor_category_unsuitable_title" = "Je, huwezi kupata aina inayofaa?";
-"editor_category_unsuitable_text" = "Organic Maps inakuwezesha kuongeza tu aina rahisi za alama, ikimaanisha hakuna miji, barabara, maziwa, mipaka ya majengo, n.k. Tafadhali ongeza aina hizo moja kwa moja kwenye <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Angalia <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">mwongozo</a> wetu kwa maelekezo ya kina hatua kwa hatua.";
+"editor_category_unsuitable_text" = "Maps&Fly inakuwezesha kuongeza tu aina rahisi za alama, ikimaanisha hakuna miji, barabara, maziwa, mipaka ya majengo, n.k. Tafadhali ongeza aina hizo moja kwa moja kwenye <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Angalia <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">mwongozo</a> wetu kwa maelekezo ya kina hatua kwa hatua.";
 "downloader_no_downloaded_maps_title" = "Haujapakua ramani yoyote";
 "downloader_no_downloaded_maps_message" = "Pakua ramani ili kutafuta na kuvinjari bila muunganisho.";
 "current_location_unknown_error_title" = "Mahali pa sasa halijulikani.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Ikiwa kuna alamisho nyingi sana, kuonyesha majina yao kwenye ramani kunaweza kupunguza kasi ya programu.";
 "show_to_the_right" = "Onyesha upande wa kulia";
 "show_at_the_bottom" = "Onyesha chini";
-"enable_logging_warning_message" = "Chaguo huwasha data kwa madhumuni ya uchunguzi. Itakuwa muhimu kwa wafanyakazi wetu ambao wanatatua matatizo ya programu. Washa chaguo hili kwa maombi ya mhudumu wa Organic Maps tu.";
+"enable_logging_warning_message" = "Chaguo huwasha data kwa madhumuni ya uchunguzi. Itakuwa muhimu kwa wafanyakazi wetu ambao wanatatua matatizo ya programu. Washa chaguo hili kwa maombi ya mhudumu wa Maps&Fly tu.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Kwa gari";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Lengo letu kuu ni kujenga ramani za haraka, zinazozingatia faragha, na rahisi kutumia ambazo utapenda.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Sasa unatumia Organic Maps kwenye skrini ya simu";
+"car_used_on_the_phone_screen" = "Sasa unatumia Maps&Fly kwenye skrini ya simu";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Sasa unatumia Organic Maps kwenye skrini ya gari";
+"car_used_on_the_car_screen" = "Sasa unatumia Maps&Fly kwenye skrini ya gari";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Endelea kwenye simu";

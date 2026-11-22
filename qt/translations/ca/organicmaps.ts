@@ -47,8 +47,8 @@
 <translation>La baixada ha fallat</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Quant a l’Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Quant a l’Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operadorea: %@";
 "editor_category_unsuitable_title" = "Ezin duzu kategoria egokirik aurkitu?";
-"editor_category_unsuitable_text" = "Organic Maps-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Begiratu gure <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">gida</a> urratsez urrats argibide zehatzak lortzeko.";
+"editor_category_unsuitable_text" = "Maps&Fly-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Begiratu gure <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">gida</a> urratsez urrats argibide zehatzak lortzeko.";
 "downloader_no_downloaded_maps_title" = "Ez duzu maparik deskargatu";
 "downloader_no_downloaded_maps_message" = "Deskargatu mapak kokapena aurkitzeko eta lineaz kanpo nabigatzeko.";
 "current_location_unknown_error_title" = "Uneko kokapena ezezaguna da.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Laster-marka gehiegi badaude, mapan laster-markak bistaratzeak aplikazioa moteldu dezake.";
 "show_to_the_right" = "Erakutsi eskuinean";
 "show_at_the_bottom" = "Erakutsi behean";
-"enable_logging_warning_message" = "Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Organic Maps laguntzari eskatuta soilik.";
+"enable_logging_warning_message" = "Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Maps&Fly laguntzari eskatuta soilik.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Autoz";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Gure helburu nagusia maite dituzun mapa azkarrak, pribatutasunari begira eta erabilerrazak sortzea da.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Organic Maps telefonoaren pantailan erabiltzen ari zara";
+"car_used_on_the_phone_screen" = "Maps&Fly telefonoaren pantailan erabiltzen ari zara";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Organic Maps autoaren pantailan erabiltzen ari zara";
+"car_used_on_the_car_screen" = "Maps&Fly autoaren pantailan erabiltzen ari zara";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Jarraitu telefonoan";

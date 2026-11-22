@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Gweithredwr: %@";
 "editor_category_unsuitable_title" = "Allwch chi ddim dod o hyd i gategori addas?";
-"editor_category_unsuitable_text" = "Mae Organic Maps yn caniatáu ychwanegu categorïau pwynt syml yn unig, sy'n golygu dim trefi, ffyrdd, llynnoedd, amlinelliadau adeiladau, ac ati. Ychwanegwch gategorïau o'r fath yn uniongyrchol at <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Edrychwch ar ein <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">canllaw</a> am gyfarwyddiadau manwl cam wrth gam.";
+"editor_category_unsuitable_text" = "Mae Maps&Fly yn caniatáu ychwanegu categorïau pwynt syml yn unig, sy'n golygu dim trefi, ffyrdd, llynnoedd, amlinelliadau adeiladau, ac ati. Ychwanegwch gategorïau o'r fath yn uniongyrchol at <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Edrychwch ar ein <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">canllaw</a> am gyfarwyddiadau manwl cam wrth gam.";
 "downloader_no_downloaded_maps_title" = "Nid ydych wedi lawrlwytho unrhyw fapiau";
 "downloader_no_downloaded_maps_message" = "Lawrlwythwch fapiau i chwilio a llywio all-lein.";
 "current_location_unknown_error_title" = "Mae'r lleoliad presennol yn anhysbys.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Ein prif nod yw creu mapiau cyflym, hawdd eu defnyddio sy'n parchu eich preifatrwydd ac y byddwch yn eu caru.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Rydych chi nawr yn defnyddio Organic Maps ar sgrin y ffôn";
+"car_used_on_the_phone_screen" = "Rydych chi nawr yn defnyddio Maps&Fly ar sgrin y ffôn";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Rydych chi nawr yn defnyddio Organic Maps ar sgrin y car";
+"car_used_on_the_car_screen" = "Rydych chi nawr yn defnyddio Maps&Fly ar sgrin y car";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Parhewch ar y ffôn";

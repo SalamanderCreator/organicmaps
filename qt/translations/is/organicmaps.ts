@@ -47,8 +47,8 @@
 <translation>Mistókst að sækja</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Um Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Um Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

@@ -47,8 +47,8 @@
 <translation>다운로드에 실패하였습니다</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps 정보</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly 정보</translation>
 </message>
 <message id="close">
 <source>Close</source>

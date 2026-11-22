@@ -47,8 +47,8 @@
 <translation>Deskargak huts egin du</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps-i buruz</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly-i buruz</translation>
 </message>
 <message id="close">
 <source>Close</source>

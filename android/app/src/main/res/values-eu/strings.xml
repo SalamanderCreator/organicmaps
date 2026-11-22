@@ -35,7 +35,7 @@
     <string name="country_status_download_failed">Deskargak huts egin du</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Saiatu berriro</string>
-    <string name="about_menu_title">Organic Maps-i buruz</string>
+    <string name="about_menu_title">Maps&amp;Fly-i buruz</string>
     <!-- Text in About screen -->
     <string name="about_headline">Denontzat doan, maitasunez egina</string>
     <!-- Text in About screen -->
@@ -52,7 +52,7 @@
     <string name="unsupported_phone">Aplikazioak hardwarez azeleratutako OpenGL behar du. Zoritxarrez, zure gailuak ez du hau eskaintzen.</string>
     <string name="download">Deskargatu</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">Mesedez, deskonektatu USB kablea edo sartu SD memoria Organic Maps erabiltzeko</string>
+    <string name="disconnect_usb_cable">Mesedez, deskonektatu USB kablea edo sartu SD memoria Maps&amp;Fly erabiltzeko</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">Mesedez, egin lekua SD memorian/USB biltegian aplikazioa erabiltzeko</string>
     <string name="download_resources">Hasi aurretik deskargatu mesedez mundu-mapa orokorra zure gailura.\nMemorian %s erabiliko ditu.</string>
@@ -445,7 +445,7 @@
     <!-- Text in About and OSM Login screens. First %@ is replaced by a local, human readable date. -->
     <string name="osm_presentation">Komunitateak sortutako OpenStreetMap datuak %s-tik aurrera. Lortu informazio gehiago mapa editatu eta eguneratzeari buruz OpenStreetMap.org helbidean</string>
     <!-- OSM explanation on Android login screen -->
-    <string name="login_osm_presentation">OpenStreetMap.org (OSM) mapa libre eta irekia eraikitzeko komunitateko proiektu bat da. Organic Maps-en mapen datuen iturri nagusia da eta Wikipediaren antzera funtzionatzen du. Tokiak gehitu edo edita ditzakezu eta mundu osoko milioika erabiltzailerentzat eskuragarri egongo dira.\nSartu komunitatean eta lagundu mapa hobea egiten guztiontzat!</string>
+    <string name="login_osm_presentation">OpenStreetMap.org (OSM) mapa libre eta irekia eraikitzeko komunitateko proiektu bat da. Maps&amp;Fly-en mapen datuen iturri nagusia da eta Wikipediaren antzera funtzionatzen du. Tokiak gehitu edo edita ditzakezu eta mundu osoko milioika erabiltzailerentzat eskuragarri egongo dira.\nSartu komunitatean eta lagundu mapa hobea egiten guztiontzat!</string>
     <string name="login_to_make_edits_visible">Sortu OpenStreetMap kontu bat edo hasi saioa zure maparen aldaketak munduan argitaratzeko.</string>
     <!-- Downloaded 10 **of** 20 <- it is that "of" -->
     <string name="downloader_of">%1$d/%2$d</string>
@@ -460,7 +460,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">OpenStreetMap-eko boluntarioentzako oharra (aukerakoa)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Deskribatu mapako akatsak edo editatu ezin diren gauzakOrganic Maps erabiliz.</string>
+    <string name="editor_note_hint">Deskribatu mapako akatsak edo editatu ezin diren gauzakMaps&amp;Fly erabiliz.</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Zure aldaketak <a href="https://wiki.openstreetmap.org/wiki/About_OpenStreetMap">OpenStreetMap</a> datu-base publikora kargatzen dira. Mesedez, ez gehitu informazio pertsonalik edo copyrightdun informaziorik.</string>
     <string name="editor_more_about_osm">OpenStreetMap-i buruzko informazio gehiago</string>
@@ -470,7 +470,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… -->
     <string name="operator">Operadorea: %s</string>
     <string name="editor_category_unsuitable_title">Ezin duzu kategoria egokirik aurkitu?</string>
-    <string name="editor_category_unsuitable_text">Organic Maps-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Begiratu gure <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gida</a> urratsez urrats argibide zehatzak lortzeko.</string>
+    <string name="editor_category_unsuitable_text">Maps&amp;Fly-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Begiratu gure <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gida</a> urratsez urrats argibide zehatzak lortzeko.</string>
     <string name="downloader_no_downloaded_maps_title">Ez duzu maparik deskargatu</string>
     <string name="downloader_no_downloaded_maps_message">Deskargatu mapak kokapena aurkitzeko eta lineaz kanpo nabigatzeko.</string>
     <string name="current_location_unknown_error_title">Uneko kokapena ezezaguna da.</string>
@@ -636,7 +636,7 @@
     <string name="bookmarks_text_placement_description">Laster-marka gehiegi badaude, mapan laster-markak bistaratzeak aplikazioa moteldu dezake.</string>
     <string name="show_to_the_right">Erakutsi eskuinean</string>
     <string name="show_at_the_bottom">Erakutsi behean</string>
-    <string name="enable_logging_warning_message">Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Organic Maps laguntzari eskatuta soilik.</string>
+    <string name="enable_logging_warning_message">Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Maps&amp;Fly laguntzari eskatuta soilik.</string>
     <!-- Driving profile in routing options settings. -->
     <string name="routing_options_driving">Autoz</string>
     <!-- Cycling profile in routing options settings. -->
@@ -800,9 +800,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Gure helburu nagusia maite dituzun mapa azkarrak, pribatutasunari begira eta erabilerrazak sortzea da.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Organic Maps telefonoaren pantailan erabiltzen ari zara</string>
+    <string name="car_used_on_the_phone_screen">Maps&amp;Fly telefonoaren pantailan erabiltzen ari zara</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Organic Maps autoaren pantailan erabiltzen ari zara</string>
+    <string name="car_used_on_the_car_screen">Maps&amp;Fly autoaren pantailan erabiltzen ari zara</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Android Auto-ra konektatuta zaude</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -810,7 +810,7 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">Autoaren pantailara</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Organic Maps-ek kokapenerako sarbidea behar du. Seguru dagoenean, egiaztatu zure telefonoko jakinarazpena.</string>
+    <string name="aa_location_permissions_request">Maps&amp;Fly-ek kokapenerako sarbidea behar du. Seguru dagoenean, egiaztatu zure telefonoko jakinarazpena.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Aplikazio honek zure baimena behar du</string>
     <!-- Grant Permissions button. -->
@@ -846,7 +846,7 @@
     <!-- Title of the one-time warning about battery optimization when starting track recording on Android. -->
     <string name="background_recording_warning_title">Atzeko planoko grabazioaren abisua</string>
     <!-- One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings. -->
-    <string name="background_recording_warning_message">Pantaila itzalita dagoenean ibilbidearen grabazioa eten ez dadin, salbuetsi Organic Maps bateriaren optimizaziotik. Samsung gailuetan, gehitu aplikazioa «Inoiz lo moduan sartzen ez diren aplikazioak» zerrendara.</string>
+    <string name="background_recording_warning_message">Pantaila itzalita dagoenean ibilbidearen grabazioa eten ez dadin, salbuetsi Maps&amp;Fly bateriaren optimizaziotik. Samsung gailuetan, gehitu aplikazioa «Inoiz lo moduan sartzen ez diren aplikazioak» zerrendara.</string>
     <!-- Prompt to start recording a track. -->
     <string name="start_track_recording">Grabatu arrastoa</string>
     <!-- Prompt for stopping a track recording. -->

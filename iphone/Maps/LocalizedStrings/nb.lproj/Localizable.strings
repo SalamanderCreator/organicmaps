@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operatør: %@";
 "editor_category_unsuitable_title" = "Finner du ikke en passende kategori?";
-"editor_category_unsuitable_text" = "Organic Maps tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Sjekk vår <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guide</a> for detaljerte trinnvise instruksjoner.";
+"editor_category_unsuitable_text" = "Maps&Fly tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Sjekk vår <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guide</a> for detaljerte trinnvise instruksjoner.";
 "downloader_no_downloaded_maps_title" = "Du har ikke lastet ned noen kart";
 "downloader_no_downloaded_maps_message" = "Last ned kart for å finne plasseringen og navigere frakoblet.";
 "current_location_unknown_error_title" = "Gjeldende plassering er ukjent.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Hvis det er for mange bokmerker, kan det gjøre appen tregere å vise navnene på dem på kartet.";
 "show_to_the_right" = "Vis til høyre";
 "show_at_the_bottom" = "Vis nederst";
-"enable_logging_warning_message" = "Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Organic Maps-brukerstøtte.";
+"enable_logging_warning_message" = "Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Maps&Fly-brukerstøtte.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Bil";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Vårt hovedmål er å bygge raske, personvernfokuserte, brukervennlige kart som du vil elske.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Du bruker nå Organic Maps på telefonskjermen";
+"car_used_on_the_phone_screen" = "Du bruker nå Maps&Fly på telefonskjermen";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Du bruker nå Organic Maps på bilskjermen";
+"car_used_on_the_car_screen" = "Du bruker nå Maps&Fly på bilskjermen";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Fortsett i telefonen";

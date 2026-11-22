@@ -1015,61 +1015,61 @@ zh-Hant = 再試一次
 
 [about_menu_title]
 tags = android-app,qt
-en = About Organic Maps
-af = Oor Organic Maps
-ar = حول Organic Maps
-ast = Tocante a Organic Maps
-az = Organic Maps Haqqında
-be = Аб праграме Organic Maps
-bg = За Organic Maps
-ca = Quant a l’Organic Maps
-cs = O aplikaci Organic Maps
-cy = Ynglŷn ag Organic Maps
-da = Om Organic Maps
-de = Über Organic Maps
-el = Σχετικά με το Organic Maps
-es = Acerca de Organic Maps
-et = Organic Mapsi teave
-eu = Organic Maps-i buruz
-fa = درباره‌ی Organic Maps
-fi = Tietoa Organic Maps:stä
-fr = À propos de Organic Maps
-gl = Acerca de Organic Maps
-he = אודות Organic Maps
-hi = Organic Maps के बारे में
-hr = O Organic Maps
-hu = Az Organic Maps névjegye
-hy = Organic Maps-ի մասին
-id = Tentang Organic Maps
-is = Um Organic Maps
-it = Informazioni su Organic Maps
-ja = Organic Mapsについて
-ko = Organic Maps 정보
-lo = ກ່ຽວກັບ Organic Maps
-lt = Apie „Organic Maps“
-lv = Par „Organic Maps“
-mr = Organic Maps बद्दल
-mt = Dwar Organic Maps
-nb = Om Organic Maps
-nl = Over Organic Maps
-pa = Organic Maps ਬਾਰੇ
-pl = O aplikacji Organic Maps
-pt = Sobre o Organic Maps
-pt-BR = Sobre Organic Maps
-ro = Despre Organic Maps
-ru = Про Organic Maps
-sk = O aplikácii Organic Maps
-sl = O Organic Maps
-sq = Rreth Organic Maps
-sr = О апликацији Organic Maps
-sv = Om Organic Maps
-sw = Kuhusu Organic Maps
-th = เกี่ยวกับ Organic Maps
-tr = Organic Maps Hakkında
-uk = Про Organic Maps
-vi = Giới thiệu về Organic Maps
-zh-Hans = 关于 Organic Maps
-zh-Hant = 關於 Organic Maps
+en = About Maps&Fly
+af = Oor Maps&Fly
+ar = حول Maps&Fly
+ast = Tocante a Maps&Fly
+az = Maps&Fly Haqqında
+be = Аб праграме Maps&Fly
+bg = За Maps&Fly
+ca = Quant a l’Maps&Fly
+cs = O aplikaci Maps&Fly
+cy = Ynglŷn ag Maps&Fly
+da = Om Maps&Fly
+de = Über Maps&Fly
+el = Σχετικά με το Maps&Fly
+es = Acerca de Maps&Fly
+et = Maps&Flyi teave
+eu = Maps&Fly-i buruz
+fa = درباره‌ی Maps&Fly
+fi = Tietoa Maps&Fly:stä
+fr = À propos de Maps&Fly
+gl = Acerca de Maps&Fly
+he = אודות Maps&Fly
+hi = Maps&Fly के बारे में
+hr = O Maps&Fly
+hu = Az Maps&Fly névjegye
+hy = Maps&Fly-ի մասին
+id = Tentang Maps&Fly
+is = Um Maps&Fly
+it = Informazioni su Maps&Fly
+ja = Maps&Flyについて
+ko = Maps&Fly 정보
+lo = ກ່ຽວກັບ Maps&Fly
+lt = Apie „Maps&Fly“
+lv = Par „Maps&Fly“
+mr = Maps&Fly बद्दल
+mt = Dwar Maps&Fly
+nb = Om Maps&Fly
+nl = Over Maps&Fly
+pa = Maps&Fly ਬਾਰੇ
+pl = O aplikacji Maps&Fly
+pt = Sobre o Maps&Fly
+pt-BR = Sobre Maps&Fly
+ro = Despre Maps&Fly
+ru = Про Maps&Fly
+sk = O aplikácii Maps&Fly
+sl = O Maps&Fly
+sq = Rreth Maps&Fly
+sr = О апликацији Maps&Fly
+sv = Om Maps&Fly
+sw = Kuhusu Maps&Fly
+th = เกี่ยวกับ Maps&Fly
+tr = Maps&Fly Hakkında
+uk = Про Maps&Fly
+vi = Giới thiệu về Maps&Fly
+zh-Hans = 关于 Maps&Fly
+zh-Hant = 關於 Maps&Fly
 
 [about_headline]
 comment = Text in About screen
@@ -1596,61 +1596,61 @@ zh-Hant = 下載
 [disconnect_usb_cable]
 comment = Used in DownloadResources startup screen
 tags = android-app
-en = Please disconnect USB cable or insert memory card to use Organic Maps
-af = Ontkoppel die USB-kabel of gebruik ’n geheuekaart om Organic Maps te gebruik
-ar = الرجاء فصل كابل الناقل التسلسلي الشامل أو إدخال بطاقة الذاكرة من أجل استخدام Organic Maps
-az = Organic Maps'dan istifadə etmək üçün zəhmət olmasa USB kabeli ayırın və ya yaddaş kartı daxil edin
-be = Адключыце кабель USB або ўстаўце карту памяці, каб карыстацца Organic Maps
-bg = Моля, изключете USB кабела или поставете картата с памет, за да използвате Organic Maps
-ca = Desconnecteu el cable USB o inseriu una targeta de memòria per a usar l’Organic Maps
-cs = Prosím, odpojte USB kabel nebo vložte paměťovou kartu pro použití s Organic Maps
-cy = Datgysylltwch y cebl USB neu mewnosodwch gerdyn cof i ddefnyddio Organic Maps
-da = Frakobl venligst USB-kabel, eller indsæt et hukommelseskort for at bruge Organic Maps
-de = Bitte USB-Kabel entfernen oder Speicherkarte einsetzen, um Organic Maps zu verwenden
-el = Αποσυνδέστε το καλώδιο USB ή τοποθετήστε την κάρτα μνήμης για να χρησιμοποιήσετε το Organic Maps
-es = Desconecte el cable USB o inserte una tarjeta de memoria SD para usar Organic Maps
-es-MX = Desconecta el cable USB o inserta la tarjeta de memoria para utilizar Organic Maps.
-et = Organic Maps kasutamiseks palun ühenda USB kaabel lahti või sisesta mälukaart
-eu = Mesedez, deskonektatu USB kablea edo sartu SD memoria Organic Maps erabiltzeko
-fa = لطفا کابل USB را جدا کنید یا کارت حافظه وارد کنید تا بتوانید از Organic Maps استفاده کنید
-fi = Irrota USB-kaapeli tai syötä muistikortti käyttääksesi Organic Maps -sovellusta
-fr = Veuillez débrancher le câble USB ou insérer la carte SD pour utiliser Organic Maps
-gl = por favor, desconecte o cable USB ou insira unha tarxeta de memoria SD para usar Organic Maps
-he = אנא נתק כבל USB או הכנס כרטיס זכרון כדי להשתמש ב-Organic Maps.
-hi = Organic Maps का उपयोग करने के लिए कृपया USB केबल डिस्कनेक्ट करें या मेमोरी कार्ड डालें।
-hr = Isključite USB kabel ili umetnite memorijsku karticu kako biste koristili Organic Maps
-hu = Bontsa az USB-kapcsolatot vagy helyezzen be egy memóriakártyát az Organic Maps használatához
-hy = Organic Maps-ից օգտվելու համար խնդրում ենք անջատել USB մալուխը կամ տեղադրել հիշողության քարտը
-id = Mohon lepas kabel USB atau masukkan kartu memori untuk menggunakan Organic Maps
-is = Aftengdu USB-kapal eða settu inn minniskort til að nota Organic Maps
-it = Scollega il cavo USB o inserisci la scheda di memoria per poter utilizzare Organic Maps
-ja = Organic Mapsを利用するにはUSBケーブルを抜くかメモリーカードを挿入してください
-ko = Organic Maps를 사용하려면 USB 케이블이나 삽입 메모리 카드를 분리하십시오
-lo = ກະລຸນາຖອດສາຍ USB ຫຼື ສຽບກາດໜ່ວຍຄວາມຈຳເພື່ອໃຊ້ Organic Maps
-lt = Jeigu norite naudotis „Organic Maps“, atjunkite USB kabelį arba įdėkite atminties kortelę
-lv = Lai lietotu „Organic Maps“, atvienojiet USB kabeli vai ievietojiet atmiņas karti.
-mr = Organic Maps वापरण्यासाठी कृपया USB केबल काढून टाका किंवा मेमरी कार्ड घाला
-mt = Jekk jogħġbok neħħi il-USB kejbil jew daħħal karta tal-memorja biex tuża Organic Maps
-nb = Koble fra USB-kabelen eller sett inn minnekortet for å bruke Organic Maps
-nl = Verwijder de USB-kabel of plaats een geheugenkaart om Organic Maps te gebruiken
-pa = Organic Maps ਵਰਤਣ ਲਈ ਕਿਰਪਾ ਕਰਕੇ USB ਕੇਬਲ ਅਨਲੱਗ ਕਰੋ ਜਾਂ ਮੈਮਰੀ ਕਾਰਡ ਲਗਾਓ।
-pl = Proszę odłączyć kabel USB albo włożyć kartę pamięci, aby korzystać z Organic Maps
-pt = Por favor desligue o cabo USB ou introduza um cartão de memória para utilizar o Organic Maps
-pt-BR = Por favor, desconecte o cabo USB ou insira um cartão de memória para utilizar Organic Maps
-ro = Deconectează cablul USB sau introdu un card de memorie pentru a utiliza Organic Maps
-ru = Для использования приложения Organic Maps отсоедините USB-кабель или вставьте карту памяти
-sk = Prosím, odpojte USB kábel alebo vložte pamäťovú kartu pre použitie s Organic Maps
-sl = Za uporabo Organic Maps odklopite kabel USB ali vstavite pomnilniško kartico
-sq = Ju lutemi shkëputni kabllon USB ose futni kartën e memories për të përdorur Organic Maps
-sr = Молим вас откачите USB кабл, или убаците меморијску картицу да бисте користили Organic Maps
-sv = Vänligen koppla ifrån USB-kabeln eller sätt in ett minneskort för att använda Organic Maps
-sw = Tafadhali toa kebo ya USB au weka kadi ya kumbukumbu ili kutumia Organic Maps
-th = โปรดยกเลิกการเชื่อมต่อสาย USB หรือใส่การ์ดหน่วยความจำเพื่อใช้ Organic Maps
-tr = Organic Maps’i kullanabilmek için lütfen USB kablosunun bağlantısını kesin veya hafıza kartı takın
-uk = Будь ласка, від'єднайте USB-кабель або вставте карту пам'яті, щоб скористатися програмою Organic Maps
-vi = Bạn vui lòng tháo cáp USB hoặc lắp thẻ nhớ vào để sử dụng Organic Maps
-zh-Hans = 请拔除 USB 线或插入 SD 卡以使用 Organic Maps
-zh-Hant = 請拔除 USB 線或插入 SD 卡以使用 Organic Maps
+en = Please disconnect USB cable or insert memory card to use Maps&Fly
+af = Ontkoppel die USB-kabel of gebruik ’n geheuekaart om Maps&Fly te gebruik
+ar = الرجاء فصل كابل الناقل التسلسلي الشامل أو إدخال بطاقة الذاكرة من أجل استخدام Maps&Fly
+az = Maps&Fly'dan istifadə etmək üçün zəhmət olmasa USB kabeli ayırın və ya yaddaş kartı daxil edin
+be = Адключыце кабель USB або ўстаўце карту памяці, каб карыстацца Maps&Fly
+bg = Моля, изключете USB кабела или поставете картата с памет, за да използвате Maps&Fly
+ca = Desconnecteu el cable USB o inseriu una targeta de memòria per a usar l’Maps&Fly
+cs = Prosím, odpojte USB kabel nebo vložte paměťovou kartu pro použití s Maps&Fly
+cy = Datgysylltwch y cebl USB neu mewnosodwch gerdyn cof i ddefnyddio Maps&Fly
+da = Frakobl venligst USB-kabel, eller indsæt et hukommelseskort for at bruge Maps&Fly
+de = Bitte USB-Kabel entfernen oder Speicherkarte einsetzen, um Maps&Fly zu verwenden
+el = Αποσυνδέστε το καλώδιο USB ή τοποθετήστε την κάρτα μνήμης για να χρησιμοποιήσετε το Maps&Fly
+es = Desconecte el cable USB o inserte una tarjeta de memoria SD para usar Maps&Fly
+es-MX = Desconecta el cable USB o inserta la tarjeta de memoria para utilizar Maps&Fly.
+et = Maps&Fly kasutamiseks palun ühenda USB kaabel lahti või sisesta mälukaart
+eu = Mesedez, deskonektatu USB kablea edo sartu SD memoria Maps&Fly erabiltzeko
+fa = لطفا کابل USB را جدا کنید یا کارت حافظه وارد کنید تا بتوانید از Maps&Fly استفاده کنید
+fi = Irrota USB-kaapeli tai syötä muistikortti käyttääksesi Maps&Fly -sovellusta
+fr = Veuillez débrancher le câble USB ou insérer la carte SD pour utiliser Maps&Fly
+gl = por favor, desconecte o cable USB ou insira unha tarxeta de memoria SD para usar Maps&Fly
+he = אנא נתק כבל USB או הכנס כרטיס זכרון כדי להשתמש ב-Maps&Fly.
+hi = Maps&Fly का उपयोग करने के लिए कृपया USB केबल डिस्कनेक्ट करें या मेमोरी कार्ड डालें।
+hr = Isključite USB kabel ili umetnite memorijsku karticu kako biste koristili Maps&Fly
+hu = Bontsa az USB-kapcsolatot vagy helyezzen be egy memóriakártyát az Maps&Fly használatához
+hy = Maps&Fly-ից օգտվելու համար խնդրում ենք անջատել USB մալուխը կամ տեղադրել հիշողության քարտը
+id = Mohon lepas kabel USB atau masukkan kartu memori untuk menggunakan Maps&Fly
+is = Aftengdu USB-kapal eða settu inn minniskort til að nota Maps&Fly
+it = Scollega il cavo USB o inserisci la scheda di memoria per poter utilizzare Maps&Fly
+ja = Maps&Flyを利用するにはUSBケーブルを抜くかメモリーカードを挿入してください
+ko = Maps&Fly를 사용하려면 USB 케이블이나 삽입 메모리 카드를 분리하십시오
+lo = ກະລຸນາຖອດສາຍ USB ຫຼື ສຽບກາດໜ່ວຍຄວາມຈຳເພື່ອໃຊ້ Maps&Fly
+lt = Jeigu norite naudotis „Maps&Fly“, atjunkite USB kabelį arba įdėkite atminties kortelę
+lv = Lai lietotu „Maps&Fly“, atvienojiet USB kabeli vai ievietojiet atmiņas karti.
+mr = Maps&Fly वापरण्यासाठी कृपया USB केबल काढून टाका किंवा मेमरी कार्ड घाला
+mt = Jekk jogħġbok neħħi il-USB kejbil jew daħħal karta tal-memorja biex tuża Maps&Fly
+nb = Koble fra USB-kabelen eller sett inn minnekortet for å bruke Maps&Fly
+nl = Verwijder de USB-kabel of plaats een geheugenkaart om Maps&Fly te gebruiken
+pa = Maps&Fly ਵਰਤਣ ਲਈ ਕਿਰਪਾ ਕਰਕੇ USB ਕੇਬਲ ਅਨਲੱਗ ਕਰੋ ਜਾਂ ਮੈਮਰੀ ਕਾਰਡ ਲਗਾਓ।
+pl = Proszę odłączyć kabel USB albo włożyć kartę pamięci, aby korzystać z Maps&Fly
+pt = Por favor desligue o cabo USB ou introduza um cartão de memória para utilizar o Maps&Fly
+pt-BR = Por favor, desconecte o cabo USB ou insira um cartão de memória para utilizar Maps&Fly
+ro = Deconectează cablul USB sau introdu un card de memorie pentru a utiliza Maps&Fly
+ru = Для использования приложения Maps&Fly отсоедините USB-кабель или вставьте карту памяти
+sk = Prosím, odpojte USB kábel alebo vložte pamäťovú kartu pre použitie s Maps&Fly
+sl = Za uporabo Maps&Fly odklopite kabel USB ali vstavite pomnilniško kartico
+sq = Ju lutemi shkëputni kabllon USB ose futni kartën e memories për të përdorur Maps&Fly
+sr = Молим вас откачите USB кабл, или убаците меморијску картицу да бисте користили Maps&Fly
+sv = Vänligen koppla ifrån USB-kabeln eller sätt in ett minneskort för att använda Maps&Fly
+sw = Tafadhali toa kebo ya USB au weka kadi ya kumbukumbu ili kutumia Maps&Fly
+th = โปรดยกเลิกการเชื่อมต่อสาย USB หรือใส่การ์ดหน่วยความจำเพื่อใช้ Maps&Fly
+tr = Maps&Fly’i kullanabilmek için lütfen USB kablosunun bağlantısını kesin veya hafıza kartı takın
+uk = Будь ласка, від'єднайте USB-кабель або вставте карту пам'яті, щоб скористатися програмою Maps&Fly
+vi = Bạn vui lòng tháo cáp USB hoặc lắp thẻ nhớ vào để sử dụng Maps&Fly
+zh-Hans = 请拔除 USB 线或插入 SD 卡以使用 Maps&Fly
+zh-Hant = 請拔除 USB 線或插入 SD 卡以使用 Maps&Fly
 
 [not_enough_free_space_on_sdcard]
 comment = Used in DownloadResources startup screen
@@ -1709,7 +1709,7 @@ tr = Uygulamayı kullanabilmek için lütfen SD kart/USB depolama aygıtında bi
 uk = Недостатньо вільного місця на SD карті / в пам'яті пристрою для використання програми
 vi = Bạn vui lòng giải phóng dung lượng trên ổ lưu trữ thẻ SD/USB để có thể sử dụng ứng dụng
 zh-Hans = 请先释放一些 SD 卡 / USB 存储空间以使用本应用
-zh-Hant = 請先釋放一些 SD 卡 / USB 儲存空間以使用 Organic Maps
+zh-Hant = 請先釋放一些 SD 卡 / USB 儲存空間以使用 Maps&Fly
 
 [download_resources]
 tags = android-app,android-libs-car
@@ -19170,60 +19170,60 @@ zh-Hant = 截至 %@ 的社群創建的開放街圖資料。請訪問 OpenStreetM
 [login_osm_presentation]
 comment = OSM explanation on Android login screen
 tags = android-app
-en = OpenStreetMap.org (OSM) is a community project to build a free and open map. It's the main source of map data in Organic Maps and works similar to Wikipedia. You can add or edit places and they become available to millions of users all over the World.\nJoin the community and help to make a better map for everyone!
-af = OpenStreetMap.org (OSM) is 'n gemeenskapsprojek om 'n gratis en oop kaart te bou. Dit is die hoofbron van kaartdata in Organic Maps en werk soortgelyk aan Wikipedia. Jy kan plekke byvoeg of wysig en hulle word beskikbaar vir miljoene gebruikers regoor die wêreld.\nSluit aan by die gemeenskap en help om 'n beter kaart vir almal te maak!
-ar = OpenStreetMap.org (OSM) هو مشروع مجتمعي يهدف إلى إنشاء خريطة مجانية ومفتوحة. وهو المصدر الرئيسي لبيانات الخرائط في Organic Maps ويعمل بشكل مشابه لـويكيبيديا. يمكنك إضافة أو تعديل الأماكن لتصبح متاحة لملايين المستخدمين في جميع أنحاء العالم.\nانضم إلى المجتمع وساعد في إنشاء خريطة أفضل للجميع!
-az = OpenStreetMap.org (OSM) pulsuz və açıq xəritə yaratmaq üçün icma layihəsidir. Bu, Organic Maps xəritə məlumatlarının əsas mənbəyidir və Vikipediya kimi fəaliyyət göstərir. Siz yerlər əlavə edib və ya redaktə edə bilərsiniz və onlar bütün dünyada milyonlarla istifadəçi üçün əlçatan olur. İcmaya qoşulun və hər kəs üçün daha yaxşı xəritə yaratmağa kömək edin!
-be = OpenStreetMap.org (OSM) - гэта грамадскі праект па стварэнні бясплатнай і адкрытай мапы, і асноўная крыніца картаграфічных даных у Organic Maps, якая працуе падобна на Вікіпедыю. Кожны можа дадаваць або рэдагаваць месцы, якія ўбачаць мільёны карыстальнікаў па ўсім свеце. \nДалучайцеся да супольнасці і дапамажыце зрабіць лепшую мапу для ўсіх!
-bg = OpenStreetMap.org (OSM) е общностен проект за създаване на безплатна и отворена карта. Той е основният източник на картографски данни в Organic Maps и работи подобно на Wikipedia. Можете да добавяте или редактирате места и те стават достъпни за милиони потребители по целия свят.\nПрисъединете се към общността и помогнете за създаването на по-добра карта за всички!
-ca = OpenStreetMap.org (OSM) és un projecte comunitari per construir un mapa lliure i obert. És la font principal de dades de mapes a Organic Maps i funciona de manera similar a la Viquipèdia. Pots afegir o editar llocs i estaran disponibles per a milions d'usuaris de tot el món.\nUneix-te a la comunitat i ajuda a crear un mapa millor per a tothom!
-cs = OpenStreetMap.org (OSM) je komunitní projekt, jehož cílem je vytvořit svobodnou a otevřenou mapu. Je hlavním zdrojem mapových dat v aplikaci Organic Maps a funguje podobně jako Wikipedie. Můžete přidávat nebo upravovat místa a ta se pak stanou dostupná milionům uživatelů po celém světě.\nPřipojte se ke komunitě a pomozte vytvořit lepší mapu pro všechny!
-cy = Mae OpenStreetMap.org (OSM) yn brosiect cymunedol i adeiladu map agored ac am ddim. Dyma brif ffynhonnell data map yn Organic Maps ac mae'n gweithio'n debyg i Wicipedia. Gallwch ychwanegu neu olygu lleoedd a byddant ar gael i filiynau o ddefnyddwyr ledled y byd.\nYmunwch â'r gymuned a helpwch i wneud map gwell i bawb!
-da = OpenStreetMap.org (OSM) er et fællesskabsprojekt til opbygning af et gratis og åbent kort. Det er hovedkilden til kortdata i Organic Maps og fungerer på samme måde som Wikipedia. Du kan tilføje eller redigere steder, og de bliver tilgængelige for millioner af brugere over hele verden.\nSlut dig til fællesskabet og vær med til at skabe et bedre kort for alle!
-de = OpenStreetMap.org (OSM) ist ein Gemeinschaftsprojekt zum Erstellen einer freien und offenen Karte. Es ist die Hauptquelle für Kartendaten in Organic Maps und funktioniert ähnlich wie Wikipedia. Du kannst Orte hinzufügen oder bearbeiten, die dann Millionen von Nutzern auf der ganzen Welt zur Verfügung stehen.\nTritt der Gemeinschaft bei und hilf mit, die Karte für alle besser zu machen!
-el = Το OpenStreetMap.org (OSM) είναι ένα κοινοτικό έργο με στόχο τη δημιουργία ενός δωρεάν και ανοιχτού χάρτη. Αποτελεί την κύρια πηγή δεδομένων χαρτών στο Organic Maps και λειτουργεί παρόμοια με τη Wikipedia. Μπορείτε να προσθέσετε ή να επεξεργαστείτε τοποθεσίες, οι οποίες θα γίνουν διαθέσιμες σε εκατομμύρια χρήστες σε όλο τον κόσμο.\nΓίνετε μέλος της κοινότητας και βοηθήστε στη δημιουργία ενός καλύτερου χάρτη για όλους!
-es = OpenStreetMap.org (OSM) es un proyecto comunitario para construir un mapa gratis y abierto. Es la principal fuente de datos cartográficos de Organic Maps y funciona de forma similar a Wikipedia. Puedes añadir o editar lugares y estos pasan a estar disponibles para millones de usuarios de todo el mundo.\n¡Únete a la comunidad y ayuda a crear un mejor mapa para todos!
-es-MX = OpenStreetMap.org (OSM) es un proyecto comunitario para construir un mapa libre y abierto. Es la principal fuente de datos cartográficos de Organic Maps y funciona de forma similar a Wikipedia. Puedes añadir o editar lugares y se ponen a disposición de millones de usuarios de todo el mundo.\N¡Únete a la comunidad y ayuda a hacer un mapa mejor para todos!
-et = OpenStreetMap.org (OSM) on kogukonna projekt, mille eesmärk on luua vaba, tasuta ja avatud kaart. See on Organic Mapsi peamine kaardiandmete allikas ja toimib sarnaselt Vikipeediaga. Saad lisada või muuta kohti ja need muutuvad kättesaadavaks miljonitele kasutajatele üle kogu maailma.\nLiitu kogukonnaga ja aita luua kõigi jaoks paremat kaarti!
-eu = OpenStreetMap.org (OSM) mapa libre eta irekia eraikitzeko komunitateko proiektu bat da. Organic Maps-en mapen datuen iturri nagusia da eta Wikipediaren antzera funtzionatzen du. Tokiak gehitu edo edita ditzakezu eta mundu osoko milioika erabiltzailerentzat eskuragarri egongo dira.\nSartu komunitatean eta lagundu mapa hobea egiten guztiontzat!
-fa = OpenStreetMap.org (OSM) یک پروژهٔ اجتماعی برای ساختن نقشه‌ای آزاد و باز است. این منبع اصلی داده‌های نقشه در Organic Maps است و به‌طور مشابهی با ویکی‌پدیا کار می‌کند. شما می‌توانید مکان‌ها را اضافه یا ویرایش کنید و آن‌ها در اختیار میلیون‌ها کاربر در سراسر جهان قرار می‌گیرند. به جامعه بپیوندید و به ساختن نقشه‌ای بهتر برای همه کمک کنید!
-fi = OpenStreetMap.org (OSM) on yhteisöprojekti, jonka tarkoituksena on rakentaa ilmainen ja avoin kartta. Se on Organic Mapsin tärkein karttatietojen lähde ja toimii samalla tavalla kuin Wikipedia. Voit lisätä tai muokata paikkoja, ja ne tulevat miljoonien käyttäjien saataville kaikkialla maailmassa.\nLiity yhteisöön ja auta tekemään parempi kartta kaikille!
-fr = OpenStreetMap.org (OSM) est un projet communautaire visant à créer une carte libre et ouverte. C'est la principale source de données cartographiques d'Organic Maps et son fonctionnement est similaire à celui de Wikipédia. Vous pouvez ajouter ou modifier des lieux et ils deviennent accessibles à des millions d'utilisateurs dans le monde entier.\nRejoignez la communauté et aidez-nous à créer une meilleure carte pour tout le monde !
-gl = OpenStreetMap.org (OSM) é un proxecto comunitario para construír un mapa libre e aberto. É a principal fonte de datos cartográficos de Organic Maps e funciona de forma similar a Wikipedia. Vostede pode engadir ou editar lugares e estes pasan a estar dispoñibles para millóns de usuarios de todo o mundo. \nÚnase á comunidade e axude a crear un mapa mellor para todos!
-he = \u200FOpenStreetMap.org (OSM) הוא פרויקט קהילתי לבניית מפה חופשית ופתוחה. זהו המקור העיקרי לנתוני מפות ב-Organic Maps והוא פועל בדומה לוויקיפדיה. ניתן להוסיף או לערוך מקומות והם הופכים לזמינים למיליוני משתמשים בכל רחבי העולם.\nהצטרף לקהילה ועזור ליצור מפה טובה יותר לכולם!
-hi = OpenStreetMap.org (OSM) एक समुदाय परियोजना है जो एक मुफ्त और खुले नक्शे का निर्माण करती है। यह Organic Maps में नक्शा डेटा का मुख्य स्रोत है और विकिपीडिया की तरह काम करती है। आप स्थान जोड़ या संपादित कर सकते हैं और वे दुनिया भर के लाखों उपयोगकर्ताओं के लिए उपलब्ध हो जाते हैं।\nसमुदाय में शामिल हों और सभी के लिए एक बेहतर नक्शा बनाने में मदद करें!
-hr = OpenStreetMap.org (OSM) je projekt zajednice za izradu slobodne i otvorene karte. To je glavni izvor kartnih podataka u Organic Mapsu i funkcionira slično kao Wikipedia. Možete dodavati ili uređivati mjesta i ona postaju dostupna milijunima korisnika diljem svijeta. Pridružite se zajednici i pomozite u izradi bolje karte za sve!
-hu = Az OpenStreetMap.org (OSM) egy közösségi projekt, amelynek célja egy ingyenes és nyílt térkép létrehozása. Ez az Organic Maps alkalmazás térképadatainak fő forrása, és a Wikipédiához hasonlóan működik. Helyeket adhat hozzá vagy szerkeszthet, és azok világszerte felhasználók milliói számára válnak elérhetővé. \nCsatlakozzon a közösséghez, és segítsen egy jobb térképet készíteni mindenki számára!
-hy = OpenStreetMap.org (OSM)-ը համայնքային նախագիծ է՝ անվճար և բաց քարտեզ ստեղծելու համար: Այն Organic Maps-ի քարտեզային տվյալների հիմնական աղբյուրն է և աշխատում է Վիքիպեդիայի նման: Դուք կարող եք ավելացնել կամ խմբագրել վայրեր, և դրանք հասանելի կդառնան միլիոնավոր օգտատերերի ամբողջ աշխարհում.\nՄիացեք համայնքին և օգնեք ստեղծել ավելի լավ քարտեզ բոլորի համար!
-id = OpenStreetMap.org (OSM) adalah sebuah proyek komunitas untuk membuat sebuah peta yang bebas dan terbuka. OSM merupakan sumber utama data peta di Organic Maps dan berfungsi mirip dengan Wikipedia. Anda dapat menambahkan atau mengedit tempat dan tempat tersebut tersedia untuk jutaan pengguna di seluruh Dunia.\nBergabunglah dengan komunitas dan bantu membuat peta yang lebih baik untuk semua orang!
-is = OpenStreetMap.org (OSM) er samfélagsverkefni sem stefnir að uppbyggingu á frjálsu og opnu landakorti. Þetta er meginuppistaðan í Organic Maps og virkar svipað og Wikipedia. Þú getur bætt við eð breytt stöðum, og verða þeir þá aðgengilegir milljónum notenda um víða veröld.\nTaktu þátt og hjálpaðu til við að gera betri landakort fyrir alla!
-it = OpenStreetMap.org (OSM) è un progetto comunitario per creare una mappa libera e aperta. È la principale fonte di dati cartografici di Organic Maps e funziona in modo simile a Wikipedia. Puoi aggiungere o modificare luoghi che diventano disponibili per milioni di utenti in tutto il mondo. \nEntra a far parte della comunità e contribuisci a creare una mappa migliore per tutti!
-ja = OpenStreetMap.org(OSM)は、フリーでオープンな地図を構築するコミュニティ・プロジェクトです。OSMは、Organic Mapsの地図データの主要なソースであり、ウィキペディアと同じように機能します。あなたが場所を追加したり編集したりすると、世界中の何百万人ものユーザーがその場所を利用できるようになります！
-ko = OpenStreetMap.org(OSM)는 무료 개방형 지도를 구축하기 위한 커뮤니티 프로젝트입니다. 이 프로젝트는 Organic Maps의 주요 지도 데이터 소스이며, 위키백과와 유사한 방식으로 운영됩니다. 사용자는 장소를 추가하거나 편집할 수 있으며, 이러한 정보는 전 세계 수백만 명의 사용자가 이용할 수 있게 됩니다.\n커뮤니티에 참여하여 모두를 위한 더 나은 지도를 만드는 데 힘을 보태주세요!
-lo = OpenStreetMap.org (OSM) ແມ່ນໂຄງການຊຸມຊົນເພື່ອສ້າງແຜນທີ່ທີ່ຟຣີ ແລະ ເປີດກວ້າງ. ມັນເປັນແຫຼ່ງຂໍ້ມູນແຜນທີ່ຫຼັກໃນ Organic Maps ແລະ ເຮັດວຽກຄ້າຍຄືກັບ Wikipedia. ທ່ານສາມາດເພີ່ມ ຫຼື ແກ້ໄຂສະຖານທີ່ ແລະ ພວກມັນຈະພ້ອມໃຫ້ຜູ້ໃຊ້ຫຼາຍລ້ານຄົນທົ່ວໂລກໄດ້ໃຊ້.\nມາເຂົ້າຮ່ວມຊຸມຊົນ ແລະ ຊ່ວຍກັນສ້າງແຜນທີ່ທີ່ດີກວ່າສຳລັບທຸກຄົນ!
-lt = OpenStreetMap.org (OSM) – tai bendruomenės projektas, kuriuo siekiama sukurti laisvą ir atvirą žemėlapį. Tai – pagrindinis „Organic Maps“ žemėlapių duomenų šaltinis, veikiantis panašiu principu, kaip „Vikipedija“. Galite pridėti ar taisyti vietas, o jos tampa prieinamos milijonams naudotojų visame pasaulyje. \nPrisijunkite prie bendruomenės ir padėkite kurti geresnį žemėlapį visiems!
-lv = OpenStreetMap.org (OSM) ir kopienas projekts, kura mērķis ir izveidot atvērtajos datos balstītu karti, kura ir pieejama bez maksas. Tas ir Organic Maps galvenais karšu datu avots un darbojas līdzīgi kā Vikipēdija. Jūs varat pievienot vai rediģēt vietas, un tās kļūst pieejamas miljoniem lietotāju visā pasaulē.\nPievienojieties kopienai, lai palīdzētu izveidot labāku karti visiem!
-mr = OpenStreetMap.org (OSM) हा मोफत आणि मुक्त नकाशा तयार करण्याचा समुदाय प्रकल्प आहे. हा Organic Maps मधील नकाशा डेटाचा मुख्य स्रोत आहे आणि विकिपीडियाप्रमाणे कार्य करतो. तुम्ही ठिकाणे जोडू किंवा संपादित करू शकता आणि ती जगभरातील लाखो वापरकर्त्यांसाठी उपलब्ध होतात.\nसमुदायात सामील व्हा आणि सर्वांसाठी अधिक चांगला नकाशा तयार करण्यात मदत करा!
-mt = OpenStreetMap.org (OSM) huwa proġett komunitarju biex jinbena mappa ħielsa u miftuħa. Huwa s-sors ewlieni tad-dejta tal-mappa fl-Organic Maps, u jaħdem b'mod simili għal Wikipedia. Tista' żżid jew teditja postijiet u dawn isiru disponibbli għal miljuni ta' utenti madwar id-dinja. Ingħaqad mal-komunità u għin biex toħloq mappa aħjar għal kulħadd!
-nb = OpenStreetMap.org (OSM) er et fellesskapsprosjekt for å bygge et gratis og åpent kart. Det er hovedkilden til kartdata i Organic Maps og fungerer på samme måte som Wikipedia. Du kan legge til eller redigere steder, og de blir tilgjengelige for millioner av brukere over hele verden. \nBli med i fellesskapet og bidra til å lage et bedre kart for alle!
-nl = OpenStreetMap.org (OSM) is een gemeenschapsproject om een vrije en open kaart te bouwen. Het is de belangrijkste bron van kaartgegevens in Organic Maps en werkt ongeveer hetzelfde als Wikipedia. U kunt plaatsen toevoegen of bewerken en deze worden dan beschikbaar voor miljoenen gebruikers over de hele wereld.\nSluit u aan bij de gemeenschap en help mee om een betere kaart voor iedereen te maken!
-pl = OpenStreetMap.org (OSM) to projekt społecznościowy mający na celu stworzenie darmowej i otwartej mapy. Jest to główne źródło danych mapowych w Organic Maps i działa podobnie do Wikipedii. Można dodawać lub edytować miejsca, które stają się dostępne dla milionów użytkowników na całym świecie.\nDołącz do społeczności i pomóż stworzyć lepszą mapę dla wszystkich!
-pt = O OpenStreetMap.org (OSM) é um projeto comunitário aberto para construir um mapa gratuito. O OSM é a principal fonte de dados de mapas do Organic Maps e funciona de forma semelhante à Wikipedia. Pode adicionar ou editar locais e estes ficam disponíveis para milhões de utilizadores no mundo todo.\nJunte-se à comunidade e ajude a criar um mapa melhor para todos!
-pt-BR = O OpenStreetMap (OSM) é um projeto comunitário aberto para construir um mapa gratuito. O OSM é a principal fonte de dados de mapas do Organic Maps e funciona de forma semelhante à Wikipédia. Você pode adicionar ou editar lugares e eles ficam disponíveis para milhões de usuários no mundo todo.\nJunte-se à comunidade e ajude a criar um mapa melhor para todos!
-ro = OpenStreetMap.org (OSM) este un proiect comunitar pentru construirea unei hărți libere și deschise. Este principala sursă de date cartografice în Organic Maps și funcționează similar cu Wikipedia. Puteți adăuga sau edita locuri, iar acestea devin disponibile pentru milioane de utilizatori din întreaga lume.\nAlăturați-vă comunității și ajutați la crearea unei hărți mai bune pentru toată lumea!
-ru = OpenStreetMap.org (OSM) - это открытый проект сообщества по созданию бесплатной карты. Он является основным источником картографических данных в Organic Maps и работает как Википедия. Кто угодно может добавлять или редактировать места, которые позже увидят миллионы пользователей по всему миру.\nПрисоединяйтесь к сообществу и помогите сделать лучшую карту для всех!
-sk = OpenStreetMap.org (OSM) je komunitný projekt na vytvorenie bezplatnej a otvorenej mapy. Je hlavným zdrojom mapových údajov v službe Organic Maps a funguje podobne ako Wikipédia. Môžete pridávať alebo upravovať miesta a tie sa stanú dostupnými pre milióny používateľov na celom svete.\nPridajte sa ku komunite a pomôžte vytvoriť lepšiu mapu pre všetkých!
-sl = OpenStreetMap.org (OSM) je projekt skupnosti za izgradnjo brezplačnega in odprtega zemljevida. Je glavni vir podatkov o zemljevidih v Organic Maps in deluje podobno kot Wikipedija. Lahko dodajate ali urejate mesta, ki postanejo na voljo milijonom uporabnikov po vsem svetu.\nPridružite se skupnosti in pomagajte ustvariti boljši zemljevid za vse!
-sq = OpenStreetMap.org (OSM) është një projekt komunitar për të ndërtuar një hartë të lirë dhe të hapur. Është burimi kryesor i të dhënave të hartës në Organic Maps dhe funksionon ngjashëm me Wikipedia. Ju mund të shtoni ose redaktoni vende dhe ato bëhen të disponueshme për miliona përdorues në të gjithë botën.\nBashkohuni me komunitetin dhe ndihmoni për të bërë një hartë më të mirë për të gjithë!
-sr = OpenStreetMap.org (OSM) је пројекат заједнице који има за циљ прављење бесплатне, слободне и отворене мапе. OSM је главни извор података за мапе у Organic Maps-у и функционише на сличан начин као Википедија. Можете додати или променити места и ваше промене постају видљиве милионима корисника широм света.\nПридружите се заједници и помозите да направимо бољу мапу која је доступна свима!
-sv = OpenStreetMap.org (OSM) är ett gemenskapsprojekt för att skapa en fri och öppen karta. Det är den huvudsakliga källan till kartdata i Organic Maps och fungerar ungefär som Wikipedia. Du kan lägga till eller redigera platser, och ändringarna blir tillgängliga för miljontals användare över hela världen.\nGå med i gemenskapen och hjälp till att skapa en bättre karta för alla!
-sw = OpenStreetMap.org (OSM) ni mradi wa jamii wa kuunda ramani huru na wazi. Ni chanzo kikuu cha data za ramani katika Organic Maps na inafanya kazi kwa njia inayofanana na Wikipedia. Unaweza kuongeza au kuhariri maeneo na yanapatikana kwa mamilioni ya watumiaji kote ulimwenguni. Jiunge na jamii na usaidie kutengeneza ramani bora kwa kila mtu!
-th = OpenStreetMap.org (OSM) เป็นโครงการของชุมชนเพื่อสร้างแผนที่ที่เสรีและเปิดกว้าง นี่คือแหล่งข้อมูลแผนที่หลักใน Organic Maps และทำงานคล้ายกับวิกิพีเดีย คุณสามารถเพิ่มหรือแก้ไขสถานที่ต่าง ๆ ได้ และสิ่งที่คุณทำจะพร้อมใช้งานสำหรับผู้ใช้หลายล้านคนทั่วโลก\nเข้าร่วมชุมชนและช่วยสร้างแผนที่ที่ดีขึ้นสำหรับทุกคน!
-tr = OpenStreetMap.org (OSM), özgür ve açık harita oluşturmayı amaçlayan topluluk projesidir. OSM, Organic Maps'teki harita verisinin ana kaynağıdır ve Vikipedi'ye benzer çalışır. Yerler ekleyebilir ya da düzenleyebilirsiniz ve bunlar tüm dünyadaki milyonlarca kullanıcıca erişilebilir.\nTopluluğa katılın ve herkes için daha iyi harita oluşturmaya yardımcı olun!
-uk = OpenStreetMap.org (OSM) - це громадський проект зі створення вільної та відкритої мапи. Це основне джерело картографічних даних в Organic Maps і працює подібно до Вікіпедії. Ви можете додавати або редагувати місця, і вони стають доступними мільйонам користувачів по всьому світу.\nПриєднуйтесь до спільноти і допоможіть зробити мапу кращою для всіх!
-vi = OpenStreetMap.org (OSM) là một dự án cộng đồng nhằm xây dựng bản đồ miễn phí và mở. Đây là nguồn dữ liệu bản đồ chính trên Organic Maps và hoạt động tương tự như Wikipedia. Bạn có thể thêm hoặc chỉnh sửa các địa điểm và chúng sẽ được cung cấp cho hàng triệu người dùng trên toàn thế giới.\nHãy tham gia cộng đồng và cùng góp phần tạo ra bản đồ tốt hơn cho mọi người!
-zh-Hans = OpenStreetMap.org（OSM）是一个构建自由开放地图的社区项目。它是 Organic Maps 地图数据的主要来源，其工作原理类似于维基百科。您可以添加或编辑地点，全世界数以百万计的用户都可以使用它们！\n加入社区，共同完善地图数据，造福每个人！
-zh-Hant = OpenStreetMap.org (OSM) 是一個建立免費開放地圖的社群專案。它是Organic Maps中地圖資料的主要來源，其工作方式類似於維基百科。您可以新增或編輯地點，全世界數百萬用戶都可以使用它們。\n加入社群來幫忙大家建造更好的地圖！
+en = OpenStreetMap.org (OSM) is a community project to build a free and open map. It's the main source of map data in Maps&Fly and works similar to Wikipedia. You can add or edit places and they become available to millions of users all over the World.\nJoin the community and help to make a better map for everyone!
+af = OpenStreetMap.org (OSM) is 'n gemeenskapsprojek om 'n gratis en oop kaart te bou. Dit is die hoofbron van kaartdata in Maps&Fly en werk soortgelyk aan Wikipedia. Jy kan plekke byvoeg of wysig en hulle word beskikbaar vir miljoene gebruikers regoor die wêreld.\nSluit aan by die gemeenskap en help om 'n beter kaart vir almal te maak!
+ar = OpenStreetMap.org (OSM) هو مشروع مجتمعي يهدف إلى إنشاء خريطة مجانية ومفتوحة. وهو المصدر الرئيسي لبيانات الخرائط في Maps&Fly ويعمل بشكل مشابه لـويكيبيديا. يمكنك إضافة أو تعديل الأماكن لتصبح متاحة لملايين المستخدمين في جميع أنحاء العالم.\nانضم إلى المجتمع وساعد في إنشاء خريطة أفضل للجميع!
+az = OpenStreetMap.org (OSM) pulsuz və açıq xəritə yaratmaq üçün icma layihəsidir. Bu, Maps&Fly xəritə məlumatlarının əsas mənbəyidir və Vikipediya kimi fəaliyyət göstərir. Siz yerlər əlavə edib və ya redaktə edə bilərsiniz və onlar bütün dünyada milyonlarla istifadəçi üçün əlçatan olur. İcmaya qoşulun və hər kəs üçün daha yaxşı xəritə yaratmağa kömək edin!
+be = OpenStreetMap.org (OSM) - гэта грамадскі праект па стварэнні бясплатнай і адкрытай мапы, і асноўная крыніца картаграфічных даных у Maps&Fly, якая працуе падобна на Вікіпедыю. Кожны можа дадаваць або рэдагаваць месцы, якія ўбачаць мільёны карыстальнікаў па ўсім свеце. \nДалучайцеся да супольнасці і дапамажыце зрабіць лепшую мапу для ўсіх!
+bg = OpenStreetMap.org (OSM) е общностен проект за създаване на безплатна и отворена карта. Той е основният източник на картографски данни в Maps&Fly и работи подобно на Wikipedia. Можете да добавяте или редактирате места и те стават достъпни за милиони потребители по целия свят.\nПрисъединете се към общността и помогнете за създаването на по-добра карта за всички!
+ca = OpenStreetMap.org (OSM) és un projecte comunitari per construir un mapa lliure i obert. És la font principal de dades de mapes a Maps&Fly i funciona de manera similar a la Viquipèdia. Pots afegir o editar llocs i estaran disponibles per a milions d'usuaris de tot el món.\nUneix-te a la comunitat i ajuda a crear un mapa millor per a tothom!
+cs = OpenStreetMap.org (OSM) je komunitní projekt, jehož cílem je vytvořit svobodnou a otevřenou mapu. Je hlavním zdrojem mapových dat v aplikaci Maps&Fly a funguje podobně jako Wikipedie. Můžete přidávat nebo upravovat místa a ta se pak stanou dostupná milionům uživatelů po celém světě.\nPřipojte se ke komunitě a pomozte vytvořit lepší mapu pro všechny!
+cy = Mae OpenStreetMap.org (OSM) yn brosiect cymunedol i adeiladu map agored ac am ddim. Dyma brif ffynhonnell data map yn Maps&Fly ac mae'n gweithio'n debyg i Wicipedia. Gallwch ychwanegu neu olygu lleoedd a byddant ar gael i filiynau o ddefnyddwyr ledled y byd.\nYmunwch â'r gymuned a helpwch i wneud map gwell i bawb!
+da = OpenStreetMap.org (OSM) er et fællesskabsprojekt til opbygning af et gratis og åbent kort. Det er hovedkilden til kortdata i Maps&Fly og fungerer på samme måde som Wikipedia. Du kan tilføje eller redigere steder, og de bliver tilgængelige for millioner af brugere over hele verden.\nSlut dig til fællesskabet og vær med til at skabe et bedre kort for alle!
+de = OpenStreetMap.org (OSM) ist ein Gemeinschaftsprojekt zum Erstellen einer freien und offenen Karte. Es ist die Hauptquelle für Kartendaten in Maps&Fly und funktioniert ähnlich wie Wikipedia. Du kannst Orte hinzufügen oder bearbeiten, die dann Millionen von Nutzern auf der ganzen Welt zur Verfügung stehen.\nTritt der Gemeinschaft bei und hilf mit, die Karte für alle besser zu machen!
+el = Το OpenStreetMap.org (OSM) είναι ένα κοινοτικό έργο με στόχο τη δημιουργία ενός δωρεάν και ανοιχτού χάρτη. Αποτελεί την κύρια πηγή δεδομένων χαρτών στο Maps&Fly και λειτουργεί παρόμοια με τη Wikipedia. Μπορείτε να προσθέσετε ή να επεξεργαστείτε τοποθεσίες, οι οποίες θα γίνουν διαθέσιμες σε εκατομμύρια χρήστες σε όλο τον κόσμο.\nΓίνετε μέλος της κοινότητας και βοηθήστε στη δημιουργία ενός καλύτερου χάρτη για όλους!
+es = OpenStreetMap.org (OSM) es un proyecto comunitario para construir un mapa gratis y abierto. Es la principal fuente de datos cartográficos de Maps&Fly y funciona de forma similar a Wikipedia. Puedes añadir o editar lugares y estos pasan a estar disponibles para millones de usuarios de todo el mundo.\n¡Únete a la comunidad y ayuda a crear un mejor mapa para todos!
+es-MX = OpenStreetMap.org (OSM) es un proyecto comunitario para construir un mapa libre y abierto. Es la principal fuente de datos cartográficos de Maps&Fly y funciona de forma similar a Wikipedia. Puedes añadir o editar lugares y se ponen a disposición de millones de usuarios de todo el mundo.\N¡Únete a la comunidad y ayuda a hacer un mapa mejor para todos!
+et = OpenStreetMap.org (OSM) on kogukonna projekt, mille eesmärk on luua vaba, tasuta ja avatud kaart. See on Maps&Flyi peamine kaardiandmete allikas ja toimib sarnaselt Vikipeediaga. Saad lisada või muuta kohti ja need muutuvad kättesaadavaks miljonitele kasutajatele üle kogu maailma.\nLiitu kogukonnaga ja aita luua kõigi jaoks paremat kaarti!
+eu = OpenStreetMap.org (OSM) mapa libre eta irekia eraikitzeko komunitateko proiektu bat da. Maps&Fly-en mapen datuen iturri nagusia da eta Wikipediaren antzera funtzionatzen du. Tokiak gehitu edo edita ditzakezu eta mundu osoko milioika erabiltzailerentzat eskuragarri egongo dira.\nSartu komunitatean eta lagundu mapa hobea egiten guztiontzat!
+fa = OpenStreetMap.org (OSM) یک پروژهٔ اجتماعی برای ساختن نقشه‌ای آزاد و باز است. این منبع اصلی داده‌های نقشه در Maps&Fly است و به‌طور مشابهی با ویکی‌پدیا کار می‌کند. شما می‌توانید مکان‌ها را اضافه یا ویرایش کنید و آن‌ها در اختیار میلیون‌ها کاربر در سراسر جهان قرار می‌گیرند. به جامعه بپیوندید و به ساختن نقشه‌ای بهتر برای همه کمک کنید!
+fi = OpenStreetMap.org (OSM) on yhteisöprojekti, jonka tarkoituksena on rakentaa ilmainen ja avoin kartta. Se on Maps&Flyin tärkein karttatietojen lähde ja toimii samalla tavalla kuin Wikipedia. Voit lisätä tai muokata paikkoja, ja ne tulevat miljoonien käyttäjien saataville kaikkialla maailmassa.\nLiity yhteisöön ja auta tekemään parempi kartta kaikille!
+fr = OpenStreetMap.org (OSM) est un projet communautaire visant à créer une carte libre et ouverte. C'est la principale source de données cartographiques d'Maps&Fly et son fonctionnement est similaire à celui de Wikipédia. Vous pouvez ajouter ou modifier des lieux et ils deviennent accessibles à des millions d'utilisateurs dans le monde entier.\nRejoignez la communauté et aidez-nous à créer une meilleure carte pour tout le monde !
+gl = OpenStreetMap.org (OSM) é un proxecto comunitario para construír un mapa libre e aberto. É a principal fonte de datos cartográficos de Maps&Fly e funciona de forma similar a Wikipedia. Vostede pode engadir ou editar lugares e estes pasan a estar dispoñibles para millóns de usuarios de todo o mundo. \nÚnase á comunidade e axude a crear un mapa mellor para todos!
+he = \u200FOpenStreetMap.org (OSM) הוא פרויקט קהילתי לבניית מפה חופשית ופתוחה. זהו המקור העיקרי לנתוני מפות ב-Maps&Fly והוא פועל בדומה לוויקיפדיה. ניתן להוסיף או לערוך מקומות והם הופכים לזמינים למיליוני משתמשים בכל רחבי העולם.\nהצטרף לקהילה ועזור ליצור מפה טובה יותר לכולם!
+hi = OpenStreetMap.org (OSM) एक समुदाय परियोजना है जो एक मुफ्त और खुले नक्शे का निर्माण करती है। यह Maps&Fly में नक्शा डेटा का मुख्य स्रोत है और विकिपीडिया की तरह काम करती है। आप स्थान जोड़ या संपादित कर सकते हैं और वे दुनिया भर के लाखों उपयोगकर्ताओं के लिए उपलब्ध हो जाते हैं।\nसमुदाय में शामिल हों और सभी के लिए एक बेहतर नक्शा बनाने में मदद करें!
+hr = OpenStreetMap.org (OSM) je projekt zajednice za izradu slobodne i otvorene karte. To je glavni izvor kartnih podataka u Maps&Flyu i funkcionira slično kao Wikipedia. Možete dodavati ili uređivati mjesta i ona postaju dostupna milijunima korisnika diljem svijeta. Pridružite se zajednici i pomozite u izradi bolje karte za sve!
+hu = Az OpenStreetMap.org (OSM) egy közösségi projekt, amelynek célja egy ingyenes és nyílt térkép létrehozása. Ez az Maps&Fly alkalmazás térképadatainak fő forrása, és a Wikipédiához hasonlóan működik. Helyeket adhat hozzá vagy szerkeszthet, és azok világszerte felhasználók milliói számára válnak elérhetővé. \nCsatlakozzon a közösséghez, és segítsen egy jobb térképet készíteni mindenki számára!
+hy = OpenStreetMap.org (OSM)-ը համայնքային նախագիծ է՝ անվճար և բաց քարտեզ ստեղծելու համար: Այն Maps&Fly-ի քարտեզային տվյալների հիմնական աղբյուրն է և աշխատում է Վիքիպեդիայի նման: Դուք կարող եք ավելացնել կամ խմբագրել վայրեր, և դրանք հասանելի կդառնան միլիոնավոր օգտատերերի ամբողջ աշխարհում.\nՄիացեք համայնքին և օգնեք ստեղծել ավելի լավ քարտեզ բոլորի համար!
+id = OpenStreetMap.org (OSM) adalah sebuah proyek komunitas untuk membuat sebuah peta yang bebas dan terbuka. OSM merupakan sumber utama data peta di Maps&Fly dan berfungsi mirip dengan Wikipedia. Anda dapat menambahkan atau mengedit tempat dan tempat tersebut tersedia untuk jutaan pengguna di seluruh Dunia.\nBergabunglah dengan komunitas dan bantu membuat peta yang lebih baik untuk semua orang!
+is = OpenStreetMap.org (OSM) er samfélagsverkefni sem stefnir að uppbyggingu á frjálsu og opnu landakorti. Þetta er meginuppistaðan í Maps&Fly og virkar svipað og Wikipedia. Þú getur bætt við eð breytt stöðum, og verða þeir þá aðgengilegir milljónum notenda um víða veröld.\nTaktu þátt og hjálpaðu til við að gera betri landakort fyrir alla!
+it = OpenStreetMap.org (OSM) è un progetto comunitario per creare una mappa libera e aperta. È la principale fonte di dati cartografici di Maps&Fly e funziona in modo simile a Wikipedia. Puoi aggiungere o modificare luoghi che diventano disponibili per milioni di utenti in tutto il mondo. \nEntra a far parte della comunità e contribuisci a creare una mappa migliore per tutti!
+ja = OpenStreetMap.org(OSM)は、フリーでオープンな地図を構築するコミュニティ・プロジェクトです。OSMは、Maps&Flyの地図データの主要なソースであり、ウィキペディアと同じように機能します。あなたが場所を追加したり編集したりすると、世界中の何百万人ものユーザーがその場所を利用できるようになります！
+ko = OpenStreetMap.org(OSM)는 무료 개방형 지도를 구축하기 위한 커뮤니티 프로젝트입니다. 이 프로젝트는 Maps&Fly의 주요 지도 데이터 소스이며, 위키백과와 유사한 방식으로 운영됩니다. 사용자는 장소를 추가하거나 편집할 수 있으며, 이러한 정보는 전 세계 수백만 명의 사용자가 이용할 수 있게 됩니다.\n커뮤니티에 참여하여 모두를 위한 더 나은 지도를 만드는 데 힘을 보태주세요!
+lo = OpenStreetMap.org (OSM) ແມ່ນໂຄງການຊຸມຊົນເພື່ອສ້າງແຜນທີ່ທີ່ຟຣີ ແລະ ເປີດກວ້າງ. ມັນເປັນແຫຼ່ງຂໍ້ມູນແຜນທີ່ຫຼັກໃນ Maps&Fly ແລະ ເຮັດວຽກຄ້າຍຄືກັບ Wikipedia. ທ່ານສາມາດເພີ່ມ ຫຼື ແກ້ໄຂສະຖານທີ່ ແລະ ພວກມັນຈະພ້ອມໃຫ້ຜູ້ໃຊ້ຫຼາຍລ້ານຄົນທົ່ວໂລກໄດ້ໃຊ້.\nມາເຂົ້າຮ່ວມຊຸມຊົນ ແລະ ຊ່ວຍກັນສ້າງແຜນທີ່ທີ່ດີກວ່າສຳລັບທຸກຄົນ!
+lt = OpenStreetMap.org (OSM) – tai bendruomenės projektas, kuriuo siekiama sukurti laisvą ir atvirą žemėlapį. Tai – pagrindinis „Maps&Fly“ žemėlapių duomenų šaltinis, veikiantis panašiu principu, kaip „Vikipedija“. Galite pridėti ar taisyti vietas, o jos tampa prieinamos milijonams naudotojų visame pasaulyje. \nPrisijunkite prie bendruomenės ir padėkite kurti geresnį žemėlapį visiems!
+lv = OpenStreetMap.org (OSM) ir kopienas projekts, kura mērķis ir izveidot atvērtajos datos balstītu karti, kura ir pieejama bez maksas. Tas ir Maps&Fly galvenais karšu datu avots un darbojas līdzīgi kā Vikipēdija. Jūs varat pievienot vai rediģēt vietas, un tās kļūst pieejamas miljoniem lietotāju visā pasaulē.\nPievienojieties kopienai, lai palīdzētu izveidot labāku karti visiem!
+mr = OpenStreetMap.org (OSM) हा मोफत आणि मुक्त नकाशा तयार करण्याचा समुदाय प्रकल्प आहे. हा Maps&Fly मधील नकाशा डेटाचा मुख्य स्रोत आहे आणि विकिपीडियाप्रमाणे कार्य करतो. तुम्ही ठिकाणे जोडू किंवा संपादित करू शकता आणि ती जगभरातील लाखो वापरकर्त्यांसाठी उपलब्ध होतात.\nसमुदायात सामील व्हा आणि सर्वांसाठी अधिक चांगला नकाशा तयार करण्यात मदत करा!
+mt = OpenStreetMap.org (OSM) huwa proġett komunitarju biex jinbena mappa ħielsa u miftuħa. Huwa s-sors ewlieni tad-dejta tal-mappa fl-Maps&Fly, u jaħdem b'mod simili għal Wikipedia. Tista' żżid jew teditja postijiet u dawn isiru disponibbli għal miljuni ta' utenti madwar id-dinja. Ingħaqad mal-komunità u għin biex toħloq mappa aħjar għal kulħadd!
+nb = OpenStreetMap.org (OSM) er et fellesskapsprosjekt for å bygge et gratis og åpent kart. Det er hovedkilden til kartdata i Maps&Fly og fungerer på samme måte som Wikipedia. Du kan legge til eller redigere steder, og de blir tilgjengelige for millioner av brukere over hele verden. \nBli med i fellesskapet og bidra til å lage et bedre kart for alle!
+nl = OpenStreetMap.org (OSM) is een gemeenschapsproject om een vrije en open kaart te bouwen. Het is de belangrijkste bron van kaartgegevens in Maps&Fly en werkt ongeveer hetzelfde als Wikipedia. U kunt plaatsen toevoegen of bewerken en deze worden dan beschikbaar voor miljoenen gebruikers over de hele wereld.\nSluit u aan bij de gemeenschap en help mee om een betere kaart voor iedereen te maken!
+pl = OpenStreetMap.org (OSM) to projekt społecznościowy mający na celu stworzenie darmowej i otwartej mapy. Jest to główne źródło danych mapowych w Maps&Fly i działa podobnie do Wikipedii. Można dodawać lub edytować miejsca, które stają się dostępne dla milionów użytkowników na całym świecie.\nDołącz do społeczności i pomóż stworzyć lepszą mapę dla wszystkich!
+pt = O OpenStreetMap.org (OSM) é um projeto comunitário aberto para construir um mapa gratuito. O OSM é a principal fonte de dados de mapas do Maps&Fly e funciona de forma semelhante à Wikipedia. Pode adicionar ou editar locais e estes ficam disponíveis para milhões de utilizadores no mundo todo.\nJunte-se à comunidade e ajude a criar um mapa melhor para todos!
+pt-BR = O OpenStreetMap (OSM) é um projeto comunitário aberto para construir um mapa gratuito. O OSM é a principal fonte de dados de mapas do Maps&Fly e funciona de forma semelhante à Wikipédia. Você pode adicionar ou editar lugares e eles ficam disponíveis para milhões de usuários no mundo todo.\nJunte-se à comunidade e ajude a criar um mapa melhor para todos!
+ro = OpenStreetMap.org (OSM) este un proiect comunitar pentru construirea unei hărți libere și deschise. Este principala sursă de date cartografice în Maps&Fly și funcționează similar cu Wikipedia. Puteți adăuga sau edita locuri, iar acestea devin disponibile pentru milioane de utilizatori din întreaga lume.\nAlăturați-vă comunității și ajutați la crearea unei hărți mai bune pentru toată lumea!
+ru = OpenStreetMap.org (OSM) - это открытый проект сообщества по созданию бесплатной карты. Он является основным источником картографических данных в Maps&Fly и работает как Википедия. Кто угодно может добавлять или редактировать места, которые позже увидят миллионы пользователей по всему миру.\nПрисоединяйтесь к сообществу и помогите сделать лучшую карту для всех!
+sk = OpenStreetMap.org (OSM) je komunitný projekt na vytvorenie bezplatnej a otvorenej mapy. Je hlavným zdrojom mapových údajov v službe Maps&Fly a funguje podobne ako Wikipédia. Môžete pridávať alebo upravovať miesta a tie sa stanú dostupnými pre milióny používateľov na celom svete.\nPridajte sa ku komunite a pomôžte vytvoriť lepšiu mapu pre všetkých!
+sl = OpenStreetMap.org (OSM) je projekt skupnosti za izgradnjo brezplačnega in odprtega zemljevida. Je glavni vir podatkov o zemljevidih v Maps&Fly in deluje podobno kot Wikipedija. Lahko dodajate ali urejate mesta, ki postanejo na voljo milijonom uporabnikov po vsem svetu.\nPridružite se skupnosti in pomagajte ustvariti boljši zemljevid za vse!
+sq = OpenStreetMap.org (OSM) është një projekt komunitar për të ndërtuar një hartë të lirë dhe të hapur. Është burimi kryesor i të dhënave të hartës në Maps&Fly dhe funksionon ngjashëm me Wikipedia. Ju mund të shtoni ose redaktoni vende dhe ato bëhen të disponueshme për miliona përdorues në të gjithë botën.\nBashkohuni me komunitetin dhe ndihmoni për të bërë një hartë më të mirë për të gjithë!
+sr = OpenStreetMap.org (OSM) је пројекат заједнице који има за циљ прављење бесплатне, слободне и отворене мапе. OSM је главни извор података за мапе у Maps&Fly-у и функционише на сличан начин као Википедија. Можете додати или променити места и ваше промене постају видљиве милионима корисника широм света.\nПридружите се заједници и помозите да направимо бољу мапу која је доступна свима!
+sv = OpenStreetMap.org (OSM) är ett gemenskapsprojekt för att skapa en fri och öppen karta. Det är den huvudsakliga källan till kartdata i Maps&Fly och fungerar ungefär som Wikipedia. Du kan lägga till eller redigera platser, och ändringarna blir tillgängliga för miljontals användare över hela världen.\nGå med i gemenskapen och hjälp till att skapa en bättre karta för alla!
+sw = OpenStreetMap.org (OSM) ni mradi wa jamii wa kuunda ramani huru na wazi. Ni chanzo kikuu cha data za ramani katika Maps&Fly na inafanya kazi kwa njia inayofanana na Wikipedia. Unaweza kuongeza au kuhariri maeneo na yanapatikana kwa mamilioni ya watumiaji kote ulimwenguni. Jiunge na jamii na usaidie kutengeneza ramani bora kwa kila mtu!
+th = OpenStreetMap.org (OSM) เป็นโครงการของชุมชนเพื่อสร้างแผนที่ที่เสรีและเปิดกว้าง นี่คือแหล่งข้อมูลแผนที่หลักใน Maps&Fly และทำงานคล้ายกับวิกิพีเดีย คุณสามารถเพิ่มหรือแก้ไขสถานที่ต่าง ๆ ได้ และสิ่งที่คุณทำจะพร้อมใช้งานสำหรับผู้ใช้หลายล้านคนทั่วโลก\nเข้าร่วมชุมชนและช่วยสร้างแผนที่ที่ดีขึ้นสำหรับทุกคน!
+tr = OpenStreetMap.org (OSM), özgür ve açık harita oluşturmayı amaçlayan topluluk projesidir. OSM, Maps&Fly'teki harita verisinin ana kaynağıdır ve Vikipedi'ye benzer çalışır. Yerler ekleyebilir ya da düzenleyebilirsiniz ve bunlar tüm dünyadaki milyonlarca kullanıcıca erişilebilir.\nTopluluğa katılın ve herkes için daha iyi harita oluşturmaya yardımcı olun!
+uk = OpenStreetMap.org (OSM) - це громадський проект зі створення вільної та відкритої мапи. Це основне джерело картографічних даних в Maps&Fly і працює подібно до Вікіпедії. Ви можете додавати або редагувати місця, і вони стають доступними мільйонам користувачів по всьому світу.\nПриєднуйтесь до спільноти і допоможіть зробити мапу кращою для всіх!
+vi = OpenStreetMap.org (OSM) là một dự án cộng đồng nhằm xây dựng bản đồ miễn phí và mở. Đây là nguồn dữ liệu bản đồ chính trên Maps&Fly và hoạt động tương tự như Wikipedia. Bạn có thể thêm hoặc chỉnh sửa các địa điểm và chúng sẽ được cung cấp cho hàng triệu người dùng trên toàn thế giới.\nHãy tham gia cộng đồng và cùng góp phần tạo ra bản đồ tốt hơn cho mọi người!
+zh-Hans = OpenStreetMap.org（OSM）是一个构建自由开放地图的社区项目。它是 Maps&Fly 地图数据的主要来源，其工作原理类似于维基百科。您可以添加或编辑地点，全世界数以百万计的用户都可以使用它们！\n加入社区，共同完善地图数据，造福每个人！
+zh-Hant = OpenStreetMap.org (OSM) 是一個建立免費開放地圖的社群專案。它是Maps&Fly中地圖資料的主要來源，其工作方式類似於維基百科。您可以新增或編輯地點，全世界數百萬用戶都可以使用它們。\n加入社群來幫忙大家建造更好的地圖！
 
 [login_to_make_edits_visible]
 tags = android-app,apple-maps
@@ -19797,59 +19797,59 @@ zh-Hant = OpenStreetMap 志工注意事項（可選）
 [editor_note_hint]
 comment = Hint of the input field in the OSM note section of the editor
 tags = android-app
-en = Describe errors on the map or things that cannot be edited with Organic Maps
-af = Beskryf foute op die kaart of dinge wat nie met Organic Maps gewysig kan word nie.
-ar = يرجى وصف الأخطاء الموجودة على الخريطة أو العناصر التي لا يمكن تعديلها عبر البريد الإلكتروني Organic Maps
-az = Xəritədəki səhvləri və ya redaktə edilə bilməyən elementləri təsvir edinOrganic Maps
-be = Апішыце памылкі на карце або рэчы, якія немагчыма адрэдагаваць з дапамогай Organic Maps
-bg = Описване на грешки в картата или неща, които не могат да бъдат редактирани с Organic Maps
-ca = Descriviu els errors al mapa o les coses que no es poden editar amb Organic Maps
-cs = Popište chyby na mapě nebo věci, které nelze upravit pomocí aplikace Organic Maps
-cy = Disgrifiwch wallau ar y map neu bethau na ellir eu golygu gydag Organic Maps
-da = Beskriv fejl på kortet eller ting, der ikke kan redigeres med Organic Maps
-de = Beschreibe Kartenfehler oder Dinge, die mit Organic Maps nicht bearbeitet werden können
-el = Περιγράψτε λάθη στο χάρτη ή πράγματα που δεν μπορούν να επεξεργαστούν με τους Organic Maps
-es = Describa los errores en el mapa o las cosas que no se pueden editar con Organic Maps
-es-MX = Describe errores en el mapa o cosas que no se pueden editar con Organic Maps
-et = Kirjelda kaardil olevaid vigu või objekte, mida ei saa Organic Mapsiga muuta
-eu = Deskribatu mapako akatsak edo editatu ezin diren gauzakOrganic Maps erabiliz.
-fa = خطاهای روی نقشه یا مواردی را که قابل ویرایش نیستند با Organic Maps توصیف کنید
-fi = Kuvaile kartassa olevia virheitä tai asioita, joita ei voi muokata Organic Mapsilla.
-fr = Décrivez les erreurs sur la carte ou les éléments qui ne peuvent pas être modifiés avec Organic Maps.
-gl = Describa os erros no mapa ou as cousas que non se poden editar con Organic Maps
-he = תארו שגיאות במפה או דברים שלא ניתן לערוך באמצעות Organic Maps
-hi = नक्शे पर त्रुटियों या ऐसी चीज़ों का वर्णन करें जिन्हें Organic Maps के साथ संपादित नहीं किया जा सकता।
-hr = Opisujte pogreške na karti ili stavke koje se ne mogu uređivati pomoću Organic Maps
-hu = Írja le a térképen található hibákat vagy olyan dolgokat, amelyeket nem lehet az Organic Maps segítségével szerkeszteni
-hy = Նկարագրեք քարտեզի սխալները կամ այն, ինչը հնարավոր չէ խմբագրել Organic Maps-ով
-id = Jelaskan kesalahan pada peta atau hal-hal yang tidak dapat diedit melalui Organic Maps
-is = Lýstu villum á kortinu eða atriðum sem ekki er hægt að breyta með Organic Maps
-it = Descrivi gli errori sulla mappa o le cose che non possono essere modificate con Organic Maps
-ja = 地図上のエラーやOrganic Mapsで編集できないものについて説明します。
-ko = Organic Maps를 사용하여 지도상의 오류나 편집할 수 없는 항목을 설명하십시오
-lo = ອະທິບາຍຂໍ້ຜິດພາດໃນແຜນທີ່ ຫຼື ສິ່ງທີ່ບໍ່ສາມາດແກ້ໄຂໄດ້ດ້ວຍ Organic Maps
-lt = Aprašykite žemėlapyje esančias klaidas arba dalykus, kurių negalite redaguoti, naudodamiesi „Organic Maps“
-lv = Aprakstiet kļūdas kartē vai lietas, ko nevar rediģēt, izmantojot Organic Maps
-mr = नकाशावरील त्रुटी किंवा संपादन करता येणार नाहीत अशा गोष्टी Organic Maps वापरून वर्णन करा
-mt = Iddeskrivi l-iżbalji fuq il-mappa jew l-affarijiet li ma jistgħux jiġu editjati ġewwa Organic Maps
-nb = Beskriv feil på kartet eller ting som ikke kan redigeres med Organic Maps
-nl = Beschrijf fouten op de kaart of dingen die niet bewerkt kunnen worden met Organic Maps
-pl = Proszę opisać błędy na mapie lub rzeczy, których nie można edytować za pomocą Organic Maps.
-pt = Descreva erros no mapa ou coisas que não podem ser editadas com o Organic Maps
-ro = Descrieți erorile de pe hartă sau lucrurile care nu pot fi editate cu Organic Maps
-ru = Опишите ошибки на карте или то, что нельзя редактировать с помощью Organic Maps
-sk = Popíšte chyby na mape alebo veci, ktoré nie je možné upravovať, na adrese Organic Maps
-sl = Opišite napake na zemljevidu ali stvari, ki jih ni mogoče urejati z Organic Maps
-sq = Përshkruani gabimet në hartë ose gjërat që nuk mund të redaktohen me Organic Maps
-sr = Опишите грешке на мапи или ствари које се не могу променити помоћу Organic Maps-а
-sv = Beskriv fel på kartan eller saker som inte kan redigeras med Organic Maps
-sw = Eleza makosa kwenye ramani au vitu ambavyo haviwezi kuhaririwa kwa kutumiaOrganic Maps
-th = อธิบายข้อผิดพลาดบนแผนที่หรือสิ่งที่ไม่สามารถแก้ไขได้ด้วยเครื่องมือแก้ไขแผนที่สาธารณะ (Organic Maps)
-tr = Organic Maps ile haritadaki hataları veya düzenlenemeyen öğeleri açıklayın
-uk = Опишіть помилки на мапі або те, що не можна редагувати за допомогою Organic Maps
-vi = Mô tả các lỗi trên bản đồ hoặc các mục không thể chỉnh sửa bằng Organic Maps
-zh-Hans = 描述地图上的错误或无法使用 Organic Maps 编辑的内容
-zh-Hant = 請描述地圖上的錯誤或無法透過 Organic Maps 進行編輯的內容
+en = Describe errors on the map or things that cannot be edited with Maps&Fly
+af = Beskryf foute op die kaart of dinge wat nie met Maps&Fly gewysig kan word nie.
+ar = يرجى وصف الأخطاء الموجودة على الخريطة أو العناصر التي لا يمكن تعديلها عبر البريد الإلكتروني Maps&Fly
+az = Xəritədəki səhvləri və ya redaktə edilə bilməyən elementləri təsvir edinMaps&Fly
+be = Апішыце памылкі на карце або рэчы, якія немагчыма адрэдагаваць з дапамогай Maps&Fly
+bg = Описване на грешки в картата или неща, които не могат да бъдат редактирани с Maps&Fly
+ca = Descriviu els errors al mapa o les coses que no es poden editar amb Maps&Fly
+cs = Popište chyby na mapě nebo věci, které nelze upravit pomocí aplikace Maps&Fly
+cy = Disgrifiwch wallau ar y map neu bethau na ellir eu golygu gydag Maps&Fly
+da = Beskriv fejl på kortet eller ting, der ikke kan redigeres med Maps&Fly
+de = Beschreibe Kartenfehler oder Dinge, die mit Maps&Fly nicht bearbeitet werden können
+el = Περιγράψτε λάθη στο χάρτη ή πράγματα που δεν μπορούν να επεξεργαστούν με τους Maps&Fly
+es = Describa los errores en el mapa o las cosas que no se pueden editar con Maps&Fly
+es-MX = Describe errores en el mapa o cosas que no se pueden editar con Maps&Fly
+et = Kirjelda kaardil olevaid vigu või objekte, mida ei saa Maps&Flyiga muuta
+eu = Deskribatu mapako akatsak edo editatu ezin diren gauzakMaps&Fly erabiliz.
+fa = خطاهای روی نقشه یا مواردی را که قابل ویرایش نیستند با Maps&Fly توصیف کنید
+fi = Kuvaile kartassa olevia virheitä tai asioita, joita ei voi muokata Maps&Flyilla.
+fr = Décrivez les erreurs sur la carte ou les éléments qui ne peuvent pas être modifiés avec Maps&Fly.
+gl = Describa os erros no mapa ou as cousas que non se poden editar con Maps&Fly
+he = תארו שגיאות במפה או דברים שלא ניתן לערוך באמצעות Maps&Fly
+hi = नक्शे पर त्रुटियों या ऐसी चीज़ों का वर्णन करें जिन्हें Maps&Fly के साथ संपादित नहीं किया जा सकता।
+hr = Opisujte pogreške na karti ili stavke koje se ne mogu uređivati pomoću Maps&Fly
+hu = Írja le a térképen található hibákat vagy olyan dolgokat, amelyeket nem lehet az Maps&Fly segítségével szerkeszteni
+hy = Նկարագրեք քարտեզի սխալները կամ այն, ինչը հնարավոր չէ խմբագրել Maps&Fly-ով
+id = Jelaskan kesalahan pada peta atau hal-hal yang tidak dapat diedit melalui Maps&Fly
+is = Lýstu villum á kortinu eða atriðum sem ekki er hægt að breyta með Maps&Fly
+it = Descrivi gli errori sulla mappa o le cose che non possono essere modificate con Maps&Fly
+ja = 地図上のエラーやMaps&Flyで編集できないものについて説明します。
+ko = Maps&Fly를 사용하여 지도상의 오류나 편집할 수 없는 항목을 설명하십시오
+lo = ອະທິບາຍຂໍ້ຜິດພາດໃນແຜນທີ່ ຫຼື ສິ່ງທີ່ບໍ່ສາມາດແກ້ໄຂໄດ້ດ້ວຍ Maps&Fly
+lt = Aprašykite žemėlapyje esančias klaidas arba dalykus, kurių negalite redaguoti, naudodamiesi „Maps&Fly“
+lv = Aprakstiet kļūdas kartē vai lietas, ko nevar rediģēt, izmantojot Maps&Fly
+mr = नकाशावरील त्रुटी किंवा संपादन करता येणार नाहीत अशा गोष्टी Maps&Fly वापरून वर्णन करा
+mt = Iddeskrivi l-iżbalji fuq il-mappa jew l-affarijiet li ma jistgħux jiġu editjati ġewwa Maps&Fly
+nb = Beskriv feil på kartet eller ting som ikke kan redigeres med Maps&Fly
+nl = Beschrijf fouten op de kaart of dingen die niet bewerkt kunnen worden met Maps&Fly
+pl = Proszę opisać błędy na mapie lub rzeczy, których nie można edytować za pomocą Maps&Fly.
+pt = Descreva erros no mapa ou coisas que não podem ser editadas com o Maps&Fly
+ro = Descrieți erorile de pe hartă sau lucrurile care nu pot fi editate cu Maps&Fly
+ru = Опишите ошибки на карте или то, что нельзя редактировать с помощью Maps&Fly
+sk = Popíšte chyby na mape alebo veci, ktoré nie je možné upravovať, na adrese Maps&Fly
+sl = Opišite napake na zemljevidu ali stvari, ki jih ni mogoče urejati z Maps&Fly
+sq = Përshkruani gabimet në hartë ose gjërat që nuk mund të redaktohen me Maps&Fly
+sr = Опишите грешке на мапи или ствари које се не могу променити помоћу Maps&Fly-а
+sv = Beskriv fel på kartan eller saker som inte kan redigeras med Maps&Fly
+sw = Eleza makosa kwenye ramani au vitu ambavyo haviwezi kuhaririwa kwa kutumiaMaps&Fly
+th = อธิบายข้อผิดพลาดบนแผนที่หรือสิ่งที่ไม่สามารถแก้ไขได้ด้วยเครื่องมือแก้ไขแผนที่สาธารณะ (Maps&Fly)
+tr = Maps&Fly ile haritadaki hataları veya düzenlenemeyen öğeleri açıklayın
+uk = Опишіть помилки на мапі або те, що не можна редагувати за допомогою Maps&Fly
+vi = Mô tả các lỗi trên bản đồ hoặc các mục không thể chỉnh sửa bằng Maps&Fly
+zh-Hans = 描述地图上的错误或无法使用 Maps&Fly 编辑的内容
+zh-Hant = 請描述地圖上的錯誤或無法透過 Maps&Fly 進行編輯的內容
 
 [editor_about_osm]
 comment = Information about OSM at the top of the editing page
@@ -20251,61 +20251,61 @@ zh-Hant = 找不到合適的類別？
 
 [editor_category_unsuitable_text]
 tags = android-app,apple-maps
-en = Organic Maps allows to add simple point categories only, that means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Check our <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detailed step by step instructions.
-af = Organic Maps laat slegs toe om eenvoudige puntkategorieë by te voeg, dit beteken geen dorpe, paaie, mere, gebouomtrekke, ens. nie. Voeg asseblief sulke kategorieë direk by <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kyk na ons <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gids</a> vir gedetailleerde stap-vir-stap instruksies.
-ar = Organic Maps تسمح بإضافة فئات النقاط البسيطة فقط، وهذا يعني عدم إضافة المدن والطرق والبحيرات وخطوط المباني، إلخ. يرجى إضافة هذه الفئات مباشرة إلى <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. راجع <a href="https://organicmaps.app/faq/editing/advanced-map-editing">دليلنا</a> للحصول على إرشادات تفصيلية خطوة بخطوة.
-az = Organic Maps yalnız sadə nöqtə kateqoriyaları əlavə etməyə imkan verir, yəni şəhərlər, yollar, göllər, binaların konturları və s. daxil deyil. Zəhmət olmasa belə kateqoriyaları birbaşa <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> saytına əlavə edin. Ətraflı addım-addım təlimat üçün <a href="https://organicmaps.app/faq/editing/advanced-map-editing">bələdç</a>imizə baxın.
-be = Organic Maps дазваляе дадаваць на мапу толькі простыя тыпы аб'ектаў, гэта значыць без гарадоў, дарог, азёр і будынкаў. Калі ласка, дадавайце такія катэгорыі на сайце <a href="https://www.openstreetmap.org/">OpenStreetMap.org </a>. Мы таксама рэкамендуем азнаёміцца з <a href="https://organicmaps.app/faq/editing/advanced-map-editing/">падрабязнымі інструкцыямі і іншымі праграмамі для рэдагавання мапы</a>.
-bg = Organic Maps позволява да се добавят само прости категории точки, т.е. без градове, пътища, езера, очертания на сгради и т.н. Моля, добавяйте такива категории директно в <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Вижте нашето <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ръководство</a> за подробни инструкции стъпка по стъпка.
-ca = Organic Maps només permet afegir categories de punts simples, això vol dir que no hi ha ciutats, carreteres, llacs, contorns d'edificis, etc. Si us plau, afegiu aquestes categories directament a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulteu la nostra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> per obtenir instruccions detallades pas a pas.
-cs = Organic Maps umožňuje přidávat pouze jednoduché bodové kategorie, to znamená žádná města, silnice, jezera, obrysy budov atd. Tyto kategorie prosím přidávejte přímo na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Podrobný návod krok za krokem najdete v našem <a href="https://organicmaps.app/faq/editing/advanced-map-editing">průvodci</a>.
-cy = Mae Organic Maps yn caniatáu ychwanegu categorïau pwynt syml yn unig, sy'n golygu dim trefi, ffyrdd, llynnoedd, amlinelliadau adeiladau, ac ati. Ychwanegwch gategorïau o'r fath yn uniongyrchol at <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Edrychwch ar ein <a href="https://organicmaps.app/faq/editing/advanced-map-editing">canllaw</a> am gyfarwyddiadau manwl cam wrth gam.
-da = Organic Maps giver kun mulighed for at tilføje simple punktkategorier, dvs. ingen byer, veje, søer, bygningsomrids osv. Tilføj sådanne kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Se vores <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerede trin for trin-instruktioner.
-de = Mit Organic Maps kann man nur einfache Punktkategorien hinzufügen, daher keine Städte, Straßen, Seen, Gebäudeumrisse, etc. Bitte füge solche Kategorien direkt bei <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> hinzu. In unserem <a href="https://organicmaps.app/faq/editing/advanced-map-editing">Leitfaden</a> findest du eine detaillierte Schritt-für-Schritt-Anleitung.
-el = Organic Maps επιτρέπει την προσθήκη μόνο απλών κατηγοριών σημείων, δηλαδή όχι πόλεων, δρόμων, λιμνών, περιγραμμάτων κτιρίων κ.λπ. Παρακαλούμε προσθέστε τέτοιες κατηγορίες απευθείας στο <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Ανατρέξτε <a href="https://organicmaps.app/faq/editing/advanced-map-editing">στον οδηγό</a> μας για λεπτομερείς οδηγίες βήμα προς βήμα.
-en-GB = Organic Maps allows adding simple point categories only, which means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Check our <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detailed step-by-step instructions.
-es = Organic Maps permite añadir únicamente categorías de puntos sencillos, es decir, no ciudades, carreteras, lagos, contornos de edificios, etc. Añada dichas categorías directamente a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nuestra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obtener instrucciones detalladas paso a paso.
-es-MX = Organic Maps permite añadir únicamente categorías de puntos sencillos, es decir, no ciudades, carreteras, lagos, contornos de edificios, etc. Por favor, añada dichas categorías directamente a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nuestra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obtener instrucciones detalladas paso a paso.
-et = Organic Maps võimaldab lisada ainult lihtsaid huvipunkte, see tähendab, et ei mingeid linnu, teid, järvi, hoonete piirjooni jne. Palun lisa sellised kategooriad otse <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> saidis. Vaata meie <a href="https://organicmaps.app/faq/editing/advanced-map-editing">juhendit</a> üksikasjalike samm-sammuliste juhiste saamiseks.
-eu = Organic Maps-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Begiratu gure <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gida</a> urratsez urrats argibide zehatzak lortzeko.
-fa = Organic Maps اجازه میu200cدهد فقط دستهu200cهای نقطهu200cای ساده را اضافه کند، یعنی هیچ شهر، جاده، دریاچه، طرح کلی ساختمان و غیره وجود ندارد. لطفاً این دستهu200cها را مستقیماً به <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> اضافه کنید. برای دستورالعملu200cهای گام به گام، <a href="https://organicmaps.app/faq/editing/advanced-map-editing">راهنمای</a> ما را بررسی کنید.
-fi = Organic Maps mahdollistaa vain yksinkertaisten pisteluokkien lisäämisen, eli ei kaupunkeja, teitä, järviä, rakennusten ääriviivoja jne. Lisää tällaiset luokat suoraan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Tarkista <a href="https://organicmaps.app/faq/editing/advanced-map-editing">oppaastamme</a> yksityiskohtaiset ohjeet vaihe vaiheelta.
-fr = Organic Maps ne permet d'ajouter que des catégories de points simples, c'est-à-dire pas de villes, de routes, de lacs, de contours de bâtiments, etc. Merci d'ajouter ces catégories directement sur <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consultez notre <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> pour obtenir des instructions détaillées étape par étape.
-gl = Organic Maps permite engadir unicamente categorías de puntos sinxelos, é dicir, non cidades, estradas, lagos, contornos de edificios, etc. Por favor, anada ditas categorías directamente <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nosa <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obter instrucións detalladas paso a paso.
-he = באמצעות Organic Maps ניתן להוסיף קטגוריות נקודה פשוטות בלבד, כלומר לא ניתן להוסיף עיירות, כבישים, אגמים, מבנים וכו'. אנא הוסיפו קטגוריות כאלה ישירות ל-<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. עיינו <a href="https://organicmaps.app/faq/editing/advanced-map-editing">במדריך</a> שלנו לקבלת הוראות מפורטות.
-hi = Organic Maps केवल सरल बिंदु श्रेणियाँ जोड़ने की अनुमति देता है, जिसका अर्थ है कि शहर, सड़कें, झीलें, इमारतों की रूपरेखा आदि नहीं। कृपया ऐसी श्रेणियाँ सीधे <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> पर जोड़ें। विस्तृत चरण-दर-चरण निर्देशों के लिए हमारी <a href="https://organicmaps.app/faq/editing/advanced-map-editing">गाइड</a> देखें।
-hr = Organic Maps omogućuje dodavanje samo jednostavnih kategorija točaka, znači bez navođenja gradova, cesta, jezera, obrisa zgrada itd. Dodajte takve kategorije izravno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Pogledajte naš <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vodič</a> za detaljne upute.
-hu = Az Organic Maps csak egyszerű pontkategóriák hozzáadását teszi lehetővé, azaz nem tartalmaz városokat, utakat, tavakat, épületek körvonalait stb., az ilyen kategóriákat közvetlenül az <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> oldalon adhatja hozzá. A részletes, lépésről lépésre történő útmutatásért tekintse meg az <a href="https://organicmaps.app/faq/editing/advanced-map-editing">útmutatónkat</a>.
-hy = Organic Maps-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ուղեցույցը</a>:
-id = Organic Maps hanya memungkinkan untuk menambahkan kategori titik sederhana, yang berarti tidak ada kota, jalan, danau, garis besar bangunan, dll. Silahkan tambahkan kategori tersebut secara langsung ke <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Lihat <a href="https://organicmaps.app/faq/editing/advanced-map-editing">panduan</a> kami untuk petunjuk langkah demi langkah yang terperinci.
-is = Organic Maps leyfir aðeins að bæta við flokkum eins-punkts staða, sem þýðir engin sveitarfélagamörk, vegir, vötn, útlínur bygginga o.s.frv. Bættu slíkum atriðum beint inn í <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Skoðaðu <a href="https://organicmaps.app/faq/editing/advanced-map-editing">leiðbeiningarnar</a> okkar til að sjá hvernig það er gert, skref-fyrir-skref.
-it = Organic Maps consente di aggiungere solo punti semplici, escludendo p.es. città, strade, laghi, planimetria edifici ecc. È possibile aggiungere tali categorie direttamente su <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulta la nostra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guida</a> per istruzioni dettagliate.
-ja = Organic Maps このアプリでは、シンプルな地点カテゴリのみを追加できます。つまり、町、道路、湖、建物の輪郭などは追加できません。そのようなカテゴリは、<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>に直接追加してください。詳細な手順については、<a href="https://organicmaps.app/faq/editing/advanced-map-editing">ガイド</a>をご確認ください。
-ko = Organic Maps 단순한 지점 카테고리만 추가할 수 있습니다. 즉, 도시, 도로, 호수, 건물 윤곽선 등은 추가할 수 없습니다. 이러한 카테고리는 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>에 직접 추가해 주십시오. 자세한 단계별 안내는 <a href="https://organicmaps.app/faq/editing/advanced-map-editing">가이드를</a> 확인해 주세요.
-lo = Organic Maps ອະນຸຍາດໃຫ້ເພີ່ມສະເພາະໝວດໝູ່ຈຸດທີ່ງ່າຍດາຍເທົ່ານັ້ນ, ນັ້ນໝາຍຄວາມວ່າບໍ່ລວມເຖິງ ຕົວເມືອງ, ຖະໜົນ, ໜອງນ້ຳ, ຂອບເຂດອາຄານ ແລະ ອື່ນໆ. ກະລຸນາເພີ່ມໝວດໝູ່ດັ່ງກ່າວໂດຍກົງທີ່ <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. ກວດເບິ່ງ <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ຄຳແນະນຳ</a> ຂອງພວກເຮົາສຳລັບຂັ້ນຕອນໂດຍລະອຽດ.
-lt = „Organic Maps“ leidžia pridėti tik paprastų kategorijų taškus – jokių miestų, kelių, ežerų, pastatų kontūrų ir pan. šia programėle pridėti negalima. Šių kategorijų objektus pridėkite naudodamiesi <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> svetaine. Žvilgtelėkite į mūsų <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vadovą</a>, kuriame rasite išsamias pažingsnines instrukcijas.
-lv = „Organic Maps“ ļauj pievienot tikai vienkāršu punktu kategorijas, proti, nevarat pievienot pilsētas, ceļus, ezerus, ēku aprises u.tml. Šādas kategorijas lūdzam pievienot tiešā veidā <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Lai uzzinātu, kā to izdarīt, sekojiet norādēm <a href="https://organicmaps.app/faq/editing/advanced-map-editing">rokasgrāmatā</a>.
-mr = Organic Maps फक्त साध्या बिंदू श्रेण्या जोडण्याची परवानगी देते, म्हणजे शहरं, रस्ते, तलाव, इमारतींच्या रूपरेषा इत्यादी नाहीत. कृपया अशा श्रेण्या थेट <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> वर जोडा. सविस्तर टप्प्याटप्प्याच्या सूचनांसाठी आमचे <a href="https://organicmaps.app/faq/editing/advanced-map-editing">मार्गदर्शक</a> तपासा.
-mt = Organic Maps jippermetti li jiżdiedu kategoriji punti sempliċi biss, li jfisser l-ebda bliet, toroq, lagi, linji ġenerali tal-bini, eċċ. Jekk jogħġbok żid dawn il-kategoriji direttament mal-<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Iċċekkja l-<a href="https://organicmaps.app/faq/editing/advanced-map-editing">gwida</a> tagħna għal struzzjonijiet dettaljati.
-nb = Organic Maps tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sjekk vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerte trinnvise instruksjoner.
-nl = Met Organic Maps kun je alleen eenvoudige puntcategorieën toevoegen, dus geen steden, wegen, meren, contouren van gebouwen, enzovoort. Voeg zulke categorieën direct toe aan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Bekijk onze <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gids</a> voor gedetailleerde stap voor stap instructies.
-pl = Organic Maps pozwala na dodawanie tylko prostych kategorii punktów, co oznacza brak miast, dróg, jezior, obrysów budynków itp. Dodaj takie kategorie bezpośrednio do <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sprawdź nasz <a href="https://organicmaps.app/faq/editing/advanced-map-editing">przewodnik</a>, aby uzyskać szczegółowe instrukcje krok po kroku.
-pt = O Organic Maps permite-lhe adicionar apenas categorias de pontos simples, ou seja, nada de cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente ao <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte o nosso <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> para instruções detalhadas passo a passo.
-pt-BR = O Organic Maps permite que você adicione apenas categorias de pontos simples, o que significa que não há cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente no <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nosso <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> para obter instruções detalhadas passo a passo.
-ro = Organic Maps permite adăugarea doar a unor categorii de puncte simple, ceea ce înseamnă că nu există orașe, drumuri, lacuri, contururi de clădiri, etc. Vă rugăm să adăugați astfel de categorii direct la <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consultați <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ghidul nostru</a> pentru instrucțiuni detaliate pas cu pas.
-ru = Organic Maps позволяет добавлять на карту только простые типы объектов, то есть никаких городов, дорог, озер, контуров зданий. Пожалуйста, добавляйте такие категории на сайте <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Также рекомендуем ознакомиться с нашими <a href="https://organicmaps.app/faq/editing/advanced-map-editing">подробными пошаговыми инструкциями и другими приложениями для редактирования карты</a>.
-sk = Organic Maps umožňuje pridávať iba jednoduché kategórie bodov, čo znamená, že nie sú k dispozícii mestá, cesty, jazerá, obrysy budov atď. Takéto kategórie prosím pridávajte priamo na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Podrobné pokyny krok za krokom nájdete v našom <a href="https://organicmaps.app/faq/editing/advanced-map-editing">návode</a>.
-sl = Organic Maps omogoča dodajanje samo preprostih točkovnih kategorij, kar pomeni, da ni mest, cest, jezer, obrisov zgradb itd. Takšne kategorije dodajte neposredno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Preverite naš <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vodnik</a> za podrobna navodila po korakih.
-sq = Organic Maps lejon shtimin e kategorive të thjeshta të pikave, që do të thotë jo qytete, rrugë, liqene, konture ndërtesash, etj. Ju lutemi shtoni kategori të tilla drejtpërdrejt në <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kontrolloni <a href="https://organicmaps.app/faq/editing/advanced-map-editing">udhëzuesin tonë</a> për udhëzime të detajuara hap pas hapi.
-sr = Organic Maps омогућава додавање једноставних категорија за тачке на мапи, што искључује градове, путеве, језера, тлоцрте зграда, итд. Молимо Вас да такве категорије додате директно на <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Прочитајте наше <a href="https://organicmaps.app/faq/editing/advanced-map-editing">упутство</a> за детаљне инструкције, корак-по-корак.
-sv = Organic Maps tillåter endast att lägga till enkla punktkategorier, det betyder inga städer, vägar, sjöar, byggnadskonturer etc. Lägg till sådana kategorier direkt till <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kontrollera vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> för detaljerade steg-för-steg-instruktioner.
-sw = Organic Maps inakuwezesha kuongeza tu aina rahisi za alama, ikimaanisha hakuna miji, barabara, maziwa, mipaka ya majengo, n.k. Tafadhali ongeza aina hizo moja kwa moja kwenye <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Angalia <a href="https://organicmaps.app/faq/editing/advanced-map-editing">mwongozo</a> wetu kwa maelekezo ya kina hatua kwa hatua.
-th = Organic Maps อนุญาตให้เพิ่มหมวดหมู่จุดแบบง่ายเท่านั้น ซึ่งหมายถึงไม่สามารถเพิ่มเมือง ถนน ทะเลสาบ เส้นขอบอาคาร ฯลฯ ได้ กรุณาเพิ่มหมวดหมู่ดังกล่าวโดยตรงที่ <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> โปรดตรวจสอบ<a href="https://organicmaps.app/faq/editing/advanced-map-editing">คู่มือ</a>ของเราสำหรับคำแนะนำแบบละเอียดทีละขั้นตอน
-tr = Organic Maps yalnızca basit nokta kategorilerini eklemeyi sağlar. Yani kasaba, yol, göl, bina vb. çizgi/alan verisi ekleme desteği yoktur. Lütfen bu tür kategorileri doğrudan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> üzerinden ekleyin. Adım adım ayrıntılı yönergeler için <a href="https://organicmaps.app/faq/editing/advanced-map-editing">yönergemize</a> göz atabilirsiniz.
-uk = Organic Maps дозволяють додавати до мапи лише прості типи об'єктів, тобто без міст, доріг, озер та контурів будівель. Будь ласка, додайте такі категорії на сайті <a href="https://www.openstreetmap.org/">OpenStreetMap.org</a>. Ми також рекомендуємо ознайомитися із <a href="https://organicmaps.app/faq/editing/advanced-map-editing/">детальними інструкціями та іншими додатками для редагування мапи</a>.
-vi = Organic Maps chỉ cho phép thêm các loại điểm đơn giản, tức là không bao gồm các thị trấn, đường, hồ, đường viền tòa nhà, v.v. Vui lòng thêm các loại này trực tiếp vào <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Hãy tham khảo <a href="https://organicmaps.app/faq/editing/advanced-map-editing">hướng dẫn</a> của chúng tôi để biết các bước thực hiện chi tiết.
-zh-Hans = Organic Maps 只允许添加简单的点类别，即无法添加城镇、道路、湖泊、建筑轮廓等类别。请直接向 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> 添加此类类别。请查看我们的<a href="https://organicmaps.app/faq/editing/advanced-map-editing">指南</a>，了解详细的步骤说明。
-zh-Hant = Organic Maps 只允許添加簡單的點類別，即無法添加城鎮、道路、湖泊、建築輪廓等類別。請直接向 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> 新增此類類別。請查看我們的<a href="https://organicmaps.app/faq/editing/advanced-map-editing">指南</a>，以了解詳細的步驟說明。
+en = Maps&Fly allows to add simple point categories only, that means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Check our <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detailed step by step instructions.
+af = Maps&Fly laat slegs toe om eenvoudige puntkategorieë by te voeg, dit beteken geen dorpe, paaie, mere, gebouomtrekke, ens. nie. Voeg asseblief sulke kategorieë direk by <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kyk na ons <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gids</a> vir gedetailleerde stap-vir-stap instruksies.
+ar = Maps&Fly تسمح بإضافة فئات النقاط البسيطة فقط، وهذا يعني عدم إضافة المدن والطرق والبحيرات وخطوط المباني، إلخ. يرجى إضافة هذه الفئات مباشرة إلى <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. راجع <a href="https://organicmaps.app/faq/editing/advanced-map-editing">دليلنا</a> للحصول على إرشادات تفصيلية خطوة بخطوة.
+az = Maps&Fly yalnız sadə nöqtə kateqoriyaları əlavə etməyə imkan verir, yəni şəhərlər, yollar, göllər, binaların konturları və s. daxil deyil. Zəhmət olmasa belə kateqoriyaları birbaşa <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> saytına əlavə edin. Ətraflı addım-addım təlimat üçün <a href="https://organicmaps.app/faq/editing/advanced-map-editing">bələdç</a>imizə baxın.
+be = Maps&Fly дазваляе дадаваць на мапу толькі простыя тыпы аб'ектаў, гэта значыць без гарадоў, дарог, азёр і будынкаў. Калі ласка, дадавайце такія катэгорыі на сайце <a href="https://www.openstreetmap.org/">OpenStreetMap.org </a>. Мы таксама рэкамендуем азнаёміцца з <a href="https://organicmaps.app/faq/editing/advanced-map-editing/">падрабязнымі інструкцыямі і іншымі праграмамі для рэдагавання мапы</a>.
+bg = Maps&Fly позволява да се добавят само прости категории точки, т.е. без градове, пътища, езера, очертания на сгради и т.н. Моля, добавяйте такива категории директно в <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Вижте нашето <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ръководство</a> за подробни инструкции стъпка по стъпка.
+ca = Maps&Fly només permet afegir categories de punts simples, això vol dir que no hi ha ciutats, carreteres, llacs, contorns d'edificis, etc. Si us plau, afegiu aquestes categories directament a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulteu la nostra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> per obtenir instruccions detallades pas a pas.
+cs = Maps&Fly umožňuje přidávat pouze jednoduché bodové kategorie, to znamená žádná města, silnice, jezera, obrysy budov atd. Tyto kategorie prosím přidávejte přímo na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Podrobný návod krok za krokem najdete v našem <a href="https://organicmaps.app/faq/editing/advanced-map-editing">průvodci</a>.
+cy = Mae Maps&Fly yn caniatáu ychwanegu categorïau pwynt syml yn unig, sy'n golygu dim trefi, ffyrdd, llynnoedd, amlinelliadau adeiladau, ac ati. Ychwanegwch gategorïau o'r fath yn uniongyrchol at <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Edrychwch ar ein <a href="https://organicmaps.app/faq/editing/advanced-map-editing">canllaw</a> am gyfarwyddiadau manwl cam wrth gam.
+da = Maps&Fly giver kun mulighed for at tilføje simple punktkategorier, dvs. ingen byer, veje, søer, bygningsomrids osv. Tilføj sådanne kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Se vores <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerede trin for trin-instruktioner.
+de = Mit Maps&Fly kann man nur einfache Punktkategorien hinzufügen, daher keine Städte, Straßen, Seen, Gebäudeumrisse, etc. Bitte füge solche Kategorien direkt bei <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> hinzu. In unserem <a href="https://organicmaps.app/faq/editing/advanced-map-editing">Leitfaden</a> findest du eine detaillierte Schritt-für-Schritt-Anleitung.
+el = Maps&Fly επιτρέπει την προσθήκη μόνο απλών κατηγοριών σημείων, δηλαδή όχι πόλεων, δρόμων, λιμνών, περιγραμμάτων κτιρίων κ.λπ. Παρακαλούμε προσθέστε τέτοιες κατηγορίες απευθείας στο <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Ανατρέξτε <a href="https://organicmaps.app/faq/editing/advanced-map-editing">στον οδηγό</a> μας για λεπτομερείς οδηγίες βήμα προς βήμα.
+en-GB = Maps&Fly allows adding simple point categories only, which means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Check our <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detailed step-by-step instructions.
+es = Maps&Fly permite añadir únicamente categorías de puntos sencillos, es decir, no ciudades, carreteras, lagos, contornos de edificios, etc. Añada dichas categorías directamente a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nuestra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obtener instrucciones detalladas paso a paso.
+es-MX = Maps&Fly permite añadir únicamente categorías de puntos sencillos, es decir, no ciudades, carreteras, lagos, contornos de edificios, etc. Por favor, añada dichas categorías directamente a <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nuestra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obtener instrucciones detalladas paso a paso.
+et = Maps&Fly võimaldab lisada ainult lihtsaid huvipunkte, see tähendab, et ei mingeid linnu, teid, järvi, hoonete piirjooni jne. Palun lisa sellised kategooriad otse <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> saidis. Vaata meie <a href="https://organicmaps.app/faq/editing/advanced-map-editing">juhendit</a> üksikasjalike samm-sammuliste juhiste saamiseks.
+eu = Maps&Fly-ek puntu kategoria soilak gehitzeko aukera ematen du, hau da, ez da herririk, errepiderik, lakurik, eraikinen eskemarik, etab. Gehitu kategoria horiek zuzenean <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Begiratu gure <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gida</a> urratsez urrats argibide zehatzak lortzeko.
+fa = Maps&Fly اجازه میu200cدهد فقط دستهu200cهای نقطهu200cای ساده را اضافه کند، یعنی هیچ شهر، جاده، دریاچه، طرح کلی ساختمان و غیره وجود ندارد. لطفاً این دستهu200cها را مستقیماً به <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> اضافه کنید. برای دستورالعملu200cهای گام به گام، <a href="https://organicmaps.app/faq/editing/advanced-map-editing">راهنمای</a> ما را بررسی کنید.
+fi = Maps&Fly mahdollistaa vain yksinkertaisten pisteluokkien lisäämisen, eli ei kaupunkeja, teitä, järviä, rakennusten ääriviivoja jne. Lisää tällaiset luokat suoraan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Tarkista <a href="https://organicmaps.app/faq/editing/advanced-map-editing">oppaastamme</a> yksityiskohtaiset ohjeet vaihe vaiheelta.
+fr = Maps&Fly ne permet d'ajouter que des catégories de points simples, c'est-à-dire pas de villes, de routes, de lacs, de contours de bâtiments, etc. Merci d'ajouter ces catégories directement sur <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consultez notre <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> pour obtenir des instructions détaillées étape par étape.
+gl = Maps&Fly permite engadir unicamente categorías de puntos sinxelos, é dicir, non cidades, estradas, lagos, contornos de edificios, etc. Por favor, anada ditas categorías directamente <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nosa <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guía</a> para obter instrucións detalladas paso a paso.
+he = באמצעות Maps&Fly ניתן להוסיף קטגוריות נקודה פשוטות בלבד, כלומר לא ניתן להוסיף עיירות, כבישים, אגמים, מבנים וכו'. אנא הוסיפו קטגוריות כאלה ישירות ל-<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. עיינו <a href="https://organicmaps.app/faq/editing/advanced-map-editing">במדריך</a> שלנו לקבלת הוראות מפורטות.
+hi = Maps&Fly केवल सरल बिंदु श्रेणियाँ जोड़ने की अनुमति देता है, जिसका अर्थ है कि शहर, सड़कें, झीलें, इमारतों की रूपरेखा आदि नहीं। कृपया ऐसी श्रेणियाँ सीधे <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> पर जोड़ें। विस्तृत चरण-दर-चरण निर्देशों के लिए हमारी <a href="https://organicmaps.app/faq/editing/advanced-map-editing">गाइड</a> देखें।
+hr = Maps&Fly omogućuje dodavanje samo jednostavnih kategorija točaka, znači bez navođenja gradova, cesta, jezera, obrisa zgrada itd. Dodajte takve kategorije izravno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Pogledajte naš <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vodič</a> za detaljne upute.
+hu = Az Maps&Fly csak egyszerű pontkategóriák hozzáadását teszi lehetővé, azaz nem tartalmaz városokat, utakat, tavakat, épületek körvonalait stb., az ilyen kategóriákat közvetlenül az <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> oldalon adhatja hozzá. A részletes, lépésről lépésre történő útmutatásért tekintse meg az <a href="https://organicmaps.app/faq/editing/advanced-map-editing">útmutatónkat</a>.
+hy = Maps&Fly-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ուղեցույցը</a>:
+id = Maps&Fly hanya memungkinkan untuk menambahkan kategori titik sederhana, yang berarti tidak ada kota, jalan, danau, garis besar bangunan, dll. Silahkan tambahkan kategori tersebut secara langsung ke <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Lihat <a href="https://organicmaps.app/faq/editing/advanced-map-editing">panduan</a> kami untuk petunjuk langkah demi langkah yang terperinci.
+is = Maps&Fly leyfir aðeins að bæta við flokkum eins-punkts staða, sem þýðir engin sveitarfélagamörk, vegir, vötn, útlínur bygginga o.s.frv. Bættu slíkum atriðum beint inn í <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Skoðaðu <a href="https://organicmaps.app/faq/editing/advanced-map-editing">leiðbeiningarnar</a> okkar til að sjá hvernig það er gert, skref-fyrir-skref.
+it = Maps&Fly consente di aggiungere solo punti semplici, escludendo p.es. città, strade, laghi, planimetria edifici ecc. È possibile aggiungere tali categorie direttamente su <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulta la nostra <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guida</a> per istruzioni dettagliate.
+ja = Maps&Fly このアプリでは、シンプルな地点カテゴリのみを追加できます。つまり、町、道路、湖、建物の輪郭などは追加できません。そのようなカテゴリは、<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>に直接追加してください。詳細な手順については、<a href="https://organicmaps.app/faq/editing/advanced-map-editing">ガイド</a>をご確認ください。
+ko = Maps&Fly 단순한 지점 카테고리만 추가할 수 있습니다. 즉, 도시, 도로, 호수, 건물 윤곽선 등은 추가할 수 없습니다. 이러한 카테고리는 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>에 직접 추가해 주십시오. 자세한 단계별 안내는 <a href="https://organicmaps.app/faq/editing/advanced-map-editing">가이드를</a> 확인해 주세요.
+lo = Maps&Fly ອະນຸຍາດໃຫ້ເພີ່ມສະເພາະໝວດໝູ່ຈຸດທີ່ງ່າຍດາຍເທົ່ານັ້ນ, ນັ້ນໝາຍຄວາມວ່າບໍ່ລວມເຖິງ ຕົວເມືອງ, ຖະໜົນ, ໜອງນ້ຳ, ຂອບເຂດອາຄານ ແລະ ອື່ນໆ. ກະລຸນາເພີ່ມໝວດໝູ່ດັ່ງກ່າວໂດຍກົງທີ່ <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. ກວດເບິ່ງ <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ຄຳແນະນຳ</a> ຂອງພວກເຮົາສຳລັບຂັ້ນຕອນໂດຍລະອຽດ.
+lt = „Maps&Fly“ leidžia pridėti tik paprastų kategorijų taškus – jokių miestų, kelių, ežerų, pastatų kontūrų ir pan. šia programėle pridėti negalima. Šių kategorijų objektus pridėkite naudodamiesi <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> svetaine. Žvilgtelėkite į mūsų <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vadovą</a>, kuriame rasite išsamias pažingsnines instrukcijas.
+lv = „Maps&Fly“ ļauj pievienot tikai vienkāršu punktu kategorijas, proti, nevarat pievienot pilsētas, ceļus, ezerus, ēku aprises u.tml. Šādas kategorijas lūdzam pievienot tiešā veidā <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Lai uzzinātu, kā to izdarīt, sekojiet norādēm <a href="https://organicmaps.app/faq/editing/advanced-map-editing">rokasgrāmatā</a>.
+mr = Maps&Fly फक्त साध्या बिंदू श्रेण्या जोडण्याची परवानगी देते, म्हणजे शहरं, रस्ते, तलाव, इमारतींच्या रूपरेषा इत्यादी नाहीत. कृपया अशा श्रेण्या थेट <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> वर जोडा. सविस्तर टप्प्याटप्प्याच्या सूचनांसाठी आमचे <a href="https://organicmaps.app/faq/editing/advanced-map-editing">मार्गदर्शक</a> तपासा.
+mt = Maps&Fly jippermetti li jiżdiedu kategoriji punti sempliċi biss, li jfisser l-ebda bliet, toroq, lagi, linji ġenerali tal-bini, eċċ. Jekk jogħġbok żid dawn il-kategoriji direttament mal-<a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Iċċekkja l-<a href="https://organicmaps.app/faq/editing/advanced-map-editing">gwida</a> tagħna għal struzzjonijiet dettaljati.
+nb = Maps&Fly tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sjekk vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerte trinnvise instruksjoner.
+nl = Met Maps&Fly kun je alleen eenvoudige puntcategorieën toevoegen, dus geen steden, wegen, meren, contouren van gebouwen, enzovoort. Voeg zulke categorieën direct toe aan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Bekijk onze <a href="https://organicmaps.app/faq/editing/advanced-map-editing">gids</a> voor gedetailleerde stap voor stap instructies.
+pl = Maps&Fly pozwala na dodawanie tylko prostych kategorii punktów, co oznacza brak miast, dróg, jezior, obrysów budynków itp. Dodaj takie kategorie bezpośrednio do <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sprawdź nasz <a href="https://organicmaps.app/faq/editing/advanced-map-editing">przewodnik</a>, aby uzyskać szczegółowe instrukcje krok po kroku.
+pt = O Maps&Fly permite-lhe adicionar apenas categorias de pontos simples, ou seja, nada de cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente ao <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte o nosso <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> para instruções detalhadas passo a passo.
+pt-BR = O Maps&Fly permite que você adicione apenas categorias de pontos simples, o que significa que não há cidades, estradas, lagos, contornos de edifícios etc. Por favor, adicione essas categorias diretamente no <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consulte nosso <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guia</a> para obter instruções detalhadas passo a passo.
+ro = Maps&Fly permite adăugarea doar a unor categorii de puncte simple, ceea ce înseamnă că nu există orașe, drumuri, lacuri, contururi de clădiri, etc. Vă rugăm să adăugați astfel de categorii direct la <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Consultați <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ghidul nostru</a> pentru instrucțiuni detaliate pas cu pas.
+ru = Maps&Fly позволяет добавлять на карту только простые типы объектов, то есть никаких городов, дорог, озер, контуров зданий. Пожалуйста, добавляйте такие категории на сайте <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Также рекомендуем ознакомиться с нашими <a href="https://organicmaps.app/faq/editing/advanced-map-editing">подробными пошаговыми инструкциями и другими приложениями для редактирования карты</a>.
+sk = Maps&Fly umožňuje pridávať iba jednoduché kategórie bodov, čo znamená, že nie sú k dispozícii mestá, cesty, jazerá, obrysy budov atď. Takéto kategórie prosím pridávajte priamo na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Podrobné pokyny krok za krokom nájdete v našom <a href="https://organicmaps.app/faq/editing/advanced-map-editing">návode</a>.
+sl = Maps&Fly omogoča dodajanje samo preprostih točkovnih kategorij, kar pomeni, da ni mest, cest, jezer, obrisov zgradb itd. Takšne kategorije dodajte neposredno na <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Preverite naš <a href="https://organicmaps.app/faq/editing/advanced-map-editing">vodnik</a> za podrobna navodila po korakih.
+sq = Maps&Fly lejon shtimin e kategorive të thjeshta të pikave, që do të thotë jo qytete, rrugë, liqene, konture ndërtesash, etj. Ju lutemi shtoni kategori të tilla drejtpërdrejt në <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kontrolloni <a href="https://organicmaps.app/faq/editing/advanced-map-editing">udhëzuesin tonë</a> për udhëzime të detajuara hap pas hapi.
+sr = Maps&Fly омогућава додавање једноставних категорија за тачке на мапи, што искључује градове, путеве, језера, тлоцрте зграда, итд. Молимо Вас да такве категорије додате директно на <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Прочитајте наше <a href="https://organicmaps.app/faq/editing/advanced-map-editing">упутство</a> за детаљне инструкције, корак-по-корак.
+sv = Maps&Fly tillåter endast att lägga till enkla punktkategorier, det betyder inga städer, vägar, sjöar, byggnadskonturer etc. Lägg till sådana kategorier direkt till <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Kontrollera vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> för detaljerade steg-för-steg-instruktioner.
+sw = Maps&Fly inakuwezesha kuongeza tu aina rahisi za alama, ikimaanisha hakuna miji, barabara, maziwa, mipaka ya majengo, n.k. Tafadhali ongeza aina hizo moja kwa moja kwenye <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Angalia <a href="https://organicmaps.app/faq/editing/advanced-map-editing">mwongozo</a> wetu kwa maelekezo ya kina hatua kwa hatua.
+th = Maps&Fly อนุญาตให้เพิ่มหมวดหมู่จุดแบบง่ายเท่านั้น ซึ่งหมายถึงไม่สามารถเพิ่มเมือง ถนน ทะเลสาบ เส้นขอบอาคาร ฯลฯ ได้ กรุณาเพิ่มหมวดหมู่ดังกล่าวโดยตรงที่ <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> โปรดตรวจสอบ<a href="https://organicmaps.app/faq/editing/advanced-map-editing">คู่มือ</a>ของเราสำหรับคำแนะนำแบบละเอียดทีละขั้นตอน
+tr = Maps&Fly yalnızca basit nokta kategorilerini eklemeyi sağlar. Yani kasaba, yol, göl, bina vb. çizgi/alan verisi ekleme desteği yoktur. Lütfen bu tür kategorileri doğrudan <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> üzerinden ekleyin. Adım adım ayrıntılı yönergeler için <a href="https://organicmaps.app/faq/editing/advanced-map-editing">yönergemize</a> göz atabilirsiniz.
+uk = Maps&Fly дозволяють додавати до мапи лише прості типи об'єктів, тобто без міст, доріг, озер та контурів будівель. Будь ласка, додайте такі категорії на сайті <a href="https://www.openstreetmap.org/">OpenStreetMap.org</a>. Ми також рекомендуємо ознайомитися із <a href="https://organicmaps.app/faq/editing/advanced-map-editing/">детальними інструкціями та іншими додатками для редагування мапи</a>.
+vi = Maps&Fly chỉ cho phép thêm các loại điểm đơn giản, tức là không bao gồm các thị trấn, đường, hồ, đường viền tòa nhà, v.v. Vui lòng thêm các loại này trực tiếp vào <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Hãy tham khảo <a href="https://organicmaps.app/faq/editing/advanced-map-editing">hướng dẫn</a> của chúng tôi để biết các bước thực hiện chi tiết.
+zh-Hans = Maps&Fly 只允许添加简单的点类别，即无法添加城镇、道路、湖泊、建筑轮廓等类别。请直接向 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> 添加此类类别。请查看我们的<a href="https://organicmaps.app/faq/editing/advanced-map-editing">指南</a>，了解详细的步骤说明。
+zh-Hant = Maps&Fly 只允許添加簡單的點類別，即無法添加城鎮、道路、湖泊、建築輪廓等類別。請直接向 <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> 新增此類類別。請查看我們的<a href="https://organicmaps.app/faq/editing/advanced-map-editing">指南</a>，以了解詳細的步驟說明。
 
 [downloader_no_downloaded_maps_title]
 tags = android-app,apple-maps
@@ -23201,7 +23201,7 @@ gl = Utilizamos o sistema TTS para as instrucións de voz. Moitos dispositivos d
 he = אנחנו משתמשים מערכת TTS של המערכת כדי לספק הנחיות קוליות. הרבה מכשירי Android מוגדרים להשתמש ב-Google TTS, שניתן להוריד ולעדכן מחנות Play
 hr = Koristimo sustavni TTS za glasovne upute. Mnogi Android uređaji koriste Google TTS, možete ga preuzeti ili ažurirati s Google Playa.
 hi = हम वॉयस निर्देशों के लिए सिस्टम TTS का उपयोग करते हैं। कई Android डिवाइस Google TTS का उपयोग करते हैं, आप इसे Google Play से डाउनलोड या अपडेट कर सकते हैं।
-hu = Az Organic Maps TTS-rendszert használ a hangnavigációhoz. Sok androidos eszköz használja a Google TTS-t; töltse le vagy frissítse a Google Play áruházból
+hu = Az Maps&Fly TTS-rendszert használ a hangnavigációhoz. Sok androidos eszköz használja a Google TTS-t; töltse le vagy frissítse a Google Play áruházból
 hy = Ձայնային հրահանգների համար օգտագործում ենք համակարգային TTS-ը։ Շատ Android սարքեր օգտագործում են Google TTS, որը կարող եք ներբեռնել կամ թարմացնել Google Play-ից։
 id = Kami menggunakan TTS sistem untuk petunjuk suara. Banyak perangkat Android menggunakan Google TTS, Anda dapat mengunduhnya dari Google Play
 is = Við notum TTS-talgervil kerfisins fyrir talaðar leiðbeiningar. Mörg Android-tæki nota TTS-kerfi Google, þú getur sótt það eða uppfært á Google Play
@@ -27475,7 +27475,7 @@ zh-Hant = 顯示在底部
 tags = android-app,apple-maps
 en = Enable this option temporarily to record and manually send detailed diagnostic logs about your issue to us using "Report a bug" in the Help dialog. Logs may include location info.
 af = Aktiveer hierdie opsie tydelik om ’n gedetailleerde diagnosestaat van u probleem op te neem en handmatig na ons te stuur d.m.v. die “Rapporteer ’n fout” in die Help-dialoog. Sulke state kan liggingsinligting bevat.
-ar = هذا الخيار يقوم ببدأ تسجيل سجلات التطبيق لإغراض التشخيصة. يمكن أن يكون مفيدًا لفريق الدعم الخاص بنا لحل المشاكل التي تواجهكم داخل التطبيق. قم بتفعيل هذا الخيار بشكل مؤقت فقط في حالة طلب الدعم من Organic Maps.
+ar = هذا الخيار يقوم ببدأ تسجيل سجلات التطبيق لإغراض التشخيصة. يمكن أن يكون مفيدًا لفريق الدعم الخاص بنا لحل المشاكل التي تواجهكم داخل التطبيق. قم بتفعيل هذا الخيار بشكل مؤقت فقط في حالة طلب الدعم من Maps&Fly.
 az = Yardım dialoq qutusunda “Problemi bildir” istifadə etməklə probleminizlə bağlı ətraflı diaqnostik jurnalları qeyd etmək və bizə göndərmək üçün bu seçimi müvəqqəti aktivləşdirin. Qeydlərə məkan məlumatı daxil ola bilər
 be = Часова ўключыце гэты параметр , каб запісаць і ўручную адправіць нам падрабязную інфармацыю пра знойдзеную праблему праз кнопку «Паведаміць аб памылцы» ў акне «Даведка». Журнал падзей можа змяшчаць даныя пра месцазнаходжанне.
 bg = Тази настройка е разрешена, за да се записват действия за диагностични цели, които помагат на нашия екип да идентифицира проблеми с приложението. Временно активирайте тази настройка само за изпращане на подробна информация за проблема, който сте открили с приложението.
@@ -27484,47 +27484,47 @@ cs = Dočasně zapněte, abyste mohli zaznamenat a ručně nám poslat podrobná
 cy = Galluogwch yr opsiwn hwn dros dro i gofnodi ac anfon logiau diagnostig manwl am eich problem atom ni â llaw gan ddefnyddio "Rhoi gwybod am fyg" yn y blwch deialog Cymorth. Gall logiau gynnwys gwybodaeth am leoliad.
 da = Aktivér denne mulighed midlertidigt for at registrere og manuelt sende detaljerede diagnostiske logfiler om dit problem til os ved hjælp af "Rapportér en fejl" i Hjælp-dialogen. Logfiler kan indeholde placeringsoplysninger.
 de = Aktivieren, um Diagnoseprotokolle aufzuzeichnen. Sollte ein App-Fehler auftreten, reproduziere das Problem und sende uns die Protokolle über die Schaltfläche „App-Fehler melden“ unter „Hilfe“. Protokolle können Standortformationen enthalten.
-el = Αυτή η λειτουργία είναι ενεργοποιημένη για την καταγραφή ενεργειών για διαγνωστικούς σκοπούς. Αυτό βοηθά την ομάδα να εντοπίζει προβλήματα με την εφαρμογή. Να ενεργοποιείτε τη λειτουργία μόνο κατόπιν αιτήματος της υποστήριξης του Organic Maps.
+el = Αυτή η λειτουργία είναι ενεργοποιημένη για την καταγραφή ενεργειών για διαγνωστικούς σκοπούς. Αυτό βοηθά την ομάδα να εντοπίζει προβλήματα με την εφαρμογή. Να ενεργοποιείτε τη λειτουργία μόνο κατόπιν αιτήματος της υποστήριξης του Maps&Fly.
 es = Active esta opción temporalmente para grabar y enviar de forma manual registros para diagnosticar defectos enviados mediante la opción «Informar de un fallo» en el diálogo Ayuda. Los registros pueden incluir ubicaciones.
 es-MX = Activa esta opción temporalmente para grabar y enviarnos manualmente registros de diagnóstico detallados sobre tu problema mediante "Informar de un error" en el cuadro de diálogo Ayuda. Los registros pueden incluir información de ubicación.
 et = Kasuta seda võimalust üksikasjaliku logi ajutiseks salvestamiseks ja meile käsitsi saatmiseks Abiteabe „Teata veast“ vaatest. Andmed võivad sisaldada sinu asukoha teavet.
-eu = Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Organic Maps laguntzari eskatuta soilik.
-fa = این گزینه ثبت گزارش را برای اهداف تشخیصی فعال می‌کند. برای کارکنان بخش پشتیبانی که مشکلات برنامه را عیب یابی می‌کنند، مفید باشد. این گزینه را تنها در صورت درخواست پشتیبانی Organic Maps فعال کنید.
-fi = Valinta ottaa käyttöön lokikirjaukset diagnostiikkaa varten. Se voi auttaa tukihenkilöstöämme, kun he korjaavat sovelluksen ongelmia. Ota tämä ominaisuus käyttöön vain, jos Organic Maps:n tuki pyytää.
-fr = Cette option est activée pour l'identification des actions à des fins de diagnostic. Cela aide l’équipe à identifier les problèmes liés à l’application. Activez cette option uniquement à la demande du support Organic Maps.
+eu = Aukera hau diagnostiko helburua duten erregistro ekintzetarako gaituta dago. Honek gure taldeari aplikazioarekin arazoak identifikatzen laguntzen dio. Gaitu aukera Maps&Fly laguntzari eskatuta soilik.
+fa = این گزینه ثبت گزارش را برای اهداف تشخیصی فعال می‌کند. برای کارکنان بخش پشتیبانی که مشکلات برنامه را عیب یابی می‌کنند، مفید باشد. این گزینه را تنها در صورت درخواست پشتیبانی Maps&Fly فعال کنید.
+fi = Valinta ottaa käyttöön lokikirjaukset diagnostiikkaa varten. Se voi auttaa tukihenkilöstöämme, kun he korjaavat sovelluksen ongelmia. Ota tämä ominaisuus käyttöön vain, jos Maps&Fly:n tuki pyytää.
+fr = Cette option est activée pour l'identification des actions à des fins de diagnostic. Cela aide l’équipe à identifier les problèmes liés à l’application. Activez cette option uniquement à la demande du support Maps&Fly.
 gl = Active esta opción temporalmente para gravar e enviar de forma manual rexistros para diagnosticar defectos enviados mediante a opción «Informar dun fallo» no diálogo Axuda. Os rexistros poden incluír localizacións.
 he = הפעל אפשרות זו כדי לתעד ובאופן ידני לשלוח אלינו פרטים דיאגנוסטיים על הבעיה שלך בעזרת הכפתור "דווח על באג" בתפריט עזרה. הפרטים עשויים לכלול מידע על מיקום.
 hi = सहायता संवाद में "बग की रिपोर्ट करें" का उपयोग करके हमें अपनी समस्या के बारे में विस्तृत डायग्नोस्टिक लॉग रिकॉर्ड करने और मैन्युअल रूप से भेजने के लिए इस विकल्प को अस्थायी रूप से सक्षम करें। लॉग में स्थान की जानकारी शामिल हो सकती है.
 hr = Privremeno omogućite ovu opciju kako biste snimili i ručno poslali detaljne dijagnostičke zapise o vašem problemu nama putem opcije "Prijavi grešku" u dijaloškom okviru Pomoć. Zapisi mogu uključivati informacije o lokaciji.
 hu = Ha ideiglenesen engedélyezi ezt a beállítást, akkor a „Súgó” párbeszédpanel „Hibajelentés” menüpontjának használatával rögzítheti és kézzel küldheti el nekünk a problémával kapcsolatos részletes diagnosztikai naplókat. A naplók tartalmazhatnak helyadatokat.
 hy = Միացրեք այս ընտրանքը ժամանակավորապես՝ Ձեր խնդրի մասին մանրամասն ախտորոշիչ գրանցամատյանները գրանցելու և մեզ ձեռքով ուղարկելու համար՝ օգտագործելով «Զեկուցել սխալի մասին» Օգնության պատուհանում։ Գրանցամատյանները կարող են ներառել տեղադիրքի տվյալներ։
-id = Opsi ini mengaktifkan pencatatan untuk tujuan diagnostik. Bisa amat membantu bagi staf dukungan kami yang memecahkan masalah dalam aplikasi. Aktifkan opsi ini hanya saat diminta oleh dukungan Organic Maps.
+id = Opsi ini mengaktifkan pencatatan untuk tujuan diagnostik. Bisa amat membantu bagi staf dukungan kami yang memecahkan masalah dalam aplikasi. Aktifkan opsi ini hanya saat diminta oleh dukungan Maps&Fly.
 is = Virkjaðu þennan valkost tímabundið til að skrá og senda síðan handvirkt nákvæma greiningarskrá um vandamálið þitt með því að nota "Tilkynna um villu" í hjálparglugganum. Slíkar atvikaskrár geta innihaldið upplýsingar um staðsetningu.
 it = Attiva questa opzione temporaneamente per registrare e inviarci manualmente dei log diagnostici riguardo al tuo problema usando "Segnala un bug" nella sezione Aiuto. I log potrebbero contenere informazioni sulla posizione.
-ja = このオプションは診断目的でのデータ記録を有効にします。これはこのアプリケーションのトラブルシューティングを担当する当社のサポートスタッフの助けになります。このオプションはOrganic Mapsにリクエストされた場合にのみ有効にしてください。
-ko = 이 옵션은 진단을 목적으로 로그를 엽니다 이를 통해 앱에 대한 문제를 분석하는 우리의 스탭을 도울 수 있습니다 이 옵션은 오직 Organic Maps 지원 요청에서만 가능합니다.
+ja = このオプションは診断目的でのデータ記録を有効にします。これはこのアプリケーションのトラブルシューティングを担当する当社のサポートスタッフの助けになります。このオプションはMaps&Flyにリクエストされた場合にのみ有効にしてください。
+ko = 이 옵션은 진단을 목적으로 로그를 엽니다 이를 통해 앱에 대한 문제를 분석하는 우리의 스탭을 도울 수 있습니다 이 옵션은 오직 Maps&Fly 지원 요청에서만 가능합니다.
 lo = ເປີດໃຊ້ຕົວເລືອກນີ້ຊົ່ວຄາວເພື່ອບັນທຶກ ແລະ ສົ່ງລັອກການວິນິດໄສໂດຍລະອຽດກ່ຽວກັບບັນຫາຂອງທ່ານໃຫ້ພວກເຮົາໂດຍໃຊ້ "ລາຍງານຂໍ້ຜິດພາດ" ໃນສ່ວນຊ່ວຍເຫຼືອ. ລັອກອາດຈະລວມມີຂໍ້ມູນຕຳແໜ່ງທີ່ຕັ້ງ.
 lt = Įjunkite šią parinktį, jei norite kurį laiką rašyti derinimo žurnalą. Pasinaudodami mygtuku „Pranešti apie klaidą“, esančiu žinyno dialogo lange, galėsite pranešti apie problemą, pridėdami sukauptą žurnalą. Žurnaluose gali būti vietos duomenų.
 lv = Uz laiku ieslēdziet šo opciju, lai reģistrētu un manuāli nosūtītu sīkākus žurnālus problēmu diagnostikai, izmantojot „Ziņot par kļūdu“ funkciju palīdzības lodziņā. Žurnāli var saturēt informāciju par atrašanās vietu.
 mr = निदान करण्याकरिता हा पर्याय लॉगिंग चालू करतो. ह्याने ऍपच्या समस्यांचे निवारण करणे आम्हाला उपयुक्त ठरू शकते. तुमच्या समस्येबद्दल तपशीलवार नोंदी रेकॉर्ड करण्यासाठी आणि आम्हाला पाठवण्यासाठी हा पर्याय तात्पुरता चालू करा.
 mt = Attiva din l-għażla biex tirrekordja u tibgħat manwalment dijanjostiċi dettaljati dwar il-kwistjoni tiegħek lilna billi tuża “Irrapporta problemi” fid-djalogu għajnuna. Ir-reġistri jistgħu jinkludu informazzjoni dwar il-post.
-nb = Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Organic Maps-brukerstøtte.
-nl = Schakel deze optie tijdelijk in om gedetailleerde logboekregistraties omtrent jouw probleem op te slaan en te verzenden tijdens " Rapporteer een probleem" in het help menu. Schakel deze optie alleen in op verzoek van Organic Maps ondersteuning.
-pl = Ta opcja zostaje włączona do zbierania danych działań w celach diagnostycznych. Pomaga to zespołowi zidentyfikować problemy z aplikacją. Włączaj opcję tylko na żądanie wsparcia technicznego Organic Maps.
-pt = Esta opção ativa o registo das ações para diagnóstico. Pode ser útil para os programadores descobrirem o problema na aplicação. Ative esta opção apenas a pedido dos programadores do Organic Maps.
-pt-BR = A opção ativa logging para realizar diagnósticos. Pode ser útil para nossa equipe de suporte que estão solucionando problemas com o aplicativo. Ative esta opção apenas ao ser solicitado pelo suporte do Organic Maps.
+nb = Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Maps&Fly-brukerstøtte.
+nl = Schakel deze optie tijdelijk in om gedetailleerde logboekregistraties omtrent jouw probleem op te slaan en te verzenden tijdens " Rapporteer een probleem" in het help menu. Schakel deze optie alleen in op verzoek van Maps&Fly ondersteuning.
+pl = Ta opcja zostaje włączona do zbierania danych działań w celach diagnostycznych. Pomaga to zespołowi zidentyfikować problemy z aplikacją. Włączaj opcję tylko na żądanie wsparcia technicznego Maps&Fly.
+pt = Esta opção ativa o registo das ações para diagnóstico. Pode ser útil para os programadores descobrirem o problema na aplicação. Ative esta opção apenas a pedido dos programadores do Maps&Fly.
+pt-BR = A opção ativa logging para realizar diagnósticos. Pode ser útil para nossa equipe de suporte que estão solucionando problemas com o aplicativo. Ative esta opção apenas ao ser solicitado pelo suporte do Maps&Fly.
 ro = Opțiunea activează jurnalizarea în scopuri de diagnosticare. Aceasta poate fi utilă echipei noastre pentru a rezolva problemele cu aplicația. Activează temporar această opțiune pentru a înregistra și a ne trimite jurnale detaliate despre problema ta.
 ru = Данная настройка включается для записи действий в целях диагностики, чтобы помочь нашей команде выявить проблемы с приложением. Временно включайте эту настройку только для отправки детальной информации о найденной вами проблеме в приложении через кнопку "Сообщить о проблеме".
 sk = Týmto zapnete záznamenávanie diagnostických informácií, ktoré môžete poslať našej technickej podpore v prípade problémov s aplikáciou. Záznam môže obsahovať údaje o vašej polohe.
 sl = To možnost omogočite začasno, da posnamete in nam ročno pošljete podrobne diagnostične dnevnike o vaši težavi z uporabo "Prijavi napako" v pogovornem oknu Pomoč. Dnevniki lahko vključujejo podatke o lokaciji.
 sq = Aktivizoni këtë opsion përkohësisht për të regjistruar dhe dërguar manualisht logje diagnostike të detajuara për problemin tuaj duke përdorur "Raporto një problem" në dialogun Ndihmë. Logjet mund të përfshijnë informacione vendndodhjeje.
 sr = Привремено укључите ову опцију да бисте сачували детаљне дијагностичке логове уколико имате неки проблем. Логове можете да нам пошаљете коришћењем опције "Пријавите проблем" у прозору Помоћ. Напомена: Логови могу да садрже информације о вашој локацији.
-sv = Aktivera denna funktion för att logga detaljer för diagnostiska ändamål. Detta hjälper utvecklarna att identifiera problem med appen. Slå på funktionen endast på begäran av Organic Maps supporttjänst.
-sw = Chaguo huwasha data kwa madhumuni ya uchunguzi. Itakuwa muhimu kwa wafanyakazi wetu ambao wanatatua matatizo ya programu. Washa chaguo hili kwa maombi ya mhudumu wa Organic Maps tu.
-th = ออปชันเพื่อเปิดการบันทึกประวัติการทำงานเพื่อการวินิจฉัย ประวัติดังกล่าวอาจเป็นประโยชน์กับทีมงานช่วยเหลือของเราที่คอยจัดการกับปัญหาที่เจอระหว่างแอปทำงาน โปรดเปิดออปชันดังกล่าวจากการร้องข้อการสนับสนุนจาก Organic Maps เท่านั้น
+sv = Aktivera denna funktion för att logga detaljer för diagnostiska ändamål. Detta hjälper utvecklarna att identifiera problem med appen. Slå på funktionen endast på begäran av Maps&Fly supporttjänst.
+sw = Chaguo huwasha data kwa madhumuni ya uchunguzi. Itakuwa muhimu kwa wafanyakazi wetu ambao wanatatua matatizo ya programu. Washa chaguo hili kwa maombi ya mhudumu wa Maps&Fly tu.
+th = ออปชันเพื่อเปิดการบันทึกประวัติการทำงานเพื่อการวินิจฉัย ประวัติดังกล่าวอาจเป็นประโยชน์กับทีมงานช่วยเหลือของเราที่คอยจัดการกับปัญหาที่เจอระหว่างแอปทำงาน โปรดเปิดออปชันดังกล่าวจากการร้องข้อการสนับสนุนจาก Maps&Fly เท่านั้น
 tr = Bu seçenek tanılama amacıyla günlüğe kaydetmeyi açar. Ekibimizin uygulamayla ilgili sorunları gidermesine yardımcı olabilir. Sorununuzla ilgili ayrıntılı günlükleri kaydetmek ve bize göndermek için bu seçeneği geçici olarak etkinleştirin.
 uk = Тимчасово увімкніть цю опцію, щоб записати й вручну надіслати нам детальні діагностичні дані про проблему через пункт «Повідомити про помилку» в розділі «Довідка». Журнали можуть містити інформацію про розташування.
-vi = Tùy chọn này được kích hoạt để ghi nhật ký đăng nhập cho mục đích chẩn đoán. Điều này sẽ giúp nhóm chúng tôi làm rõ các vấn đề liên quan đến ứng dụng. Hãy bật tùy chọn này chỉ khi nào có yêu cầu hỗ trợ từ Organic Maps.
+vi = Tùy chọn này được kích hoạt để ghi nhật ký đăng nhập cho mục đích chẩn đoán. Điều này sẽ giúp nhóm chúng tôi làm rõ các vấn đề liên quan đến ứng dụng. Hãy bật tùy chọn này chỉ khi nào có yêu cầu hỗ trợ từ Maps&Fly.
 zh-Hans = 临时启用此选项，以便使用“报告错误”功能在帮助对话框中记录并手动发送详细诊断日志给我们。日志可能包含位置信息。
 zh-Hant = 暫時啟用此選項，以便使用“報告問題”功能在幫助對話框中記錄並手動發送詳細的診斷日誌給我們。日誌可能包含位置資訊。
 
@@ -37845,7 +37845,7 @@ ja = 私たちのアプリは気に入っていますか? 開発をサポート�
 ko = 우리 앱이 마음에 드시나요? 발전을 위해 기부해주세요! 아직 마음에 들지 않으세요? 알려주시면 수정하겠습니다!
 lo = ທ່ານມັກແອັບຂອງພວກເຮົາບໍ່? ກະລຸນາບໍລິຈາກເພື່ອສະໜັບສະໜູນການພັດທະນາ! ຫາກຍັງບໍ່ມັກ? ກະລຸນາບອກໃຫ້ພວກເຮົາຮູ້ເຫດຜົນ, ແລ້ວພວກເຮົາຈະແກ້ໄຂໃຫ້!
 lt = Patinka šį programėlė? Paremkite, paaukodami jos vystymui! Dar ne? Papasakokite mums, kodėl, ir mes pasistengsime tai pataisyti!
-lv = Vai jums patīk mūsu lietotne? Lūdzam ziedot tās attīstībai! Varbūt tā nepatīk? Tādā gadījumā lūdzam mums pastāstīt, kas tajā nepatīk, lai varam „Organic Maps“ uzlabot!
+lv = Vai jums patīk mūsu lietotne? Lūdzam ziedot tās attīstībai! Varbūt tā nepatīk? Tādā gadījumā lūdzam mums pastāstīt, kas tajā nepatīk, lai varam „Maps&Fly“ uzlabot!
 mr = तुम्हाला आमचे अॅप आवडते का? कृपया विकासाला पाठिंबा देण्यासाठी देणगी द्या! अजून आवडत नाही? कृपया आम्हाला कळवा आणि आम्ही त्याचे निराकरण करू!
 mt = Togħġbok l-app tagħna? Jekk jogħġbok agħti donazzjoni biex tappoġġja l-iżvilupp! Għadha ma togħġbokx? Jekk jogħġbok għidilna għaliex, u nirranġawha!
 nb = Liker du appen vår? Vennligst doner for å støtte utviklingen! Liker du det ikke ennå? Gi oss beskjed, så fikser vi det!
@@ -38277,120 +38277,120 @@ zh-Hant = 我們的主要目標是構建您會喜歡的快速、注重隱私、�
 [car_used_on_the_phone_screen]
 comment = Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen
 tags = android-app,apple-maps
-en = You are now using Organic Maps on the phone screen
-af = Jy gebruik nou Organic Maps op die foon se skerm
-ar = أنت تستخدم الآن Organic Maps على شاشة الهاتف
-ast = Agora tas utilizando Organic Maps na pantalla del teléfonu
-az = İndi telefon ekranında Organic Maps istifadə edirsiniz
-be = Вы выкарыстоўваеце Organic Maps на экране тэлефона
-bg = Вече използвате Organic Maps на екрана на телефона
-ca = Ara esteu utilitzant Organic Maps a la pantalla del telèfon
-cs = Na obrazovce telefonu nyní používáte aplikaci Organic Maps
-cy = Rydych chi nawr yn defnyddio Organic Maps ar sgrin y ffôn
-da = Du bruger nu Organic Maps på telefonens skærm
-de = Du verwendest jetzt Organic Maps auf dem Telefondisplay
-el = Αυτή τη στιγμή το Organic Maps βρίσκεται στην οθόνη του κινητού
-es = Ahora usa Organic Maps en la pantalla del teléfono
-es-MX = Ahora estás utilizando Organic Maps en la pantalla del teléfono
-et = Nüüd kasutad telefoni ekraanil Organic Mapsi
-eu = Organic Maps telefonoaren pantailan erabiltzen ari zara
-fa = شما اکنون در حال استفاده از Organic Maps بر روی صفحهٔ تلفن همراه هستید
-fi = Käytät nyt puhelimen näytöllä Organic Maps -palvelua.
-fr = Vous utilisez maintenant Organic Maps sur le téléphone
-gl = Agora usa Organic Maps na pantalla do teléfono
-he = אתה משתמש כעת ב-Organic Maps במסך הטלפון
-hi = आप अब फोन स्क्रीन पर Organic Maps का उपयोग कर रहे हैं
-hr = Sada koristiš Organic Maps na ekranu telefona
-hu = Ön most az Organic Maps alkalmazást használja az eszköz képernyőjén
-hy = Դուք այժմ օգտագործում եք Organic Maps-ը հեռախոսի էկրանին
-id = Anda sekarang menggunakan Organic Maps pada layar ponsel
-is = Þú ert núna að nota Organic Maps á símaskjánum
-it = Stai utilizzando Organic Maps sullo schermo del telefono
-ja = 端末の画面でOrganic Mapsを使用している
-ko = 현재 휴대폰 화면에서 Organic Maps을 이용 중입니다
-lo = ຕອນນີ້ທ່ານກຳລັງໃຊ້ Organic Maps ໃນໜ້າຈໍໂທລະສັບ
-lt = Dabar naudojatės „Organic Maps“ telefono ekrane
-lv = Tagad „Organic Maps“ izmantojat tālruņa ekrānā
-mr = आपण आता फोन स्क्रीनवर Organic Maps वापरत आहात
-mt = Issa qed tuża Organic Maps fuq l-iskrin tat-telefown
-nb = Du bruker nå Organic Maps på telefonskjermen
-nl = Je gebruikt nu Organic Maps op het telefoonscherm
-pl = Korzystasz teraz z Organic Maps na ekranie telefonu
-pt = Está agora a utilizar o Organic Maps no ecrã do telemóvel
-pt-BR = Agora você está usando o Organic Maps na tela do telefone
-ro = Acum utilizați Organic Maps pe ecranul telefonului
-ru = Сейчас Вы используете Organic Maps на экране телефона
-sk = Na obrazovke telefónu teraz používate službu Organic Maps
-sl = Zdaj uporabljate Organic Maps na zaslonu telefona
-sq = Tani jeni duke përdorur Organic Maps në ekranin e telefonit
-sr = Ви сада користите Organic Maps на екрану телефона
-sv = Du använder nu Organic Maps på telefonens skärm
-sw = Sasa unatumia Organic Maps kwenye skrini ya simu
-th = ขณะนี้คุณกำลังใช้ Organic Maps บนหน้าจอโทรศัพท์
-tr = Artık Organic Maps'i telefon ekranında kullanıyorsunuz
-uk = Зараз ви використовуєте Organic Maps на екрані телефону
-vi = Bạn hiện đang sử dụng Organic Maps trên màn hình điện thoại
-zh-Hans = 您现在正在手机屏幕上使用 Organic Maps
-zh-Hant = 您現在正在手機螢幕上使用 Organic Maps
+en = You are now using Maps&Fly on the phone screen
+af = Jy gebruik nou Maps&Fly op die foon se skerm
+ar = أنت تستخدم الآن Maps&Fly على شاشة الهاتف
+ast = Agora tas utilizando Maps&Fly na pantalla del teléfonu
+az = İndi telefon ekranında Maps&Fly istifadə edirsiniz
+be = Вы выкарыстоўваеце Maps&Fly на экране тэлефона
+bg = Вече използвате Maps&Fly на екрана на телефона
+ca = Ara esteu utilitzant Maps&Fly a la pantalla del telèfon
+cs = Na obrazovce telefonu nyní používáte aplikaci Maps&Fly
+cy = Rydych chi nawr yn defnyddio Maps&Fly ar sgrin y ffôn
+da = Du bruger nu Maps&Fly på telefonens skærm
+de = Du verwendest jetzt Maps&Fly auf dem Telefondisplay
+el = Αυτή τη στιγμή το Maps&Fly βρίσκεται στην οθόνη του κινητού
+es = Ahora usa Maps&Fly en la pantalla del teléfono
+es-MX = Ahora estás utilizando Maps&Fly en la pantalla del teléfono
+et = Nüüd kasutad telefoni ekraanil Maps&Flyi
+eu = Maps&Fly telefonoaren pantailan erabiltzen ari zara
+fa = شما اکنون در حال استفاده از Maps&Fly بر روی صفحهٔ تلفن همراه هستید
+fi = Käytät nyt puhelimen näytöllä Maps&Fly -palvelua.
+fr = Vous utilisez maintenant Maps&Fly sur le téléphone
+gl = Agora usa Maps&Fly na pantalla do teléfono
+he = אתה משתמש כעת ב-Maps&Fly במסך הטלפון
+hi = आप अब फोन स्क्रीन पर Maps&Fly का उपयोग कर रहे हैं
+hr = Sada koristiš Maps&Fly na ekranu telefona
+hu = Ön most az Maps&Fly alkalmazást használja az eszköz képernyőjén
+hy = Դուք այժմ օգտագործում եք Maps&Fly-ը հեռախոսի էկրանին
+id = Anda sekarang menggunakan Maps&Fly pada layar ponsel
+is = Þú ert núna að nota Maps&Fly á símaskjánum
+it = Stai utilizzando Maps&Fly sullo schermo del telefono
+ja = 端末の画面でMaps&Flyを使用している
+ko = 현재 휴대폰 화면에서 Maps&Fly을 이용 중입니다
+lo = ຕອນນີ້ທ່ານກຳລັງໃຊ້ Maps&Fly ໃນໜ້າຈໍໂທລະສັບ
+lt = Dabar naudojatės „Maps&Fly“ telefono ekrane
+lv = Tagad „Maps&Fly“ izmantojat tālruņa ekrānā
+mr = आपण आता फोन स्क्रीनवर Maps&Fly वापरत आहात
+mt = Issa qed tuża Maps&Fly fuq l-iskrin tat-telefown
+nb = Du bruker nå Maps&Fly på telefonskjermen
+nl = Je gebruikt nu Maps&Fly op het telefoonscherm
+pl = Korzystasz teraz z Maps&Fly na ekranie telefonu
+pt = Está agora a utilizar o Maps&Fly no ecrã do telemóvel
+pt-BR = Agora você está usando o Maps&Fly na tela do telefone
+ro = Acum utilizați Maps&Fly pe ecranul telefonului
+ru = Сейчас Вы используете Maps&Fly на экране телефона
+sk = Na obrazovke telefónu teraz používate službu Maps&Fly
+sl = Zdaj uporabljate Maps&Fly na zaslonu telefona
+sq = Tani jeni duke përdorur Maps&Fly në ekranin e telefonit
+sr = Ви сада користите Maps&Fly на екрану телефона
+sv = Du använder nu Maps&Fly på telefonens skärm
+sw = Sasa unatumia Maps&Fly kwenye skrini ya simu
+th = ขณะนี้คุณกำลังใช้ Maps&Fly บนหน้าจอโทรศัพท์
+tr = Artık Maps&Fly'i telefon ekranında kullanıyorsunuz
+uk = Зараз ви використовуєте Maps&Fly на екрані телефону
+vi = Bạn hiện đang sử dụng Maps&Fly trên màn hình điện thoại
+zh-Hans = 您现在正在手机屏幕上使用 Maps&Fly
+zh-Hant = 您現在正在手機螢幕上使用 Maps&Fly
 
 [car_used_on_the_car_screen]
 comment = Text on the phone placeholder screen that maps are displayed on the car screen
 tags = android-app,apple-maps
-en = You are now using Organic Maps on the car screen
-af = Jy gebruik nou Organic Maps op die motor se skerm
-ar = أنت تستخدم الآن Organic Maps على شاشة السيارة
-ast = Agora tas utilizando Organic Maps na pantalla del coche
-az = Hazırda avtomobil ekranında Organic Maps istifadə edirsiniz
-be = Вы выкарыстоўваеце Organic Maps на экране аўтамабіля
-bg = Вече използвате Organic Maps на екрана на автомобила
-ca = Ara esteu utilitzant Organic Maps a la pantalla del cotxe
-cs = Na obrazovce auta nyní používáte aplikaci Organic Maps
-cy = Rydych chi nawr yn defnyddio Organic Maps ar sgrin y car
-da = Du bruger nu Organic Maps på bilens skærm
-de = Du verwendest jetzt Organic Maps auf dem Bildschirm des Autos
-el = Αυτή τη στιγμή το Organic Maps βρίσκεται στην οθόνη του αυτοκινήτου
-es = Ahora usa Organic Maps en la pantalla del coche
-es-MX = Ahora usa Organic Maps en la pantalla del automóvil
-et = Nüüd kasutad auto ekraanil Organic Mapsi
-eu = Organic Maps autoaren pantailan erabiltzen ari zara
-fa = شما اکنون در حال استفاده از Organic Maps بر روی صفحهٔ خودرو هستید
-fi = Käytät nyt Organic Maps auton näytöllä
-fr = Vous utilisez maintenant Organic Maps dans la voiture
-gl = Agora usa Organic Maps na pantalla do coche
-he = אתה משתמש כעת ב-Organic Maps במסך המכונית
-hi = आप अब कार स्क्रीन पर Organic Maps का उपयोग कर रहे हैं
-hr = Sada koristiš Organic Maps na ekranu auta
-hu = Ön most az Organic Maps alkalmazást használja az autó képernyőjén
-hy = Դուք այժմ օգտագործում եք Organic Maps-ը մեքենայի էկրանին
-id = Anda sekarang menggunakan Organic Maps pada layar mobil
-is = Þú ert núna að nota Organic Maps á bílskjánum
-it = Stai utilizzando Organic Maps sullo schermo dell'auto
-ja = 現在、車の画面でOrganic Mapsをご利用中です
-ko = 현재 차량 화면에서 Organic Maps을 이용 중입니다
-lo = ຕອນນີ້ທ່ານກຳລັງໃຊ້ Organic Maps ໃນໜ້າຈໍລົດ
-lt = Dabar naudojatės „Organic Maps“ automobilio ekrane
-lv = Tagad „Organic Maps“ izmantojat automobiļa ekrānā
-mr = तुम्ही आता कार स्क्रीनवर Organic Maps वापरत आहात
-mt = Issa qed tuża Organic Maps fuq l-iskrin tal-karozza
-nb = Du bruker nå Organic Maps på bilskjermen
-nl = Je gebruikt nu Organic Maps op het autoscherm
-pl = Korzystasz teraz z Organic Maps na ekranie samochodu
-pt = Está agora a utilizar o Organic Maps no ecrã do automóvel
-pt-BR = Agora você está usando o Organic Maps na tela do carro
-ro = Acum utilizați Organic Maps pe ecranul mașinii
-ru = Сейчас Вы используете Organic Maps на экране автомобиля
-sk = Na obrazovke auta teraz používate službu Organic Maps
-sl = Zdaj uporabljate Organic Maps na zaslonu avtomobila
-sq = Tani jeni duke përdorur Organic Maps në ekranin e makinës
-sr = Ви сада користите Organic Maps на екрану аутомобила
-sv = Du använder nu Organic Maps på bilskärmen
-sw = Sasa unatumia Organic Maps kwenye skrini ya gari
-th = ขณะนี้คุณกำลังใช้ Organic Maps บนหน้าจอรถยนต์
-tr = Şu anda araç ekranında Organic Maps kullanıyorsunuz
-uk = Ви використовуєте Organic Maps на екрані автомобіля
-vi = Bạn hiện đang sử dụng Organic Maps trên màn hình xe hơi
-zh-Hans = 您现在正在汽车屏幕上使用 Organic Maps
-zh-Hant = 您現在正在汽車螢幕上使用 Organic Maps
+en = You are now using Maps&Fly on the car screen
+af = Jy gebruik nou Maps&Fly op die motor se skerm
+ar = أنت تستخدم الآن Maps&Fly على شاشة السيارة
+ast = Agora tas utilizando Maps&Fly na pantalla del coche
+az = Hazırda avtomobil ekranında Maps&Fly istifadə edirsiniz
+be = Вы выкарыстоўваеце Maps&Fly на экране аўтамабіля
+bg = Вече използвате Maps&Fly на екрана на автомобила
+ca = Ara esteu utilitzant Maps&Fly a la pantalla del cotxe
+cs = Na obrazovce auta nyní používáte aplikaci Maps&Fly
+cy = Rydych chi nawr yn defnyddio Maps&Fly ar sgrin y car
+da = Du bruger nu Maps&Fly på bilens skærm
+de = Du verwendest jetzt Maps&Fly auf dem Bildschirm des Autos
+el = Αυτή τη στιγμή το Maps&Fly βρίσκεται στην οθόνη του αυτοκινήτου
+es = Ahora usa Maps&Fly en la pantalla del coche
+es-MX = Ahora usa Maps&Fly en la pantalla del automóvil
+et = Nüüd kasutad auto ekraanil Maps&Flyi
+eu = Maps&Fly autoaren pantailan erabiltzen ari zara
+fa = شما اکنون در حال استفاده از Maps&Fly بر روی صفحهٔ خودرو هستید
+fi = Käytät nyt Maps&Fly auton näytöllä
+fr = Vous utilisez maintenant Maps&Fly dans la voiture
+gl = Agora usa Maps&Fly na pantalla do coche
+he = אתה משתמש כעת ב-Maps&Fly במסך המכונית
+hi = आप अब कार स्क्रीन पर Maps&Fly का उपयोग कर रहे हैं
+hr = Sada koristiš Maps&Fly na ekranu auta
+hu = Ön most az Maps&Fly alkalmazást használja az autó képernyőjén
+hy = Դուք այժմ օգտագործում եք Maps&Fly-ը մեքենայի էկրանին
+id = Anda sekarang menggunakan Maps&Fly pada layar mobil
+is = Þú ert núna að nota Maps&Fly á bílskjánum
+it = Stai utilizzando Maps&Fly sullo schermo dell'auto
+ja = 現在、車の画面でMaps&Flyをご利用中です
+ko = 현재 차량 화면에서 Maps&Fly을 이용 중입니다
+lo = ຕອນນີ້ທ່ານກຳລັງໃຊ້ Maps&Fly ໃນໜ້າຈໍລົດ
+lt = Dabar naudojatės „Maps&Fly“ automobilio ekrane
+lv = Tagad „Maps&Fly“ izmantojat automobiļa ekrānā
+mr = तुम्ही आता कार स्क्रीनवर Maps&Fly वापरत आहात
+mt = Issa qed tuża Maps&Fly fuq l-iskrin tal-karozza
+nb = Du bruker nå Maps&Fly på bilskjermen
+nl = Je gebruikt nu Maps&Fly op het autoscherm
+pl = Korzystasz teraz z Maps&Fly na ekranie samochodu
+pt = Está agora a utilizar o Maps&Fly no ecrã do automóvel
+pt-BR = Agora você está usando o Maps&Fly na tela do carro
+ro = Acum utilizați Maps&Fly pe ecranul mașinii
+ru = Сейчас Вы используете Maps&Fly на экране автомобиля
+sk = Na obrazovke auta teraz používate službu Maps&Fly
+sl = Zdaj uporabljate Maps&Fly na zaslonu avtomobila
+sq = Tani jeni duke përdorur Maps&Fly në ekranin e makinës
+sr = Ви сада користите Maps&Fly на екрану аутомобила
+sv = Du använder nu Maps&Fly på bilskärmen
+sw = Sasa unatumia Maps&Fly kwenye skrini ya gari
+th = ขณะนี้คุณกำลังใช้ Maps&Fly บนหน้าจอรถยนต์
+tr = Şu anda araç ekranında Maps&Fly kullanıyorsunuz
+uk = Ви використовуєте Maps&Fly на екрані автомобіля
+vi = Bạn hiện đang sử dụng Maps&Fly trên màn hình xe hơi
+zh-Hans = 您现在正在汽车屏幕上使用 Maps&Fly
+zh-Hant = 您現在正在汽車螢幕上使用 Maps&Fly
 
 [aa_connected_title]
 comment = Displayed on the phone screen. Android Auto connected
@@ -38570,60 +38570,60 @@ zh-Hant = 轉到汽車螢幕
 [aa_location_permissions_request]
 comment = Ask user to grant location permissions
 tags = android-app
-en = Organic Maps needs location access. When it's safe, check the notification on your phone.
-af = Organic Maps benodig liggingtoegang. Gaan die kennisgewing op jou foon na wanneer dit veilig is.
-ar = Organic Maps تحتاج إلى الوصول إلى الموقع. عندما يكون الوضع آمنًا، تحقق من الإشعار على هاتفك.
-az = Organic Maps Məkan məlumatlarına giriş tələb olunur. Təhlükəsiz olduqda telefonunuzdakı bildirişi yoxlayın.
-be = Organic Maps патрабуе доступу да месцазнаходжання. Калі будзе бяспечна, праверце апавяшчэнне на тэлефоне.
-bg = Organic Maps се нуждае от достъп до местоположението. Когато е безопасно, проверете известието на телефона си.
-ca = Organic Maps necessita accés a la ubicació. Quan sigui segur, comproveu la notificació al telèfon.
-cs = Služba Organic Maps potřebuje přístup k poloze. Když je to bezpečné, zkontrolujte oznámení v telefonu.
-cy = Mae angen mynediad at leoliad ar Organic Maps. Pan fydd yn ddiogel, gwiriwch yr hysbysiad ar eich ffôn.
-da = Organic Maps har brug for placeringsadgang. Når det er sikkert, kan du tjekke notifikationen på din telefon.
-de = Organic Maps benötigt Zugriff auf den Standort. Wenn es sicher ist, überprüfe die Benachrichtigung auf deinem Telefon.
-el = Η εφαρμογή Organic Maps χρειάζεται πρόσβαση στην τοποθεσία. Όταν είναι ασφαλές, ελέγξτε την ειδοποίηση στο τηλέφωνό σας.
-es = Organic Maps necesita acceder a la ubicación. Cuando sea seguro, compruebe la notificación en el teléfono.
-es-MX = Organic Maps necesita acceder a la ubicación. Cuando sea seguro, revise la notificación en el teléfono.
-et = Organic Maps vajab juurdepääsu asukohale. Kui see on turvaline, kontrolli oma telefonis olevat teadet.
-eu = Organic Maps-ek kokapenerako sarbidea behar du. Seguru dagoenean, egiaztatu zure telefonoko jakinarazpena.
-fa = Organic Maps به دسترسی به مکان نیاز دارد. وقتی ایمن است، اعلان گوشی خود را بررسی کنید.
-fi = Organic Maps tarvitsee sijaintitietoja. Kun se on turvallista, tarkista puhelimesi ilmoitus.
-fr = Organic Maps a besoin d'un accès à la localisation. Lorsque c'est sûr, vérifiez la notification sur votre téléphone.
-gl = Organic Maps necesita acceder á localización. Cando sexa seguro, comprobe a notificación no teléfono.
-he = Organic Maps זקוק לגישה למיקום. כאשר זה בטוח, בדוק את ההודעה בטלפון שלך.
-hi = Organic Maps इसे स्थान तक पहुंच की आवश्यकता है। जब यह सुरक्षित हो, तो अपने फोन पर सूचना देखें।
-hr = Organic Maps treba pristup lokacijama. Kada je sigurno, provjeri obavijest na telefonu.
-hu = Az Organic Maps alkalmazásnak szüksége van a helymeghatározáshoz való hozzáférésre. Ha biztonságos, ellenőrizze az értesítést az eszközén.
-hy = Organic Maps-ին անհրաժեշտ է տեղադիրքի հասանելիություն։ Երբ անվտանգ լինի, ստուգեք ծանուցումը ձեր հեռախոսում։
-id = Organic Maps membutuhkan akses lokasi. Jika sudah aman, periksa notifikasi di ponsel Anda.
-is = Organic Maps þarf aðgang að staðsetningu. Við gott tækifæri, þegar það er öruggt, skaltu skoða tilkynninguna á símanum þínum.
-it = Organic Maps ha bisogno di accedere alla posizione. Quando puoi farlo in sicurezza, controlla la notifica sul tuo telefono.
-ja = Organic Maps 位置情報のアクセスが必要です。安全な場所にいる際は、スマートフォンの通知をご確認ください。
-ko = Organic Maps 위치 정보 접근 권한이 필요합니다. 안전한 환경에서 휴대폰의 알림을 확인해 주세요.
-lo = Organic Maps ຕ້ອງການການເຂົ້າເຖິງຕຳແໜ່ງທີ່ຕັ້ງ. ເມື່ອປອດໄພແລ້ວ, ໃຫ້ກວດເບິ່ງການແຈ້ງເຕືອນໃນໂທລະສັບຂອງທ່ານ.
-lt = „Organic Maps“ programėlei reikia prieigos prie vietos. Kai bus saugu, patikrinkite pranešimą savo telefone.
-lv = Organic Maps lietotnes darbībai ir nepieciešama piekļuve jūsu atrašanās vietai. Kad tas ir droši, pārbaudiet paziņojumu savā tālrunī.
-mr = Organic Maps स्थान प्रवेश आवश्यक आहे. जेव्हा सुरक्षित असेल, तेव्हा आपल्या फोनवरील सूचना तपासा.
-mt = Organic Maps teħtieġ aċċess għall-post. Meta jkun sigur, iċċekkja n-notifika fuq il-mowbajl tiegħek.
-nb = Organic Maps trenger posisjonstilgang. Når det er trygt, kan du sjekke varslingen på telefonen.
-nl = Organic Maps heeft locatietoegang nodig. Als het veilig is, controleer je de melding op je telefoon.
-pl = Aplikacja Organic Maps wymaga dostępu do lokalizacji. Gdy będzie to bezpieczne, sprawdź powiadomienie w telefonie.
-pt = O Organic Maps precisa de acesso à localização. Quando for seguro, verifica a notificação no teu telemóvel.
-pt-BR = O Organic Maps precisa de acesso à localização. Quando for seguro, verifique a notificação em seu telefone.
-ro = Organic Maps are nevoie de acces la locație. Când este sigur, verificați notificarea de pe telefon.
-ru = Organic Maps нужен доступ к местоположению. Когда будет безопасно, проверьте уведомление на телефоне.
-sk = Služba Organic Maps potrebuje prístup k polohe. Keď je to bezpečné, skontrolujte oznámenie na telefóne.
-sl = Organic Maps potrebuje dostop do lokacije. Ko bo varno, preverite obvestilo na telefonu.
-sq = Organic Maps ka nevojë për qasje në vendndodhje. Kur të jetë e sigurt, kontrolloni njoftimin në telefonin tuaj.
-sr = Organic Maps је потребан локацијски приступ. Када је сигурно, проверите обавештење на свом телефону.
-sv = Organic Maps behöver platsåtkomst. När det är säkert kan du kontrollera aviseringen på din telefon.
-sw = Organic Maps zinahitaji ufikiaji wa eneo. Ikiwa salama, angalia arifa kwenye simu yako.
-th = Organic Maps ต้องการการเข้าถึงตำแหน่ง เมื่อปลอดภัยแล้ว โปรดตรวจสอบการแจ้งเตือนบนโทรศัพท์ของคุณ
-tr = Organic Maps konum erişimine gereksinir. Güvenliyken, telefonunuzdaki bildirime bakın.
-uk = Для роботи Organic Maps потрібен доступ до місцезнаходження. Коли це буде безпечно, перевірте сповіщення на телефоні.
-vi = Organic Maps cần quyền truy cập vị trí. Khi an toàn, hãy kiểm tra thông báo trên điện thoại của bạn.
-zh-Hans = Organic Maps 需要位置访问权限。在安全的情况下，请查看手机上的通知。
-zh-Hant = Organic Maps 需要位置存取權限。在安全的情況下，請查看手機上的通知。
+en = Maps&Fly needs location access. When it's safe, check the notification on your phone.
+af = Maps&Fly benodig liggingtoegang. Gaan die kennisgewing op jou foon na wanneer dit veilig is.
+ar = Maps&Fly تحتاج إلى الوصول إلى الموقع. عندما يكون الوضع آمنًا، تحقق من الإشعار على هاتفك.
+az = Maps&Fly Məkan məlumatlarına giriş tələb olunur. Təhlükəsiz olduqda telefonunuzdakı bildirişi yoxlayın.
+be = Maps&Fly патрабуе доступу да месцазнаходжання. Калі будзе бяспечна, праверце апавяшчэнне на тэлефоне.
+bg = Maps&Fly се нуждае от достъп до местоположението. Когато е безопасно, проверете известието на телефона си.
+ca = Maps&Fly necessita accés a la ubicació. Quan sigui segur, comproveu la notificació al telèfon.
+cs = Služba Maps&Fly potřebuje přístup k poloze. Když je to bezpečné, zkontrolujte oznámení v telefonu.
+cy = Mae angen mynediad at leoliad ar Maps&Fly. Pan fydd yn ddiogel, gwiriwch yr hysbysiad ar eich ffôn.
+da = Maps&Fly har brug for placeringsadgang. Når det er sikkert, kan du tjekke notifikationen på din telefon.
+de = Maps&Fly benötigt Zugriff auf den Standort. Wenn es sicher ist, überprüfe die Benachrichtigung auf deinem Telefon.
+el = Η εφαρμογή Maps&Fly χρειάζεται πρόσβαση στην τοποθεσία. Όταν είναι ασφαλές, ελέγξτε την ειδοποίηση στο τηλέφωνό σας.
+es = Maps&Fly necesita acceder a la ubicación. Cuando sea seguro, compruebe la notificación en el teléfono.
+es-MX = Maps&Fly necesita acceder a la ubicación. Cuando sea seguro, revise la notificación en el teléfono.
+et = Maps&Fly vajab juurdepääsu asukohale. Kui see on turvaline, kontrolli oma telefonis olevat teadet.
+eu = Maps&Fly-ek kokapenerako sarbidea behar du. Seguru dagoenean, egiaztatu zure telefonoko jakinarazpena.
+fa = Maps&Fly به دسترسی به مکان نیاز دارد. وقتی ایمن است، اعلان گوشی خود را بررسی کنید.
+fi = Maps&Fly tarvitsee sijaintitietoja. Kun se on turvallista, tarkista puhelimesi ilmoitus.
+fr = Maps&Fly a besoin d'un accès à la localisation. Lorsque c'est sûr, vérifiez la notification sur votre téléphone.
+gl = Maps&Fly necesita acceder á localización. Cando sexa seguro, comprobe a notificación no teléfono.
+he = Maps&Fly זקוק לגישה למיקום. כאשר זה בטוח, בדוק את ההודעה בטלפון שלך.
+hi = Maps&Fly इसे स्थान तक पहुंच की आवश्यकता है। जब यह सुरक्षित हो, तो अपने फोन पर सूचना देखें।
+hr = Maps&Fly treba pristup lokacijama. Kada je sigurno, provjeri obavijest na telefonu.
+hu = Az Maps&Fly alkalmazásnak szüksége van a helymeghatározáshoz való hozzáférésre. Ha biztonságos, ellenőrizze az értesítést az eszközén.
+hy = Maps&Fly-ին անհրաժեշտ է տեղադիրքի հասանելիություն։ Երբ անվտանգ լինի, ստուգեք ծանուցումը ձեր հեռախոսում։
+id = Maps&Fly membutuhkan akses lokasi. Jika sudah aman, periksa notifikasi di ponsel Anda.
+is = Maps&Fly þarf aðgang að staðsetningu. Við gott tækifæri, þegar það er öruggt, skaltu skoða tilkynninguna á símanum þínum.
+it = Maps&Fly ha bisogno di accedere alla posizione. Quando puoi farlo in sicurezza, controlla la notifica sul tuo telefono.
+ja = Maps&Fly 位置情報のアクセスが必要です。安全な場所にいる際は、スマートフォンの通知をご確認ください。
+ko = Maps&Fly 위치 정보 접근 권한이 필요합니다. 안전한 환경에서 휴대폰의 알림을 확인해 주세요.
+lo = Maps&Fly ຕ້ອງການການເຂົ້າເຖິງຕຳແໜ່ງທີ່ຕັ້ງ. ເມື່ອປອດໄພແລ້ວ, ໃຫ້ກວດເບິ່ງການແຈ້ງເຕືອນໃນໂທລະສັບຂອງທ່ານ.
+lt = „Maps&Fly“ programėlei reikia prieigos prie vietos. Kai bus saugu, patikrinkite pranešimą savo telefone.
+lv = Maps&Fly lietotnes darbībai ir nepieciešama piekļuve jūsu atrašanās vietai. Kad tas ir droši, pārbaudiet paziņojumu savā tālrunī.
+mr = Maps&Fly स्थान प्रवेश आवश्यक आहे. जेव्हा सुरक्षित असेल, तेव्हा आपल्या फोनवरील सूचना तपासा.
+mt = Maps&Fly teħtieġ aċċess għall-post. Meta jkun sigur, iċċekkja n-notifika fuq il-mowbajl tiegħek.
+nb = Maps&Fly trenger posisjonstilgang. Når det er trygt, kan du sjekke varslingen på telefonen.
+nl = Maps&Fly heeft locatietoegang nodig. Als het veilig is, controleer je de melding op je telefoon.
+pl = Aplikacja Maps&Fly wymaga dostępu do lokalizacji. Gdy będzie to bezpieczne, sprawdź powiadomienie w telefonie.
+pt = O Maps&Fly precisa de acesso à localização. Quando for seguro, verifica a notificação no teu telemóvel.
+pt-BR = O Maps&Fly precisa de acesso à localização. Quando for seguro, verifique a notificação em seu telefone.
+ro = Maps&Fly are nevoie de acces la locație. Când este sigur, verificați notificarea de pe telefon.
+ru = Maps&Fly нужен доступ к местоположению. Когда будет безопасно, проверьте уведомление на телефоне.
+sk = Služba Maps&Fly potrebuje prístup k polohe. Keď je to bezpečné, skontrolujte oznámenie na telefóne.
+sl = Maps&Fly potrebuje dostop do lokacije. Ko bo varno, preverite obvestilo na telefonu.
+sq = Maps&Fly ka nevojë për qasje në vendndodhje. Kur të jetë e sigurt, kontrolloni njoftimin në telefonin tuaj.
+sr = Maps&Fly је потребан локацијски приступ. Када је сигурно, проверите обавештење на свом телефону.
+sv = Maps&Fly behöver platsåtkomst. När det är säkert kan du kontrollera aviseringen på din telefon.
+sw = Maps&Fly zinahitaji ufikiaji wa eneo. Ikiwa salama, angalia arifa kwenye simu yako.
+th = Maps&Fly ต้องการการเข้าถึงตำแหน่ง เมื่อปลอดภัยแล้ว โปรดตรวจสอบการแจ้งเตือนบนโทรศัพท์ของคุณ
+tr = Maps&Fly konum erişimine gereksinir. Güvenliyken, telefonunuzdaki bildirime bakın.
+uk = Для роботи Maps&Fly потрібен доступ до місцезнаходження. Коли це буде безпечно, перевірте сповіщення на телефоні.
+vi = Maps&Fly cần quyền truy cập vị trí. Khi an toàn, hãy kiểm tra thông báo trên điện thoại của bạn.
+zh-Hans = Maps&Fly 需要位置访问权限。在安全的情况下，请查看手机上的通知。
+zh-Hant = Maps&Fly 需要位置存取權限。在安全的情況下，請查看手機上的通知。
 
 [aa_request_permission_notification]
 comment = Notification title for permission request from AA.
@@ -38686,60 +38686,60 @@ zh-Hant = 此應用程式需要您的許可
 [aa_request_permission_activity_text]
 comment = The text in the activity for location permission request.
 tags = android-libs-car
-en = Organic Maps in Android Auto needs location permissions to work effectively
-af = Organic Maps in Android Auto het 'n liggingtoestemming nodig om effektief te werk
-ar = Organic Maps في Android Auto تحتاج إلى أذونات الموقع لتعمل بفعالية
-az = Organic Maps Android Auto effektiv işləmək üçün yer icazələrinə ehtiyac duyur
-be = Для эфектыўнай працы Organic Maps у Android Auto патрабуецца дазвол на вызначэнне месцазнаходжання
-bg = Organic Maps в Android Auto се нуждае от разрешение за местоположение, за да работи ефективно
-ca = L’Organic Maps a l’Android Auto necessita permisos d’ubicació per a funcionar eficaçment
-cs = Organic Maps v systému Android Auto potřebují k efektivní práci povolení k poloze
-cy = Mae angen caniatâd lleoliad ar Organic Maps yn Android Auto i weithio'n effeithiol
-da = Organic Maps i Android Auto har brug for placeringstilladelse for at fungere effektivt
-de = Organic Maps in Android Auto benötigt Standortberechtigungen, um effektiv zu funktionieren
-el = Organic Maps στο Android Auto απαιτεί δικαιώματα πρόσβασης στην τοποθεσία για να λειτουργεί αποτελεσματικά
-es = Organic Maps en Android Auto necesita permisos de ubicación para funcionar eficazmente
-es-MX = Organic Maps en Android Auto necesita un permiso de ubicación para funcionar de manera eficaz
-et = Android Auto liidestusega Organic Maps vajavab tõhusaks tööks luba asukoha tuvastamiseks
-eu = Android Auto-ko Organic Maps-ek kokapen-baimena behar du eraginkortasunez funtzionatzeko
-fa = Organic Maps در Android Auto برای عملکرد بهتر به مجوزهای مکان نیاز دارد
-fi = Organic Maps tarvitsee luvan käyttää sijantia toimiakseen tehokkaasti Android Autossa
-fr = Organic Maps dans Android Auto a besoin des permissions de localisation pour fonctionner efficacement
-gl = Organic Maps en Android Auto necesita permisos de localización para funcionar eficazmente
-he = Organic Maps ב-Android Auto זקוק להרשאות מיקום כדי לפעול ביעילות
-hi = Organic Maps Android Auto में प्रभावी ढंग से काम करने के लिए इसे स्थान अनुमतियों की आवश्यकता होती है
-hr = Za učinkovit rad Organic Maps treba dozvole za lokacije u aplikaciji Android Auto
-hu = Az Organic Maps az Android Autoban helymeghatározási engedélyeket igényel a hatékony működéshez
-hy = Android Auto-ում Organic Maps-ի արդյունավետ աշխատանքի համար անհրաժեշտ է տեղադիրքի թույլտվություն
-id = Organic Maps di Android Auto membutuhkan izin lokasi agar dapat bekerja secara efektif
-is = Organic Maps í Android Auto þarf heimildir fyrir staðsetningar til að virka eðlilega
-it = Organic Maps in Android Auto ha bisogno di accedere alla posizione per funzionare efficacemente
-ja = Android AutoのOrganic Mapsを有効に機能させるには、位置情報の許可が必要です
-ko = Organic Maps Android Auto에서 이 앱이 제대로 작동하려면 위치 권한이 필요합니다
-lo = Organic Maps ໃນ Android Auto ຕ້ອງການການອະນຸຍາດຕຳແໜ່ງທີ່ຕັ້ງເພື່ອໃຫ້ເຮັດວຽກໄດ້ຢ່າງມີປະສິດທິພາບ
-lt = Kad „Android Auto“ sistemoje „Organic Maps“ veiktų efektyviai, reikia leidimo nustatyti buvimo vietą
-lv = Organic Maps lietotnei ir nepieciešama atrašanās vietas atļauja sekmīgai Android Auto darbībai
-mr = Organic Maps Android Auto मध्ये प्रभावीपणे कार्य करण्यासाठी स्थान परवानग्या आवश्यक आहेत
-mt = Organic Maps ġo’ Android Auto jeħtieġ permessi tal-post biex jaħdem b ‘mod effettiv
-nb = Organic Maps i Android Auto trenger en posisjonstillatelse for å fungere effektivt
-nl = Organic Maps in Android Auto heeft locatietoestemming nodig om effectief te werken
-pl = Organic Maps w Android Auto wymagają uprawnień do lokalizacji, aby działać efektywnie
-pt = Os Organic Maps no Android Auto precisam de uma permissão de localização para funcionarem eficazmente
-pt-BR = O Organic Maps no Android Auto precisa de uma permissão de localização para funcionar corretamente
-ro = Organic Maps din Android Auto are nevoie de o permisiune de localizare pentru a funcționa eficient
-ru = Для эффективной работы Organic Maps в Android Auto необходимы разрешения на определение местоположения
-sk = Organic Maps v službe Android Auto potrebujú na efektívnu prácu povolenie na určenie polohy
-sl = Organic Maps v Android Auto potrebuje dovoljenja za lokacijo za učinkovito delovanje
-sq = Organic Maps në Android Auto ka nevojë për leje vendndodhjeje për të punuar me efikasitet
-sr = Organic Maps у Android Auto-у је потребна дозвола за локацију да ефикасно раде
-sv = Organic Maps i Android Auto behöver tillgång till platsinformation för att fungera effektivt
-sw = Organic Maps katika Android Auto zinahitaji ruhusa ya eneo ili kufanya kazi kwa ufanisi
-th = Organic Maps ใน Android Auto ต้องการสิทธิ์การเข้าถึงตำแหน่งเพื่อทำงานอย่างมีประสิทธิภาพ
-tr = Android Auto'daki Organic Maps etkin çalışmak için konum iznine gereksiniyor
-uk = Для ефективної роботи Organic Maps в Android Auto потрібні дозвіли на розташування
-vi = Organic Maps trên Android Auto cần quyền truy cập vị trí để hoạt động hiệu quả
-zh-Hans = Android Auto 中的 Organic Maps 需要位置权限才能有效工作
-zh-Hant = Android Auto 中的 Organic Maps 需要位置權限才能有效運作
+en = Maps&Fly in Android Auto needs location permissions to work effectively
+af = Maps&Fly in Android Auto het 'n liggingtoestemming nodig om effektief te werk
+ar = Maps&Fly في Android Auto تحتاج إلى أذونات الموقع لتعمل بفعالية
+az = Maps&Fly Android Auto effektiv işləmək üçün yer icazələrinə ehtiyac duyur
+be = Для эфектыўнай працы Maps&Fly у Android Auto патрабуецца дазвол на вызначэнне месцазнаходжання
+bg = Maps&Fly в Android Auto се нуждае от разрешение за местоположение, за да работи ефективно
+ca = L’Maps&Fly a l’Android Auto necessita permisos d’ubicació per a funcionar eficaçment
+cs = Maps&Fly v systému Android Auto potřebují k efektivní práci povolení k poloze
+cy = Mae angen caniatâd lleoliad ar Maps&Fly yn Android Auto i weithio'n effeithiol
+da = Maps&Fly i Android Auto har brug for placeringstilladelse for at fungere effektivt
+de = Maps&Fly in Android Auto benötigt Standortberechtigungen, um effektiv zu funktionieren
+el = Maps&Fly στο Android Auto απαιτεί δικαιώματα πρόσβασης στην τοποθεσία για να λειτουργεί αποτελεσματικά
+es = Maps&Fly en Android Auto necesita permisos de ubicación para funcionar eficazmente
+es-MX = Maps&Fly en Android Auto necesita un permiso de ubicación para funcionar de manera eficaz
+et = Android Auto liidestusega Maps&Fly vajavab tõhusaks tööks luba asukoha tuvastamiseks
+eu = Android Auto-ko Maps&Fly-ek kokapen-baimena behar du eraginkortasunez funtzionatzeko
+fa = Maps&Fly در Android Auto برای عملکرد بهتر به مجوزهای مکان نیاز دارد
+fi = Maps&Fly tarvitsee luvan käyttää sijantia toimiakseen tehokkaasti Android Autossa
+fr = Maps&Fly dans Android Auto a besoin des permissions de localisation pour fonctionner efficacement
+gl = Maps&Fly en Android Auto necesita permisos de localización para funcionar eficazmente
+he = Maps&Fly ב-Android Auto זקוק להרשאות מיקום כדי לפעול ביעילות
+hi = Maps&Fly Android Auto में प्रभावी ढंग से काम करने के लिए इसे स्थान अनुमतियों की आवश्यकता होती है
+hr = Za učinkovit rad Maps&Fly treba dozvole za lokacije u aplikaciji Android Auto
+hu = Az Maps&Fly az Android Autoban helymeghatározási engedélyeket igényel a hatékony működéshez
+hy = Android Auto-ում Maps&Fly-ի արդյունավետ աշխատանքի համար անհրաժեշտ է տեղադիրքի թույլտվություն
+id = Maps&Fly di Android Auto membutuhkan izin lokasi agar dapat bekerja secara efektif
+is = Maps&Fly í Android Auto þarf heimildir fyrir staðsetningar til að virka eðlilega
+it = Maps&Fly in Android Auto ha bisogno di accedere alla posizione per funzionare efficacemente
+ja = Android AutoのMaps&Flyを有効に機能させるには、位置情報の許可が必要です
+ko = Maps&Fly Android Auto에서 이 앱이 제대로 작동하려면 위치 권한이 필요합니다
+lo = Maps&Fly ໃນ Android Auto ຕ້ອງການການອະນຸຍາດຕຳແໜ່ງທີ່ຕັ້ງເພື່ອໃຫ້ເຮັດວຽກໄດ້ຢ່າງມີປະສິດທິພາບ
+lt = Kad „Android Auto“ sistemoje „Maps&Fly“ veiktų efektyviai, reikia leidimo nustatyti buvimo vietą
+lv = Maps&Fly lietotnei ir nepieciešama atrašanās vietas atļauja sekmīgai Android Auto darbībai
+mr = Maps&Fly Android Auto मध्ये प्रभावीपणे कार्य करण्यासाठी स्थान परवानग्या आवश्यक आहेत
+mt = Maps&Fly ġo’ Android Auto jeħtieġ permessi tal-post biex jaħdem b ‘mod effettiv
+nb = Maps&Fly i Android Auto trenger en posisjonstillatelse for å fungere effektivt
+nl = Maps&Fly in Android Auto heeft locatietoestemming nodig om effectief te werken
+pl = Maps&Fly w Android Auto wymagają uprawnień do lokalizacji, aby działać efektywnie
+pt = Os Maps&Fly no Android Auto precisam de uma permissão de localização para funcionarem eficazmente
+pt-BR = O Maps&Fly no Android Auto precisa de uma permissão de localização para funcionar corretamente
+ro = Maps&Fly din Android Auto are nevoie de o permisiune de localizare pentru a funcționa eficient
+ru = Для эффективной работы Maps&Fly в Android Auto необходимы разрешения на определение местоположения
+sk = Maps&Fly v službe Android Auto potrebujú na efektívnu prácu povolenie na určenie polohy
+sl = Maps&Fly v Android Auto potrebuje dovoljenja za lokacijo za učinkovito delovanje
+sq = Maps&Fly në Android Auto ka nevojë për leje vendndodhjeje për të punuar me efikasitet
+sr = Maps&Fly у Android Auto-у је потребна дозвола за локацију да ефикасно раде
+sv = Maps&Fly i Android Auto behöver tillgång till platsinformation för att fungera effektivt
+sw = Maps&Fly katika Android Auto zinahitaji ruhusa ya eneo ili kufanya kazi kwa ufanisi
+th = Maps&Fly ใน Android Auto ต้องการสิทธิ์การเข้าถึงตำแหน่งเพื่อทำงานอย่างมีประสิทธิภาพ
+tr = Android Auto'daki Maps&Fly etkin çalışmak için konum iznine gereksiniyor
+uk = Для ефективної роботи Maps&Fly в Android Auto потрібні дозвіли на розташування
+vi = Maps&Fly trên Android Auto cần quyền truy cập vị trí để hoạt động hiệu quả
+zh-Hans = Android Auto 中的 Maps&Fly 需要位置权限才能有效工作
+zh-Hant = Android Auto 中的 Maps&Fly 需要位置權限才能有效運作
 
 [aa_grant_permissions]
 comment = Grant Permissions button.
@@ -39789,68 +39789,68 @@ zh-Hant = 背景軌跡記錄提醒
 [background_recording_warning_message]
 comment = One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings.
 tags = android-app
-en = To prevent track recording from stopping when the screen is off, please exclude Organic Maps from battery optimization. On Samsung devices, add it to the "Never sleeping apps" list.
-af = Om te verhoed dat die spooropname stop wanneer die skerm af is, sluit Organic Maps asseblief van batteryoptimalisering uit. Voeg die toepassing op Samsung-toestelle by die lys “Toepassings wat nooit slaap nie”.
-ar = لمنع توقف تسجيل المسار عند إيقاف تشغيل الشاشة، يرجى استبعاد Organic Maps من عملية تحسين استهلاك البطارية. على أجهزة Samsung، أضفه إلى قائمة «التطبيقات التي لا تدخل في وضع السكون أبدًا».
-ast = Pa evitar que la grabación del trayeutu se pare cuando la pantalla tea apagada, desactiva la optimización de la batería pa Organic Maps. Nos preseos Samsung, amiesta Organic Maps a la llista «Aplicaciones que nunca entren en suspensión».
-az = Ekran söndürüldükdə marşrutun qeydinin dayanmaması üçün Organic Maps-i batareya optimallaşdırmasından istisna edin. Samsung cihazlarında onu «Heç vaxt yuxu rejiminə keçməyən tətbiqlər» siyahısına əlavə edin.
-be = Каб запіс трэка не перарываўся пры выключаным экране, адключыце аптымізацыю батарэі для Organic Maps. На прыладах Samsung дадайце праграму ў спіс «Праграмы, якія ніколі не спяць».
-bg = За да не се прекъсва записът на трака при изключен екран, изключете Organic Maps от оптимизацията на батерията. На устройствата Samsung добавете приложението в списъка „Приложения, които никога не преминават в режим на сън“.
-bn = স্ক্রিন বন্ধ থাকাকালীন ট্র্যাক রেকর্ডিং বন্ধ হওয়া রোধ করতে, অনুগ্রহ করে ব্যাটারি অপ্টিমাইজেশন থেকে Organic Maps বাদ দিন। Samsung ডিভাইসে এটিকে “কখনও স্লিপ মোডে যায় না এমন অ্যাপ” তালিকায় যোগ করুন।
-ca = Per evitar que l'enregistrament de la ruta s'aturi quan la pantalla està apagada, si us plau, excloeu Organic Maps de l'optimització de la bateria. Als dispositius Samsung, afegiu-lo a la llista "Aplicacions que no s'adormen mai".
-cs = Aby se záznam trasy nepřerušil při vypnutém displeji, vyřaďte aplikaci Organic Maps z optimalizace baterie. Na zařízeních Samsung ji přidejte do seznamu „Aplikace, které nikdy neusínají“.
-cy = I atal recordio'r llwybr rhag stopio pan fydd y sgrin wedi'i diffodd, eithrwch Organic Maps o optimeiddio'r batri. Ar ddyfeisiau Samsung, ychwanegwch ef at y rhestr "Apiau sy'n aros yn effro".
-da = For at forhindre, at sporoptagelsen stopper, når skærmen er slukket, skal du undtage Organic Maps fra batterioptimering. På Samsung-enheder skal du føje den til listen »Apps, der aldrig går i dvale«.
-de = Damit die Track-Aufzeichnung bei ausgeschaltetem Bildschirm nicht unterbrochen wird, nimm Organic Maps von der Akkuoptimierung aus. Füge die App auf Samsung-Geräten zur Liste „Apps, die nie im Standby sind“ hinzu.
-el = Για να αποτρέψετε τη διακοπή της καταγραφής διαδρομής όταν η οθόνη είναι απενεργοποιημένη, παρακαλούμε να εξαιρέσετε το Organic Maps από τη βελτιστοποίηση της μπαταρίας. Στις συσκευές Samsung, προσθέστε την εφαρμογή στη λίστα «Εφαρμογές που δεν τίθενται ποτέ σε κατάσταση αναστολής λειτουργίας».
-en-GB = To prevent track recording from stopping when the screen is off, please exclude Organic Maps from battery optimisation. On Samsung devices, add it to the "Never sleeping apps" list.
-es = Para evitar que la grabación del trayecto se detenga cuando la pantalla esté apagada, excluye Organic Maps de la optimización de la batería. En los dispositivos Samsung, añade la aplicación a la lista «Aplicaciones sin suspensión».
-es-MX = Para evitar que la grabación del trayecto se detenga cuando la pantalla esté apagada, excluye Organic Maps de la optimización de la batería. En los dispositivos Samsung, agrega la aplicación a la lista “Aplicaciones sin autosuspensión”.
-et = Et raja salvestamine ei katkeks, kui ekraan on välja lülitatud, jäta Organic Maps aku optimeerimisest välja. Samsungi seadmetes lisa see loendisse „Rakendused, mida ei panda kunagi unerežiimi“.
-eu = Pantaila itzalita dagoenean ibilbidearen grabazioa eten ez dadin, salbuetsi Organic Maps bateriaren optimizaziotik. Samsung gailuetan, gehitu aplikazioa «Inoiz lo moduan sartzen ez diren aplikazioak» zerrendara.
-fa = برای جلوگیری از توقف ضبط مسیر هنگام خاموش بودن صفحه‌نمایش، لطفاً Organic Maps را از بهینه‌سازی باتری مستثنی کنید. در دستگاه‌های Samsung، آن را به فهرست «برنامه‌هایی که هرگز به حالت خواب نمی‌روند» اضافه کنید.
-fi = Jotta reitin tallennus ei keskeydy näytön ollessa pois päältä, poista Organic Maps akun optimoinnin piiristä. Lisää sovellus Samsung-laitteissa luetteloon ”Sovellukset, joita ei siirretä lepotilaan”.
-fr = Pour éviter que l’enregistrement de la trace ne s’arrête lorsque l’écran est éteint, veuillez exclure Organic Maps de l’optimisation de la batterie. Sur les appareils Samsung, ajoutez l’application à la liste « Applications jamais en veille ».
-gl = Para evitar que a gravación do traxecto se interrompa cando a pantalla está apagada, exclúa Organic Maps da optimización da batería. Nos dispositivos Samsung, engada a aplicación á lista «Aplicacións que nunca entran en suspensión».
-he = כדי למנוע הפסקת הקלטת המסלול כשהמסך כבוי, אנא הוציאו את Organic Maps מהאופטימיזציה של הסוללה. במכשירי Samsung, הוסיפו אותה לרשימת "אפליקציות שלא נכנסות למצב שינה".
-hi = स्क्रीन बंद होने पर भी ट्रैक रिकॉर्डिंग जारी रखने के लिए, Organic Maps को बैटरी ऑप्टिमाइज़ेशन से बाहर रखें। Samsung डिवाइस पर इसे “कभी स्लीप मोड में न जाने वाले ऐप्स” की सूची में जोड़ें।
-hr = Kako se snimanje staze ne bi prekinulo kada je zaslon isključen, isključite aplikaciju Organic Maps iz optimizacije baterije. Na Samsung uređajima dodajte je na popis „Aplikacije koje nikada ne miruju“.
-hu = Annak érdekében, hogy a nyomvonalrögzítés ne álljon le a képernyő kikapcsolásakor, zárja ki az Organic Maps alkalmazást az akkumulátor-optimalizálásból. Samsung-eszközökön adja hozzá az alkalmazást a „Soha nem alvó alkalmazások” listájához.
-hy = Էկրանն անջատված ժամանակ հետագծի գրանցման ընդհատումից խուսափելու համար Organic Maps-ը բացառեք մարտկոցի օպտիմալացումից։ Samsung սարքերում այն ավելացրեք «Երբեք չքնող հավելվածներ» ցանկում։
-ia = Pro evitar que le registration del tracia se interrumpe quando le schermo es extinguite, exclude Organic Maps del optimisation del batteria. Sur dispositivos Samsung, adde lo al lista «Applicationes que nunquam dormi».
-id = Agar perekaman jalur tidak terhenti saat layar mati, kecualikan Organic Maps dari pengoptimalan baterai. Pada perangkat Samsung, tambahkan aplikasi ini ke daftar “Aplikasi yang tidak pernah tidur”.
-is = Til að skráning ferils stöðvist ekki þegar slökkt er á skjánum skaltu slökkva á rafhlöðubestun fyrir Organic Maps. Á Samsung-tækjum skaltu bæta forritinu við listann „Forrit sem sofna aldrei“.
-it = Per evitare che la registrazione della traccia si interrompa a schermo spento, escludi Organic Maps dall’ottimizzazione della batteria. Sui dispositivi Samsung, aggiungi l’app all’elenco «App mai in sospensione automatica».
-ja = 画面がオフのときにトラック記録が停止しないようにするには、Organic Mapsをバッテリー最適化の対象から除外してください。Samsung端末では、「自動的にスリープ状態にしないアプリ」リストに追加してください。
-ko = 화면이 꺼져 있을 때 트랙 기록이 중단되지 않도록 Organic Maps를 배터리 최적화 대상에서 제외해 주세요. Samsung 기기에서는 ‘절전 예외 앱’ 목록에 추가해 주세요.
-lo = ເພື່ອປ້ອງກັນບໍ່ໃຫ້ການບັນທຶກເສັ້ນທາງຢຸດເມື່ອໜ້າຈໍປິດ, ກະລຸນາຍົກເວັ້ນ Organic Maps ຈາກການປັບປຸງປະສິດທິພາບແບັດເຕີຣີ. ໃນອຸປະກອນ Samsung, ໃຫ້ເພີ່ມແອັບນີ້ໃສ່ລາຍການ «ແອັບທີ່ບໍ່ເຂົ້າໂໝດພັກ».
-lt = Kad trasos įrašymas nenutrūktų išjungus ekraną, išjunkite „Organic Maps“ akumuliatoriaus optimizavimą. „Samsung“ įrenginiuose įtraukite programėlę į sąrašą „Niekada nemiegančios programėlės“.
-lv = Lai pēdojuma ierakstīšana netiktu pārtraukta, kad ekrāns ir izslēgts, izslēdziet akumulatora optimizāciju lietotnei Organic Maps. Samsung ierīcēs pievienojiet to sarakstam „Lietotnes, kas nekad netiek pārslēgtas miega režīmā“.
-ml = സ്ക്രീൻ ഓഫ് ആയിരിക്കുമ്പോൾ ട്രാക്ക് റെക്കോർഡിംഗ് നിർത്താതിരിക്കാൻ, Organic Maps-നെ ബാറ്ററി ഒപ്റ്റിമൈസേഷനിൽ നിന്ന് ഒഴിവാക്കുക. Samsung ഉപകരണങ്ങളിൽ, അതിനെ “ഒരിക്കലും സ്ലീപ്പ് മോഡിലേക്ക് പോകാത്ത ആപ്പുകൾ” എന്ന പട്ടികയിൽ ചേർക്കുക.
-mr = स्क्रीन बंद असताना ट्रॅक रेकॉर्डिंग थांबू नये म्हणून Organic Maps अॅपला बॅटरी ऑप्टिमायझेशनमधून वगळा. Samsung डिव्हाइसवर ते “कधीही स्लीप मोडमध्ये न जाणारे अॅप्स” या यादीत जोडा.
-mt = Biex ir-reġistrazzjoni tat-traċċa ma tieqafx meta l-iskrin ikun mitfi, eskludi Organic Maps mill-ottimizzazzjoni tal-batterija. Fuq apparati Samsung, żid l-app mal-lista «Applikazzjonijiet li qatt ma jorqdu».
-nb = For å forhindre at sporopptaket stopper når skjermen er slått av, må du unnta Organic Maps fra batterioptimalisering. På Samsung-enheter legger du appen til i listen «Apper som aldri går i dvale».
-nl = Om te voorkomen dat de trackopname stopt als het scherm uit is, sluit u Organic Maps uit van batterijoptimalisatie. Voeg de app op Samsung-toestellen toe aan de lijst ‘Apps die nooit sluimeren’.
-oc = Per empachar que l’enregistrament de la traça s’arrèste quand l’ecran es atudat, mercé d’exclure Organic Maps de l’optimizacion de la batariá. Sus los aparelhs Samsung, apondètz l’aplicacion a la lista «Aplicacions que jamai dormisson».
-pa = ਸਕ੍ਰੀਨ ਬੰਦ ਹੋਣ ’ਤੇ ਟਰੈਕ ਰਿਕਾਰਡਿੰਗ ਰੁਕਣ ਤੋਂ ਬਚਾਉਣ ਲਈ, Organic Maps ਨੂੰ ਬੈਟਰੀ ਅਨੁਕੂਲਨ ਤੋਂ ਬਾਹਰ ਰੱਖੋ। Samsung ਡਿਵਾਈਸਾਂ ’ਤੇ ਇਸਨੂੰ “ਕਦੇ ਸਲੀਪ ਮੋਡ ਵਿੱਚ ਨਾ ਜਾਣ ਵਾਲੀਆਂ ਐਪਾਂ” ਦੀ ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ।
-pl = Aby zapis śladu nie został przerwany przy wyłączonym ekranie, wyłącz optymalizację baterii dla Organic Maps. Na urządzeniach Samsung dodaj aplikację do listy „Nigdy nie usypiaj aplikacji automatycznie”.
-pt = Para evitar que a gravação de trajetos seja interrompida quando o ecrã estiver desligado, exclua o Organic Maps da otimização da bateria. Nos dispositivos Samsung, adicione-o à lista «Aplicações que nunca entram em modo de suspensão».
-pt-BR = Para evitar que a gravação de trilhas pare quando a tela estiver desligada, exclua o Organic Maps da otimização de bateria. Em aparelhos Samsung, adicione-o à lista “Aplicativos que nunca entram em modo de suspensão”.
-ro = Pentru a evita întreruperea înregistrării traseului când ecranul este stins, excludeți Organic Maps de la optimizarea bateriei. Pe dispozitivele Samsung, adăugați aplicația la lista „Aplicații care nu intră niciodată în repaus”.
-ru = Чтобы запись трека не прерывалась при выключенном экране, отключите оптимизацию батареи для Organic Maps. На устройствах Samsung добавьте приложение в список «Никогда не переходящие в спящий режим».
-sk = Aby sa zabránilo zastaveniu zaznamenávania trasy pri vypnutom displeji, vylúčte prosím aplikáciu Organic Maps z optimalizácie batérie. Na zariadeniach Samsung ju pridajte do zoznamu „Aplikácie, ktoré nikdy neprejdú do režimu spánku“.
-sl = Da se snemanje sledi ne bi prekinilo, ko je zaslon izklopljen, izključite Organic Maps iz optimizacije baterije. Na napravah Samsung dodajte aplikacijo na seznam »Aplikacije, ki nikoli ne gredo v mirovanje«.
-sq = Për të parandaluar ndalimin e regjistrimit të gjurmës kur ekrani është i fikur, përjashtoni Organic Maps nga optimizimi i baterisë. Në pajisjet Samsung, shtojeni në listën “Aplikacionet që nuk flenë kurrë”.
-sr = Да се снимање путање не би прекинуло када је екран искључен, изузмите Organic Maps из оптимизације батерије. На Samsung уређајима додајте апликацију на листу „Апликације које никада не спавају“.
-sv = För att spårinspelningen inte ska avbrytas när skärmen är avstängd, undanta Organic Maps från batterioptimeringen. På Samsung-enheter lägger du till appen i listan ”Appar som aldrig sätts i viloläge”.
-sw = Ili urekodi wa njia uendelee hata skrini inapozimwa, zima uboreshaji wa betri kwa Organic Maps. Kwenye vifaa vya Samsung, iongeze kwenye orodha ya “Programu zisizolala kamwe”.
-te = స్క్రీన్ ఆఫ్‌లో ఉన్నప్పుడు ట్రాక్ రికార్డింగ్ ఆగకుండా ఉండేందుకు, Organic Maps‌ను బ్యాటరీ ఆప్టిమైజేషన్ నుండి మినహాయించండి. Samsung పరికరాలలో, దాన్ని “ఎప్పుడూ స్లీప్ మోడ్‌లోకి వెళ్లని యాప్‌లు” జాబితాలో చేర్చండి.
-th = เพื่อป้องกันไม่ให้การบันทึกเส้นทางหยุดลงเมื่อหน้าจอปิด โปรดยกเว้น Organic Maps จากการปรับประสิทธิภาพแบตเตอรี่ สำหรับอุปกรณ์ Samsung ให้เพิ่มแอปนี้ลงในรายชื่อ “แอปที่ไม่พักการทำงาน”
-tr = Ekran kapalıyken iz kaydının durmasını önlemek için Organic Maps'i pil optimizasyonundan hariç tutun. Samsung cihazlarda uygulamayı “Hiç uyumayan uygulamalar” listesine ekleyin.
-uk = Щоб запис треку не переривався, коли екран вимкнено, вимкніть оптимізацію батареї для Organic Maps. На пристроях Samsung додайте програму до списку «Програми, що ніколи не переходять у режим сну».
-vi = Để tránh việc ghi lộ trình bị gián đoạn khi màn hình tắt, hãy loại trừ Organic Maps khỏi tính năng tối ưu hóa pin. Trên thiết bị Samsung, hãy thêm ứng dụng vào danh sách “Ứng dụng không bao giờ ngủ”.
-zh-Hans = 为防止屏幕关闭时轨迹记录中断，请将 Organic Maps 排除在电池优化之外。在三星设备上，请将其添加到“从不自动休眠的应用程序”列表中。
-zh-Hant = 為避免螢幕關閉時軌跡記錄中斷，請將 Organic Maps 排除在電池最佳化之外。在 Samsung 裝置上，請將其加入「永不自動進入休眠的應用程式」清單中。
+en = To prevent track recording from stopping when the screen is off, please exclude Maps&Fly from battery optimization. On Samsung devices, add it to the "Never sleeping apps" list.
+af = Om te verhoed dat die spooropname stop wanneer die skerm af is, sluit Maps&Fly asseblief van batteryoptimalisering uit. Voeg die toepassing op Samsung-toestelle by die lys “Toepassings wat nooit slaap nie”.
+ar = لمنع توقف تسجيل المسار عند إيقاف تشغيل الشاشة، يرجى استبعاد Maps&Fly من عملية تحسين استهلاك البطارية. على أجهزة Samsung، أضفه إلى قائمة «التطبيقات التي لا تدخل في وضع السكون أبدًا».
+ast = Pa evitar que la grabación del trayeutu se pare cuando la pantalla tea apagada, desactiva la optimización de la batería pa Maps&Fly. Nos preseos Samsung, amiesta Maps&Fly a la llista «Aplicaciones que nunca entren en suspensión».
+az = Ekran söndürüldükdə marşrutun qeydinin dayanmaması üçün Maps&Fly-i batareya optimallaşdırmasından istisna edin. Samsung cihazlarında onu «Heç vaxt yuxu rejiminə keçməyən tətbiqlər» siyahısına əlavə edin.
+be = Каб запіс трэка не перарываўся пры выключаным экране, адключыце аптымізацыю батарэі для Maps&Fly. На прыладах Samsung дадайце праграму ў спіс «Праграмы, якія ніколі не спяць».
+bg = За да не се прекъсва записът на трака при изключен екран, изключете Maps&Fly от оптимизацията на батерията. На устройствата Samsung добавете приложението в списъка „Приложения, които никога не преминават в режим на сън“.
+bn = স্ক্রিন বন্ধ থাকাকালীন ট্র্যাক রেকর্ডিং বন্ধ হওয়া রোধ করতে, অনুগ্রহ করে ব্যাটারি অপ্টিমাইজেশন থেকে Maps&Fly বাদ দিন। Samsung ডিভাইসে এটিকে “কখনও স্লিপ মোডে যায় না এমন অ্যাপ” তালিকায় যোগ করুন।
+ca = Per evitar que l'enregistrament de la ruta s'aturi quan la pantalla està apagada, si us plau, excloeu Maps&Fly de l'optimització de la bateria. Als dispositius Samsung, afegiu-lo a la llista "Aplicacions que no s'adormen mai".
+cs = Aby se záznam trasy nepřerušil při vypnutém displeji, vyřaďte aplikaci Maps&Fly z optimalizace baterie. Na zařízeních Samsung ji přidejte do seznamu „Aplikace, které nikdy neusínají“.
+cy = I atal recordio'r llwybr rhag stopio pan fydd y sgrin wedi'i diffodd, eithrwch Maps&Fly o optimeiddio'r batri. Ar ddyfeisiau Samsung, ychwanegwch ef at y rhestr "Apiau sy'n aros yn effro".
+da = For at forhindre, at sporoptagelsen stopper, når skærmen er slukket, skal du undtage Maps&Fly fra batterioptimering. På Samsung-enheder skal du føje den til listen »Apps, der aldrig går i dvale«.
+de = Damit die Track-Aufzeichnung bei ausgeschaltetem Bildschirm nicht unterbrochen wird, nimm Maps&Fly von der Akkuoptimierung aus. Füge die App auf Samsung-Geräten zur Liste „Apps, die nie im Standby sind“ hinzu.
+el = Για να αποτρέψετε τη διακοπή της καταγραφής διαδρομής όταν η οθόνη είναι απενεργοποιημένη, παρακαλούμε να εξαιρέσετε το Maps&Fly από τη βελτιστοποίηση της μπαταρίας. Στις συσκευές Samsung, προσθέστε την εφαρμογή στη λίστα «Εφαρμογές που δεν τίθενται ποτέ σε κατάσταση αναστολής λειτουργίας».
+en-GB = To prevent track recording from stopping when the screen is off, please exclude Maps&Fly from battery optimisation. On Samsung devices, add it to the "Never sleeping apps" list.
+es = Para evitar que la grabación del trayecto se detenga cuando la pantalla esté apagada, excluye Maps&Fly de la optimización de la batería. En los dispositivos Samsung, añade la aplicación a la lista «Aplicaciones sin suspensión».
+es-MX = Para evitar que la grabación del trayecto se detenga cuando la pantalla esté apagada, excluye Maps&Fly de la optimización de la batería. En los dispositivos Samsung, agrega la aplicación a la lista “Aplicaciones sin autosuspensión”.
+et = Et raja salvestamine ei katkeks, kui ekraan on välja lülitatud, jäta Maps&Fly aku optimeerimisest välja. Samsungi seadmetes lisa see loendisse „Rakendused, mida ei panda kunagi unerežiimi“.
+eu = Pantaila itzalita dagoenean ibilbidearen grabazioa eten ez dadin, salbuetsi Maps&Fly bateriaren optimizaziotik. Samsung gailuetan, gehitu aplikazioa «Inoiz lo moduan sartzen ez diren aplikazioak» zerrendara.
+fa = برای جلوگیری از توقف ضبط مسیر هنگام خاموش بودن صفحه‌نمایش، لطفاً Maps&Fly را از بهینه‌سازی باتری مستثنی کنید. در دستگاه‌های Samsung، آن را به فهرست «برنامه‌هایی که هرگز به حالت خواب نمی‌روند» اضافه کنید.
+fi = Jotta reitin tallennus ei keskeydy näytön ollessa pois päältä, poista Maps&Fly akun optimoinnin piiristä. Lisää sovellus Samsung-laitteissa luetteloon ”Sovellukset, joita ei siirretä lepotilaan”.
+fr = Pour éviter que l’enregistrement de la trace ne s’arrête lorsque l’écran est éteint, veuillez exclure Maps&Fly de l’optimisation de la batterie. Sur les appareils Samsung, ajoutez l’application à la liste « Applications jamais en veille ».
+gl = Para evitar que a gravación do traxecto se interrompa cando a pantalla está apagada, exclúa Maps&Fly da optimización da batería. Nos dispositivos Samsung, engada a aplicación á lista «Aplicacións que nunca entran en suspensión».
+he = כדי למנוע הפסקת הקלטת המסלול כשהמסך כבוי, אנא הוציאו את Maps&Fly מהאופטימיזציה של הסוללה. במכשירי Samsung, הוסיפו אותה לרשימת "אפליקציות שלא נכנסות למצב שינה".
+hi = स्क्रीन बंद होने पर भी ट्रैक रिकॉर्डिंग जारी रखने के लिए, Maps&Fly को बैटरी ऑप्टिमाइज़ेशन से बाहर रखें। Samsung डिवाइस पर इसे “कभी स्लीप मोड में न जाने वाले ऐप्स” की सूची में जोड़ें।
+hr = Kako se snimanje staze ne bi prekinulo kada je zaslon isključen, isključite aplikaciju Maps&Fly iz optimizacije baterije. Na Samsung uređajima dodajte je na popis „Aplikacije koje nikada ne miruju“.
+hu = Annak érdekében, hogy a nyomvonalrögzítés ne álljon le a képernyő kikapcsolásakor, zárja ki az Maps&Fly alkalmazást az akkumulátor-optimalizálásból. Samsung-eszközökön adja hozzá az alkalmazást a „Soha nem alvó alkalmazások” listájához.
+hy = Էկրանն անջատված ժամանակ հետագծի գրանցման ընդհատումից խուսափելու համար Maps&Fly-ը բացառեք մարտկոցի օպտիմալացումից։ Samsung սարքերում այն ավելացրեք «Երբեք չքնող հավելվածներ» ցանկում։
+ia = Pro evitar que le registration del tracia se interrumpe quando le schermo es extinguite, exclude Maps&Fly del optimisation del batteria. Sur dispositivos Samsung, adde lo al lista «Applicationes que nunquam dormi».
+id = Agar perekaman jalur tidak terhenti saat layar mati, kecualikan Maps&Fly dari pengoptimalan baterai. Pada perangkat Samsung, tambahkan aplikasi ini ke daftar “Aplikasi yang tidak pernah tidur”.
+is = Til að skráning ferils stöðvist ekki þegar slökkt er á skjánum skaltu slökkva á rafhlöðubestun fyrir Maps&Fly. Á Samsung-tækjum skaltu bæta forritinu við listann „Forrit sem sofna aldrei“.
+it = Per evitare che la registrazione della traccia si interrompa a schermo spento, escludi Maps&Fly dall’ottimizzazione della batteria. Sui dispositivi Samsung, aggiungi l’app all’elenco «App mai in sospensione automatica».
+ja = 画面がオフのときにトラック記録が停止しないようにするには、Maps&Flyをバッテリー最適化の対象から除外してください。Samsung端末では、「自動的にスリープ状態にしないアプリ」リストに追加してください。
+ko = 화면이 꺼져 있을 때 트랙 기록이 중단되지 않도록 Maps&Fly를 배터리 최적화 대상에서 제외해 주세요. Samsung 기기에서는 ‘절전 예외 앱’ 목록에 추가해 주세요.
+lo = ເພື່ອປ້ອງກັນບໍ່ໃຫ້ການບັນທຶກເສັ້ນທາງຢຸດເມື່ອໜ້າຈໍປິດ, ກະລຸນາຍົກເວັ້ນ Maps&Fly ຈາກການປັບປຸງປະສິດທິພາບແບັດເຕີຣີ. ໃນອຸປະກອນ Samsung, ໃຫ້ເພີ່ມແອັບນີ້ໃສ່ລາຍການ «ແອັບທີ່ບໍ່ເຂົ້າໂໝດພັກ».
+lt = Kad trasos įrašymas nenutrūktų išjungus ekraną, išjunkite „Maps&Fly“ akumuliatoriaus optimizavimą. „Samsung“ įrenginiuose įtraukite programėlę į sąrašą „Niekada nemiegančios programėlės“.
+lv = Lai pēdojuma ierakstīšana netiktu pārtraukta, kad ekrāns ir izslēgts, izslēdziet akumulatora optimizāciju lietotnei Maps&Fly. Samsung ierīcēs pievienojiet to sarakstam „Lietotnes, kas nekad netiek pārslēgtas miega režīmā“.
+ml = സ്ക്രീൻ ഓഫ് ആയിരിക്കുമ്പോൾ ട്രാക്ക് റെക്കോർഡിംഗ് നിർത്താതിരിക്കാൻ, Maps&Fly-നെ ബാറ്ററി ഒപ്റ്റിമൈസേഷനിൽ നിന്ന് ഒഴിവാക്കുക. Samsung ഉപകരണങ്ങളിൽ, അതിനെ “ഒരിക്കലും സ്ലീപ്പ് മോഡിലേക്ക് പോകാത്ത ആപ്പുകൾ” എന്ന പട്ടികയിൽ ചേർക്കുക.
+mr = स्क्रीन बंद असताना ट्रॅक रेकॉर्डिंग थांबू नये म्हणून Maps&Fly अॅपला बॅटरी ऑप्टिमायझेशनमधून वगळा. Samsung डिव्हाइसवर ते “कधीही स्लीप मोडमध्ये न जाणारे अॅप्स” या यादीत जोडा.
+mt = Biex ir-reġistrazzjoni tat-traċċa ma tieqafx meta l-iskrin ikun mitfi, eskludi Maps&Fly mill-ottimizzazzjoni tal-batterija. Fuq apparati Samsung, żid l-app mal-lista «Applikazzjonijiet li qatt ma jorqdu».
+nb = For å forhindre at sporopptaket stopper når skjermen er slått av, må du unnta Maps&Fly fra batterioptimalisering. På Samsung-enheter legger du appen til i listen «Apper som aldri går i dvale».
+nl = Om te voorkomen dat de trackopname stopt als het scherm uit is, sluit u Maps&Fly uit van batterijoptimalisatie. Voeg de app op Samsung-toestellen toe aan de lijst ‘Apps die nooit sluimeren’.
+oc = Per empachar que l’enregistrament de la traça s’arrèste quand l’ecran es atudat, mercé d’exclure Maps&Fly de l’optimizacion de la batariá. Sus los aparelhs Samsung, apondètz l’aplicacion a la lista «Aplicacions que jamai dormisson».
+pa = ਸਕ੍ਰੀਨ ਬੰਦ ਹੋਣ ’ਤੇ ਟਰੈਕ ਰਿਕਾਰਡਿੰਗ ਰੁਕਣ ਤੋਂ ਬਚਾਉਣ ਲਈ, Maps&Fly ਨੂੰ ਬੈਟਰੀ ਅਨੁਕੂਲਨ ਤੋਂ ਬਾਹਰ ਰੱਖੋ। Samsung ਡਿਵਾਈਸਾਂ ’ਤੇ ਇਸਨੂੰ “ਕਦੇ ਸਲੀਪ ਮੋਡ ਵਿੱਚ ਨਾ ਜਾਣ ਵਾਲੀਆਂ ਐਪਾਂ” ਦੀ ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ।
+pl = Aby zapis śladu nie został przerwany przy wyłączonym ekranie, wyłącz optymalizację baterii dla Maps&Fly. Na urządzeniach Samsung dodaj aplikację do listy „Nigdy nie usypiaj aplikacji automatycznie”.
+pt = Para evitar que a gravação de trajetos seja interrompida quando o ecrã estiver desligado, exclua o Maps&Fly da otimização da bateria. Nos dispositivos Samsung, adicione-o à lista «Aplicações que nunca entram em modo de suspensão».
+pt-BR = Para evitar que a gravação de trilhas pare quando a tela estiver desligada, exclua o Maps&Fly da otimização de bateria. Em aparelhos Samsung, adicione-o à lista “Aplicativos que nunca entram em modo de suspensão”.
+ro = Pentru a evita întreruperea înregistrării traseului când ecranul este stins, excludeți Maps&Fly de la optimizarea bateriei. Pe dispozitivele Samsung, adăugați aplicația la lista „Aplicații care nu intră niciodată în repaus”.
+ru = Чтобы запись трека не прерывалась при выключенном экране, отключите оптимизацию батареи для Maps&Fly. На устройствах Samsung добавьте приложение в список «Никогда не переходящие в спящий режим».
+sk = Aby sa zabránilo zastaveniu zaznamenávania trasy pri vypnutom displeji, vylúčte prosím aplikáciu Maps&Fly z optimalizácie batérie. Na zariadeniach Samsung ju pridajte do zoznamu „Aplikácie, ktoré nikdy neprejdú do režimu spánku“.
+sl = Da se snemanje sledi ne bi prekinilo, ko je zaslon izklopljen, izključite Maps&Fly iz optimizacije baterije. Na napravah Samsung dodajte aplikacijo na seznam »Aplikacije, ki nikoli ne gredo v mirovanje«.
+sq = Për të parandaluar ndalimin e regjistrimit të gjurmës kur ekrani është i fikur, përjashtoni Maps&Fly nga optimizimi i baterisë. Në pajisjet Samsung, shtojeni në listën “Aplikacionet që nuk flenë kurrë”.
+sr = Да се снимање путање не би прекинуло када је екран искључен, изузмите Maps&Fly из оптимизације батерије. На Samsung уређајима додајте апликацију на листу „Апликације које никада не спавају“.
+sv = För att spårinspelningen inte ska avbrytas när skärmen är avstängd, undanta Maps&Fly från batterioptimeringen. På Samsung-enheter lägger du till appen i listan ”Appar som aldrig sätts i viloläge”.
+sw = Ili urekodi wa njia uendelee hata skrini inapozimwa, zima uboreshaji wa betri kwa Maps&Fly. Kwenye vifaa vya Samsung, iongeze kwenye orodha ya “Programu zisizolala kamwe”.
+te = స్క్రీన్ ఆఫ్‌లో ఉన్నప్పుడు ట్రాక్ రికార్డింగ్ ఆగకుండా ఉండేందుకు, Maps&Fly‌ను బ్యాటరీ ఆప్టిమైజేషన్ నుండి మినహాయించండి. Samsung పరికరాలలో, దాన్ని “ఎప్పుడూ స్లీప్ మోడ్‌లోకి వెళ్లని యాప్‌లు” జాబితాలో చేర్చండి.
+th = เพื่อป้องกันไม่ให้การบันทึกเส้นทางหยุดลงเมื่อหน้าจอปิด โปรดยกเว้น Maps&Fly จากการปรับประสิทธิภาพแบตเตอรี่ สำหรับอุปกรณ์ Samsung ให้เพิ่มแอปนี้ลงในรายชื่อ “แอปที่ไม่พักการทำงาน”
+tr = Ekran kapalıyken iz kaydının durmasını önlemek için Maps&Fly'i pil optimizasyonundan hariç tutun. Samsung cihazlarda uygulamayı “Hiç uyumayan uygulamalar” listesine ekleyin.
+uk = Щоб запис треку не переривався, коли екран вимкнено, вимкніть оптимізацію батареї для Maps&Fly. На пристроях Samsung додайте програму до списку «Програми, що ніколи не переходять у режим сну».
+vi = Để tránh việc ghi lộ trình bị gián đoạn khi màn hình tắt, hãy loại trừ Maps&Fly khỏi tính năng tối ưu hóa pin. Trên thiết bị Samsung, hãy thêm ứng dụng vào danh sách “Ứng dụng không bao giờ ngủ”.
+zh-Hans = 为防止屏幕关闭时轨迹记录中断，请将 Maps&Fly 排除在电池优化之外。在三星设备上，请将其添加到“从不自动休眠的应用程序”列表中。
+zh-Hant = 為避免螢幕關閉時軌跡記錄中斷，請將 Maps&Fly 排除在電池最佳化之外。在 Samsung 裝置上，請將其加入「永不自動進入休眠的應用程式」清單中。
 
 [start_track_recording]
 comment = Prompt to start recording a track.

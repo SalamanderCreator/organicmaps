@@ -47,8 +47,8 @@
 <translation>Descărcarea a eșuat</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Despre Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Despre Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Käitaja: %@";
 "editor_category_unsuitable_title" = "Ei leia sobivat kategooriat?";
-"editor_category_unsuitable_text" = "Organic Maps võimaldab lisada ainult lihtsaid huvipunkte, see tähendab, et ei mingeid linnu, teid, järvi, hoonete piirjooni jne. Palun lisa sellised kategooriad otse <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> saidis. Vaata meie <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">juhendit</a> üksikasjalike samm-sammuliste juhiste saamiseks.";
+"editor_category_unsuitable_text" = "Maps&Fly võimaldab lisada ainult lihtsaid huvipunkte, see tähendab, et ei mingeid linnu, teid, järvi, hoonete piirjooni jne. Palun lisa sellised kategooriad otse <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> saidis. Vaata meie <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">juhendit</a> üksikasjalike samm-sammuliste juhiste saamiseks.";
 "downloader_no_downloaded_maps_title" = "Sa ei ole kaarte alla laadinud";
 "downloader_no_downloaded_maps_message" = "Laadi alla kaardid asukoha otsimiseks ja võrguühenduseta tee juhatamiseks.";
 "current_location_unknown_error_title" = "Hetkeasukoht on teadmata.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Meie põhieesmärk on luua kiireid, privaatsusele keskenduvaid ja hõlpsasti kasutatavaid kaarte, mis sulle meeldivad.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Nüüd kasutad telefoni ekraanil Organic Mapsi";
+"car_used_on_the_phone_screen" = "Nüüd kasutad telefoni ekraanil Maps&Flyi";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Nüüd kasutad auto ekraanil Organic Mapsi";
+"car_used_on_the_car_screen" = "Nüüd kasutad auto ekraanil Maps&Flyi";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Jätka telefonis";

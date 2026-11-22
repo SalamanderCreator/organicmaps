@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "ऑपरेटर: %@";
 "editor_category_unsuitable_title" = "योग्य श्रेणी शोधू शकत नाही?";
-"editor_category_unsuitable_text" = "Organic Maps फक्त साध्या बिंदू श्रेण्या जोडण्याची परवानगी देते, म्हणजे शहरं, रस्ते, तलाव, इमारतींच्या रूपरेषा इत्यादी नाहीत. कृपया अशा श्रेण्या थेट <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> वर जोडा. सविस्तर टप्प्याटप्प्याच्या सूचनांसाठी आमचे <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">मार्गदर्शक</a> तपासा.";
+"editor_category_unsuitable_text" = "Maps&Fly फक्त साध्या बिंदू श्रेण्या जोडण्याची परवानगी देते, म्हणजे शहरं, रस्ते, तलाव, इमारतींच्या रूपरेषा इत्यादी नाहीत. कृपया अशा श्रेण्या थेट <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> वर जोडा. सविस्तर टप्प्याटप्प्याच्या सूचनांसाठी आमचे <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">मार्गदर्शक</a> तपासा.";
 "downloader_no_downloaded_maps_title" = "तुम्ही कोणतेही नकाशे डाउनलोड केलेले नाहीत";
 "downloader_no_downloaded_maps_message" = "स्थान शोधण्यासाठी नकाशे डाउनलोड करा आणि ऑफलाइन मार्गनिर्देशन वापरा.";
 "current_location_unknown_error_title" = "वर्तमान स्थान अज्ञात आहे.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "आमचे मुख्य ध्येय जलद, गोपनीयता-केंद्रित, वापरण्यास-सुलभ नकाशे तयार करणे आहे जे तुम्हाला आवडतील.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "आपण आता फोन स्क्रीनवर Organic Maps वापरत आहात";
+"car_used_on_the_phone_screen" = "आपण आता फोन स्क्रीनवर Maps&Fly वापरत आहात";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "तुम्ही आता कार स्क्रीनवर Organic Maps वापरत आहात";
+"car_used_on_the_car_screen" = "तुम्ही आता कार स्क्रीनवर Maps&Fly वापरत आहात";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "फोनवर सुरू ठेवा";

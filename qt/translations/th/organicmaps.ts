@@ -47,8 +47,8 @@
 <translation>การดาวน์โหลดล้มเหลว</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>เกี่ยวกับ Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>เกี่ยวกับ Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

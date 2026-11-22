@@ -47,8 +47,8 @@
 <translation>Échec lors du téléchargement</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>À propos de Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>À propos de Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

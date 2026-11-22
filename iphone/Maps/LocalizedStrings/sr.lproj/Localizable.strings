@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Оператор: %@";
 "editor_category_unsuitable_title" = "Не можете да пронађете одговарајућу категорију?";
-"editor_category_unsuitable_text" = "Organic Maps омогућава додавање једноставних категорија за тачке на мапи, што искључује градове, путеве, језера, тлоцрте зграда, итд. Молимо Вас да такве категорије додате директно на <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Прочитајте наше <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">упутство</a> за детаљне инструкције, корак-по-корак.";
+"editor_category_unsuitable_text" = "Maps&Fly омогућава додавање једноставних категорија за тачке на мапи, што искључује градове, путеве, језера, тлоцрте зграда, итд. Молимо Вас да такве категорије додате директно на <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Прочитајте наше <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">упутство</a> за детаљне инструкције, корак-по-корак.";
 "downloader_no_downloaded_maps_title" = "Нисте преузели ни једну мапу";
 "downloader_no_downloaded_maps_message" = "Преузмите мапе да бисте претраживали и користили навигацију без интернета.";
 "current_location_unknown_error_title" = "Тренутна локација није позната.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Наш главни циљ је да направимо брзу апликацију за мапе, једноставну за коришћење, оријентисану на приватност, коју ћете волети.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Ви сада користите Organic Maps на екрану телефона";
+"car_used_on_the_phone_screen" = "Ви сада користите Maps&Fly на екрану телефона";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Ви сада користите Organic Maps на екрану аутомобила";
+"car_used_on_the_car_screen" = "Ви сада користите Maps&Fly на екрану аутомобила";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Настави на телефону";

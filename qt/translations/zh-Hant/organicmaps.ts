@@ -47,8 +47,8 @@
 <translation>下載失敗</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>關於 Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>關於 Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

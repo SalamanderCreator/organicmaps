@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <style name="MwmTheme.Splash">
-    <item name="android:windowBackground">@color/bg_primary</item>
-    <item name="android:textColorPrimary">@color/white_primary</item>
-    <item name="android:navigationBarColor">@color/bg_primary</item>
-    <item name="android:statusBarColor">@color/bg_primary</item>
+    <!-- Maps&Fly: white start screen with the blue logo, also in dark mode. -->
+    <item name="android:windowBackground">@color/white_primary</item>
+    <item name="android:textColorPrimary">@color/logo</item>
+    <item name="android:navigationBarColor">@color/white_primary</item>
+    <item name="android:statusBarColor">@color/white_primary</item>
+    <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+    <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
 
     <item name="android:windowSplashScreenBackground" tools:targetApi="31">?android:windowBackground</item>
     <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/system_splash</item>

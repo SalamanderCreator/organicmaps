@@ -47,8 +47,8 @@
 <translation>डाउनलोड विफल हो गया है</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps के बारे में</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly के बारे में</translation>
 </message>
 <message id="close">
 <source>Close</source>

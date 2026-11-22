@@ -47,8 +47,8 @@
 <translation>Преузимање није успело</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>О апликацији Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>О апликацији Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

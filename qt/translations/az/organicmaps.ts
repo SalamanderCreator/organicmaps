@@ -47,8 +47,8 @@
 <translation>Yükləmə uğursuz oldu</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps Haqqında</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly Haqqında</translation>
 </message>
 <message id="close">
 <source>Close</source>

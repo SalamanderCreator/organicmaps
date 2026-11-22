@@ -47,8 +47,8 @@
 <translation>İndirme başarısız oldu</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps Hakkında</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly Hakkında</translation>
 </message>
 <message id="close">
 <source>Close</source>

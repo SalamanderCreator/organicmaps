@@ -47,8 +47,8 @@
 <translation>Allalaadimine ei õnnestunud</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Mapsi teave</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Flyi teave</translation>
 </message>
 <message id="close">
 <source>Close</source>

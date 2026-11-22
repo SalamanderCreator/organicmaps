@@ -47,8 +47,8 @@
 <translation>Ներբեռնումը ձախողվեց</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Organic Maps-ի մասին</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Maps&amp;Fly-ի մասին</translation>
 </message>
 <message id="close">
 <source>Close</source>

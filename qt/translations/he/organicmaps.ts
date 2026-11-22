@@ -47,8 +47,8 @@
 <translation>ההורדה נכשלה</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>אודות Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>אודות Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

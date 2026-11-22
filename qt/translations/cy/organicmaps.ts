@@ -47,8 +47,8 @@
 <translation>Methodd y lawrlwythiad</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Ynglŷn ag Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Ynglŷn ag Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

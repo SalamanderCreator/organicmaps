@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operators: %@";
 "editor_category_unsuitable_title" = "Vai neatrodat atbilstošu kategoriju?";
-"editor_category_unsuitable_text" = "„Organic Maps“ ļauj pievienot tikai vienkāršu punktu kategorijas, proti, nevarat pievienot pilsētas, ceļus, ezerus, ēku aprises u.tml. Šādas kategorijas lūdzam pievienot tiešā veidā <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Lai uzzinātu, kā to izdarīt, sekojiet norādēm <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">rokasgrāmatā</a>.";
+"editor_category_unsuitable_text" = "„Maps&Fly“ ļauj pievienot tikai vienkāršu punktu kategorijas, proti, nevarat pievienot pilsētas, ceļus, ezerus, ēku aprises u.tml. Šādas kategorijas lūdzam pievienot tiešā veidā <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Lai uzzinātu, kā to izdarīt, sekojiet norādēm <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">rokasgrāmatā</a>.";
 "downloader_no_downloaded_maps_title" = "Ierīcē nav lejupielādētu karšu";
 "downloader_no_downloaded_maps_message" = "Lai darbotos nesaistes navigācija un meklēšana, lejupielādējiet kartes.";
 "current_location_unknown_error_title" = "Pašreizējā vieta nav zināma.";
@@ -988,7 +988,7 @@
 "app_tip_01" = "Ar jūsu ziedojumiem un atbalstu varam izveidot pasaulē labākās kartes!";
 
 /* App tip #02 */
-"app_tip_02" = "Vai jums patīk mūsu lietotne? Lūdzam ziedot tās attīstībai! Varbūt tā nepatīk? Tādā gadījumā lūdzam mums pastāstīt, kas tajā nepatīk, lai varam „Organic Maps“ uzlabot!";
+"app_tip_02" = "Vai jums patīk mūsu lietotne? Lūdzam ziedot tās attīstībai! Varbūt tā nepatīk? Tādā gadījumā lūdzam mums pastāstīt, kas tajā nepatīk, lai varam „Maps&Fly“ uzlabot!";
 
 /* App tip #03 */
 "app_tip_03" = "Ja pazīstat kādu programmatūras izstrādātāju, varat viņam vai viņai palūgt ieviest funkciju, kas jums pietrūkst.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Mūsu mērķis ir izveidot viegli lietojamas kartes, kas respektē jūsu privātumu un kuras jums patiks.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Tagad „Organic Maps“ izmantojat tālruņa ekrānā";
+"car_used_on_the_phone_screen" = "Tagad „Maps&Fly“ izmantojat tālruņa ekrānā";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Tagad „Organic Maps“ izmantojat automobiļa ekrānā";
+"car_used_on_the_car_screen" = "Tagad „Maps&Fly“ izmantojat automobiļa ekrānā";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Turpināt tālrunī";
