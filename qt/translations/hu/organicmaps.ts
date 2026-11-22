@@ -47,8 +47,8 @@
 <translation>Sikertelen letöltés</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Az Organic Maps névjegye</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Az Maps&amp;Fly névjegye</translation>
 </message>
 <message id="close">
 <source>Close</source>

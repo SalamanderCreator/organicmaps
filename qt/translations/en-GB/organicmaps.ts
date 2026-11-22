@@ -47,8 +47,8 @@
 <translation>Download has failed</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>About Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>About Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

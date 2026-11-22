@@ -23,7 +23,7 @@
     <string name="zoom_to_country">Amosar nel mapa</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Tentar de nueves</string>
-    <string name="about_menu_title">Tocante a Organic Maps</string>
+    <string name="about_menu_title">Tocante a Maps&amp;Fly</string>
     <string name="close">Zarrar</string>
     <string name="download">Baxar</string>
     <string name="download_resources_continue">Dir al mapa</string>
@@ -371,9 +371,9 @@
     <!-- App tip #06 -->
     <string name="app_tip_06">Pues ayudar a traducir la nuesa aplicación na to llingua.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Agora tas utilizando Organic Maps na pantalla del teléfonu</string>
+    <string name="car_used_on_the_phone_screen">Agora tas utilizando Maps&amp;Fly na pantalla del teléfonu</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Agora tas utilizando Organic Maps na pantalla del coche</string>
+    <string name="car_used_on_the_car_screen">Agora tas utilizando Maps&amp;Fly na pantalla del coche</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
     <string name="car_continue_on_the_phone">Siguir nel móvil</string>
     <!-- Text displayed when a webview or a browser are disabled, and external links can't be opened. -->
@@ -388,7 +388,7 @@
     <!-- Title of the one-time warning about battery optimization when starting track recording on Android. -->
     <string name="background_recording_warning_title">Avisu de grabación en segundu planu</string>
     <!-- One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings. -->
-    <string name="background_recording_warning_message">Pa evitar que la grabación del trayeutu se pare cuando la pantalla tea apagada, desactiva la optimización de la batería pa Organic Maps. Nos preseos Samsung, amiesta Organic Maps a la llista «Aplicaciones que nunca entren en suspensión».</string>
+    <string name="background_recording_warning_message">Pa evitar que la grabación del trayeutu se pare cuando la pantalla tea apagada, desactiva la optimización de la batería pa Maps&amp;Fly. Nos preseos Samsung, amiesta Maps&amp;Fly a la llista «Aplicaciones que nunca entren en suspensión».</string>
     <!-- Prompt to start recording a track. -->
     <string name="start_track_recording">Grabar trayeutu</string>
     <!-- Prompt for stopping a track recording. -->

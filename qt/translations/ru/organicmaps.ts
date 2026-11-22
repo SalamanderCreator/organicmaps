@@ -47,8 +47,8 @@
 <translation>Ошибка загрузки</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Про Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Про Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

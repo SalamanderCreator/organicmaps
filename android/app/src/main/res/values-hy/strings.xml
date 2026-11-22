@@ -35,7 +35,7 @@
     <string name="country_status_download_failed">Ներբեռնումը ձախողվեց</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Փորձել նորից</string>
-    <string name="about_menu_title">Organic Maps-ի մասին</string>
+    <string name="about_menu_title">Maps&amp;Fly-ի մասին</string>
     <!-- Text in About screen -->
     <string name="about_headline">Անվճար բոլորի համար՝ պատրաստված սիրով</string>
     <!-- Text in About screen -->
@@ -52,7 +52,7 @@
     <string name="unsupported_phone">Հավելվածը պահանջում է ապարատային արագացմամբ OpenGL: Ցավոք, ձեր սարքը չի աջակցվում:</string>
     <string name="download">Ներբեռնել</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">Organic Maps-ից օգտվելու համար խնդրում ենք անջատել USB մալուխը կամ տեղադրել հիշողության քարտը</string>
+    <string name="disconnect_usb_cable">Maps&amp;Fly-ից օգտվելու համար խնդրում ենք անջատել USB մալուխը կամ տեղադրել հիշողության քարտը</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">Հավելվածից օգտվելու համար խնդրում ենք ազատել տեղ SD քարտի/USB կրիչի վրա</string>
     <string name="download_resources">Նախքան հավելվածից օգտվելը, խնդրում ենք ներբեռնել աշխարհի ընդհանուր քարտեզը.\nԱյն կզբաղեցնի %s հիշողություն:</string>
@@ -445,7 +445,7 @@
     <!-- Text in About and OSM Login screens. First %@ is replaced by a local, human readable date. -->
     <string name="osm_presentation">Համայնքի կողմից ստեղծված OpenStreetMap տվյալներ՝ %s թ. դրությամբ։ Իմացեք ավելին քարտեզի խմբագրման և թարմացման մասին OpenStreetMap.org կայքում:</string>
     <!-- OSM explanation on Android login screen -->
-    <string name="login_osm_presentation">OpenStreetMap.org (OSM)-ը համայնքային նախագիծ է՝ անվճար և բաց քարտեզ ստեղծելու համար: Այն Organic Maps-ի քարտեզային տվյալների հիմնական աղբյուրն է և աշխատում է Վիքիպեդիայի նման: Դուք կարող եք ավելացնել կամ խմբագրել վայրեր, և դրանք հասանելի կդառնան միլիոնավոր օգտատերերի ամբողջ աշխարհում.\nՄիացեք համայնքին և օգնեք ստեղծել ավելի լավ քարտեզ բոլորի համար!</string>
+    <string name="login_osm_presentation">OpenStreetMap.org (OSM)-ը համայնքային նախագիծ է՝ անվճար և բաց քարտեզ ստեղծելու համար: Այն Maps&amp;Fly-ի քարտեզային տվյալների հիմնական աղբյուրն է և աշխատում է Վիքիպեդիայի նման: Դուք կարող եք ավելացնել կամ խմբագրել վայրեր, և դրանք հասանելի կդառնան միլիոնավոր օգտատերերի ամբողջ աշխարհում.\nՄիացեք համայնքին և օգնեք ստեղծել ավելի լավ քարտեզ բոլորի համար!</string>
     <string name="login_to_make_edits_visible">Ստեղծեք OpenStreetMap հաշիվ կամ մուտք գործեք՝ ձեր քարտեզային խմբագրումները հրապարակելու համար:</string>
     <!-- Downloaded 10 **of** 20 <- it is that "of" -->
     <string name="downloader_of">%1$d՝ %2$d-ից</string>
@@ -460,7 +460,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">Նշում OpenStreetMap կամավորների համար (ոչ պարտադիր)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Նկարագրեք քարտեզի սխալները կամ այն, ինչը հնարավոր չէ խմբագրել Organic Maps-ով</string>
+    <string name="editor_note_hint">Նկարագրեք քարտեզի սխալները կամ այն, ինչը հնարավոր չէ խմբագրել Maps&amp;Fly-ով</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Ձեր խմբագրումները բեռնվում են հանրային <a href="https://wiki.openstreetmap.org/wiki/About_OpenStreetMap">OpenStreetMap</a> տվյալների բազա։ Խնդրում ենք չավելացնել անձնական կամ հեղինակային իրավունքով պաշտպանված տեղեկություններ:</string>
     <string name="editor_more_about_osm">Ավելին OpenStreetMap-ի մասին</string>
@@ -470,7 +470,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… -->
     <string name="operator">Օպերատոր՝ %s</string>
     <string name="editor_category_unsuitable_title">Չե՞ք գտնում համապատասխան կատեգորիա:</string>
-    <string name="editor_category_unsuitable_text">Organic Maps-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ուղեցույցը</a>:</string>
+    <string name="editor_category_unsuitable_text">Maps&amp;Fly-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href="https://organicmaps.app/faq/editing/advanced-map-editing">ուղեցույցը</a>:</string>
     <string name="downloader_no_downloaded_maps_title">Դուք դեռ քարտեզներ չեք ներբեռնել</string>
     <string name="downloader_no_downloaded_maps_message">Ներբեռնեք քարտեզներ՝ օֆլայն որոնման և նավիգացիայի համար:</string>
     <string name="current_location_unknown_error_title">Ընթացիկ դիրքն անհայտ է:</string>
@@ -800,9 +800,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Մեր հիմնական նպատակն է ստեղծել արագ, գաղտնիությանը միտված և հեշտ օգտագործվող քարտեզներ, որոնք դուք կսիրեք։</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Դուք այժմ օգտագործում եք Organic Maps-ը հեռախոսի էկրանին</string>
+    <string name="car_used_on_the_phone_screen">Դուք այժմ օգտագործում եք Maps&amp;Fly-ը հեռախոսի էկրանին</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Դուք այժմ օգտագործում եք Organic Maps-ը մեքենայի էկրանին</string>
+    <string name="car_used_on_the_car_screen">Դուք այժմ օգտագործում եք Maps&amp;Fly-ը մեքենայի էկրանին</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Դուք միացված եք Android Auto-ին</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -810,7 +810,7 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">Դեպի մեքենայի էկրան</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Organic Maps-ին անհրաժեշտ է տեղադիրքի հասանելիություն։ Երբ անվտանգ լինի, ստուգեք ծանուցումը ձեր հեռախոսում։</string>
+    <string name="aa_location_permissions_request">Maps&amp;Fly-ին անհրաժեշտ է տեղադիրքի հասանելիություն։ Երբ անվտանգ լինի, ստուգեք ծանուցումը ձեր հեռախոսում։</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Այս հավելվածին անհրաժեշտ է ձեր թույլտվությունը</string>
     <!-- Grant Permissions button. -->
@@ -846,7 +846,7 @@
     <!-- Title of the one-time warning about battery optimization when starting track recording on Android. -->
     <string name="background_recording_warning_title">Հետին պլանում գրանցման նախազգուշացում</string>
     <!-- One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings. -->
-    <string name="background_recording_warning_message">Էկրանն անջատված ժամանակ հետագծի գրանցման ընդհատումից խուսափելու համար Organic Maps-ը բացառեք մարտկոցի օպտիմալացումից։ Samsung սարքերում այն ավելացրեք «Երբեք չքնող հավելվածներ» ցանկում։</string>
+    <string name="background_recording_warning_message">Էկրանն անջատված ժամանակ հետագծի գրանցման ընդհատումից խուսափելու համար Maps&amp;Fly-ը բացառեք մարտկոցի օպտիմալացումից։ Samsung սարքերում այն ավելացրեք «Երբեք չքնող հավելվածներ» ցանկում։</string>
     <!-- Prompt to start recording a track. -->
     <string name="start_track_recording">Գրանցել հետագիծը</string>
     <!-- Prompt for stopping a track recording. -->

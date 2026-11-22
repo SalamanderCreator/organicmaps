@@ -47,8 +47,8 @@
 <translation>It-tniżżil falla</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Dwar Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Dwar Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

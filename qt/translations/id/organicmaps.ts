@@ -47,8 +47,8 @@
 <translation>Sedang Mengunduh telah gagal</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Tentang Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Tentang Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Օպերատոր՝ %@";
 "editor_category_unsuitable_title" = "Չե՞ք գտնում համապատասխան կատեգորիա:";
-"editor_category_unsuitable_text" = "Organic Maps-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">ուղեցույցը</a>:";
+"editor_category_unsuitable_text" = "Maps&Fly-ը թույլ է տալիս ավելացնել միայն պարզ կետային կատեգորիաներ, այսինքն՝ ոչ քաղաքներ, ճանապարհներ, լճեր, շենքերի ուրվագծեր և այլն։ Խնդրում ենք ավելացնել նման կատեգորիաները անմիջապես <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a> կայքում։ Մանրամասն քայլ առ քայլ հրահանգների համար ստուգեք մեր <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">ուղեցույցը</a>:";
 "downloader_no_downloaded_maps_title" = "Դուք դեռ քարտեզներ չեք ներբեռնել";
 "downloader_no_downloaded_maps_message" = "Ներբեռնեք քարտեզներ՝ օֆլայն որոնման և նավիգացիայի համար:";
 "current_location_unknown_error_title" = "Ընթացիկ դիրքն անհայտ է:";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Մեր հիմնական նպատակն է ստեղծել արագ, գաղտնիությանը միտված և հեշտ օգտագործվող քարտեզներ, որոնք դուք կսիրեք։";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Դուք այժմ օգտագործում եք Organic Maps-ը հեռախոսի էկրանին";
+"car_used_on_the_phone_screen" = "Դուք այժմ օգտագործում եք Maps&Fly-ը հեռախոսի էկրանին";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Դուք այժմ օգտագործում եք Organic Maps-ը մեքենայի էկրանին";
+"car_used_on_the_car_screen" = "Դուք այժմ օգտագործում եք Maps&Fly-ը մեքենայի էկրանին";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Շարունակել հեռախոսով";

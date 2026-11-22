@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Toán tử: %@";
 "editor_category_unsuitable_title" = "Không thể tìm thấy một danh mục phù hợp?";
-"editor_category_unsuitable_text" = "Organic Maps chỉ cho phép thêm các loại điểm đơn giản, tức là không bao gồm các thị trấn, đường, hồ, đường viền tòa nhà, v.v. Vui lòng thêm các loại này trực tiếp vào <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Hãy tham khảo <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">hướng dẫn</a> của chúng tôi để biết các bước thực hiện chi tiết.";
+"editor_category_unsuitable_text" = "Maps&Fly chỉ cho phép thêm các loại điểm đơn giản, tức là không bao gồm các thị trấn, đường, hồ, đường viền tòa nhà, v.v. Vui lòng thêm các loại này trực tiếp vào <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Hãy tham khảo <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">hướng dẫn</a> của chúng tôi để biết các bước thực hiện chi tiết.";
 "downloader_no_downloaded_maps_title" = "Bạn chưa tải về bất kỳ bản đồ nào";
 "downloader_no_downloaded_maps_message" = "Tải về bản đồ để tìm địa điểm và định hướng ngoại tuyến.";
 "current_location_unknown_error_title" = "Chưa biết địa điểm hiện tại.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Nếu có quá nhiều dấu trang, việc hiển thị tên của chúng trên bản đồ có thể làm chậm ứng dụng.";
 "show_to_the_right" = "Hiển thị ở bên phải";
 "show_at_the_bottom" = "Hiển thị ở phía dưới";
-"enable_logging_warning_message" = "Tùy chọn này được kích hoạt để ghi nhật ký đăng nhập cho mục đích chẩn đoán. Điều này sẽ giúp nhóm chúng tôi làm rõ các vấn đề liên quan đến ứng dụng. Hãy bật tùy chọn này chỉ khi nào có yêu cầu hỗ trợ từ Organic Maps.";
+"enable_logging_warning_message" = "Tùy chọn này được kích hoạt để ghi nhật ký đăng nhập cho mục đích chẩn đoán. Điều này sẽ giúp nhóm chúng tôi làm rõ các vấn đề liên quan đến ứng dụng. Hãy bật tùy chọn này chỉ khi nào có yêu cầu hỗ trợ từ Maps&Fly.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Lái xe";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Mục tiêu chính của chúng tôi là xây dựng các bản đồ nhanh chóng, tập trung vào quyền riêng tư, dễ sử dụng mà bạn sẽ yêu thích.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Bạn hiện đang sử dụng Organic Maps trên màn hình điện thoại";
+"car_used_on_the_phone_screen" = "Bạn hiện đang sử dụng Maps&Fly trên màn hình điện thoại";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Bạn hiện đang sử dụng Organic Maps trên màn hình xe hơi";
+"car_used_on_the_car_screen" = "Bạn hiện đang sử dụng Maps&Fly trên màn hình xe hơi";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Tiếp tục trên điện thoại";

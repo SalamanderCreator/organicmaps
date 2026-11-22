@@ -47,8 +47,8 @@
 <translation>Shkarkimi dështoi</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Rreth Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Rreth Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

@@ -47,8 +47,8 @@
 <translation>Erro durante a descarga</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Acerca de Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Acerca de Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

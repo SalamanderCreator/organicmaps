@@ -35,7 +35,7 @@
     <string name="country_status_download_failed">دانلود با شکست مواجه شد</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">تلاش مجدد</string>
-    <string name="about_menu_title">درباره‌ی Organic Maps</string>
+    <string name="about_menu_title">درباره‌ی Maps&amp;Fly</string>
     <!-- Text in About screen -->
     <string name="about_headline">رایگان برای همه ، ساخته شده با عشق</string>
     <!-- Text in About screen -->
@@ -52,7 +52,7 @@
     <string name="unsupported_phone">این برنامه به OpenGL با شتاب سخت‌افزاری نیاز دارد. متاسفانه دستگاه شما پشتیبانی نمی‌شود.</string>
     <string name="download">دانلود</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">لطفا کابل USB را جدا کنید یا کارت حافظه وارد کنید تا بتوانید از Organic Maps استفاده کنید</string>
+    <string name="disconnect_usb_cable">لطفا کابل USB را جدا کنید یا کارت حافظه وارد کنید تا بتوانید از Maps&amp;Fly استفاده کنید</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">لطفا مقداری از فضای ذخیره‌سازی را آزاد نمایید</string>
     <string name="download_resources">قبل از استفاده از برنامه، اجازه دهید تا ما نقشه جهانی را بر روی موبایل شما دانلود کنیم. \nمقدار %s از حافظه شما اشغال می‌شود.</string>
@@ -445,7 +445,7 @@
     <!-- Text in About and OSM Login screens. First %@ is replaced by a local, human readable date. -->
     <string name="osm_presentation">داده های OpenStreetMap ایجاد شده توسط انجمن از %s. درباره نحوه ویرایش و به روز رسانی نقشه در OpenStreetMap.org بیشتر بیاموزید</string>
     <!-- OSM explanation on Android login screen -->
-    <string name="login_osm_presentation">OpenStreetMap.org (OSM) یک پروژهٔ اجتماعی برای ساختن نقشه‌ای آزاد و باز است. این منبع اصلی داده‌های نقشه در Organic Maps است و به‌طور مشابهی با ویکی‌پدیا کار می‌کند. شما می‌توانید مکان‌ها را اضافه یا ویرایش کنید و آن‌ها در اختیار میلیون‌ها کاربر در سراسر جهان قرار می‌گیرند. به جامعه بپیوندید و به ساختن نقشه‌ای بهتر برای همه کمک کنید!</string>
+    <string name="login_osm_presentation">OpenStreetMap.org (OSM) یک پروژهٔ اجتماعی برای ساختن نقشه‌ای آزاد و باز است. این منبع اصلی داده‌های نقشه در Maps&amp;Fly است و به‌طور مشابهی با ویکی‌پدیا کار می‌کند. شما می‌توانید مکان‌ها را اضافه یا ویرایش کنید و آن‌ها در اختیار میلیون‌ها کاربر در سراسر جهان قرار می‌گیرند. به جامعه بپیوندید و به ساختن نقشه‌ای بهتر برای همه کمک کنید!</string>
     <string name="login_to_make_edits_visible">یک حساب OpenStreetMap ایجاد کنید یا وارد شوید تا ویرایش های نقشه خود را در جهان منتشر کنید.</string>
     <!-- Downloaded 10 **of** 20 <- it is that "of" -->
     <string name="downloader_of">%1$d از %2$d</string>
@@ -460,7 +460,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">توجه به داوطلبان OpenStreetMap (اختیاری)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">خطاهای روی نقشه یا مواردی را که قابل ویرایش نیستند با Organic Maps توصیف کنید</string>
+    <string name="editor_note_hint">خطاهای روی نقشه یا مواردی را که قابل ویرایش نیستند با Maps&amp;Fly توصیف کنید</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">ویرایش های شما در پایگاه داده عمومی <a href="https://wiki.openstreetmap.org/wiki/Fa:About_OpenStreetMap">OpenStreetMap</a> آپلود می شود. لطفا اطلاعات شخصی یا دارای حق چاپ را اضافه نکنید.</string>
     <string name="editor_more_about_osm">در مورد OpenStreetMap بیشتر بدانید</string>
@@ -470,7 +470,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… -->
     <string name="operator">اپراتور: %s</string>
     <string name="editor_category_unsuitable_title">آیا نمی توانید یک دسته بندی مناسب پیدا کنید؟</string>
-    <string name="editor_category_unsuitable_text">Organic Maps اجازه میu200cدهد فقط دستهu200cهای نقطهu200cای ساده را اضافه کند، یعنی هیچ شهر، جاده، دریاچه، طرح کلی ساختمان و غیره وجود ندارد. لطفاً این دستهu200cها را مستقیماً به <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> اضافه کنید. برای دستورالعملu200cهای گام به گام، <a href="https://organicmaps.app/faq/editing/advanced-map-editing">راهنمای</a> ما را بررسی کنید.</string>
+    <string name="editor_category_unsuitable_text">Maps&amp;Fly اجازه میu200cدهد فقط دستهu200cهای نقطهu200cای ساده را اضافه کند، یعنی هیچ شهر، جاده، دریاچه، طرح کلی ساختمان و غیره وجود ندارد. لطفاً این دستهu200cها را مستقیماً به <a href="https://www.openstreetmap.org">OpenStreetMap.org</a> اضافه کنید. برای دستورالعملu200cهای گام به گام، <a href="https://organicmaps.app/faq/editing/advanced-map-editing">راهنمای</a> ما را بررسی کنید.</string>
     <string name="downloader_no_downloaded_maps_title">شما هیچ نقشه دانلود شده ای ندارید</string>
     <string name="downloader_no_downloaded_maps_message">برای جست وجو یک مکان و استفاده از قابلیت ناوبری، نقشه‌ها را دانلود کنید.</string>
     <string name="current_location_unknown_error_title">مکان فعلیتان ناشناس است.</string>
@@ -636,7 +636,7 @@
     <string name="bookmarks_text_placement_description">اگر نشانک‌ها زیاد باشند، نمایش نام آن‌ها روی نقشه ممکن است باعث کند شدن برنامه شود.</string>
     <string name="show_to_the_right">در سمت راست نمایش دهید</string>
     <string name="show_at_the_bottom">در پایین نمایش دهید</string>
-    <string name="enable_logging_warning_message">این گزینه ثبت گزارش را برای اهداف تشخیصی فعال می‌کند. برای کارکنان بخش پشتیبانی که مشکلات برنامه را عیب یابی می‌کنند، مفید باشد. این گزینه را تنها در صورت درخواست پشتیبانی Organic Maps فعال کنید.</string>
+    <string name="enable_logging_warning_message">این گزینه ثبت گزارش را برای اهداف تشخیصی فعال می‌کند. برای کارکنان بخش پشتیبانی که مشکلات برنامه را عیب یابی می‌کنند، مفید باشد. این گزینه را تنها در صورت درخواست پشتیبانی Maps&amp;Fly فعال کنید.</string>
     <!-- Driving profile in routing options settings. -->
     <string name="routing_options_driving">رانندگی</string>
     <!-- Cycling profile in routing options settings. -->
@@ -800,9 +800,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">هدف اصلی ما ساختن نقشه هایی سریع، متمرکز بر حریم خصوصی و با کاربری آسان است که شما عاشق آن خواهید شد.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">شما اکنون در حال استفاده از Organic Maps بر روی صفحهٔ تلفن همراه هستید</string>
+    <string name="car_used_on_the_phone_screen">شما اکنون در حال استفاده از Maps&amp;Fly بر روی صفحهٔ تلفن همراه هستید</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">شما اکنون در حال استفاده از Organic Maps بر روی صفحهٔ خودرو هستید</string>
+    <string name="car_used_on_the_car_screen">شما اکنون در حال استفاده از Maps&amp;Fly بر روی صفحهٔ خودرو هستید</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">شما به Android Auto متصل هستید</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -810,7 +810,7 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">به صفحه ماشین</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Organic Maps به دسترسی به مکان نیاز دارد. وقتی ایمن است، اعلان گوشی خود را بررسی کنید.</string>
+    <string name="aa_location_permissions_request">Maps&amp;Fly به دسترسی به مکان نیاز دارد. وقتی ایمن است، اعلان گوشی خود را بررسی کنید.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">این برنامه به اجازه شما نیاز دارد</string>
     <!-- Grant Permissions button. -->
@@ -846,7 +846,7 @@
     <!-- Title of the one-time warning about battery optimization when starting track recording on Android. -->
     <string name="background_recording_warning_title">هشدار ضبط در پس‌زمینه</string>
     <!-- One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings. -->
-    <string name="background_recording_warning_message">برای جلوگیری از توقف ضبط مسیر هنگام خاموش بودن صفحه‌نمایش، لطفاً Organic Maps را از بهینه‌سازی باتری مستثنی کنید. در دستگاه‌های Samsung، آن را به فهرست «برنامه‌هایی که هرگز به حالت خواب نمی‌روند» اضافه کنید.</string>
+    <string name="background_recording_warning_message">برای جلوگیری از توقف ضبط مسیر هنگام خاموش بودن صفحه‌نمایش، لطفاً Maps&amp;Fly را از بهینه‌سازی باتری مستثنی کنید. در دستگاه‌های Samsung، آن را به فهرست «برنامه‌هایی که هرگز به حالت خواب نمی‌روند» اضافه کنید.</string>
     <!-- Prompt to start recording a track. -->
     <string name="start_track_recording">ضبط مسیر</string>
     <!-- Prompt for stopping a track recording. -->

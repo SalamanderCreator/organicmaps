@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Operator: %@";
 "editor_category_unsuitable_title" = "Can't find a suitable category?";
-"editor_category_unsuitable_text" = "Organic Maps allows to add simple point categories only, that means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Check our <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guide</a> for detailed step by step instructions.";
+"editor_category_unsuitable_text" = "Maps&Fly allows to add simple point categories only, that means no towns, roads, lakes, building outlines, etc. Please add such categories directly to <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Check our <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">guide</a> for detailed step by step instructions.";
 "downloader_no_downloaded_maps_title" = "You haven't downloaded any maps";
 "downloader_no_downloaded_maps_message" = "Download maps to search and navigate offline.";
 "current_location_unknown_error_title" = "Desconózse l’allugamientu actual.";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Our main goal is to build fast, privacy-focused, easy-to-use maps that you will love.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Agora tas utilizando Organic Maps na pantalla del teléfonu";
+"car_used_on_the_phone_screen" = "Agora tas utilizando Maps&Fly na pantalla del teléfonu";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Agora tas utilizando Organic Maps na pantalla del coche";
+"car_used_on_the_car_screen" = "Agora tas utilizando Maps&Fly na pantalla del coche";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Siguir nel móvil";

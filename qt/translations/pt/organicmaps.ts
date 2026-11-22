@@ -47,8 +47,8 @@
 <translation>O descarregamento falhou</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Sobre o Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Sobre o Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

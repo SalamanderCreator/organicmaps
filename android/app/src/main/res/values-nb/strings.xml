@@ -35,7 +35,7 @@
     <string name="country_status_download_failed">Laster ned mislyktes</string>
     <!-- Button text for the button under the country_status_download_failed message -->
     <string name="try_again">Prøv på nytt</string>
-    <string name="about_menu_title">Om Organic Maps</string>
+    <string name="about_menu_title">Om Maps&amp;Fly</string>
     <!-- Text in About screen -->
     <string name="about_headline">Gratis for alle, laget med kjærlighet</string>
     <!-- Text in About screen -->
@@ -52,7 +52,7 @@
     <string name="unsupported_phone">En maskinvareakselerert OpenGL kreves. Dessverre støttes ikke enheten din.</string>
     <string name="download">Last ned</string>
     <!-- Used in DownloadResources startup screen -->
-    <string name="disconnect_usb_cable">Koble fra USB-kabelen eller sett inn minnekortet for å bruke Organic Maps</string>
+    <string name="disconnect_usb_cable">Koble fra USB-kabelen eller sett inn minnekortet for å bruke Maps&amp;Fly</string>
     <!-- Used in DownloadResources startup screen -->
     <string name="not_enough_free_space_on_sdcard">Frigjør plass på SD-kortet/USB-enheten først for å bruke appen</string>
     <string name="download_resources">Før du begynner, la oss laste ned det generelle verdenskartet til enheten. Det trengs %s med data.</string>
@@ -445,7 +445,7 @@
     <!-- Text in About and OSM Login screens. First %@ is replaced by a local, human readable date. -->
     <string name="osm_presentation">Fellesskapsopprettede OpenStreetMap-data fra %s. Les mer om hvordan du redigerer og oppdaterer kartet på OpenStreetMap.org.</string>
     <!-- OSM explanation on Android login screen -->
-    <string name="login_osm_presentation">OpenStreetMap.org (OSM) er et fellesskapsprosjekt for å bygge et gratis og åpent kart. Det er hovedkilden til kartdata i Organic Maps og fungerer på samme måte som Wikipedia. Du kan legge til eller redigere steder, og de blir tilgjengelige for millioner av brukere over hele verden. \nBli med i fellesskapet og bidra til å lage et bedre kart for alle!</string>
+    <string name="login_osm_presentation">OpenStreetMap.org (OSM) er et fellesskapsprosjekt for å bygge et gratis og åpent kart. Det er hovedkilden til kartdata i Maps&amp;Fly og fungerer på samme måte som Wikipedia. Du kan legge til eller redigere steder, og de blir tilgjengelige for millioner av brukere over hele verden. \nBli med i fellesskapet og bidra til å lage et bedre kart for alle!</string>
     <string name="login_to_make_edits_visible">Opprett en OpenStreetMap-konto eller logg inn for å publisere kartredigeringene dine til hele verden.</string>
     <!-- Downloaded 10 **of** 20 <- it is that "of" -->
     <string name="downloader_of">%1$d av %2$d</string>
@@ -460,7 +460,7 @@
     <!-- Title for OSM note section in the editor -->
     <string name="editor_other_info">Merknad til OpenStreetMap-frivillige (valgfritt)</string>
     <!-- Hint of the input field in the OSM note section of the editor -->
-    <string name="editor_note_hint">Beskriv feil på kartet eller ting som ikke kan redigeres med Organic Maps</string>
+    <string name="editor_note_hint">Beskriv feil på kartet eller ting som ikke kan redigeres med Maps&amp;Fly</string>
     <!-- Information about OSM at the top of the editing page -->
     <string name="editor_about_osm">Dine endringer lastes opp til den offentlige <a href="https://wiki.openstreetmap.org/wiki/About_OpenStreetMap">OpenStreetMap</a>-databasen. Vennligst ikke legg til personlig eller opphavsrettsbeskyttet informasjon.</string>
     <string name="editor_more_about_osm">Mer om OpenStreetMap</string>
@@ -470,7 +470,7 @@
     <!-- To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… -->
     <string name="operator">Operatør: %s</string>
     <string name="editor_category_unsuitable_title">Finner du ikke en passende kategori?</string>
-    <string name="editor_category_unsuitable_text">Organic Maps tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sjekk vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerte trinnvise instruksjoner.</string>
+    <string name="editor_category_unsuitable_text">Maps&amp;Fly tillater kun å legge til enkle punktkategorier, det vil si ingen byer, veier, innsjøer, bygningsomriss osv. Vennligst legg til slike kategorier direkte til <a href="https://www.openstreetmap.org">OpenStreetMap.org</a>. Sjekk vår <a href="https://organicmaps.app/faq/editing/advanced-map-editing">guide</a> for detaljerte trinnvise instruksjoner.</string>
     <string name="downloader_no_downloaded_maps_title">Du har ikke lastet ned noen kart</string>
     <string name="downloader_no_downloaded_maps_message">Last ned kart for å finne plasseringen og navigere frakoblet.</string>
     <string name="current_location_unknown_error_title">Gjeldende plassering er ukjent.</string>
@@ -636,7 +636,7 @@
     <string name="bookmarks_text_placement_description">Hvis det er for mange bokmerker, kan det gjøre appen tregere å vise navnene på dem på kartet.</string>
     <string name="show_to_the_right">Vis til høyre</string>
     <string name="show_at_the_bottom">Vis nederst</string>
-    <string name="enable_logging_warning_message">Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Organic Maps-brukerstøtte.</string>
+    <string name="enable_logging_warning_message">Alternativet slår på logging for diagnostiske formål. Det kan være nyttig for våre supportpersonale som feilsøker problemer med appen. Aktiver dette alternativet bare på forespørsel fra Maps&amp;Fly-brukerstøtte.</string>
     <!-- Driving profile in routing options settings. -->
     <string name="routing_options_driving">Bil</string>
     <!-- Cycling profile in routing options settings. -->
@@ -790,9 +790,9 @@
     <!-- App tip #09 -->
     <string name="app_tip_09">Vårt hovedmål er å bygge raske, personvernfokuserte, brukervennlige kart som du vil elske.</string>
     <!-- Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen -->
-    <string name="car_used_on_the_phone_screen">Du bruker nå Organic Maps på telefonskjermen</string>
+    <string name="car_used_on_the_phone_screen">Du bruker nå Maps&amp;Fly på telefonskjermen</string>
     <!-- Text on the phone placeholder screen that maps are displayed on the car screen -->
-    <string name="car_used_on_the_car_screen">Du bruker nå Organic Maps på bilskjermen</string>
+    <string name="car_used_on_the_car_screen">Du bruker nå Maps&amp;Fly på bilskjermen</string>
     <!-- Displayed on the phone screen. Android Auto connected -->
     <string name="aa_connected_title">Du er koblet til Android Auto</string>
     <!-- Displayed on the phone screen. Button to display maps on the phone screen instead of a car -->
@@ -800,7 +800,7 @@
     <!-- Displayed on the Android Auto or CarPlay screen. Button to display maps on the car screen instead of a phone. Must be no more than 18 symbols! -->
     <string name="car_continue_in_the_car">Til bilens skjerm</string>
     <!-- Ask user to grant location permissions -->
-    <string name="aa_location_permissions_request">Organic Maps trenger posisjonstilgang. Når det er trygt, kan du sjekke varslingen på telefonen.</string>
+    <string name="aa_location_permissions_request">Maps&amp;Fly trenger posisjonstilgang. Når det er trygt, kan du sjekke varslingen på telefonen.</string>
     <!-- Notification title for permission request from AA. -->
     <string name="aa_request_permission_notification">Denne appen trenger din tillatelse</string>
     <!-- Grant Permissions button. -->
@@ -836,7 +836,7 @@
     <!-- Title of the one-time warning about battery optimization when starting track recording on Android. -->
     <string name="background_recording_warning_title">Varsel om opptak i bakgrunnen</string>
     <!-- One-time warning when starting track recording on Android. "Never sleeping apps" is a Samsung setting. The Settings button opens Samsung's list when available, with fallbacks to Android battery optimization settings or general settings. -->
-    <string name="background_recording_warning_message">For å forhindre at sporopptaket stopper når skjermen er slått av, må du unnta Organic Maps fra batterioptimalisering. På Samsung-enheter legger du appen til i listen «Apper som aldri går i dvale».</string>
+    <string name="background_recording_warning_message">For å forhindre at sporopptaket stopper når skjermen er slått av, må du unnta Maps&amp;Fly fra batterioptimalisering. På Samsung-enheter legger du appen til i listen «Apper som aldri går i dvale».</string>
     <!-- Prompt to start recording a track. -->
     <string name="start_track_recording">Ta opp rute</string>
     <!-- Prompt for stopping a track recording. -->

@@ -47,8 +47,8 @@
 <translation>Збой спампоўвання</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Аб праграме Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Аб праграме Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

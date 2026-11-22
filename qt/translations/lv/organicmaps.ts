@@ -47,8 +47,8 @@
 <translation>Lejupielāde neizdevās</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Par „Organic Maps“</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Par „Maps&amp;Fly“</translation>
 </message>
 <message id="close">
 <source>Close</source>

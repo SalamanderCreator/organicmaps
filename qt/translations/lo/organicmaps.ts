@@ -47,8 +47,8 @@
 <translation>ການດາວໂຫລດລົ້ມເຫຼວ</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>ກ່ຽວກັບ Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>ກ່ຽວກັບ Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

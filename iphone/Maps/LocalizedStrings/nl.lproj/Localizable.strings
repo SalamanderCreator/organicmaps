@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "Exploitant: %@";
 "editor_category_unsuitable_title" = "Kun je geen geschikte categorie vinden?";
-"editor_category_unsuitable_text" = "Met Organic Maps kun je alleen eenvoudige puntcategorieën toevoegen, dus geen steden, wegen, meren, contouren van gebouwen, enzovoort. Voeg zulke categorieën direct toe aan <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Bekijk onze <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">gids</a> voor gedetailleerde stap voor stap instructies.";
+"editor_category_unsuitable_text" = "Met Maps&Fly kun je alleen eenvoudige puntcategorieën toevoegen, dus geen steden, wegen, meren, contouren van gebouwen, enzovoort. Voeg zulke categorieën direct toe aan <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. Bekijk onze <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">gids</a> voor gedetailleerde stap voor stap instructies.";
 "downloader_no_downloaded_maps_title" = "U hebt geen kaarten gedownload";
 "downloader_no_downloaded_maps_message" = "Download kaarten om een locatie te zoeken en offline te navigeren.";
 "current_location_unknown_error_title" = "Huidige locatie is onbekend.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "Wanneer er teveel markeringen zijn, kan weergave van de namen op de map vertragen.";
 "show_to_the_right" = "Rechts weergeven";
 "show_at_the_bottom" = "Onderaan weergeven";
-"enable_logging_warning_message" = "Schakel deze optie tijdelijk in om gedetailleerde logboekregistraties omtrent jouw probleem op te slaan en te verzenden tijdens \" Rapporteer een probleem\" in het help menu. Schakel deze optie alleen in op verzoek van Organic Maps ondersteuning.";
+"enable_logging_warning_message" = "Schakel deze optie tijdelijk in om gedetailleerde logboekregistraties omtrent jouw probleem op te slaan en te verzenden tijdens \" Rapporteer een probleem\" in het help menu. Schakel deze optie alleen in op verzoek van Maps&Fly ondersteuning.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "Auto";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "Ons belangrijkste doel is om snelle, op privacy gerichte, gebruiksvriendelijke kaarten te maken waar u dol op zult zijn.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "Je gebruikt nu Organic Maps op het telefoonscherm";
+"car_used_on_the_phone_screen" = "Je gebruikt nu Maps&Fly op het telefoonscherm";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "Je gebruikt nu Organic Maps op het autoscherm";
+"car_used_on_the_car_screen" = "Je gebruikt nu Maps&Fly op het autoscherm";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "Ga verder op de telefoon";

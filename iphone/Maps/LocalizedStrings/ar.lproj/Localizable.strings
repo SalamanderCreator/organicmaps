@@ -591,7 +591,7 @@
 /* To indicate the operator of ATMs, bicycle rentals, electric vehicle charging stations… */
 "operator" = "المشغل: %@";
 "editor_category_unsuitable_title" = "لا يمكن العثور على فئة مناسبة؟";
-"editor_category_unsuitable_text" = "Organic Maps تسمح بإضافة فئات النقاط البسيطة فقط، وهذا يعني عدم إضافة المدن والطرق والبحيرات وخطوط المباني، إلخ. يرجى إضافة هذه الفئات مباشرة إلى <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. راجع <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">دليلنا</a> للحصول على إرشادات تفصيلية خطوة بخطوة.";
+"editor_category_unsuitable_text" = "Maps&Fly تسمح بإضافة فئات النقاط البسيطة فقط، وهذا يعني عدم إضافة المدن والطرق والبحيرات وخطوط المباني، إلخ. يرجى إضافة هذه الفئات مباشرة إلى <a href=\"https://www.openstreetmap.org\">OpenStreetMap.org</a>. راجع <a href=\"https://organicmaps.app/faq/editing/advanced-map-editing\">دليلنا</a> للحصول على إرشادات تفصيلية خطوة بخطوة.";
 "downloader_no_downloaded_maps_title" = "لم تقم بتنزيل أية خرائط";
 "downloader_no_downloaded_maps_message" = "قم بتنزيل خرائط للبحث عن مكان واستخدام الملاحة بدون اتصال بالإنترنت.";
 "current_location_unknown_error_title" = "الموقع الحالي غير معروف.";
@@ -738,7 +738,7 @@
 "bookmarks_text_placement_description" = "إذا كان هناك عدد كبير جدًا من الإشارات المرجعية، فقد يؤدي عرض أسمائها على الخريطة إلى إبطاء التطبيق.";
 "show_to_the_right" = "عرض إلى اليمين";
 "show_at_the_bottom" = "اعرض في الأسفل";
-"enable_logging_warning_message" = "هذا الخيار يقوم ببدأ تسجيل سجلات التطبيق لإغراض التشخيصة. يمكن أن يكون مفيدًا لفريق الدعم الخاص بنا لحل المشاكل التي تواجهكم داخل التطبيق. قم بتفعيل هذا الخيار بشكل مؤقت فقط في حالة طلب الدعم من Organic Maps.";
+"enable_logging_warning_message" = "هذا الخيار يقوم ببدأ تسجيل سجلات التطبيق لإغراض التشخيصة. يمكن أن يكون مفيدًا لفريق الدعم الخاص بنا لحل المشاكل التي تواجهكم داخل التطبيق. قم بتفعيل هذا الخيار بشكل مؤقت فقط في حالة طلب الدعم من Maps&Fly.";
 
 /* Driving profile in routing options settings. */
 "routing_options_driving" = "القيادة";
@@ -1012,10 +1012,10 @@
 "app_tip_09" = "هدفنا الرئيسي هو إنشاء خرائط سريعة وسهلة الاستخدام تركز على الخصوصية والتي ستعجبك.";
 
 /* Text on the Android Auto or CarPlay placeholder screen that maps are displayed on the phone screen */
-"car_used_on_the_phone_screen" = "أنت تستخدم الآن Organic Maps على شاشة الهاتف";
+"car_used_on_the_phone_screen" = "أنت تستخدم الآن Maps&Fly على شاشة الهاتف";
 
 /* Text on the phone placeholder screen that maps are displayed on the car screen */
-"car_used_on_the_car_screen" = "أنت تستخدم الآن Organic Maps على شاشة السيارة";
+"car_used_on_the_car_screen" = "أنت تستخدم الآن Maps&Fly على شاشة السيارة";
 
 /* Displayed on the phone screen. Button to display maps on the phone screen instead of a car */
 "car_continue_on_the_phone" = "تواصل على الهاتف";

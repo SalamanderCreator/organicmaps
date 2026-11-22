@@ -47,8 +47,8 @@
 <translation>Lataus epäonnistui</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Tietoa Organic Maps:stä</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Tietoa Maps&amp;Fly:stä</translation>
 </message>
 <message id="close">
 <source>Close</source>

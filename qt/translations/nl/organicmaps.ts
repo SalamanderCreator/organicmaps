@@ -47,8 +47,8 @@
 <translation>Downloaden is mislukt</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>Over Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>Over Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>

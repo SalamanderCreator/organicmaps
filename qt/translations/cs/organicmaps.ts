@@ -47,8 +47,8 @@
 <translation>Stahování selhalo</translation>
 </message>
 <message id="about_menu_title">
-<source>About Organic Maps</source>
-<translation>O aplikaci Organic Maps</translation>
+<source>About Maps&amp;Fly</source>
+<translation>O aplikaci Maps&amp;Fly</translation>
 </message>
 <message id="close">
 <source>Close</source>
