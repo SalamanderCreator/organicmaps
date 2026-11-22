@@ -132,6 +132,15 @@
       app:singleLineTitle="false"
       android:persistent="false"
       android:order="20"/>
+    <!-- Maps&Fly: distance for the off track alarm. -->
+    <ListPreference
+      android:key="@string/pref_off_track_threshold"
+      android:title="@string/off_track_threshold_title"
+      app:singleLineTitle="false"
+      android:persistent="false"
+      android:entries="@array/off_track_threshold_options"
+      android:entryValues="@array/off_track_threshold_values"
+      android:order="21" />
   </androidx.preference.PreferenceCategory>
 
   <androidx.preference.PreferenceCategory

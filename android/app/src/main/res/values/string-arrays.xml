@@ -81,4 +81,19 @@
     <item>2</item>
   </string-array>
 
+  <!-- Maps&Fly: off track alarm distances, in meters. -->
+  <string-array name="off_track_threshold_options" translatable="false">
+    <item>15 m</item>
+    <item>30 m</item>
+    <item>50 m</item>
+    <item>100 m</item>
+  </string-array>
+
+  <string-array name="off_track_threshold_values" translatable="false">
+    <item>15</item>
+    <item>30</item>
+    <item>50</item>
+    <item>100</item>
+  </string-array>
+
 </resources>
