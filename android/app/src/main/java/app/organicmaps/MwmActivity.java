@@ -2166,8 +2166,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (id.equals(MAIN_MENU_ID))
     {
       ArrayList<MenuBottomSheetItem> items = new ArrayList<>();
-      items.add(new MenuBottomSheetItem(R.string.placepage_add_place_button, R.drawable.ic_plus,
-                                        this::onAddPlaceOptionSelected));
+      // Maps&Fly hides "Add place": the OpenStreetMap editor is not offered.
       items.add(new MenuBottomSheetItem(R.string.download_maps, R.drawable.ic_download, getDownloadMapsCounter(),
                                         this::onDownloadMapsOptionSelected));
       mDonatesUrl = Utils.getDonateUrl(getApplicationContext());

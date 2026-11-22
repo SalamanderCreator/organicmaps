@@ -102,6 +102,8 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
   private void updateProfileSettingsPrefsSummary()
   {
     final Preference pref = getPreference(getString(R.string.pref_osm_profile));
+    // Maps&Fly hides the OpenStreetMap login together with the editor.
+    pref.setVisible(false);
     if (OsmOAuth.isAuthorized())
     {
       final String username = OsmOAuth.getUsername();
