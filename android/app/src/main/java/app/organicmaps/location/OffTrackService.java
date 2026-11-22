@@ -14,7 +14,9 @@ import android.location.Location;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +59,11 @@ public class OffTrackService extends Service implements LocationListener
 
   // The watched track, or null.
   private static final MutableLiveData<Long> sActiveTrackId = new MutableLiveData<>(null);
+  // The map banner text while off the track, else null.
+  private static final MutableLiveData<String> sOffTrackText = new MutableLiveData<>(null);
+  // The announcement waits for the alarm sound, which would cut it off.
+  private static final long SPEECH_DELAY_MS = 2000;
+  private final Handler mHandler = new Handler(Looper.getMainLooper());
 
   private String mTrackName = "";
   private int mState = OffTrackMonitor.STATE_ON_TRACK;
@@ -69,6 +76,12 @@ public class OffTrackService extends Service implements LocationListener
   public static LiveData<Long> getActiveTrackId()
   {
     return sActiveTrackId;
+  }
+
+  @NonNull
+  public static LiveData<String> getOffTrackText()
+  {
+    return sOffTrackText;
   }
 
   public static boolean isWatching(long trackId)
@@ -196,7 +209,9 @@ public class OffTrackService extends Service implements LocationListener
       MwmApplication.from(this).getLocationHelper().removeListener(this);
       MwmApplication.from(this).onNavigationOrRecordingStopped();
     }
+    mHandler.removeCallbacksAndMessages(null);
     sActiveTrackId.setValue(null);
+    sOffTrackText.setValue(null);
     NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
     super.onDestroy();
   }
@@ -221,7 +236,7 @@ public class OffTrackService extends Service implements LocationListener
     {
       NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
       if (state == OffTrackMonitor.STATE_ON_TRACK)
-        TtsPlayer.INSTANCE.speak(getString(R.string.off_track_back_speech));
+        speakLater(getString(R.string.off_track_back_speech));
     }
 
     final long now = SystemClock.elapsedRealtime();
@@ -230,6 +245,13 @@ public class OffTrackService extends Service implements LocationListener
       mStatusTimeMs = now;
       updateStatus(accuracy);
     }
+  }
+
+  private void speakLater(@NonNull String text)
+  {
+    // Only the announcement for the latest state.
+    mHandler.removeCallbacksAndMessages(null);
+    mHandler.postDelayed(() -> TtsPlayer.INSTANCE.speak(text), SPEECH_DELAY_MS);
   }
 
   @NonNull
@@ -241,7 +263,7 @@ public class OffTrackService extends Service implements LocationListener
   private void raiseAlarm()
   {
     Logger.i(TAG, "Off the track, distance " + OffTrackMonitor.nativeGetDistance());
-    TtsPlayer.INSTANCE.speak(getString(R.string.off_track_alarm_speech));
+    speakLater(getString(R.string.off_track_alarm_speech));
     if (!canNotify())
       return;
     final String text = getString(R.string.off_track_alarm_text, formatDistance(OffTrackMonitor.nativeGetDistance()));
@@ -288,6 +310,10 @@ public class OffTrackService extends Service implements LocationListener
     else
       text = getString(R.string.off_track_on_track, formatDistance(OffTrackMonitor.nativeGetDistance()));
     getStatusBuilder().setContentText(text);
+    sOffTrackText.setValue(
+        mHasFix && mState == OffTrackMonitor.STATE_OFF_TRACK
+            ? getString(R.string.off_track_banner, formatDistance(OffTrackMonitor.nativeGetDistance()))
+            : null);
     if (canNotify())
       NotificationManagerCompat.from(this).notify(STATUS_NOTIFICATION_ID, getStatusBuilder().build());
   }

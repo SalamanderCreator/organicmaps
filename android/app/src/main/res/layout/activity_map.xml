@@ -47,6 +47,24 @@
       android:layout_height="match_parent"
       android:paddingBottom="@dimen/margin_base"
       android:visibility="invisible" />
+
+    <!-- Maps&Fly: shown while the position is off the watched track. -->
+    <TextView
+      android:id="@+id/off_track_banner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:background="@color/notification_warning"
+      android:gravity="center"
+      android:minHeight="@dimen/map_button_size"
+      android:paddingHorizontal="@dimen/margin_base"
+      android:paddingVertical="@dimen/margin_half"
+      android:textAppearance="@style/MwmTextAppearance.Body1"
+      android:textColor="@color/white_primary"
+      android:textStyle="bold"
+      android:visibility="gone"
+      tools:text="Trackabweichung: 60 m"
+      tools:visibility="visible" />
   </RelativeLayout>
   <androidx.fragment.app.FragmentContainerView
     android:id="@+id/search_container_fragment"
