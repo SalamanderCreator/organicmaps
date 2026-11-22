@@ -10,6 +10,7 @@
 #include "routing/routing_options.hpp"
 #include "routing/ruler_router.hpp"
 #include "routing/speed_camera.hpp"
+#include "routing/track_router.hpp"
 
 #include "storage/country_info_getter.hpp"
 #include "storage/routing_helpers.hpp"
@@ -504,6 +505,12 @@ void RoutingManager::SetRouterImpl(RouterType type)
 
   if (type == RouterType::Ruler)
     router = std::make_unique<RulerRouter>();
+  else if (m_followedTrack)
+  {
+    // Maps&Fly: the track has no road data, so missing maps do not matter.
+    router = std::make_unique<TrackRouter>(
+        vehicleType == VehicleType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian, m_followedTrack);
+  }
   else
   {
     auto & dataSource = m_callbacks.m_dataSourceGetter();
@@ -994,6 +1001,18 @@ void RoutingManager::CloseRouting(bool removeRoutePoints)
 
   if (removeRoutePoints)
     RemoveRoutePoints();
+
+  if (m_followedTrack)
+    SetFollowedTrack(nullptr);
+}
+
+void RoutingManager::SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(m_numMwmIDs, ("Routing is not initialized"));
+  m_followedTrack = std::move(track);
+  HidePreviewSegments();
+  SetRouterImpl(m_currentRouterType);
 }
 
 void RoutingManager::SetLastUsedRouter(RouterType type)

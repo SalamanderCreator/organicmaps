@@ -28,11 +28,13 @@ import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.OrganicMaps;
+import app.organicmaps.sdk.bookmarks.data.MapObject;
 import app.organicmaps.sdk.location.LocationHelper;
 import app.organicmaps.sdk.location.LocationListener;
 import app.organicmaps.sdk.location.LocationUtils;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
+import app.organicmaps.sdk.routing.TrackFollowing;
 import app.organicmaps.sdk.sound.MediaPlayerWrapper;
 import app.organicmaps.sdk.sound.TtsPlayer;
 import app.organicmaps.sdk.util.Assert;
@@ -330,8 +332,14 @@ public class NavigationService extends Service implements LocationListener
     // This check should be done after playTurnNotifications() to play the last turn notification.
     if (Framework.nativeIsRouteFinished())
     {
+      // Maps&Fly: arriving at the entry point of a track continues along the track.
+      final TrackFollowing.Pending track = TrackFollowing.takePending();
       routingController.cancel();
       stopSelf();
+      final MapObject myPosition = sOrganicMaps.getLocationHelper().getMyPosition();
+      if (track != null && myPosition != null)
+        routingController.followTrack(myPosition, track.trackId(), track.title(), track.distFromBegM(),
+                                      routingController.getLastRouterType(), true /* startWhenBuilt */);
       return;
     }
 
