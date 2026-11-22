@@ -944,6 +944,18 @@
     <string name="track_debug_nothing_to_share">No raw track data yet</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
     <string name="track_recording_gps_accuracy">GPS accuracy: ±%s</string>
+    <!-- Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point -->
+    <string name="track_follow_distance_title">The closest track point is %s away (straight line)</string>
+    <!-- Dialog option: navigate by road to the closest track point, then follow the track -->
+    <string name="track_follow_navigate_closest">Navigate to the closest track point</string>
+    <!-- Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start -->
+    <string name="track_follow_navigate_selected">Navigate to the selected point (%s along the track)</string>
+    <!-- Dialog option: navigate by road to the track start, then follow the whole track -->
+    <string name="track_follow_navigate_start">Navigate to the track start</string>
+    <!-- Toast when the user wants to follow a track before the GPS position is known -->
+    <string name="track_follow_no_location">Waiting for your location…</string>
+    <!-- Toast when the chosen point is the end of the track -->
+    <string name="track_follow_nothing_left">Nothing left to follow: this is the track end</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
     <string name="off_track_monitor_start">Follow track</string>
     <!-- Place page and notification button: stop the off-track alarm -->
@@ -966,12 +978,14 @@
     <string name="off_track_alarm_title">Off the track</string>
     <!-- Notification text when the user left the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_alarm_text">%s from the track</string>
-    <!-- Voice announcement when the user left the watched track -->
+    <!-- Voice announcement when the user left the watched track. German spells Track as Träck so that the voice says it in English -->
     <string name="off_track_alarm_speech">Attention, off the track.</string>
-    <!-- Voice announcement when the user is back on the watched track -->
+    <!-- Voice announcement when the user is back on the watched track. German spells Track as Träck so that the voice says it in English -->
     <string name="off_track_back_speech">Back on the track.</string>
     <!-- Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km -->
     <string name="off_track_not_reached">Track is %s away</string>
+    <!-- Voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point. German spells Track as Träck so that the voice says it in English -->
+    <string name="off_track_not_reached_speech">Track is %s away</string>
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Off the track: %s</string>
     <!-- Settings: title of the off-track alarm distance -->
