@@ -2198,14 +2198,17 @@ void Framework::DiscardTrackRecording()
 
 bool Framework::SaveTrackRecordingWithName(std::string const & name)
 {
-  auto const pointCount = StopTrackRecording();
+  StopTrackRecording();
   auto & tracker = GpsTracker::Instance();
-  if (pointCount < 2)
+  // Maps&Fly: the saved track is built from all recorded fixes, not from the live filter shown while recording.
+  auto const points =
+      SelectAccurateTrackPoints(tracker.LoadRecordedPoints(), GpsTrackFilter::LoadMinHorizontalAccuracy());
+  if (points.size() < 2)
   {
     tracker.Clear();
     return false;
   }
-  auto const trackId = GetBookmarkManager().SaveTrackRecording(name, pointCount);
+  auto const trackId = GetBookmarkManager().SaveTrackRecording(name, points);
   tracker.Clear();
   ShowTrack(trackId);
   return true;

@@ -134,6 +134,55 @@ UNIT_TEST(GpsTrackFilter_ResetAppliesStoredAccuracy)
   TEST_EQUAL(out.size(), 3, ());
 }
 
+location::GpsInfo MakeAt(double timestamp, double meters, double accuracy)
+{
+  auto info = Make(timestamp, 0.0, meters * kDegPerMeter, 1.0);
+  info.m_horizontalAccuracy = accuracy;
+  return info;
+}
+
+std::vector<double> Times(Points const & points)
+{
+  std::vector<double> times;
+  for (auto const & p : points)
+    times.push_back(p.m_timestamp);
+  return times;
+}
+
+UNIT_TEST(SelectAccurateTrackPoints_KeepsFixesFartherThanTheirAccuracy)
+{
+  // Most accurate first: 2 (3 m), 4 (4 m), 0 (5 m), 3 (6 m), 1 (8 m).
+  Points const points = {MakeAt(0, 0, 5), MakeAt(1, 6, 8), MakeAt(2, 12, 3), MakeAt(3, 16, 6), MakeAt(4, 30, 4)};
+  // 1 is 6 m from 0 and from 2, within its 8 m. 3 is 4 m from 2, within its 6 m.
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(points, 0)), (std::vector<double>{0, 2, 4}), ());
+}
+
+UNIT_TEST(SelectAccurateTrackPoints_ChecksOnlyExistingNeighbours)
+{
+  // The first kept fix has no neighbours. The next one is checked against the only neighbour before it.
+  Points const points = {MakeAt(0, 0, 5), MakeAt(1, 4, 2)};
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(points, 0)), (std::vector<double>{1}), ());
+  Points const farApart = {MakeAt(0, 0, 5), MakeAt(1, 10, 2)};
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(farApart, 0)), (std::vector<double>{0, 1}), ());
+}
+
+UNIT_TEST(SelectAccurateTrackPoints_InaccurateFixFillsGap)
+{
+  // A 40 m fix more than 40 m from both kept neighbours fills the gap, a fix worse than the limit never does.
+  Points const points = {MakeAt(0, 0, 5), MakeAt(10, 100, 40), MakeAt(20, 200, 5), MakeAt(30, 300, 60),
+                         MakeAt(40, 400, 5)};
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(points, 50)), (std::vector<double>{0, 10, 20, 40}), ());
+  TEST_EQUAL(Times(SelectAccurateTrackPoints(points, 0)), (std::vector<double>{0, 10, 20, 30, 40}), ());
+}
+
+UNIT_TEST(SelectAccurateTrackPoints_SameTimeKeepsMoreAccurateFix)
+{
+  Points const points = {MakeAt(0, 0, 5), MakeAt(5, 50, 9), MakeAt(5, 80, 3)};
+  auto const result = SelectAccurateTrackPoints(points, 0);
+  TEST_EQUAL(result.size(), 2, ());
+  TEST_EQUAL(result[1].m_horizontalAccuracy, 3, ());
+}
+
 UNIT_TEST(GpsTrackFilter_RepeatedFixKeepsNextFix)
 {
   Points const walk = MakeWalk(4);

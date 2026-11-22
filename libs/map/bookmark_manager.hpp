@@ -9,6 +9,7 @@
 
 #include "drape_frontend/drape_engine_safe_ptr.hpp"
 
+#include "platform/location.hpp"
 #include "platform/safe_callback.hpp"
 
 #include "geometry/any_rect2d.hpp"
@@ -431,7 +432,7 @@ public:
   void OnTrackSelected(kml::TrackId trackId);
   void OnTrackDeselected();
 
-  kml::TrackId SaveTrackRecording(std::string trackName, size_t pointCount);
+  kml::TrackId SaveTrackRecording(std::string trackName, std::vector<location::GpsInfo> const & points);
   std::string GenerateTrackRecordingName() const;
   dp::Color GenerateTrackRecordingColor() const;
 

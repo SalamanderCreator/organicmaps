@@ -74,6 +74,10 @@ public:
     m_collection.ForEach(fn);
   }
 
+  /// Returns all fixes of the recording, unfiltered.
+  /// @pre Finalize should be called before.
+  std::vector<location::GpsInfo> LoadRecordedPoints();
+
 private:
   DISALLOW_COPY_AND_MOVE(GpsTrack);
 

@@ -7,6 +7,10 @@
 
 #include "base/assert.hpp"
 
+#include <algorithm>
+#include <map>
+#include <numeric>
+
 namespace
 {
 std::string_view constexpr kMinHorizontalAccuracyKey = "GpsTrackingMinAccuracy";
@@ -36,6 +40,40 @@ double GetDistance(location::GpsInfo const & from, location::GpsInfo const & to)
   return ms::DistanceOnEarth(from.m_latitude, from.m_longitude, to.m_latitude, to.m_longitude);
 }
 }  // namespace
+
+std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> const & points,
+                                                         double maxAccuracy)
+{
+  std::vector<size_t> order(points.size());
+  std::iota(order.begin(), order.end(), 0);
+  std::stable_sort(order.begin(), order.end(), [&points](size_t l, size_t r)
+  { return points[l].m_horizontalAccuracy < points[r].m_horizontalAccuracy; });
+
+  // Kept fixes by time.
+  std::map<double, size_t> kept;
+  for (size_t const i : order)
+  {
+    auto const & point = points[i];
+    if (maxAccuracy > 0 && point.m_horizontalAccuracy > maxAccuracy)
+      break;
+
+    auto const next = kept.lower_bound(point.m_timestamp);
+    // A more accurate fix with the same time is already kept.
+    if (next != kept.end() && next->first == point.m_timestamp)
+      continue;
+    if (next != kept.end() && GetDistance(points[next->second], point) <= point.m_horizontalAccuracy)
+      continue;
+    if (next != kept.begin() && GetDistance(points[std::prev(next)->second], point) <= point.m_horizontalAccuracy)
+      continue;
+    kept.emplace_hint(next, point.m_timestamp, i);
+  }
+
+  std::vector<location::GpsInfo> result;
+  result.reserve(kept.size());
+  for (auto const & [time, i] : kept)
+    result.push_back(points[i]);
+  return result;
+}
 
 void GpsTrackNullFilter::Process(std::vector<location::GpsInfo> const & inPoints,
                                  std::vector<location::GpsInfo> & outPoints)
