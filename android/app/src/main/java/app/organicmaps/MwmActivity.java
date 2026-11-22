@@ -544,9 +544,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
     });
     final TextView offTrackBanner = findViewById(R.id.off_track_banner);
     ViewCompat.setOnApplyWindowInsetsListener(offTrackBanner, BaselinePaddingInsetsListener.excludeBottom());
-    OffTrackService.getOffTrackText().observe(this, text -> {
-      offTrackBanner.setText(text);
-      UiUtils.showIf(text != null, offTrackBanner);
+    OffTrackService.getBanner().observe(this, banner -> {
+      UiUtils.showIf(banner != null, offTrackBanner);
+      if (banner == null)
+        return;
+      offTrackBanner.setText(banner.text);
+      offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);

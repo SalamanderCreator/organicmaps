@@ -40,7 +40,7 @@ OffTrackMonitor::State OffTrackMonitor::Update(location::GpsInfo const & info)
   if (info.m_horizontalAccuracy > kMaxAccuracyMeters)
     current = State::GpsInaccurate;
   else if (m_distanceMeters > m_thresholdMeters + info.m_horizontalAccuracy)
-    current = State::OffTrack;
+    current = m_reached ? State::OffTrack : State::NotReached;
   else
     current = State::OnTrack;
 
@@ -53,13 +53,18 @@ OffTrackMonitor::State OffTrackMonitor::Update(location::GpsInfo const & info)
   if (m_candidate != m_state)
   {
     double delay = kOnTrackDelaySeconds;
-    if (m_candidate == State::OffTrack)
+    // Reaching the track and the info that it is not reached yet are shown at once.
+    if (m_candidate == State::NotReached || (m_state == State::NotReached && m_candidate == State::OnTrack))
+      delay = 0;
+    else if (m_candidate == State::OffTrack)
       delay = kOffTrackDelaySeconds;
     else if (m_candidate == State::GpsInaccurate)
       delay = kGpsInaccurateDelaySeconds;
     if (info.m_timestamp - m_candidateSince >= delay)
       m_state = m_candidate;
   }
+  if (m_state == State::OnTrack)
+    m_reached = true;
   return m_state;
 }
 
@@ -70,6 +75,7 @@ std::string DebugPrint(OffTrackMonitor::State state)
   case OffTrackMonitor::State::OnTrack: return "OnTrack";
   case OffTrackMonitor::State::OffTrack: return "OffTrack";
   case OffTrackMonitor::State::GpsInaccurate: return "GpsInaccurate";
+  case OffTrackMonitor::State::NotReached: return "NotReached";
   }
   UNREACHABLE();
 }
