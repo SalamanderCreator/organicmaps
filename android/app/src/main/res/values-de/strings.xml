@@ -964,6 +964,8 @@
     <string name="track_follow_direct">Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)</string>
     <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->
     <string name="nav_elevation_remaining">↑ %1$s   ↓ %2$s bis zum Ziel</string>
+    <!-- Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
+    <string name="elevation_position_to_point">Von deiner Position: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
     <string name="off_track_monitor_start">Track folgen</string>
     <!-- Place page and notification button: stop the off-track alarm -->
