@@ -53,6 +53,22 @@ public final class TrackFollowing
     return TrackPoint.of(nativeGetSelectedPoint(trackId));
   }
 
+  /** Distance in meters and ascent and descent between two points of a track, walking from one to the other. */
+  public record Section(double distanceM, int ascentM, int descentM)
+  {
+  }
+
+  /**
+   * Returns the section of the track from one distance to the other, in either direction, or {@code null} if the
+   * track has no elevation profile.
+   */
+  @Nullable
+  public static Section getSection(long trackId, double fromDistM, double toDistM)
+  {
+    final double[] values = nativeGetSection(trackId, fromDistM, toDistM);
+    return values == null ? null : new Section(values[0], (int) values[1], (int) values[2]);
+  }
+
   /** Whether the current route follows a track. */
   public static boolean isActive()
   {
@@ -97,5 +113,7 @@ public final class TrackFollowing
   private static native double[] nativeGetSelectedPoint(long trackId);
   @Nullable
   private static native double[] nativeStart(long trackId, double distFromBegM);
+  @Nullable
+  private static native double[] nativeGetSection(long trackId, double fromDistM, double toDistM);
   private static native boolean nativeIsActive();
 }

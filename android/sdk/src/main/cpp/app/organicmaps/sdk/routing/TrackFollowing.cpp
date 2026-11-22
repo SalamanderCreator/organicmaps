@@ -7,6 +7,7 @@
 
 #include "geometry/mercator.hpp"
 
+#include <cmath>
 #include <optional>
 
 // Maps&Fly: follow a saved track like a route. All calls come from the UI thread.
@@ -81,6 +82,28 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeSta
   auto const end = remainder->m_points.back();
   frm()->GetRoutingManager().SetFollowedTrack(std::move(remainder));
   return ToJava(env, {track->m_points.size() - 1, end, track->m_distFromBegM.back()}, 0);
+}
+
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetSection(JNIEnv * env, jclass,
+                                                                                        jlong trackId,
+                                                                                        jdouble fromDistM,
+                                                                                        jdouble toDistM)
+{
+  auto const * track = frm()->GetBookmarkManager().GetTrack(static_cast<kml::TrackId>(trackId));
+  if (track == nullptr)
+    return nullptr;
+  auto const * profile = track->GetElevationInfo();
+  if (profile == nullptr)
+    return nullptr;
+  // The same threshold as the track totals.
+  auto const threshold =
+      track->GetId() == kml::kTempRelationTrackId ? ElevationInfo::kDefThresholdMWM : ElevationInfo::kDefThresholdGPS;
+  auto const info = track_following::GetSectionAltitudes(*profile, fromDistM, toDistM, threshold);
+  jdouble const values[] = {std::abs(toDistM - fromDistM), static_cast<jdouble>(info.GetTotalAscent()),
+                            static_cast<jdouble>(info.GetTotalDescent())};
+  jdoubleArray result = env->NewDoubleArray(3);
+  env->SetDoubleArrayRegion(result, 0, 3, values);
+  return result;
 }
 
 JNIEXPORT jboolean Java_app_organicmaps_sdk_routing_TrackFollowing_nativeIsActive(JNIEnv *, jclass)

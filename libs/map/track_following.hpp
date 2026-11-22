@@ -45,6 +45,11 @@ TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM);
 std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track,
                                                                  TrackPosition const & entry);
 
+/// Ascent and descent of |profile| walking from one distance to the other, in either direction, with the altitudes
+/// at both ends interpolated. Distances beyond the profile are clamped to it.
+ElevationInfo::AltitudesInfo GetSectionAltitudes(ElevationInfo const & profile, double fromDistM, double toDistM,
+                                                 geometry::Altitude threshold);
+
 /// Ascent and descent of |profile| (one line, e.g. of a route) from the distance to its end, with the altitude
 /// at that distance interpolated. Uses the threshold of the route profile, so the numbers match its totals.
 ElevationInfo::AltitudesInfo GetRemainingAltitudes(ElevationInfo const & profile, double fromDistM);

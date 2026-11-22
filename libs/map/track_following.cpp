@@ -120,36 +120,57 @@ std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack con
   return data;
 }
 
+ElevationInfo::AltitudesInfo GetSectionAltitudes(ElevationInfo const & profile, double fromDistM, double toDistM,
+                                                 geometry::Altitude threshold)
+{
+  std::vector<ElevationInfo::Point> points;
+  profile.ForEachPoint([&points](double dist, geometry::Altitude altitude) { points.push_back({dist, altitude}); });
+  if (points.empty())
+    return {};
+
+  double const lo = std::max(std::min(fromDistM, toDistM), points.front().m_distance);
+  double const hi = std::min(std::max(fromDistM, toDistM), points.back().m_distance);
+  if (hi <= lo)
+    return {};
+
+  auto const altitudeAt = [&points](double dist)
+  {
+    auto const it = std::lower_bound(points.begin(), points.end(), dist,
+                                     [](ElevationInfo::Point const & p, double d) { return p.m_distance < d; });
+    if (it == points.begin())
+      return it->m_altitude;
+    auto const prev = std::prev(it);
+    if (it == points.end() || it->m_distance <= prev->m_distance)
+      return prev->m_altitude;
+    double const t = (dist - prev->m_distance) / (it->m_distance - prev->m_distance);
+    return static_cast<geometry::Altitude>(std::lround(prev->m_altitude + t * (it->m_altitude - prev->m_altitude)));
+  };
+
+  std::vector<ElevationInfo::Point> section;
+  section.push_back({lo, altitudeAt(lo)});
+  for (auto const & point : points)
+    if (point.m_distance > lo && point.m_distance < hi)
+      section.push_back(point);
+  section.push_back({hi, altitudeAt(hi)});
+
+  // Walking backwards along the track turns its climbs into descents.
+  if (toDistM < fromDistM)
+    std::reverse(section.begin(), section.end());
+
+  std::vector<double> distances;
+  geometry::Altitudes altitudes = {section.front().m_altitude};
+  for (size_t i = 1; i < section.size(); ++i)
+  {
+    distances.push_back(std::abs(section[i].m_distance - section.front().m_distance));
+    altitudes.push_back(section[i].m_altitude);
+  }
+  ElevationInfo result;
+  result.Assign(distances, altitudes);
+  return result.CalculateAltitudesInfo(threshold);
+}
+
 ElevationInfo::AltitudesInfo GetRemainingAltitudes(ElevationInfo const & profile, double fromDistM)
 {
-  std::vector<double> distances;
-  geometry::Altitudes altitudes;
-  double prevDist = 0;
-  std::optional<geometry::Altitude> prevAltitude;
-  profile.ForEachPoint([&](double dist, geometry::Altitude altitude)
-  {
-    if (dist <= fromDistM)
-    {
-      prevDist = dist;
-      prevAltitude = altitude;
-      return;
-    }
-    if (altitudes.empty())
-    {
-      geometry::Altitude start = altitude;
-      if (prevAltitude)
-        start = static_cast<geometry::Altitude>(
-            std::lround(*prevAltitude + (altitude - *prevAltitude) * (fromDistM - prevDist) / (dist - prevDist)));
-      altitudes.push_back(start);
-    }
-    distances.push_back(dist - fromDistM);
-    altitudes.push_back(altitude);
-  });
-
-  if (distances.empty())
-    return {};
-  ElevationInfo remaining;
-  remaining.Assign(distances, altitudes);
-  return remaining.CalculateAltitudesInfo(ElevationInfo::kDefThresholdMWM);
+  return GetSectionAltitudes(profile, fromDistM, std::numeric_limits<double>::max(), ElevationInfo::kDefThresholdMWM);
 }
 }  // namespace track_following

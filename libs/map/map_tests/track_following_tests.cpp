@@ -152,4 +152,29 @@ UNIT_TEST(TrackFollowing_RemainingAltitudes)
   TEST_EQUAL(end.GetTotalAscent(), 0, ());
   TEST_EQUAL(end.GetTotalDescent(), 0, ());
 }
+
+UNIT_TEST(TrackFollowing_SectionAltitudes)
+{
+  ElevationInfo profile;
+  profile.Assign({1000, 2000, 3000}, {500, 600, 300, 350});
+  auto constexpr kThreshold = ElevationInfo::kDefThresholdMWM;
+
+  // From 500 m (550 m high) to 2500 m (325 m high): up 50, down 300, up 25.
+  auto const forward = GetSectionAltitudes(profile, 500, 2500, kThreshold);
+  TEST_EQUAL(forward.GetTotalAscent(), 75, ());
+  TEST_EQUAL(forward.GetTotalDescent(), 300, ());
+
+  // The same section backwards.
+  auto const backward = GetSectionAltitudes(profile, 2500, 500, kThreshold);
+  TEST_EQUAL(backward.GetTotalAscent(), 300, ());
+  TEST_EQUAL(backward.GetTotalDescent(), 75, ());
+
+  // Clamped to the profile.
+  auto const clamped = GetSectionAltitudes(profile, -100, 1e6, kThreshold);
+  TEST_EQUAL(clamped.GetTotalAscent(), 150, ());
+  TEST_EQUAL(clamped.GetTotalDescent(), 300, ());
+
+  auto const empty = GetSectionAltitudes(profile, 700, 700, kThreshold);
+  TEST_EQUAL(empty.GetTotalAscent(), 0, ());
+}
 }  // namespace track_following_tests
