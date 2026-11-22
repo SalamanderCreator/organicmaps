@@ -46082,6 +46082,12 @@ tags = android-app
 en = Nothing left to follow: this is the track end
 de = Hier endet der Track, nichts mehr zu folgen
 
+[track_follow_direct]
+comment = Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads
+tags = android-app
+en = Follow directly (straight line to the closest track point)
+de = Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)
+
 [off_track_monitor_start]
 comment = Place page button for a track: start the off-track alarm for it
 tags = android-app
