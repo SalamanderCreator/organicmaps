@@ -28,3 +28,7 @@
 # R8 crypts the source line numbers in all log messages.
 # https://github.com/organicmaps/organicmaps/issues/6559#issuecomment-1812039926
 -dontoptimize
+
+# Room: keep no-arg constructors for generated _Impl classes (room-runtime:2.6.1 rule is insufficient for R8 full mode).
+# WorkManager stores its jobs in a Room database and creates it at app start.
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
