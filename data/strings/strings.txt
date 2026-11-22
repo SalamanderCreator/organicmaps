@@ -46046,6 +46046,96 @@ tags = android-app
 en = GPS accuracy: ±%s
 de = GPS-Genauigkeit: ±%s
 
+[off_track_monitor_start]
+comment = Place page button for a track: start the off-track alarm for it
+tags = android-app
+en = Watch track
+de = Track überwachen
+
+[off_track_monitor_stop]
+comment = Place page and notification button: stop the off-track alarm
+tags = android-app
+en = Stop watching
+de = Überwachung beenden
+
+[off_track_monitor_started]
+comment = Toast after the off-track alarm started
+tags = android-app
+en = Alarm when you leave the track
+de = Warnung, wenn du den Track verlässt
+
+[off_track_status_channel]
+comment = Android notification channel name for the ongoing off-track alarm notification
+tags = android-app
+en = Track watching
+de = Track-Überwachung
+
+[off_track_alarm_channel]
+comment = Android notification channel name for the off-track alarm itself
+tags = android-app
+en = Off-track alarm
+de = Off-Track-Alarm
+
+[off_track_watching]
+comment = Notification title while a track is watched. %s is the track name
+tags = android-app
+en = Watching %s
+de = Überwache %s
+
+[off_track_waiting_for_gps]
+comment = Notification text of the off-track alarm before a GPS position is known
+tags = android-app
+en = Waiting for GPS…
+de = Warte auf GPS…
+
+[off_track_on_track]
+comment = Notification text of the off-track alarm. %s is the distance to the track, e.g. 8 m
+tags = android-app
+en = On the track (%s away)
+de = Auf dem Track (%s entfernt)
+
+[off_track_gps_inaccurate]
+comment = Notification text of the off-track alarm when GPS is too inaccurate. %s is the GPS accuracy, e.g. 80 m
+tags = android-app
+en = GPS inaccurate (±%s), no alarm possible
+de = GPS ungenau (±%s), keine Warnung möglich
+
+[off_track_alarm_title]
+comment = Notification title when the user left the watched track
+tags = android-app
+en = You left the track
+de = Du hast den Track verlassen
+
+[off_track_alarm_text]
+comment = Notification text when the user left the watched track. %s is the distance, e.g. 60 m
+tags = android-app
+en = %s from the track
+de = %s vom Track entfernt
+
+[off_track_alarm_speech]
+comment = Voice announcement when the user left the watched track
+tags = android-app
+en = Attention, you left the track.
+de = Achtung, du hast den Track verlassen.
+
+[off_track_back_speech]
+comment = Voice announcement when the user is back on the watched track
+tags = android-app
+en = Back on the track.
+de = Wieder auf dem Track.
+
+[off_track_threshold_title]
+comment = Settings: title of the off-track alarm distance
+tags = android-app
+en = Off-track alarm: distance
+de = Off-Track-Alarm: Abstand
+
+[off_track_threshold_description]
+comment = Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m
+tags = android-app
+en = Alarm when farther than %s plus the GPS accuracy from the track
+de = Warnung ab %s Abstand zum Track plus GPS-Ungenauigkeit
+
 [reverse_route]
 comment = Accessibility label for the button that reverses the complete planned route, including intermediate stops.
 tags = android-app,apple-maps
