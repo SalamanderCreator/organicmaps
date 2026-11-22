@@ -2282,8 +2282,6 @@ public class MwmActivity extends BaseMwmFragmentActivity
       labels.add(getString(R.string.track_follow_navigate_start));
       actions.add(() -> followTrack(track, myPosition, 0, true /* byRoad */));
     }
-    labels.add(getString(R.string.track_follow_direct));
-    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), false /* byRoad */));
 
     new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
         .setTitle(getString(R.string.track_follow_distance_title,

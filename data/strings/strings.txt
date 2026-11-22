@@ -46047,16 +46047,16 @@ en = GPS accuracy: ±%s
 de = GPS-Genauigkeit: ±%s
 
 [track_follow_distance_title]
-comment = Dialog title when the user starts to follow a track but is not on it. %s is the distance to the closest track point
+comment = Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point
 tags = android-app
-en = The track is %s away
-de = Der Track ist %s entfernt
+en = The closest track point is %s away (straight line)
+de = Der nächstgelegene Trackpunkt ist %s entfernt (Luftlinie)
 
 [track_follow_navigate_closest]
 comment = Dialog option: navigate by road to the closest track point, then follow the track
 tags = android-app
 en = Navigate to the closest track point
-de = Zum nächsten Trackpunkt navigieren
+de = Zum nächstgelegenen Trackpunkt navigieren
 
 [track_follow_navigate_selected]
 comment = Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start
@@ -46069,12 +46069,6 @@ comment = Dialog option: navigate by road to the track start, then follow the wh
 tags = android-app
 en = Navigate to the track start
 de = Zum Trackanfang navigieren
-
-[track_follow_direct]
-comment = Dialog option: follow the track from its closest point, with a straight line to it
-tags = android-app
-en = Follow from the closest point (straight line)
-de = Ab dem nächsten Punkt folgen (Luftlinie)
 
 [track_follow_no_location]
 comment = Toast when the user wants to follow a track before the GPS position is known
@@ -46155,22 +46149,28 @@ en = %s from the track
 de = %s vom Track entfernt
 
 [off_track_alarm_speech]
-comment = Voice announcement when the user left the watched track
+comment = Voice announcement when the user left the watched track. German spells Track as Träck so that the voice says it in English
 tags = android-app
 en = Attention, off the track.
-de = Achtung, Trackabweichung.
+de = Achtung, Träck-Abweichung.
 
 [off_track_back_speech]
-comment = Voice announcement when the user is back on the watched track
+comment = Voice announcement when the user is back on the watched track. German spells Track as Träck so that the voice says it in English
 tags = android-app
 en = Back on the track.
-de = Zurück auf dem Track.
+de = Zurück auf dem Träck.
 
 [off_track_not_reached]
 comment = Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km
 tags = android-app
 en = Track is %s away
 de = Track ist %s entfernt
+
+[off_track_not_reached_speech]
+comment = Voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point. German spells Track as Träck so that the voice says it in English
+tags = android-app
+en = Track is %s away
+de = Träck ist %s entfernt
 
 [off_track_banner]
 comment = Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m

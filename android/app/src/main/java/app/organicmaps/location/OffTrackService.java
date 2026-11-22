@@ -253,7 +253,7 @@ public class OffTrackService extends Service implements LocationListener
     {
       mDistanceAnnounced = true;
       TtsPlayer.INSTANCE.speak(
-          getString(R.string.off_track_not_reached, formatDistance(OffTrackMonitor.nativeGetDistance())));
+          getString(R.string.off_track_not_reached_speech, formatDistance(OffTrackMonitor.nativeGetDistance())));
     }
     else if (state == OffTrackMonitor.STATE_OFF_TRACK && previous != OffTrackMonitor.STATE_OFF_TRACK)
       raiseAlarm();
