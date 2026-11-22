@@ -7,13 +7,17 @@
 
 #include "base/assert.hpp"
 
+#include <algorithm>
+#include <numeric>
+#include <set>
+
 namespace
 {
 std::string_view constexpr kMinHorizontalAccuracyKey = "GpsTrackingMinAccuracy";
 
-// Minimal horizontal accuracy is required to skip 'bad' points.
-// Use 250 meters to allow points from a pure GPS + GPS through wifi.
-double constexpr kMinHorizontalAccuracyMeters = 250;
+// Maps&Fly: fixes with a worse horizontal accuracy are skipped. 25 m keeps clean outdoor GPS fixes and drops the
+// zigzag of Wi-Fi/cell fixes and of poor GPS in forests or between houses.
+double constexpr kMinHorizontalAccuracyMeters = 25;
 
 // Required for points decimation to reduce number of close points.
 double constexpr kClosePointDistanceMeters = 10;
@@ -35,7 +39,96 @@ double GetDistance(location::GpsInfo const & from, location::GpsInfo const & to)
 {
   return ms::DistanceOnEarth(from.m_latitude, from.m_longitude, to.m_latitude, to.m_longitude);
 }
+
+// Slower than walking: the phone reports 0 while standing still.
+double constexpr kStandingSpeed = 0.3;  // m / sec
+
+// Faster than any recorded movement, also a paraglider with tailwind or a car on a motorway.
+double constexpr kMaxPlausibleSpeed = 200 / 3.6;  // m / sec
+
+// After a rejected fix, this many fixes in a row that agree with each other show that the fix before them was
+// the jump, e.g. the first fix of the recording.
+size_t constexpr kJumpRecoveryFixCount = 5;
+
+bool IsPlausibleMove(location::GpsInfo const & from, location::GpsInfo const & to)
+{
+  // Both fixes may be off by their accuracy.
+  double const distance = std::max(0.0, GetDistance(from, to) - from.m_horizontalAccuracy - to.m_horizontalAccuracy);
+  return distance <= kMaxPlausibleSpeed * (to.m_timestamp - from.m_timestamp);
+}
+
+// @param points - in time order.
+std::vector<location::GpsInfo> RemoveJumps(std::vector<location::GpsInfo> const & points)
+{
+  std::vector<location::GpsInfo> result;
+  // Rejected fixes in a row that agree with each other.
+  std::vector<location::GpsInfo> rejected;
+  for (auto const & point : points)
+  {
+    if (result.empty() || IsPlausibleMove(result.back(), point))
+    {
+      result.push_back(point);
+      rejected.clear();
+      continue;
+    }
+
+    if (!rejected.empty() && !IsPlausibleMove(rejected.back(), point))
+      rejected.clear();
+    rejected.push_back(point);
+    if (rejected.size() == kJumpRecoveryFixCount)
+    {
+      while (!result.empty() && !IsPlausibleMove(result.back(), rejected.front()))
+        result.pop_back();
+      result.insert(result.end(), rejected.begin(), rejected.end());
+      rejected.clear();
+    }
+  }
+  return result;
+}
 }  // namespace
+
+std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> points)
+{
+  std::stable_sort(points.begin(), points.end(), [](auto const & l, auto const & r)
+  {
+    if (l.m_timestamp != r.m_timestamp)
+      return l.m_timestamp < r.m_timestamp;
+    return l.m_horizontalAccuracy < r.m_horizontalAccuracy;
+  });
+  // While the phone reports standing still, the position drifts by tens of meters with a good accuracy.
+  std::erase_if(points, [](auto const & p) { return p.HasSpeed() && p.m_speed < kStandingSpeed; });
+
+  // Keep the most accurate fix of each time.
+  points.erase(std::unique(points.begin(), points.end(),
+                           [](auto const & l, auto const & r) { return l.m_timestamp == r.m_timestamp; }),
+               points.end());
+
+  points = RemoveJumps(points);
+
+  std::vector<size_t> order(points.size());
+  std::iota(order.begin(), order.end(), 0);
+  std::stable_sort(order.begin(), order.end(), [&points](size_t l, size_t r)
+  { return points[l].m_horizontalAccuracy < points[r].m_horizontalAccuracy; });
+
+  // Indices of the kept fixes, in time order.
+  std::set<size_t> kept;
+  for (size_t const i : order)
+  {
+    auto const & point = points[i];
+    auto const next = kept.lower_bound(i);
+    if (next != kept.end() && GetDistance(points[*next], point) <= point.m_horizontalAccuracy)
+      continue;
+    if (next != kept.begin() && GetDistance(points[*std::prev(next)], point) <= point.m_horizontalAccuracy)
+      continue;
+    kept.emplace_hint(next, i);
+  }
+
+  std::vector<location::GpsInfo> result;
+  result.reserve(kept.size());
+  for (size_t const i : kept)
+    result.push_back(points[i]);
+  return result;
+}
 
 void GpsTrackNullFilter::Process(std::vector<location::GpsInfo> const & inPoints,
                                  std::vector<location::GpsInfo> & outPoints)
@@ -48,14 +141,20 @@ void GpsTrackFilter::StoreMinHorizontalAccuracy(double value)
   settings::Set(kMinHorizontalAccuracyKey, value);
 }
 
-GpsTrackFilter::GpsTrackFilter() : m_minAccuracy(kMinHorizontalAccuracyMeters)
+double GpsTrackFilter::LoadMinHorizontalAccuracy()
 {
-  settings::TryGet(kMinHorizontalAccuracyKey, m_minAccuracy);
+  double value = kMinHorizontalAccuracyMeters;
+  settings::TryGet(kMinHorizontalAccuracyKey, value);
+  return value;
 }
+
+GpsTrackFilter::GpsTrackFilter() : m_minAccuracy(LoadMinHorizontalAccuracy()) {}
 
 void GpsTrackFilter::Reset()
 {
   m_countLastInfo = 0;
+  // A changed setting applies when a recording starts or is restored.
+  m_minAccuracy = LoadMinHorizontalAccuracy();
 }
 
 void GpsTrackFilter::Process(GpsVectorT const & inPoints, GpsVectorT & outPoints)
@@ -73,6 +172,11 @@ void GpsTrackFilter::Process(GpsVectorT const & inPoints, GpsVectorT & outPoints
   {
     // Jump filtering needs the previous fix's speed to estimate acceleration.
     if (!currInfo.HasSpeed())
+      continue;
+
+    // An inaccurate fix must not enter the history either: the first fix is accepted unchecked, and the jump
+    // filter predicts the next fix from the history.
+    if (currInfo.m_horizontalAccuracy > m_minAccuracy)
       continue;
 
     // A replayed fix (same time and position) must not enter the history: IsGoodVector() would take a zero
@@ -130,10 +234,6 @@ bool GpsTrackFilter::IsGoodVector(location::GpsInfo const & info) const
 
 bool GpsTrackFilter::IsGoodPoint(location::GpsInfo const & info) const
 {
-  // Filter by point accuracy
-  if (info.m_horizontalAccuracy > m_minAccuracy)
-    return false;
-
   auto const & lastInfo = GetLastInfo();
   auto const & lastAcceptedInfo = GetLastAcceptedInfo();
 

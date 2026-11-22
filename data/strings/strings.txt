@@ -46016,6 +46016,36 @@ vi = Kết thúc
 zh-Hans = 结束
 zh-Hant = 結束
 
+[track_debug_title]
+comment = Settings: debug switch that logs every GPS fix of a track recording to a file
+tags = android-app
+en = Debug: log raw track data
+de = Debug: Track-Rohdaten mitschreiben
+
+[track_debug_description]
+comment = Settings: summary of the track recording debug switch
+tags = android-app
+en = While recording, every GPS position is written to a file with its accuracy and source. Applies from the next recording.
+de = Beim Aufzeichnen wird jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben. Gilt ab der nächsten Aufzeichnung.
+
+[track_debug_share]
+comment = Settings: shares the newest raw track data file
+tags = android-app
+en = Debug: share latest raw track data
+de = Debug: letzte Track-Rohdaten teilen
+
+[track_debug_nothing_to_share]
+comment = Toast when there is no raw track data file to share
+tags = android-app
+en = No raw track data yet
+de = Noch keine Track-Rohdaten vorhanden
+
+[track_recording_gps_accuracy]
+comment = Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m
+tags = android-app
+en = GPS accuracy: ±%s
+de = GPS-Genauigkeit: ±%s
+
 [reverse_route]
 comment = Accessibility label for the button that reverses the complete planned route, including intermediate stops.
 tags = android-app,apple-maps

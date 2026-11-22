@@ -30,11 +30,7 @@ public:
   void OnLocationUpdated(location::GpsInfo const & info);
 
   /// @pre Stop should be called before.
-  template <class FnT>
-  void ForEachTrackPoint(FnT && fn)
-  {
-    m_track.ForEachPoint(fn);
-  }
+  std::vector<location::GpsInfo> LoadRecordedPoints() { return m_track.LoadRecordedPoints(); }
 
 private:
   GpsTracker();

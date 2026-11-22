@@ -45,6 +45,11 @@ public class PlacePageTrackRecordingFragment extends Fragment
       if (trackStatistics != null)
         render(trackStatistics);
     });
+    TrackRecordingService.getGpsAccuracyText().observe(getViewLifecycleOwner(), text -> {
+      final TrackStatistics trackStatistics = TrackRecordingService.getStatistics().getValue();
+      if (trackStatistics != null)
+        render(trackStatistics);
+    });
   }
 
   private void render(@NonNull TrackStatistics trackStatistics)
@@ -55,10 +60,13 @@ public class PlacePageTrackRecordingFragment extends Fragment
     MapObject mo = mViewModel.getMapObject().getValue();
     if (mo == null || !mo.isTrackRecording())
       return;
-    ((TrackRecording) mo)
-        .setTrackRecordingPPDescription(
-            StringUtils.nativeFormatDistance(trackStatistics.getLength()).toString(requireContext()) + " • "
-            + Utils.formatDuration(requireContext(), (int) trackStatistics.getDuration(), R.dimen.text_size_body_3));
+    String description =
+        StringUtils.nativeFormatDistance(trackStatistics.getLength()).toString(requireContext()) + " • "
+        + Utils.formatDuration(requireContext(), (int) trackStatistics.getDuration(), R.dimen.text_size_body_3);
+    final String gpsAccuracy = TrackRecordingService.getGpsAccuracyText().getValue();
+    if (gpsAccuracy != null)
+      description += " • " + gpsAccuracy;
+    ((TrackRecording) mo).setTrackRecordingPPDescription(description);
     // A live profile needs positive distance, complete heights and at least one nonzero height.
     ElevationInfo elevationInfo = TrackRecorder.nativeGetElevationInfo();
     if (elevationInfo != null)

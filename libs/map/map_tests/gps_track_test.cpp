@@ -283,7 +283,7 @@ UNIT_CLASS_TEST(VisualParamsFixture, Framework_SaveRecordingFinalizesBeforeCheck
   tracker.OnLocationUpdated(finish);
   TEST(!framework.SaveTrackRecordingWithName("Stationary"), ());
 
-  finish.m_longitude = -179.99998;
+  finish.m_longitude = -179.9998;
   finish.m_altitude = 102.0;
   auto missingAltitude = finish;
   missingAltitude.m_verticalAccuracy = -1.0;
@@ -296,11 +296,11 @@ UNIT_CLASS_TEST(VisualParamsFixture, Framework_SaveRecordingFinalizesBeforeCheck
   TEST(!incomplete->GetElevationInfo(), ());
   auto const & mixedGeometry = incomplete->GetData().m_geometry;
   TEST_EQUAL(mixedGeometry.m_lines.front(),
-             (kml::TrackGeometry{{{180.0, 0}, 100}, {{-179.99998, 0}, geometry::kInvalidAltitude}}), ());
+             (kml::TrackGeometry{{{180.0, 0}, 100}, {{-179.9998, 0}, geometry::kInvalidAltitude}}), ());
   TEST_EQUAL(mixedGeometry.m_timestamps.front(), (kml::MultiGeometry::TimeT{100, 160}), ());
   TEST_EQUAL(incomplete->GetDurationInSeconds(), 60.0, ());
 
-  // The sampling filter defers this close but distinct fix until finalization.
+  // The saved track keeps both fixes: they are farther apart than their accuracy.
   framework.StartTrackRecording();
   tracker.OnLocationUpdated(start);
   tracker.OnLocationUpdated(finish);

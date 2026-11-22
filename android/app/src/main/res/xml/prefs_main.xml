@@ -132,6 +132,20 @@
       app:singleLineTitle="false"
       android:persistent="false"
       android:order="20"/>
+    <!-- Maps&Fly: debug mode for the track filter. -->
+    <SwitchPreferenceCompat
+      android:key="@string/pref_track_debug"
+      android:title="@string/track_debug_title"
+      app:singleLineTitle="false"
+      android:summary="@string/track_debug_description"
+      android:persistent="false"
+      android:order="21"/>
+    <Preference
+      android:key="@string/pref_track_debug_share"
+      android:title="@string/track_debug_share"
+      app:singleLineTitle="false"
+      android:persistent="false"
+      android:order="22"/>
   </androidx.preference.PreferenceCategory>
 
   <androidx.preference.PreferenceCategory

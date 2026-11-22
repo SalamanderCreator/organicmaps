@@ -18,6 +18,7 @@ import app.organicmaps.downloader.OnmapDownloader;
 import app.organicmaps.editor.LanguagesFragment;
 import app.organicmaps.editor.ProfileActivity;
 import app.organicmaps.help.HelpActivity;
+import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.Router;
 import app.organicmaps.sdk.downloader.MapManager;
@@ -68,6 +69,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     initUseMobileDataPrefsCallbacks();
     initPowerManagementPrefsCallbacks();
     initBookmarksTextPlacementPrefsCallbacks();
+    initTrackDebugPrefsCallbacks();
     initShowDownloadedRegionsPrefsCallbacks();
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
@@ -600,6 +602,20 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     bookmarksTextPlacementPref.setOnPreferenceChangeListener((preference, newValue) -> {
       final int placement = Integer.parseInt((String) newValue);
       Framework.nativeSetBookmarksTextPlacement(placement);
+      return true;
+    });
+  }
+
+  private void initTrackDebugPrefsCallbacks()
+  {
+    final TwoStatePreference pref = getPreference(getString(R.string.pref_track_debug));
+    pref.setChecked(TrackRecordingDebugLog.isEnabled(requireContext()));
+    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+      TrackRecordingDebugLog.setEnabled(requireContext(), (boolean) newValue);
+      return true;
+    });
+    getPreference(getString(R.string.pref_track_debug_share)).setOnPreferenceClickListener(preference -> {
+      TrackRecordingDebugLog.shareLatest(requireContext());
       return true;
     });
   }
