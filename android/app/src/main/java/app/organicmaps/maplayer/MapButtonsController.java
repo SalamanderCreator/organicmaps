@@ -148,8 +148,9 @@ public class MapButtonsController extends Fragment
         }
       });
     }
+    // Maps&Fly hides the "About Organic Maps" button; About stays reachable from the settings.
     if (helpButton != null)
-      helpButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.help));
+      UiUtils.hide(helpButton);
 
     mSearchWheel =
         new SearchWheel(mFrame,
@@ -171,8 +172,6 @@ public class MapButtonsController extends Fragment
       mButtonsMap.put(MapButtons.toggleMapLayer, mToggleMapLayerButton);
     if (menuButton != null)
       mButtonsMap.put(MapButtons.menu, menuButton);
-    if (helpButton != null)
-      mButtonsMap.put(MapButtons.help, helpButton);
     if (mTrackRecordingStatusButton != null)
       mButtonsMap.put(MapButtons.trackRecordingStatus, mTrackRecordingStatusButton);
     showButton(false, MapButtons.trackRecordingStatus);
