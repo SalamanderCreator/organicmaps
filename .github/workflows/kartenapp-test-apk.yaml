@@ -72,6 +72,10 @@ jobs:
           CMAKE_C_COMPILER_LAUNCHER: ccache
           CMAKE_CXX_COMPILER_LAUNCHER: ccache
         run: |
+          # The upstream code counts the day's commits of the built branch, so an APK from a branch with fewer
+          # commits could not update one from another branch. Use the build time instead: yyMMdd + 30..77 for
+          # each half hour (UTC), above any commit count of the day.
+          export KARTENAPP_ANDROID_CODE="$(date -u +%y%m%d)$((30 + 10#$(date -u +%H) * 2 + 10#$(date -u +%M) / 30))"
           echo "ANDROID_CODE=$(../tools/unix/version.sh android_code)" >> "$GITHUB_ENV"
           ./gradlew -Parm64 assembleFdroidBeta
 

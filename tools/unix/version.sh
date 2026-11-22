@@ -51,6 +51,11 @@ function android_code {
   # CC - the number of commits from the current day
   # 21_00_00_00_00 is the the greatest value Google Play allows for versionCode.
   # See https://developer.android.com/studio/publish/versioning for details.
+  # Maps&Fly: the test APK workflow sets its own code.
+  if [ -n "${KARTENAPP_ANDROID_CODE:-}" ]; then
+    echo "$KARTENAPP_ANDROID_CODE"
+    return
+  fi
   local cutYear=${DATE:2}
   echo "${cutYear//./}$(printf %02d "$COUNT")"
 }
