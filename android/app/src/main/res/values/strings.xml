@@ -945,17 +945,17 @@
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
     <string name="track_recording_gps_accuracy">GPS accuracy: ±%s</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
-    <string name="off_track_monitor_start">Watch track</string>
+    <string name="off_track_monitor_start">Follow track</string>
     <!-- Place page and notification button: stop the off-track alarm -->
-    <string name="off_track_monitor_stop">Stop watching</string>
+    <string name="off_track_monitor_stop">Stop following</string>
     <!-- Toast after the off-track alarm started -->
     <string name="off_track_monitor_started">Alarm when you leave the track</string>
     <!-- Android notification channel name for the ongoing off-track alarm notification -->
-    <string name="off_track_status_channel">Track watching</string>
+    <string name="off_track_status_channel">Track following</string>
     <!-- Android notification channel name for the off-track alarm itself -->
     <string name="off_track_alarm_channel">Off-track alarm</string>
     <!-- Notification title while a track is watched. %s is the track name -->
-    <string name="off_track_watching">Watching %s</string>
+    <string name="off_track_watching">Following %s</string>
     <!-- Notification text of the off-track alarm before a GPS position is known -->
     <string name="off_track_waiting_for_gps">Waiting for GPS…</string>
     <!-- Notification text of the off-track alarm. %s is the distance to the track, e.g. 8 m -->
@@ -970,6 +970,8 @@
     <string name="off_track_alarm_speech">Attention, off the track.</string>
     <!-- Voice announcement when the user is back on the watched track -->
     <string name="off_track_back_speech">Back on the track.</string>
+    <!-- Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km -->
+    <string name="off_track_not_reached">Track is %s away</string>
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Off the track: %s</string>
     <!-- Settings: title of the off-track alarm distance -->
