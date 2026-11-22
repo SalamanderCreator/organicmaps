@@ -36,8 +36,8 @@ jdoubleArray ToJava(JNIEnv * env, track_following::TrackPosition const & pos, do
 extern "C"
 {
 JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetClosestPoint(JNIEnv * env, jclass,
-                                                                                            jlong trackId, jdouble lat,
-                                                                                            jdouble lon)
+                                                                                             jlong trackId, jdouble lat,
+                                                                                             jdouble lon)
 {
   auto const track = GetJoinedTrack(trackId);
   if (!track)
@@ -48,8 +48,8 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGet
 }
 
 JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetPointAt(JNIEnv * env, jclass,
-                                                                                       jlong trackId,
-                                                                                       jdouble distFromBegM)
+                                                                                        jlong trackId,
+                                                                                        jdouble distFromBegM)
 {
   auto const track = GetJoinedTrack(trackId);
   if (!track)
@@ -57,9 +57,20 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGet
   return ToJava(env, track_following::AtDistance(*track, distFromBegM), 0);
 }
 
-JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeStart(JNIEnv * env, jclass,
-                                                                                  jlong trackId,
-                                                                                  jdouble distFromBegM)
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetSelectedPoint(JNIEnv * env, jclass,
+                                                                                              jlong trackId)
+{
+  auto const track = GetJoinedTrack(trackId);
+  if (!track)
+    return nullptr;
+  auto const info = frm()->GetBookmarkManager().GetTrackSelectionInfo(static_cast<kml::TrackId>(trackId));
+  if (!info.IsValid())
+    return nullptr;
+  return ToJava(env, track_following::AtDistance(*track, info.m_distFromBegM), 0);
+}
+
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeStart(JNIEnv * env, jclass, jlong trackId,
+                                                                                   jdouble distFromBegM)
 {
   auto const track = GetJoinedTrack(trackId);
   if (!track)

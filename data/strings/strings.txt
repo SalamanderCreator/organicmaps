@@ -46046,6 +46046,48 @@ tags = android-app
 en = GPS accuracy: ±%s
 de = GPS-Genauigkeit: ±%s
 
+[track_follow_distance_title]
+comment = Dialog title when the user starts to follow a track but is not on it. %s is the distance to the closest track point
+tags = android-app
+en = The track is %s away
+de = Der Track ist %s entfernt
+
+[track_follow_navigate_closest]
+comment = Dialog option: navigate by road to the closest track point, then follow the track
+tags = android-app
+en = Navigate to the closest track point
+de = Zum nächsten Trackpunkt navigieren
+
+[track_follow_navigate_selected]
+comment = Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start
+tags = android-app
+en = Navigate to the selected point (%s along the track)
+de = Zum gewählten Punkt navigieren (%s auf dem Track)
+
+[track_follow_navigate_start]
+comment = Dialog option: navigate by road to the track start, then follow the whole track
+tags = android-app
+en = Navigate to the track start
+de = Zum Trackanfang navigieren
+
+[track_follow_direct]
+comment = Dialog option: follow the track from its closest point, with a straight line to it
+tags = android-app
+en = Follow from the closest point (straight line)
+de = Ab dem nächsten Punkt folgen (Luftlinie)
+
+[track_follow_no_location]
+comment = Toast when the user wants to follow a track before the GPS position is known
+tags = android-app
+en = Waiting for your location…
+de = Warte auf deinen Standort…
+
+[track_follow_nothing_left]
+comment = Toast when the chosen point is the end of the track
+tags = android-app
+en = Nothing left to follow: this is the track end
+de = Hier endet der Track, nichts mehr zu folgen
+
 [off_track_monitor_start]
 comment = Place page button for a track: start the off-track alarm for it
 tags = android-app
