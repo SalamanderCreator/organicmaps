@@ -89,7 +89,8 @@
           android:id="@+id/vehicle"
           style="@style/MwmWidget.RoutingToolbarCell"
           android:button="@drawable/ic_car"
-          android:contentDescription="@string/routing_options_driving"/>
+          android:contentDescription="@string/routing_options_driving"
+          android:visibility="gone"/>
         <app.organicmaps.widget.RoutingToolbarButton
           android:id="@+id/pedestrian"
           style="@style/MwmWidget.RoutingToolbarCell"

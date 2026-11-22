@@ -17,6 +17,7 @@
     android:background="@drawable/routing_toolbar_pill_bg"
     android:padding="@dimen/routing_toolbar_pill_padding">
 
+    <!-- Maps&Fly hides car and public transport routing; the buttons stay for upstream code. -->
     <RadioGroup
       android:id="@+id/route_type"
       android:layout_width="match_parent"
@@ -27,17 +28,19 @@
         android:id="@+id/vehicle"
         style="@style/MwmWidget.RoutingToolbarCell"
         android:button="@drawable/ic_car"
-        android:checked="true" />
+        android:visibility="gone" />
 
       <app.organicmaps.widget.RoutingToolbarButton
         android:id="@+id/pedestrian"
         style="@style/MwmWidget.RoutingToolbarCell"
-        android:button="@drawable/ic_pedestrian" />
+        android:button="@drawable/ic_pedestrian"
+        android:checked="true" />
 
       <app.organicmaps.widget.RoutingToolbarButton
         android:id="@+id/transit"
         style="@style/MwmWidget.RoutingToolbarCell"
-        android:button="@drawable/ic_transit" />
+        android:button="@drawable/ic_transit"
+        android:visibility="gone" />
 
       <app.organicmaps.widget.RoutingToolbarButton
         android:id="@+id/bicycle"

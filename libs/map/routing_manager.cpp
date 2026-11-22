@@ -479,7 +479,9 @@ RouterType RoutingManager::GetLastUsedRouter() const
 {
   std::string routerTypeStr;
   settings::TryGet(kRouterTypeKey, routerTypeStr);
-  return FromString(routerTypeStr);
+  // Maps&Fly offers no car or public transport routing, so those profiles and the default fall back to walking.
+  RouterType const type = FromString(routerTypeStr);
+  return type == RouterType::Vehicle || type == RouterType::Transit ? RouterType::Pedestrian : type;
 }
 
 void RoutingManager::Init(std::shared_ptr<routing::NumMwmIds> ptr)

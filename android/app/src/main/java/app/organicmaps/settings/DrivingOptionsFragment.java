@@ -64,8 +64,8 @@ public class DrivingOptionsFragment extends BaseMwmToolbarFragment
   private static Router initialRouter()
   {
     final Router router = RoutingController.get().getLastRouterType();
-    // Only modes with avoid options have a tab.
-    return router == Router.Pedestrian || router == Router.Bicycle ? router : Router.Vehicle;
+    // Only modes with avoid options have a tab; Maps&Fly hides the car tab.
+    return router == Router.Bicycle ? router : Router.Pedestrian;
   }
 
   @NonNull

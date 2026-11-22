@@ -44,11 +44,11 @@ public class DrivingOptionsFragmentTest
   }
 
   @Test
-  public void modesWithoutAvoidOptionsOpenTheDrivingTab() throws ReflectiveOperationException
+  public void modesWithoutAvoidOptionsOpenTheWalkingTab() throws ReflectiveOperationException
   {
-    assertEquals(Router.Vehicle, initialRouter(Router.Ruler));
-    assertEquals(Router.Vehicle, initialRouter(Router.Transit));
-    assertEquals(Router.Vehicle, initialRouter(Router.Vehicle));
+    assertEquals(Router.Pedestrian, initialRouter(Router.Ruler));
+    assertEquals(Router.Pedestrian, initialRouter(Router.Transit));
+    assertEquals(Router.Pedestrian, initialRouter(Router.Vehicle));
     assertEquals(Router.Pedestrian, initialRouter(Router.Pedestrian));
     assertEquals(Router.Bicycle, initialRouter(Router.Bicycle));
   }
