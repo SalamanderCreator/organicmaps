@@ -4,11 +4,10 @@
 
 #include <vector>
 
-/// Maps&Fly: builds the saved track from all recorded fixes, the most accurate fix first. A fix is kept if it is
-/// farther than its own accuracy from each kept fix next to it in time. Fixes worse than maxAccuracy are dropped,
-/// maxAccuracy 0 keeps all of them. Returns the kept fixes in time order.
-std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> const & points,
-                                                         double maxAccuracy);
+/// Maps&Fly: builds the saved track from all recorded fixes. Jumps faster than a plausible speed are dropped. Then
+/// fixes are taken from the most accurate one on, and a fix is kept if it is farther than its own accuracy from each
+/// kept fix next to it in time. Returns the kept fixes in time order.
+std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> points);
 
 class IGpsTrackFilter
 {

@@ -8,8 +8,8 @@
 #include "base/assert.hpp"
 
 #include <algorithm>
-#include <map>
 #include <numeric>
+#include <set>
 
 namespace
 {
@@ -39,38 +39,87 @@ double GetDistance(location::GpsInfo const & from, location::GpsInfo const & to)
 {
   return ms::DistanceOnEarth(from.m_latitude, from.m_longitude, to.m_latitude, to.m_longitude);
 }
+
+// Faster than any recorded movement, also a paraglider with tailwind or a car on a motorway.
+double constexpr kMaxPlausibleSpeed = 200 / 3.6;  // m / sec
+
+// After a rejected fix, this many fixes in a row that agree with each other show that the fix before them was
+// the jump, e.g. the first fix of the recording.
+size_t constexpr kJumpRecoveryFixCount = 5;
+
+bool IsPlausibleMove(location::GpsInfo const & from, location::GpsInfo const & to)
+{
+  // Both fixes may be off by their accuracy.
+  double const distance = std::max(0.0, GetDistance(from, to) - from.m_horizontalAccuracy - to.m_horizontalAccuracy);
+  return distance <= kMaxPlausibleSpeed * (to.m_timestamp - from.m_timestamp);
+}
+
+// @param points - in time order.
+std::vector<location::GpsInfo> RemoveJumps(std::vector<location::GpsInfo> const & points)
+{
+  std::vector<location::GpsInfo> result;
+  // Rejected fixes in a row that agree with each other.
+  std::vector<location::GpsInfo> rejected;
+  for (auto const & point : points)
+  {
+    if (result.empty() || IsPlausibleMove(result.back(), point))
+    {
+      result.push_back(point);
+      rejected.clear();
+      continue;
+    }
+
+    if (!rejected.empty() && !IsPlausibleMove(rejected.back(), point))
+      rejected.clear();
+    rejected.push_back(point);
+    if (rejected.size() == kJumpRecoveryFixCount)
+    {
+      while (!result.empty() && !IsPlausibleMove(result.back(), rejected.front()))
+        result.pop_back();
+      result.insert(result.end(), rejected.begin(), rejected.end());
+      rejected.clear();
+    }
+  }
+  return result;
+}
 }  // namespace
 
-std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> const & points,
-                                                         double maxAccuracy)
+std::vector<location::GpsInfo> SelectAccurateTrackPoints(std::vector<location::GpsInfo> points)
 {
+  std::stable_sort(points.begin(), points.end(), [](auto const & l, auto const & r)
+  {
+    if (l.m_timestamp != r.m_timestamp)
+      return l.m_timestamp < r.m_timestamp;
+    return l.m_horizontalAccuracy < r.m_horizontalAccuracy;
+  });
+  // Keep the most accurate fix of each time.
+  points.erase(std::unique(points.begin(), points.end(),
+                           [](auto const & l, auto const & r) { return l.m_timestamp == r.m_timestamp; }),
+               points.end());
+
+  points = RemoveJumps(points);
+
   std::vector<size_t> order(points.size());
   std::iota(order.begin(), order.end(), 0);
   std::stable_sort(order.begin(), order.end(), [&points](size_t l, size_t r)
   { return points[l].m_horizontalAccuracy < points[r].m_horizontalAccuracy; });
 
-  // Kept fixes by time.
-  std::map<double, size_t> kept;
+  // Indices of the kept fixes, in time order.
+  std::set<size_t> kept;
   for (size_t const i : order)
   {
     auto const & point = points[i];
-    if (maxAccuracy > 0 && point.m_horizontalAccuracy > maxAccuracy)
-      break;
-
-    auto const next = kept.lower_bound(point.m_timestamp);
-    // A more accurate fix with the same time is already kept.
-    if (next != kept.end() && next->first == point.m_timestamp)
+    auto const next = kept.lower_bound(i);
+    if (next != kept.end() && GetDistance(points[*next], point) <= point.m_horizontalAccuracy)
       continue;
-    if (next != kept.end() && GetDistance(points[next->second], point) <= point.m_horizontalAccuracy)
+    if (next != kept.begin() && GetDistance(points[*std::prev(next)], point) <= point.m_horizontalAccuracy)
       continue;
-    if (next != kept.begin() && GetDistance(points[std::prev(next)->second], point) <= point.m_horizontalAccuracy)
-      continue;
-    kept.emplace_hint(next, point.m_timestamp, i);
+    kept.emplace_hint(next, i);
   }
 
   std::vector<location::GpsInfo> result;
   result.reserve(kept.size());
-  for (auto const & [time, i] : kept)
+  for (size_t const i : kept)
     result.push_back(points[i]);
   return result;
 }

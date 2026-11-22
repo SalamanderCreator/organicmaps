@@ -53,10 +53,8 @@ public class TrackRecordingService
   private static final MutableLiveData<TrackStatistics> sStatistics = new MutableLiveData<>();
   // Maps&Fly: the current GPS accuracy as shown to the user, null when unknown or not recording.
   private static final MutableLiveData<String> sGpsAccuracyText = new MutableLiveData<>();
-  // The accuracy changes with almost every fix, while the recording state should be visible at once.
+  // The accuracy changes with almost every fix.
   private static final long GPS_ACCURACY_UPDATE_INTERVAL_MS = 3000;
-  private double mMinAccuracy;
-  private boolean mGpsInaccurate;
   private long mGpsAccuracyTimeMs;
   private NotificationCompat.Builder mNotificationBuilder;
   private static final String TAG = TrackRecordingService.class.getSimpleName();
@@ -258,9 +256,6 @@ public class TrackRecordingService
       return START_NOT_STICKY;
     }
 
-    // The core reads the limit when the recording starts.
-    mMinAccuracy = TrackRecorder.nativeGetMinAccuracy();
-
     // Safe to call again: the core replaces the listener and sends the current statistics.
     TrackRecorder.nativeSetTrackRecordingStatsListener(this);
 
@@ -357,17 +352,13 @@ public class TrackRecordingService
   /** Returns {@code true} if the shown accuracy has changed. */
   private boolean updateGpsAccuracy(float accuracy)
   {
-    final boolean inaccurate = mMinAccuracy > 0 && accuracy > mMinAccuracy;
     final long now = SystemClock.elapsedRealtime();
-    if (sGpsAccuracyText.getValue() != null && inaccurate == mGpsInaccurate
-        && now - mGpsAccuracyTimeMs < GPS_ACCURACY_UPDATE_INTERVAL_MS)
+    if (sGpsAccuracyText.getValue() != null && now - mGpsAccuracyTimeMs < GPS_ACCURACY_UPDATE_INTERVAL_MS)
       return false;
 
-    final String distance = StringUtils.nativeFormatDistance(accuracy).toString(this);
-    final String text = getString(
-        inaccurate ? R.string.track_recording_gps_inaccurate : R.string.track_recording_gps_accuracy, distance);
-    mGpsInaccurate = inaccurate;
     mGpsAccuracyTimeMs = now;
+    final String text =
+        getString(R.string.track_recording_gps_accuracy, StringUtils.nativeFormatDistance(accuracy).toString(this));
     if (text.equals(sGpsAccuracyText.getValue()))
       return false;
     sGpsAccuracyText.setValue(text);

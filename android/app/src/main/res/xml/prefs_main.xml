@@ -132,15 +132,6 @@
       app:singleLineTitle="false"
       android:persistent="false"
       android:order="20"/>
-    <!-- Maps&Fly: GPS accuracy filter for track recording. -->
-    <ListPreference
-      android:key="@string/pref_track_recording_accuracy"
-      android:title="@string/track_recording_accuracy_title"
-      app:singleLineTitle="false"
-      android:persistent="false"
-      android:entries="@array/track_recording_accuracy_options"
-      android:entryValues="@array/track_recording_accuracy_values"
-      android:order="21" />
   </androidx.preference.PreferenceCategory>
 
   <androidx.preference.PreferenceCategory

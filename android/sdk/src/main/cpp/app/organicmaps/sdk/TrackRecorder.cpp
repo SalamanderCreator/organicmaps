@@ -4,20 +4,8 @@
 #include "app/organicmaps/sdk/bookmarks/data/TrackStatistics.hpp"
 #include "app/organicmaps/sdk/core/jni_helper.hpp"
 
-#include "map/gps_track_filter.hpp"
-
 extern "C"
 {
-JNIEXPORT jdouble Java_app_organicmaps_sdk_location_TrackRecorder_nativeGetMinAccuracy(JNIEnv *, jclass)
-{
-  return GpsTrackFilter::LoadMinHorizontalAccuracy();
-}
-
-JNIEXPORT void Java_app_organicmaps_sdk_location_TrackRecorder_nativeSetMinAccuracy(JNIEnv *, jclass, jdouble meters)
-{
-  GpsTrackFilter::StoreMinHorizontalAccuracy(meters);
-}
-
 JNIEXPORT void Java_app_organicmaps_sdk_location_TrackRecorder_nativeStartTrackRecording(JNIEnv * env, jclass clazz)
 {
   frm()->StartTrackRecording();

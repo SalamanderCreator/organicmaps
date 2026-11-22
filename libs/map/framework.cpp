@@ -2201,8 +2201,7 @@ bool Framework::SaveTrackRecordingWithName(std::string const & name)
   StopTrackRecording();
   auto & tracker = GpsTracker::Instance();
   // Maps&Fly: the saved track is built from all recorded fixes, not from the live filter shown while recording.
-  auto const points =
-      SelectAccurateTrackPoints(tracker.LoadRecordedPoints(), GpsTrackFilter::LoadMinHorizontalAccuracy());
+  auto const points = SelectAccurateTrackPoints(tracker.LoadRecordedPoints());
   if (points.size() < 2)
   {
     tracker.Clear();
