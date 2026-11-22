@@ -37,7 +37,8 @@ rootProject.ext {
     def ver = getVersion()
     versionCode = ver.V1
     versionName = ver.V2
-    appId = 'app.organicmaps'
+    // Kartenapp fork: own application ID so it installs next to the original Organic Maps.
+    appId = 'io.github.salamandercreator.kartenapp'
     CI = System.getenv("CI") != null
 }
 

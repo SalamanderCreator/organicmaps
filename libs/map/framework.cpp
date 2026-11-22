@@ -3287,8 +3287,9 @@ void Framework::SaveTransitSchemeEnabled(bool enabled)
 
 bool Framework::LoadIsolinesEnabled()
 {
+  // Kartenapp fork: terrain (contour lines and hillshading) is on until the user turns it off.
   bool enabled;
-  return settings::Get(kIsolinesEnabledKey, enabled) && enabled;
+  return !settings::Get(kIsolinesEnabledKey, enabled) || enabled;
 }
 
 void Framework::SaveIsolinesEnabled(bool enabled)
