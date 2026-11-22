@@ -19,6 +19,7 @@ import app.organicmaps.editor.LanguagesFragment;
 import app.organicmaps.editor.ProfileActivity;
 import app.organicmaps.help.HelpActivity;
 import app.organicmaps.location.TrackRecordingDebugLog;
+import app.organicmaps.location.OffTrackService;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.Router;
 import app.organicmaps.sdk.downloader.MapManager;
@@ -70,6 +71,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     initPowerManagementPrefsCallbacks();
     initBookmarksTextPlacementPrefsCallbacks();
     initTrackDebugPrefsCallbacks();
+    initOffTrackThresholdPrefsCallbacks();
     initShowDownloadedRegionsPrefsCallbacks();
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
@@ -618,6 +620,24 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
       TrackRecordingDebugLog.shareLatest(requireContext());
       return true;
     });
+  }
+
+  private void initOffTrackThresholdPrefsCallbacks()
+  {
+    final ListPreference pref = getPreference(getString(R.string.pref_off_track_threshold));
+    final String value = String.valueOf(OffTrackService.getThresholdMeters(requireContext()));
+    pref.setValue(value);
+    updateOffTrackThresholdSummary(pref, value);
+    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+      OffTrackService.setThresholdMeters(requireContext(), Integer.parseInt((String) newValue));
+      updateOffTrackThresholdSummary(pref, (String) newValue);
+      return true;
+    });
+  }
+
+  private void updateOffTrackThresholdSummary(@NonNull ListPreference pref, @NonNull String meters)
+  {
+    pref.setSummary(getString(R.string.off_track_threshold_description, meters + " m"));
   }
 
   private void initShowDownloadedRegionsPrefsCallbacks()

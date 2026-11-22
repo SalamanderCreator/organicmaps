@@ -948,6 +948,38 @@
     <string name="track_debug_nothing_to_share">Noch keine Track-Rohdaten vorhanden</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
     <string name="track_recording_gps_accuracy">GPS-Genauigkeit: ±%s</string>
+    <!-- Place page button for a track: start the off-track alarm for it -->
+    <string name="off_track_monitor_start">Track überwachen</string>
+    <!-- Place page and notification button: stop the off-track alarm -->
+    <string name="off_track_monitor_stop">Überwachung beenden</string>
+    <!-- Toast after the off-track alarm started -->
+    <string name="off_track_monitor_started">Warnung, wenn du den Track verlässt</string>
+    <!-- Android notification channel name for the ongoing off-track alarm notification -->
+    <string name="off_track_status_channel">Track-Überwachung</string>
+    <!-- Android notification channel name for the off-track alarm itself -->
+    <string name="off_track_alarm_channel">Off-Track-Alarm</string>
+    <!-- Notification title while a track is watched. %s is the track name -->
+    <string name="off_track_watching">Überwache %s</string>
+    <!-- Notification text of the off-track alarm before a GPS position is known -->
+    <string name="off_track_waiting_for_gps">Warte auf GPS…</string>
+    <!-- Notification text of the off-track alarm. %s is the distance to the track, e.g. 8 m -->
+    <string name="off_track_on_track">Auf dem Track (%s entfernt)</string>
+    <!-- Notification text of the off-track alarm when GPS is too inaccurate. %s is the GPS accuracy, e.g. 80 m -->
+    <string name="off_track_gps_inaccurate">GPS ungenau (±%s), keine Warnung möglich</string>
+    <!-- Notification title when the user left the watched track -->
+    <string name="off_track_alarm_title">Trackabweichung</string>
+    <!-- Notification text when the user left the watched track. %s is the distance, e.g. 60 m -->
+    <string name="off_track_alarm_text">%s vom Track entfernt</string>
+    <!-- Voice announcement when the user left the watched track -->
+    <string name="off_track_alarm_speech">Achtung, Trackabweichung.</string>
+    <!-- Voice announcement when the user is back on the watched track -->
+    <string name="off_track_back_speech">Zurück auf dem Track.</string>
+    <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
+    <string name="off_track_banner">Trackabweichung: %s</string>
+    <!-- Settings: title of the off-track alarm distance -->
+    <string name="off_track_threshold_title">Off-Track-Alarm: Abstand</string>
+    <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->
+    <string name="off_track_threshold_description">Warnung ab %s Abstand zum Track plus GPS-Ungenauigkeit</string>
     <!-- Accessibility label for the button that reverses the complete planned route, including intermediate stops. -->
     <string name="reverse_route">Route umkehren</string>
     <!-- Title of the transit route details screen, shown when the user taps the public transport summary tile. -->

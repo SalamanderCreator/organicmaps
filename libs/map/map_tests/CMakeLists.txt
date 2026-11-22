@@ -19,6 +19,7 @@ set(SRC
   isolines_manager_tests.cpp
   kmz_unarchive_test.cpp
   mwm_url_tests.cpp
+  off_track_monitor_tests.cpp
   power_manager_tests.cpp
   raster_tile_provider_tests.cpp
   road_warning_tests.cpp

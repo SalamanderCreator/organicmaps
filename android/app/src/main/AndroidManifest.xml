@@ -527,6 +527,13 @@
     <activity
         android:name="app.organicmaps.MapPlaceholderActivity"/>
 
+    <!-- Maps&Fly: off track alarm. -->
+    <service android:name=".location.OffTrackService"
+      android:foregroundServiceType="location"
+      android:exported="false"
+      android:stopWithTask="false"
+      />
+
     <service android:name=".location.TrackRecordingService"
       android:foregroundServiceType="location"
       android:exported="false"
