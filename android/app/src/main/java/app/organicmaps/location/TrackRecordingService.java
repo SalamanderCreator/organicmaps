@@ -14,6 +14,7 @@ import android.content.pm.ServiceInfo;
 import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.widget.Toast;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ import app.organicmaps.sdk.location.LocationHelper;
 import app.organicmaps.sdk.location.LocationListener;
 import app.organicmaps.sdk.location.LocationUtils;
 import app.organicmaps.sdk.location.TrackRecorder;
+import app.organicmaps.sdk.util.StringUtils;
 import app.organicmaps.sdk.util.log.Logger;
 import app.organicmaps.widget.TrackRecordingWidget;
 
@@ -49,6 +51,11 @@ public class TrackRecordingService
   private static final MutableLiveData<Boolean> sIsRecording = new MutableLiveData<>();
   // The core has a single statistics listener, so the service owns it.
   private static final MutableLiveData<TrackStatistics> sStatistics = new MutableLiveData<>();
+  // Maps&Fly: the current GPS accuracy as shown to the user, null when unknown or not recording.
+  private static final MutableLiveData<String> sGpsAccuracyText = new MutableLiveData<>();
+  // The accuracy changes with almost every fix.
+  private static final long GPS_ACCURACY_UPDATE_INTERVAL_MS = 3000;
+  private long mGpsAccuracyTimeMs;
   private NotificationCompat.Builder mNotificationBuilder;
   private static final String TAG = TrackRecordingService.class.getSimpleName();
   private boolean mWarningNotification = false;
@@ -73,6 +80,12 @@ public class TrackRecordingService
   public static LiveData<TrackStatistics> getStatistics()
   {
     return sStatistics;
+  }
+
+  @NonNull
+  public static LiveData<String> getGpsAccuracyText()
+  {
+    return sGpsAccuracyText;
   }
 
   @RequiresPermission(value = ACCESS_FINE_LOCATION)
@@ -165,9 +178,11 @@ public class TrackRecordingService
     {
       TrackRecorder.nativeSetTrackRecordingStatsListener(null);
       sStatistics.setValue(null);
+      sGpsAccuracyText.setValue(null);
       if (TrackRecorder.nativeIsTrackRecordingEnabled())
         TrackRecorder.nativeStopTrackRecording();
       MwmApplication.from(this).getLocationHelper().removeListener(this);
+      TrackRecordingDebugLog.stop(MwmApplication.from(this).getLocationHelper());
       MwmApplication.from(this).onTrackRecordingStopped();
       // Publish only here: after this block the recording is off, so false always means the native state.
       sIsRecording.setValue(false);
@@ -249,6 +264,7 @@ public class TrackRecordingService
 
     // Subscribe to location updates. This call is idempotent.
     locationHelper.addListener(this);
+    TrackRecordingDebugLog.start(this, locationHelper);
 
     // Restart the location with more frequent refresh interval for Track Recording.
     locationHelper.restartWithNewMode();
@@ -328,17 +344,38 @@ public class TrackRecordingService
   {
     Logger.i(TAG, "Location is being updated in Track Recording service");
 
-    if (mWarningNotification)
-    {
-      mWarningNotification = false;
+    final boolean hadWarning = mWarningNotification;
+    mWarningNotification = false;
+    final boolean accuracyChanged = location.hasAccuracy() && updateGpsAccuracy(location.getAccuracy());
+    if (hadWarning || accuracyChanged)
+      notifyRecording();
+  }
 
-      // post notification permission is not there but we will not stop the runnable because if
-      // in between user gives permission then warning will not be updated until next restart
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-          && ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PERMISSION_GRANTED)
-        return;
+  /** Returns {@code true} if the shown accuracy has changed. */
+  private boolean updateGpsAccuracy(float accuracy)
+  {
+    final long now = SystemClock.elapsedRealtime();
+    if (sGpsAccuracyText.getValue() != null && now - mGpsAccuracyTimeMs < GPS_ACCURACY_UPDATE_INTERVAL_MS)
+      return false;
 
-      NotificationManagerCompat.from(this).notify(TRACK_REC_NOTIFICATION_ID, getNotificationBuilder(this).build());
-    }
+    mGpsAccuracyTimeMs = now;
+    final String text =
+        getString(R.string.track_recording_gps_accuracy, StringUtils.nativeFormatDistance(accuracy).toString(this));
+    if (text.equals(sGpsAccuracyText.getValue()))
+      return false;
+    sGpsAccuracyText.setValue(text);
+    getNotificationBuilder(this).setContentText(text);
+    return true;
+  }
+
+  private void notifyRecording()
+  {
+    // post notification permission is not there but we will not stop the runnable because if
+    // in between user gives permission then warning will not be updated until next restart
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        && ActivityCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PERMISSION_GRANTED)
+      return;
+
+    NotificationManagerCompat.from(this).notify(TRACK_REC_NOTIFICATION_ID, getNotificationBuilder(this).build());
   }
 }

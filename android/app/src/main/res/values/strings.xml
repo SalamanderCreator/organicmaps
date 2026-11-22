@@ -934,6 +934,16 @@
     <string name="track_recording_stop_and_save">Stop and Save</string>
     <!-- Track recording home screen widget button: opens the app to save or delete the recorded track. -->
     <string name="track_recording_finish">Finish</string>
+    <!-- Settings: debug switch that logs every GPS fix of a track recording to a file -->
+    <string name="track_debug_title">Debug: log raw track data</string>
+    <!-- Settings: summary of the track recording debug switch -->
+    <string name="track_debug_description">While recording, every GPS position is written to a file with its accuracy and source. Applies from the next recording.</string>
+    <!-- Settings: shares the newest raw track data file -->
+    <string name="track_debug_share">Debug: share latest raw track data</string>
+    <!-- Toast when there is no raw track data file to share -->
+    <string name="track_debug_nothing_to_share">No raw track data yet</string>
+    <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
+    <string name="track_recording_gps_accuracy">GPS accuracy: ±%s</string>
     <!-- Accessibility label for the button that reverses the complete planned route, including intermediate stops. -->
     <string name="reverse_route">Reverse route</string>
     <!-- Title of the transit route details screen, shown when the user taps the public transport summary tile. -->

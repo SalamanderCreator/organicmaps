@@ -201,6 +201,15 @@ size_t GpsTrack::Finalize()
   return m_collection.GetSize();
 }
 
+std::vector<location::GpsInfo> GpsTrack::LoadRecordedPoints()
+{
+  std::lock_guard lg(m_threadGuard);
+  auto points = m_storage.Load();
+  // Fixes that Finalize() could not write to the backup.
+  points.insert(points.end(), m_backupPoints.begin(), m_backupPoints.end());
+  return points;
+}
+
 void GpsTrack::NotifyCallback(std::pair<size_t, size_t> const & addedIds, std::pair<size_t, size_t> const & evictedIds)
 {
   std::lock_guard lg(m_callbackGuard);

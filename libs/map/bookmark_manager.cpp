@@ -1143,11 +1143,11 @@ void BookmarkManager::OnTrackDeselected()
   m_selectedTrackId = kml::kInvalidTrackId;
 }
 
-kml::TrackId BookmarkManager::SaveTrackRecording(std::string trackName, size_t pointCount)
+kml::TrackId BookmarkManager::SaveTrackRecording(std::string trackName, std::vector<location::GpsInfo> const & points)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
-  auto & tracker = GpsTracker::Instance();
-  ASSERT(!tracker.IsEnabled(), ());
+  ASSERT(!GpsTracker::Instance().IsEnabled(), ());
+  auto const pointCount = points.size();
   ASSERT_GREATER_OR_EQUAL(pointCount, 2, ());
 
   kml::TrackData trackData;
@@ -1157,13 +1157,12 @@ kml::TrackId BookmarkManager::SaveTrackRecording(std::string trackName, size_t p
   line.reserve(pointCount);
   timestamps.reserve(pointCount);
 
-  tracker.ForEachTrackPoint([&](location::GpsInfo const & pt, size_t)
+  for (auto const & pt : points)
   {
     auto const altitude = pt.HasAltitude() ? kml::ToAltitude(pt.m_altitude) : geometry::kInvalidAltitude;
     line.emplace_back(mercator::FromLatLon(pt.GetLatLon()), altitude);
     timestamps.emplace_back(static_cast<kml::MultiGeometry::TimeInt>(pt.m_timestamp));
-    return true;
-  });
+  }
 
   if (trackName.empty())
     trackName = GenerateTrackRecordingName();

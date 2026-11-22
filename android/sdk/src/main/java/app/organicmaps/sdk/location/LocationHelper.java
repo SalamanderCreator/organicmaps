@@ -62,6 +62,26 @@ public class LocationHelper
   private final ObserverList<LocationListener> mListeners = new ObserverList<>();
   private final ObserverList.RewindableIterator<LocationListener> mListenersIterator = mListeners.rewindableIterator();
 
+  /** Maps&Fly debug: receives every fix of the provider and why it was used or dropped. */
+  public interface RawLocationListener
+  {
+    void onRawLocation(@NonNull Location location, @NonNull String status);
+  }
+
+  @Nullable
+  private RawLocationListener mRawLocationListener;
+
+  public void setRawLocationListener(@Nullable RawLocationListener listener)
+  {
+    mRawLocationListener = listener;
+  }
+
+  private void reportRawLocation(@NonNull Location location, @NonNull String status)
+  {
+    if (mRawLocationListener != null)
+      mRawLocationListener.onRawLocation(location, status);
+  }
+
   @Nullable
   private Location mSavedLocation;
   // Compare accuracy within one backend while retaining the displayed location across replacements.
@@ -436,12 +456,14 @@ public class LocationHelper
         && mSavedLocation.getElapsedRealtimeNanos() <= SystemClock.elapsedRealtimeNanos())
     {
       Logger.d(TAG, "The new " + location + " is older than the saved " + mSavedLocation);
+      reportRawLocation(location, "older");
       return;
     }
 
     if (!LocationUtils.isAccuracySatisfied(location))
     {
       Logger.w(TAG, "Unsatisfied accuracy for location = " + location);
+      reportRawLocation(location, "no_accuracy");
       return;
     }
 
@@ -450,11 +472,13 @@ public class LocationHelper
       if (!LocationUtils.isLocationBetterThanLast(location, mLocationForFiltering))
       {
         Logger.d(TAG, "The new " + location + " is worse than the last " + mLocationForFiltering);
+        reportRawLocation(location, "worse_than_last");
         return;
       }
     }
 
     MslAltitudeConverter.addMslAltitude(mContext, location);
+    reportRawLocation(location, "used");
     mLocationForFiltering = location;
     mSavedLocation = location;
     mMyPosition = null;
