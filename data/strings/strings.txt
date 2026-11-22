@@ -46049,14 +46049,14 @@ de = GPS-Genauigkeit: ±%s
 [off_track_monitor_start]
 comment = Place page button for a track: start the off-track alarm for it
 tags = android-app
-en = Watch track
-de = Track überwachen
+en = Follow track
+de = Track folgen
 
 [off_track_monitor_stop]
 comment = Place page and notification button: stop the off-track alarm
 tags = android-app
-en = Stop watching
-de = Überwachung beenden
+en = Stop following
+de = Track folgen beenden
 
 [off_track_monitor_started]
 comment = Toast after the off-track alarm started
@@ -46067,8 +46067,8 @@ de = Warnung, wenn du den Track verlässt
 [off_track_status_channel]
 comment = Android notification channel name for the ongoing off-track alarm notification
 tags = android-app
-en = Track watching
-de = Track-Überwachung
+en = Track following
+de = Track folgen
 
 [off_track_alarm_channel]
 comment = Android notification channel name for the off-track alarm itself
@@ -46079,8 +46079,8 @@ de = Off-Track-Alarm
 [off_track_watching]
 comment = Notification title while a track is watched. %s is the track name
 tags = android-app
-en = Watching %s
-de = Überwache %s
+en = Following %s
+de = Folge %s
 
 [off_track_waiting_for_gps]
 comment = Notification text of the off-track alarm before a GPS position is known
@@ -46123,6 +46123,12 @@ comment = Voice announcement when the user is back on the watched track
 tags = android-app
 en = Back on the track.
 de = Zurück auf dem Track.
+
+[off_track_not_reached]
+comment = Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km
+tags = android-app
+en = Track is %s away
+de = Track ist %s entfernt
 
 [off_track_banner]
 comment = Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m
