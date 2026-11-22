@@ -12,11 +12,11 @@ import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.location.Location;
 import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +38,7 @@ import app.organicmaps.sdk.location.OffTrackMonitor;
 import app.organicmaps.sdk.sound.TtsPlayer;
 import app.organicmaps.sdk.util.StringUtils;
 import app.organicmaps.sdk.util.log.Logger;
+import java.io.IOException;
 
 /**
  * Maps&Fly: watches the distance to a chosen track in the background and raises an alarm with sound, vibration and
@@ -47,7 +48,9 @@ public class OffTrackService extends Service implements LocationListener
 {
   private static final String TAG = OffTrackService.class.getSimpleName();
   private static final String STATUS_CHANNEL_ID = "OFF TRACK STATUS";
-  private static final String ALARM_CHANNEL_ID = "OFF TRACK ALARM";
+  // The first alarm channel played its own sound with alarm usage, which took the audio from the announcement.
+  private static final String OLD_ALARM_CHANNEL_ID = "OFF TRACK ALARM";
+  private static final String ALARM_CHANNEL_ID = "OFF TRACK ALARM VIBRATION";
   private static final int STATUS_NOTIFICATION_ID = 54322;
   private static final int ALARM_NOTIFICATION_ID = 54323;
   private static final String ACTION_STOP = "STOP_OFF_TRACK_MONITOR";
@@ -61,9 +64,9 @@ public class OffTrackService extends Service implements LocationListener
   private static final MutableLiveData<Long> sActiveTrackId = new MutableLiveData<>(null);
   // The map banner text while off the track, else null.
   private static final MutableLiveData<String> sOffTrackText = new MutableLiveData<>(null);
-  // The announcement waits for the alarm sound, which would cut it off.
-  private static final long SPEECH_DELAY_MS = 2000;
-  private final Handler mHandler = new Handler(Looper.getMainLooper());
+  // Plays the alarm tone, then the announcement: the tone and the speech must not overlap.
+  @Nullable
+  private MediaPlayer mAlarmPlayer;
 
   private String mTrackName = "";
   private int mState = OffTrackMonitor.STATE_ON_TRACK;
@@ -133,14 +136,12 @@ public class OffTrackService extends Service implements LocationListener
             .setLightsEnabled(false)
             .setVibrationEnabled(false)
             .build());
-    final AudioAttributes audio = new AudioAttributes.Builder()
-                                      .setUsage(AudioAttributes.USAGE_ALARM)
-                                      .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                                      .build();
+    manager.deleteNotificationChannel(OLD_ALARM_CHANNEL_ID);
+    // The service plays the tone itself, see playAlarm().
     manager.createNotificationChannel(
         new NotificationChannelCompat.Builder(ALARM_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
             .setName(context.getString(R.string.off_track_alarm_channel))
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audio)
+            .setSound(null, null)
             .setVibrationEnabled(true)
             .setVibrationPattern(ALARM_VIBRATION)
             .build());
@@ -209,7 +210,7 @@ public class OffTrackService extends Service implements LocationListener
       MwmApplication.from(this).getLocationHelper().removeListener(this);
       MwmApplication.from(this).onNavigationOrRecordingStopped();
     }
-    mHandler.removeCallbacksAndMessages(null);
+    releaseAlarmPlayer();
     sActiveTrackId.setValue(null);
     sOffTrackText.setValue(null);
     NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
@@ -236,7 +237,10 @@ public class OffTrackService extends Service implements LocationListener
     {
       NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
       if (state == OffTrackMonitor.STATE_ON_TRACK)
-        speakLater(getString(R.string.off_track_back_speech));
+      {
+        releaseAlarmPlayer();
+        TtsPlayer.INSTANCE.speak(getString(R.string.off_track_back_speech));
+      }
     }
 
     final long now = SystemClock.elapsedRealtime();
@@ -247,11 +251,53 @@ public class OffTrackService extends Service implements LocationListener
     }
   }
 
-  private void speakLater(@NonNull String text)
+  private void playAlarm()
   {
-    // Only the announcement for the latest state.
-    mHandler.removeCallbacksAndMessages(null);
-    mHandler.postDelayed(() -> TtsPlayer.INSTANCE.speak(text), SPEECH_DELAY_MS);
+    releaseAlarmPlayer();
+    final String speech = getString(R.string.off_track_alarm_speech);
+    final Uri tone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    if (tone == null)
+    {
+      TtsPlayer.INSTANCE.speak(speech);
+      return;
+    }
+    final MediaPlayer player = new MediaPlayer();
+    mAlarmPlayer = player;
+    // Like the voice instructions, so the tone is heard in silent mode and has the same volume.
+    player.setAudioAttributes(new AudioAttributes.Builder()
+                                  .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+                                  .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                  .build());
+    player.setOnPreparedListener(MediaPlayer::start);
+    player.setOnCompletionListener(mp -> {
+      releaseAlarmPlayer();
+      TtsPlayer.INSTANCE.speak(speech);
+    });
+    player.setOnErrorListener((mp, what, extra) -> {
+      Logger.w(TAG, "Alarm tone failed: " + what + ", " + extra);
+      releaseAlarmPlayer();
+      TtsPlayer.INSTANCE.speak(speech);
+      return true;
+    });
+    try
+    {
+      player.setDataSource(this, tone);
+      player.prepareAsync();
+    }
+    catch (IOException | RuntimeException e)
+    {
+      Logger.w(TAG, "Alarm tone failed", e);
+      releaseAlarmPlayer();
+      TtsPlayer.INSTANCE.speak(speech);
+    }
+  }
+
+  private void releaseAlarmPlayer()
+  {
+    if (mAlarmPlayer == null)
+      return;
+    mAlarmPlayer.release();
+    mAlarmPlayer = null;
   }
 
   @NonNull
@@ -263,7 +309,7 @@ public class OffTrackService extends Service implements LocationListener
   private void raiseAlarm()
   {
     Logger.i(TAG, "Off the track, distance " + OffTrackMonitor.nativeGetDistance());
-    speakLater(getString(R.string.off_track_alarm_speech));
+    playAlarm();
     if (!canNotify())
       return;
     final String text = getString(R.string.off_track_alarm_text, formatDistance(OffTrackMonitor.nativeGetDistance()));
@@ -275,7 +321,6 @@ public class OffTrackService extends Service implements LocationListener
                                    .setContentTitle(getString(R.string.off_track_alarm_title))
                                    .setContentText(text)
                                    .setVibrate(ALARM_VIBRATION)
-                                   .setDefaults(NotificationCompat.DEFAULT_SOUND)
                                    .setAutoCancel(true)
                                    .setContentIntent(TrackRecordingService.createContentPendingIntent(this))
                                    .addAction(0, getString(R.string.off_track_monitor_stop), getStopIntent())
