@@ -127,4 +127,29 @@ UNIT_TEST(TrackFollowing_SinglePoint)
   TEST_EQUAL(pos.m_point, Pt(0, 100), ());
   TEST(!MakeRemainder(track, pos), ());
 }
+
+UNIT_TEST(TrackFollowing_RemainingAltitudes)
+{
+  // Up 100 m, down 300 m, up 50 m, every 1000 m.
+  ElevationInfo profile;
+  profile.Assign({1000, 2000, 3000}, {500, 600, 300, 350});
+
+  auto const all = GetRemainingAltitudes(profile, 0);
+  TEST_EQUAL(all.GetTotalAscent(), 150, ());
+  TEST_EQUAL(all.GetTotalDescent(), 300, ());
+
+  // Halfway up the first climb: 50 m are left of it.
+  auto const half = GetRemainingAltitudes(profile, 500);
+  TEST_EQUAL(half.GetTotalAscent(), 100, ());
+  TEST_EQUAL(half.GetTotalDescent(), 300, ());
+  TEST_EQUAL(half.m_maxAltitude, 600, ());
+
+  auto const last = GetRemainingAltitudes(profile, 2000);
+  TEST_EQUAL(last.GetTotalAscent(), 50, ());
+  TEST_EQUAL(last.GetTotalDescent(), 0, ());
+
+  auto const end = GetRemainingAltitudes(profile, 3000);
+  TEST_EQUAL(end.GetTotalAscent(), 0, ());
+  TEST_EQUAL(end.GetTotalDescent(), 0, ());
+}
 }  // namespace track_following_tests

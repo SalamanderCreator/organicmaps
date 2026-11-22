@@ -1,5 +1,7 @@
 #pragma once
 
+#include "map/elevation_info.hpp"
+
 #include "routing/track_router.hpp"
 
 #include "kml/types.hpp"
@@ -42,4 +44,8 @@ TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM);
 /// (almost) the track end.
 std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track,
                                                                  TrackPosition const & entry);
+
+/// Ascent and descent of |profile| (one line, e.g. of a route) from the distance to its end, with the altitude
+/// at that distance interpolated. Uses the threshold of the route profile, so the numbers match its totals.
+ElevationInfo::AltitudesInfo GetRemainingAltitudes(ElevationInfo const & profile, double fromDistM);
 }  // namespace track_following

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <optional>
 
 namespace track_following
 {
@@ -117,5 +118,38 @@ std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack con
   if (lengthM < kMinRemainderM)
     return nullptr;
   return data;
+}
+
+ElevationInfo::AltitudesInfo GetRemainingAltitudes(ElevationInfo const & profile, double fromDistM)
+{
+  std::vector<double> distances;
+  geometry::Altitudes altitudes;
+  double prevDist = 0;
+  std::optional<geometry::Altitude> prevAltitude;
+  profile.ForEachPoint([&](double dist, geometry::Altitude altitude)
+  {
+    if (dist <= fromDistM)
+    {
+      prevDist = dist;
+      prevAltitude = altitude;
+      return;
+    }
+    if (altitudes.empty())
+    {
+      geometry::Altitude start = altitude;
+      if (prevAltitude)
+        start = static_cast<geometry::Altitude>(
+            std::lround(*prevAltitude + (altitude - *prevAltitude) * (fromDistM - prevDist) / (dist - prevDist)));
+      altitudes.push_back(start);
+    }
+    distances.push_back(dist - fromDistM);
+    altitudes.push_back(altitude);
+  });
+
+  if (distances.empty())
+    return {};
+  ElevationInfo remaining;
+  remaining.Assign(distances, altitudes);
+  return remaining.CalculateAltitudesInfo(ElevationInfo::kDefThresholdMWM);
 }
 }  // namespace track_following
