@@ -182,6 +182,7 @@ public class TrackRecordingService
       if (TrackRecorder.nativeIsTrackRecordingEnabled())
         TrackRecorder.nativeStopTrackRecording();
       MwmApplication.from(this).getLocationHelper().removeListener(this);
+      TrackRecordingDebugLog.stop(MwmApplication.from(this).getLocationHelper());
       MwmApplication.from(this).onTrackRecordingStopped();
       // Publish only here: after this block the recording is off, so false always means the native state.
       sIsRecording.setValue(false);
@@ -263,6 +264,7 @@ public class TrackRecordingService
 
     // Subscribe to location updates. This call is idempotent.
     locationHelper.addListener(this);
+    TrackRecordingDebugLog.start(this, locationHelper);
 
     // Restart the location with more frequent refresh interval for Track Recording.
     locationHelper.restartWithNewMode();
