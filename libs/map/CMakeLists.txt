@@ -35,6 +35,8 @@ set(SRC
   isolines_manager.hpp
   mwm_url.cpp
   mwm_url.hpp
+  off_track_monitor.cpp
+  off_track_monitor.hpp
   place_page_info.cpp
   place_page_info.hpp
   share.cpp

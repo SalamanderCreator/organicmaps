@@ -31,6 +31,7 @@ import app.organicmaps.R;
 import app.organicmaps.api.Const;
 import app.organicmaps.bookmarks.ChooseBookmarkCategoryFragment;
 import app.organicmaps.intent.Factory;
+import app.organicmaps.location.OffTrackService;
 import app.organicmaps.sdk.ChoosePositionMode;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.bookmarks.data.Bookmark;
@@ -78,6 +79,13 @@ public class PlacePageController
   private int mFrameHeight;
   @Nullable
   private MapObject mMapObject;
+  private boolean mShowBackButton;
+  // Maps&Fly: the watch button of a track follows the off track alarm, which its notification can stop.
+  private final Observer<Long> mActiveTrackObserver = trackId ->
+  {
+    if (mMapObject != null && mMapObject.isTrack())
+      updateButtons(mMapObject, mShowBackButton, true);
+  };
   @Nullable
   private MapObject mPreviousMapObject;
   private WindowInsetsCompat mCurrentWindowInsets;
@@ -508,6 +516,11 @@ public class PlacePageController
     {
     case BOOKMARK_SAVE, BOOKMARK_DELETE -> onBookmarkBtnClicked();
     case TRACK_DELETE -> onTrackRemoveClicked();
+    case TRACK_WATCH_START, TRACK_WATCH_STOP ->
+    {
+      if (mMapObject instanceof Track track)
+        mPlacePageListener.onTrackWatchToggled(track);
+    }
     case TRACK_RECORDING_SAVE -> mPlacePageListener.onTrackRecordingSaved();
     case TRACK_RECORDING_DELETE -> mPlacePageListener.onTrackRecordingCancelled();
     case BACK -> onBackBtnClicked();
@@ -733,6 +746,10 @@ public class PlacePageController
         {
           buttons.add(mapObject.isBookmark() ? PlacePageButtons.ButtonType.BOOKMARK_DELETE
                                              : PlacePageButtons.ButtonType.BOOKMARK_SAVE);
+          if (mapObject.isTrack())
+            buttons.add(OffTrackService.isWatching(((Track) mapObject).getTrackId())
+                            ? PlacePageButtons.ButtonType.TRACK_WATCH_STOP
+                            : PlacePageButtons.ButtonType.TRACK_WATCH_START);
           if (mapObject.isTrack() && !((Track) mapObject).isRelationTrack())
             buttons.add(PlacePageButtons.ButtonType.TRACK_DELETE);
         }
@@ -771,6 +788,7 @@ public class PlacePageController
       mPreviousMapObject = mMapObject;
       // Place page will automatically open when the bottom sheet content is loaded so we can compute the peek height
       createPlacePageFragments();
+      mShowBackButton = showBackButton;
       updateButtons(mapObject, showBackButton, !(mMapObject.isMyPosition() || mMapObject.isTrackRecording()));
       if (mMapObject.isTrackRecording())
         onTrackRecordingSelected();
@@ -789,6 +807,7 @@ public class PlacePageController
     super.onStart();
     mPlacePageBehavior.addBottomSheetCallback(mDefaultBottomSheetCallback);
     mViewModel.getMapObject().observe(requireActivity(), this);
+    OffTrackService.getActiveTrackId().observe(requireActivity(), mActiveTrackObserver);
   }
 
   @Override
@@ -819,6 +838,7 @@ public class PlacePageController
     super.onStop();
     mPlacePageBehavior.removeBottomSheetCallback(mDefaultBottomSheetCallback);
     mViewModel.getMapObject().removeObserver(this);
+    OffTrackService.getActiveTrackId().removeObserver(mActiveTrackObserver);
   }
 
   public interface PlacePageListener
@@ -826,6 +846,7 @@ public class PlacePageController
     void onPlacePageRequestToggleRouteSettings(@NonNull RoadType roadType);
     void onTrackRecordingSaved();
     void onTrackRecordingCancelled();
+    void onTrackWatchToggled(@NonNull Track track);
     void onPlacePageActiveChanged(boolean active);
   }
 }

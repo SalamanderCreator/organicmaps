@@ -21,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.preference.PreferenceManager;
 import app.organicmaps.background.OsmUploadWork;
 import app.organicmaps.downloader.DownloaderNotifier;
+import app.organicmaps.location.OffTrackService;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.routing.NavigationService;
 import app.organicmaps.sdk.Map;
@@ -30,6 +31,7 @@ import app.organicmaps.sdk.display.DisplayManager;
 import app.organicmaps.sdk.location.LocationHelper;
 import app.organicmaps.sdk.location.LocationState;
 import app.organicmaps.sdk.location.LocationUtils;
+import app.organicmaps.sdk.location.OffTrackMonitor;
 import app.organicmaps.sdk.location.SensorHelper;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
@@ -157,6 +159,7 @@ public class MwmApplication extends Application implements Application.ActivityL
       }
     });
     TrackRecordingService.createNotificationChannel(this);
+    OffTrackService.createNotificationChannels(this);
     // Reset the widget in case the process was killed while recording.
     TrackRecordingWidget.update(this);
 
@@ -255,7 +258,8 @@ public class MwmApplication extends Application implements Application.ActivityL
   // Recording from the widget runs without the map, so nothing else needs location then.
   public void onTrackRecordingStopped()
   {
-    if (!Map.isEngineCreated() && mDisplayManager.isDeviceDisplayUsed() && !RoutingController.get().isNavigating())
+    if (!Map.isEngineCreated() && mDisplayManager.isDeviceDisplayUsed() && !RoutingController.get().isNavigating()
+        && !OffTrackMonitor.nativeIsActive())
       getLocationHelper().stop();
     else
       onNavigationOrRecordingStopped();
@@ -274,6 +278,8 @@ public class MwmApplication extends Application implements Application.ActivityL
       Logger.i(LOCATION_TAG, "PENDING_POSITION mode, keeping location in the background");
     else if (TrackRecorder.nativeIsTrackRecordingEnabled())
       Logger.i(LOCATION_TAG, "Track Recordr is active, keeping location in the background");
+    else if (OffTrackMonitor.nativeIsActive())
+      Logger.i(LOCATION_TAG, "Off track alarm is active, keeping location in the background");
     else
     {
       Logger.i(LOCATION_TAG, "Stopping location in the background");

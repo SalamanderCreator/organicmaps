@@ -63,6 +63,7 @@ import app.organicmaps.editor.OsmLoginActivity;
 import app.organicmaps.help.HelpActivity;
 import app.organicmaps.intent.Factory;
 import app.organicmaps.intent.IntentProcessor;
+import app.organicmaps.location.OffTrackService;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
@@ -83,6 +84,7 @@ import app.organicmaps.sdk.PlacePageActivationListener;
 import app.organicmaps.sdk.Router;
 import app.organicmaps.sdk.bookmarks.data.BookmarkManager;
 import app.organicmaps.sdk.bookmarks.data.MapObject;
+import app.organicmaps.sdk.bookmarks.data.Track;
 import app.organicmaps.sdk.bookmarks.data.TrackRecording;
 import app.organicmaps.sdk.display.DisplayChangedListener;
 import app.organicmaps.sdk.display.DisplayManager;
@@ -539,6 +541,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
         showTrackRecordingUi();
       else if (Boolean.FALSE.equals(recording) && uiShown)
         stopTrackRecording();
+    });
+    final TextView offTrackBanner = findViewById(R.id.off_track_banner);
+    ViewCompat.setOnApplyWindowInsetsListener(offTrackBanner, BaselinePaddingInsetsListener.excludeBottom());
+    OffTrackService.getOffTrackText().observe(this, text -> {
+      offTrackBanner.setText(text);
+      UiUtils.showIf(text != null, offTrackBanner);
     });
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
@@ -2206,6 +2214,28 @@ public class MwmActivity extends BaseMwmFragmentActivity
   {
     if (!saveAndStopTrackRecording())
       Toast.makeText(this, R.string.track_recording_toast_nothing_to_save, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void onTrackWatchToggled(@NonNull Track track)
+  {
+    if (OffTrackService.isWatching(track.getTrackId()))
+    {
+      OffTrackService.stop(this);
+      return;
+    }
+    if (!LocationUtils.checkFineLocationPermission(this))
+    {
+      // The user taps the button again after granting the permission.
+      mLocationPermissionRequest.launch(new String[] {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
+      return;
+    }
+    requestPostNotificationsPermission();
+    if (OffTrackService.start(getApplicationContext(), track.getTrackId(), track.getTitle()))
+    {
+      Toast.makeText(this, R.string.off_track_monitor_started, Toast.LENGTH_SHORT).show();
+      Utils.showBatteryOptimizationWarningIfNeeded(this);
+    }
   }
 
   public void onTrackRecordingCancelled()
