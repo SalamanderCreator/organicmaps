@@ -967,13 +967,15 @@
     <!-- Notification text of the off-track alarm when GPS is too inaccurate. %s is the GPS accuracy, e.g. 80 m -->
     <string name="off_track_gps_inaccurate">GPS ungenau (±%s), keine Warnung möglich</string>
     <!-- Notification title when the user left the watched track -->
-    <string name="off_track_alarm_title">Du hast den Track verlassen</string>
+    <string name="off_track_alarm_title">Trackabweichung</string>
     <!-- Notification text when the user left the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_alarm_text">%s vom Track entfernt</string>
     <!-- Voice announcement when the user left the watched track -->
-    <string name="off_track_alarm_speech">Achtung, du hast den Track verlassen.</string>
+    <string name="off_track_alarm_speech">Achtung, Trackabweichung.</string>
     <!-- Voice announcement when the user is back on the watched track -->
-    <string name="off_track_back_speech">Wieder auf dem Track.</string>
+    <string name="off_track_back_speech">Zurück auf dem Track.</string>
+    <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
+    <string name="off_track_banner">Trackabweichung: %s</string>
     <!-- Settings: title of the off-track alarm distance -->
     <string name="off_track_threshold_title">Off-Track-Alarm: Abstand</string>
     <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->
