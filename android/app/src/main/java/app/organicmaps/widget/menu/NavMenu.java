@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import app.organicmaps.MwmApplication;
@@ -17,10 +16,7 @@ import app.organicmaps.R;
 import app.organicmaps.sdk.routing.RoutingInfo;
 import app.organicmaps.sdk.sound.TtsPlayer;
 import app.organicmaps.sdk.util.StringUtils;
-import app.organicmaps.sdk.widgets.speedlimit.Mode;
-import app.organicmaps.sdk.widgets.speedlimit.SpeedThresholds;
 import app.organicmaps.util.Graphics;
-import app.organicmaps.util.ThemeUtils;
 import app.organicmaps.util.UiUtils;
 import app.organicmaps.util.Utils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -34,7 +30,6 @@ public class NavMenu implements DefaultLifecycleObserver
   private final View mHeaderFrame;
 
   private final ImageView mTts;
-  private final View mSpeedViewContainer;
   private final TextView mSpeedValue;
   private final TextView mSpeedUnits;
   private final TextView mTimeHourValue;
@@ -51,8 +46,6 @@ public class NavMenu implements DefaultLifecycleObserver
   private final Runnable mTtsStateListener = this::refreshTts;
 
   private int currentPeekHeight = 0;
-  private Mode mSpeedMode = Mode.Normal;
-  private int mSpeedLimit = 0;
 
   public interface OnMenuSizeChangedListener
   {
@@ -99,7 +92,6 @@ public class NavMenu implements DefaultLifecycleObserver
     });
 
     // Bottom frame
-    mSpeedViewContainer = bottomFrame.findViewById(R.id.speed_view_container);
     mSpeedValue = bottomFrame.findViewById(R.id.speed_value);
     mSpeedUnits = bottomFrame.findViewById(R.id.speed_dimen);
     mTimeHourValue = bottomFrame.findViewById(R.id.time_hour_value);
@@ -234,7 +226,7 @@ public class NavMenu implements DefaultLifecycleObserver
     mTimeEstimate.setText(Utils.formatArrivalTime(mActivity, seconds));
   }
 
-  private void updateSpeedView(@NonNull RoutingInfo info)
+  private void updateSpeedView()
   {
     final Location last = MwmApplication.from(mActivity).getLocationHelper().getSavedLocation();
     if (last == null)
@@ -243,39 +235,12 @@ public class NavMenu implements DefaultLifecycleObserver
     final double speedMps = last.hasSpeed() ? last.getSpeed() : 0;
     final Pair<String, String> speedAndUnits = StringUtils.nativeFormatSpeedAndUnits(speedMps);
     mSpeedValue.setText(speedAndUnits.first);
-
-    final int speed = StringUtils.nativeFormatSpeed(speedMps);
-    final int speedLimit = info.speedLimitMps > 0 ? StringUtils.nativeFormatSpeed(info.speedLimitMps) : 0;
-    if (mSpeedLimit != speedLimit || !speedAndUnits.second.contentEquals(mSpeedUnits.getText()))
-      mSpeedMode = Mode.Normal;
-    mSpeedLimit = speedLimit;
-    mSpeedMode = SpeedThresholds.DEFAULT.modeFor(speed, speedLimit, mSpeedMode);
-
-    switch (info.isSpeedCamLimitExceeded() ? Mode.Alert : mSpeedMode)
-    {
-    case Normal ->
-    {
-      mSpeedViewContainer.setActivated(false);
-      mSpeedValue.setTextColor(ThemeUtils.getColor(mActivity, android.R.attr.textColorPrimary));
-    }
-    case Warning ->
-    {
-      mSpeedViewContainer.setActivated(false);
-      mSpeedValue.setTextColor(ContextCompat.getColor(mActivity, R.color.base_yellow));
-    }
-    case Alert ->
-    {
-      mSpeedViewContainer.setActivated(true);
-      mSpeedValue.setTextColor(ContextCompat.getColor(mActivity, R.color.white_primary));
-    }
-    }
-
     mSpeedUnits.setText(speedAndUnits.second);
   }
 
   public void update(@NonNull RoutingInfo info)
   {
-    updateSpeedView(info);
+    updateSpeedView();
     updateTime(info.totalTimeInSeconds);
     mDistanceValue.setText(info.distToTarget.mDistanceStr);
     mDistanceUnits.setText(info.distToTarget.getUnitsStr(mActivity.getApplicationContext()));

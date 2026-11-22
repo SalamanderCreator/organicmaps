@@ -90,31 +90,4 @@
         tools:src="@drawable/ic_turn_left_sharp"/>
     </FrameLayout>
   </RelativeLayout>
-
-  <app.organicmaps.sdk.widgets.lanes.LanesView
-      android:id="@+id/lanes"
-      android:layout_width="0dp"
-      android:layout_height="68dp"
-      android:layout_marginEnd="@dimen/margin_half"
-      android:layout_marginTop="@dimen/margin_half"
-      android:padding="@dimen/margin_half"
-      android:visibility="gone"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@id/nav_next_turn_container"
-      app:layout_constraintTop_toBottomOf="@id/street_frame"
-      app:lanesActiveLaneTintColor="?navLaneArrowActiveColor"
-      app:lanesInactiveLaneTintColor="?navLaneArrowInactiveColor"
-      app:lanesBackgroundColor="?navLanesBackgroundColor"
-      app:lanesCornerRadius="@dimen/margin_quarter"
-      app:lanesEditModeLanesCount="5"
-      tools:visibility="gone" />
-
-  <app.organicmaps.sdk.widgets.speedlimit.CombinedSpeedView
-    android:id="@+id/nav_speed_limit"
-    android:layout_width="wrap_content"
-    android:layout_height="60dp"
-    android:layout_margin="@dimen/margin_half"
-    app:om_widget_current_speed_position="end"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/lanes" />
 </androidx.constraintlayout.widget.ConstraintLayout>

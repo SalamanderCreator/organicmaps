@@ -4,9 +4,7 @@ ext.sdkArtifacts = [
     ':sdk:location:core': 'location-core',
     ':sdk:location:gms:google': 'location-google',
     ':sdk:location:gms:foss': 'location-foss',
-    ':sdk:maps:world': 'maps-world',
-    ':sdk:widgets:lanes': 'widgets-lanes',
-    ':sdk:widgets:speedlimit': 'widgets-speedlimit'
+    ':sdk:maps:world': 'maps-world'
 ]
 ext.sdkVersion = providers.gradleProperty('sdkVersion').getOrElse(rootProject.ext.versionName)
 def docsTool = rootProject.file('../tools/python/check_sdk_docs.py')
