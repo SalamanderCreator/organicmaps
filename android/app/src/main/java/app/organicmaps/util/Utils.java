@@ -38,7 +38,6 @@ import androidx.core.os.BundleCompat;
 import app.organicmaps.BuildConfig;
 import app.organicmaps.MwmActivity;
 import app.organicmaps.R;
-import app.organicmaps.sdk.util.Config;
 import app.organicmaps.sdk.util.Constants;
 import app.organicmaps.sdk.util.Distance;
 import app.organicmaps.sdk.util.concurrency.UiThread;
@@ -514,13 +513,7 @@ public class Utils
   @NonNull
   public static String getDonateUrl(@NonNull Context context)
   {
-    // The same l11n logic as in Framework::GetDonateUrl()
-
-    final String url = Config.getDonateUrl();
-    // Enable donations by default if not Google or Huawei. Replace organicmaps.app/donate/ with localized page.
-    if ((url.isEmpty() && !BuildConfig.FLAVOR.equals("google") && !BuildConfig.FLAVOR.equals("huawei"))
-        || url.endsWith("organicmaps.app/donate/"))
-      return context.getString(R.string.translated_om_site_url) + "donate/";
-    return url;
+    // Maps&Fly shows no Organic Maps donation prompts: an empty URL hides them everywhere.
+    return "";
   }
 }

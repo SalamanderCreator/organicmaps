@@ -495,7 +495,8 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
 
   private boolean hasProductsEntry()
   {
-    return Framework.nativeShouldShowProducts();
+    // Maps&Fly hides the Organic Maps product and donation offers on the place page.
+    return false;
   }
 
   private void updateProductsView()
