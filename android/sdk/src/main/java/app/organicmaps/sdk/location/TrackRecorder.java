@@ -22,6 +22,12 @@ public class TrackRecorder
   @Nullable
   public static native ElevationInfo nativeGetElevationInfo();
 
+  /** Fixes with a worse horizontal accuracy in meters are not recorded. 0 turns the filter off. */
+  public static native double nativeGetMinAccuracy();
+
+  /** Applies when a recording starts or is restored after an app restart. */
+  public static native void nativeSetMinAccuracy(double meters);
+
   /** Stops the recording. Returns {@code true} when it creates a track. The file is written asynchronously. */
   public static boolean saveAndStop()
   {

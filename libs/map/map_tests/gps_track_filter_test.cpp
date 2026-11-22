@@ -4,8 +4,6 @@
 
 #include "platform/settings.hpp"
 
-#include "base/scope_guard.hpp"
-
 #include <vector>
 
 namespace gps_track_filter_test
@@ -35,6 +33,105 @@ Points MakeWalk(size_t count)
   for (size_t i = 0; i < count; ++i)
     points.push_back(Make(100.0 + i, 0.0, 15.0 * i * kDegPerMeter, 15.0));
   return points;
+}
+
+std::string_view constexpr kMinAccuracyKey = "GpsTrackingMinAccuracy";
+
+// Restores the accuracy setting of the test environment.
+class MinAccuracyGuard
+{
+public:
+  MinAccuracyGuard() : m_hadSetting(settings::Get(kMinAccuracyKey, m_original)) {}
+  ~MinAccuracyGuard()
+  {
+    if (m_hadSetting)
+      GpsTrackFilter::StoreMinHorizontalAccuracy(m_original);
+    else
+      settings::Delete(kMinAccuracyKey);
+  }
+
+private:
+  double m_original = 0;
+  bool m_hadSetting;
+};
+
+UNIT_TEST(GpsTrackFilter_DefaultMinAccuracy)
+{
+  MinAccuracyGuard guard;
+  settings::Delete(kMinAccuracyKey);
+  TEST_EQUAL(GpsTrackFilter::LoadMinHorizontalAccuracy(), 25.0, ());
+}
+
+UNIT_TEST(GpsTrackFilter_SkipsInaccurateFixes)
+{
+  MinAccuracyGuard guard;
+  settings::Delete(kMinAccuracyKey);
+  GpsTrackFilter filter;
+  auto points = MakeWalk(6);
+  // Also the first fix: it would be accepted without any other check.
+  points[0].m_horizontalAccuracy = 60;
+  points[3].m_horizontalAccuracy = 26;
+  points[4].m_horizontalAccuracy = 25;
+  Points out;
+  filter.Process(points, out);
+  TEST_EQUAL(out.size(), 4, ());
+  TEST_EQUAL(out[0].m_timestamp, points[1].m_timestamp, ());
+  TEST_EQUAL(out[1].m_timestamp, points[2].m_timestamp, ());
+  TEST_EQUAL(out[2].m_timestamp, points[4].m_timestamp, ());
+  TEST_EQUAL(out[3].m_timestamp, points[5].m_timestamp, ());
+}
+
+UNIT_TEST(GpsTrackFilter_InaccurateFixDoesNotBlockNextFix)
+{
+  MinAccuracyGuard guard;
+  settings::Delete(kMinAccuracyKey);
+  GpsTrackFilter filter;
+  auto points = MakeWalk(4);
+  // A far-off inaccurate fix would make the next good fix look like a jump if it entered the history.
+  points[2].m_horizontalAccuracy = 80;
+  points[2].m_latitude = 200 * kDegPerMeter;
+  Points out;
+  filter.Process(points, out);
+  TEST_EQUAL(out.size(), 3, ());
+  TEST_EQUAL(out.back().m_timestamp, points[3].m_timestamp, ());
+}
+
+UNIT_TEST(GpsTrackFilter_RejectsJump)
+{
+  MinAccuracyGuard guard;
+  settings::Delete(kMinAccuracyKey);
+  GpsTrackFilter filter;
+  auto points = MakeWalk(4);
+  // An accurate-looking fix 300 m away within a second.
+  auto jump = Make(103.5, 300 * kDegPerMeter, 45.0 * kDegPerMeter, 15.0);
+  points.insert(points.begin() + 3, jump);
+  Points out;
+  filter.Process(points, out);
+  for (auto const & p : out)
+    TEST_NOT_EQUAL(p.m_timestamp, jump.m_timestamp, ());
+}
+
+UNIT_TEST(GpsTrackFilter_ResetAppliesStoredAccuracy)
+{
+  MinAccuracyGuard guard;
+  settings::Delete(kMinAccuracyKey);
+  GpsTrackFilter filter;
+  // 50 m apart, so that the 40 m accuracy circles do not overlap.
+  Points points;
+  for (size_t i = 0; i < 3; ++i)
+  {
+    points.push_back(Make(100.0 + i, 0.0, 50.0 * i * kDegPerMeter, 50.0));
+    points.back().m_horizontalAccuracy = 40;
+  }
+
+  Points out;
+  filter.Process(points, out);
+  TEST(out.empty(), ());
+
+  GpsTrackFilter::StoreMinHorizontalAccuracy(50);
+  filter.Reset();
+  filter.Process(points, out);
+  TEST_EQUAL(out.size(), 3, ());
 }
 
 UNIT_TEST(GpsTrackFilter_RepeatedFixKeepsNextFix)
@@ -103,16 +200,7 @@ UNIT_TEST(GpsTrackFilter_FinalizeAppendsLastFix)
 
 UNIT_TEST(GpsTrackFilter_ZeroAccuracyBypassesSampling)
 {
-  std::string_view constexpr kMinAccuracyKey = "GpsTrackingMinAccuracy";
-  double originalAccuracy = 0;
-  bool const hadSetting = settings::Get(kMinAccuracyKey, originalAccuracy);
-  SCOPE_GUARD(restoreAccuracy, [&]
-  {
-    if (hadSetting)
-      GpsTrackFilter::StoreMinHorizontalAccuracy(originalAccuracy);
-    else
-      settings::Delete(kMinAccuracyKey);
-  });
+  MinAccuracyGuard guard;
   GpsTrackFilter::StoreMinHorizontalAccuracy(0);
   GpsTrackFilter filter;
   auto points = MakeWalk(2);

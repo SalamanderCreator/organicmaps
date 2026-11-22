@@ -27,6 +27,7 @@ class GpsTrackFilter : public IGpsTrackFilter
 public:
   /// Store setting for  minimal horizontal accuracy
   static void StoreMinHorizontalAccuracy(double value);
+  static double LoadMinHorizontalAccuracy();
 
   GpsTrackFilter();
 

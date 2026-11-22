@@ -81,4 +81,23 @@
     <item>2</item>
   </string-array>
 
+  <!-- Maps&Fly: GPS accuracy limits for track recording, in meters. -->
+  <string-array name="track_recording_accuracy_options" translatable="false">
+    <item>10 m</item>
+    <item>15 m</item>
+    <item>25 m</item>
+    <item>50 m</item>
+    <item>100 m</item>
+    <item>250 m</item>
+  </string-array>
+
+  <string-array name="track_recording_accuracy_values" translatable="false">
+    <item>10</item>
+    <item>15</item>
+    <item>25</item>
+    <item>50</item>
+    <item>100</item>
+    <item>250</item>
+  </string-array>
+
 </resources>

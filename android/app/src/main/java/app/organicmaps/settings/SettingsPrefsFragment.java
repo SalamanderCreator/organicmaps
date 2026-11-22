@@ -24,6 +24,7 @@ import app.organicmaps.sdk.downloader.MapManager;
 import app.organicmaps.sdk.editor.OsmOAuth;
 import app.organicmaps.sdk.editor.data.Language;
 import app.organicmaps.sdk.location.LocationHelper;
+import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.search.SearchRecents;
 import app.organicmaps.sdk.settings.MapLanguageCode;
@@ -68,6 +69,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     initUseMobileDataPrefsCallbacks();
     initPowerManagementPrefsCallbacks();
     initBookmarksTextPlacementPrefsCallbacks();
+    initTrackRecordingAccuracyPrefsCallbacks();
     initShowDownloadedRegionsPrefsCallbacks();
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
@@ -602,6 +604,24 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
       Framework.nativeSetBookmarksTextPlacement(placement);
       return true;
     });
+  }
+
+  private void initTrackRecordingAccuracyPrefsCallbacks()
+  {
+    final ListPreference pref = getPreference(getString(R.string.pref_track_recording_accuracy));
+    final String value = String.valueOf(Math.round(TrackRecorder.nativeGetMinAccuracy()));
+    pref.setValue(value);
+    updateTrackRecordingAccuracySummary(pref, value);
+    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+      TrackRecorder.nativeSetMinAccuracy(Double.parseDouble((String) newValue));
+      updateTrackRecordingAccuracySummary(pref, (String) newValue);
+      return true;
+    });
+  }
+
+  private void updateTrackRecordingAccuracySummary(@NonNull ListPreference pref, @NonNull String meters)
+  {
+    pref.setSummary(getString(R.string.track_recording_accuracy_description, meters + " m"));
   }
 
   private void initShowDownloadedRegionsPrefsCallbacks()

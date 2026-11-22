@@ -11,9 +11,9 @@ namespace
 {
 std::string_view constexpr kMinHorizontalAccuracyKey = "GpsTrackingMinAccuracy";
 
-// Minimal horizontal accuracy is required to skip 'bad' points.
-// Use 250 meters to allow points from a pure GPS + GPS through wifi.
-double constexpr kMinHorizontalAccuracyMeters = 250;
+// Maps&Fly: fixes with a worse horizontal accuracy are skipped. 25 m keeps clean outdoor GPS fixes and drops the
+// zigzag of Wi-Fi/cell fixes and of poor GPS in forests or between houses.
+double constexpr kMinHorizontalAccuracyMeters = 25;
 
 // Required for points decimation to reduce number of close points.
 double constexpr kClosePointDistanceMeters = 10;
@@ -48,14 +48,20 @@ void GpsTrackFilter::StoreMinHorizontalAccuracy(double value)
   settings::Set(kMinHorizontalAccuracyKey, value);
 }
 
-GpsTrackFilter::GpsTrackFilter() : m_minAccuracy(kMinHorizontalAccuracyMeters)
+double GpsTrackFilter::LoadMinHorizontalAccuracy()
 {
-  settings::TryGet(kMinHorizontalAccuracyKey, m_minAccuracy);
+  double value = kMinHorizontalAccuracyMeters;
+  settings::TryGet(kMinHorizontalAccuracyKey, value);
+  return value;
 }
+
+GpsTrackFilter::GpsTrackFilter() : m_minAccuracy(LoadMinHorizontalAccuracy()) {}
 
 void GpsTrackFilter::Reset()
 {
   m_countLastInfo = 0;
+  // A changed setting applies when a recording starts or is restored.
+  m_minAccuracy = LoadMinHorizontalAccuracy();
 }
 
 void GpsTrackFilter::Process(GpsVectorT const & inPoints, GpsVectorT & outPoints)
@@ -73,6 +79,11 @@ void GpsTrackFilter::Process(GpsVectorT const & inPoints, GpsVectorT & outPoints
   {
     // Jump filtering needs the previous fix's speed to estimate acceleration.
     if (!currInfo.HasSpeed())
+      continue;
+
+    // An inaccurate fix must not enter the history either: the first fix is accepted unchecked, and the jump
+    // filter predicts the next fix from the history.
+    if (currInfo.m_horizontalAccuracy > m_minAccuracy)
       continue;
 
     // A replayed fix (same time and position) must not enter the history: IsGoodVector() would take a zero
@@ -130,10 +141,6 @@ bool GpsTrackFilter::IsGoodVector(location::GpsInfo const & info) const
 
 bool GpsTrackFilter::IsGoodPoint(location::GpsInfo const & info) const
 {
-  // Filter by point accuracy
-  if (info.m_horizontalAccuracy > m_minAccuracy)
-    return false;
-
   auto const & lastInfo = GetLastInfo();
   auto const & lastAcceptedInfo = GetLastAcceptedInfo();
 
