@@ -64,6 +64,7 @@ import app.organicmaps.help.HelpActivity;
 import app.organicmaps.intent.Factory;
 import app.organicmaps.intent.IntentProcessor;
 import app.organicmaps.location.OffTrackService;
+import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
@@ -284,7 +285,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (intent.getBooleanExtra(EXTRA_START_TRACK_RECORDING, false))
     {
       if (!TrackRecorder.nativeIsTrackRecordingEnabled())
-        startTrackRecording();
+        startTrackRecording(TrackRecordingDebugLog.isEnabled(this));
       return;
     }
     if (intent.getBooleanExtra(EXTRA_FINISH_TRACK_RECORDING, false))
@@ -634,8 +635,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     // Global listener on the activity's semantic root, so insets are captured regardless
     // of which overlay views happen to be present at dispatch time.
     ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.coordinator), (view, windowInsets) -> {
-      final int trackRecorderOffset =
-          TrackRecorder.nativeIsTrackRecordingEnabled() ? dimen(this, R.dimen.map_button_size) : 0;
+      // Maps&Fly always shows the track recording button below the compass position.
+      final int trackRecorderOffset = dimen(this, R.dimen.map_button_size);
       final Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
       // Drive nav-bar height from the AndroidX visibility signal — pre-R FLAG_FULLSCREEN
       // hides only the status bar, so inferring from app state misreports the nav bar.
@@ -875,7 +876,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       showBottomSheet(MAIN_MENU_ID);
     }
     case help -> showHelp();
-    case trackRecordingStatus -> toggleTrackRecordingPP();
+    case trackRecordingStatus -> onTrackRecordingOptionSelected();
     }
   }
 
@@ -2108,22 +2109,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
   private void showTrackRecordingUi()
   {
-    if (mCurrentWindowInsets != null)
-    {
-      final int offset = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-      updateCompassOffset(offset + dimen(this, R.dimen.map_button_size));
-    }
     mMapButtonsViewModel.setTrackRecorderState(true);
   }
 
   private void stopTrackRecording()
   {
-    if (mCurrentWindowInsets != null)
-    {
-      final int offsetY = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-      final int offsetX = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).right;
-      updateCompassOffset(offsetY, offsetX);
-    }
     // Reset the state before stopping the service: its observer re-enters this method while the state is on.
     mMapButtonsViewModel.setTrackRecorderState(false);
     TrackRecordingService.stopService(getApplicationContext());
@@ -2142,9 +2132,28 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private void onTrackRecordingOptionSelected()
   {
     if (TrackRecorder.nativeIsTrackRecordingEnabled())
+    {
       toggleTrackRecordingPP();
-    else
-      startTrackRecording();
+      return;
+    }
+    // Maps&Fly: the debug log is offered per recording; switched off in the settings, it is never written.
+    if (!TrackRecordingDebugLog.isEnabled(this))
+    {
+      startTrackRecording(false);
+      return;
+    }
+    new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
+        .setTitle(R.string.start_track_recording)
+        .setItems(new String[] {getString(R.string.track_record), getString(R.string.track_record_with_debug)},
+                  (dialog, which) -> startTrackRecording(which == 1))
+        .setNegativeButton(R.string.cancel, null)
+        .show();
+  }
+
+  private void startTrackRecording(boolean withDebugLog)
+  {
+    TrackRecordingDebugLog.setForNextRecording(this, withDebugLog);
+    startTrackRecording();
   }
 
   private void toggleTrackRecordingPP()

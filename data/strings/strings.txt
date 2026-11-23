@@ -46025,8 +46025,20 @@ de = Debug: Track-Rohdaten mitschreiben
 [track_debug_description]
 comment = Settings: summary of the track recording debug switch
 tags = android-app
-en = While recording, every GPS position is written to a file with its accuracy and source. Applies from the next recording.
-de = Beim Aufzeichnen wird jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben. Gilt ab der nächsten Aufzeichnung.
+en = When a recording starts, you can choose to write every GPS position to a file with its accuracy and source.
+de = Beim Start einer Aufzeichnung kannst du wählen, ob jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben wird.
+
+[track_record]
+comment = Dialog when a track recording starts: record the track only
+tags = android-app
+en = Record track
+de = Track aufzeichnen
+
+[track_record_with_debug]
+comment = Dialog when a track recording starts: record the track and also write the raw GPS data for debugging
+tags = android-app
+en = Record track + debug
+de = Track aufzeichnen + Debug
 
 [track_debug_share]
 comment = Settings: shares the newest raw track data file
