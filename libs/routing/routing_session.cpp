@@ -19,7 +19,6 @@ int constexpr kOnRouteMissedCount = 10;
 double constexpr kShowLanesMinDistInMeters = 500.0;
 
 // @TODO The distance may depend on the current speed.
-double constexpr kShowPedestrianTurnInMeters = 20.0;
 
 double constexpr kRunawayDistanceSensitivityMeters = 0.01;
 
@@ -503,9 +502,8 @@ void RoutingSession::GetRouteFollowingInfo(FollowingInfo & info) const
   if (distanceToTurnMeters < kShowLanesMinDistInMeters || m_route->GetCurrentTimeToNearestTurnSec() < 60.0)
     info.m_lanes = turn.m_lanes;
 
-  // Pedestrian info.
-  info.m_pedestrianTurn =
-      (distanceToTurnMeters < kShowPedestrianTurnInMeters) ? turn.m_pedestrianTurn : turns::PedestrianDirection::None;
+  // Maps&Fly: show the next pedestrian turn while its distance counts down, not "straight" until 20 m before it.
+  info.m_pedestrianTurn = turn.m_pedestrianTurn;
 }
 
 double RoutingSession::GetCompletionPercent() const
