@@ -790,6 +790,8 @@ void RoutingSession::SetRoutingSettings(RoutingSettings const & routingSettings)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   m_routingSettings = routingSettings;
+  m_turnNotificationsMgr.SetTurnWarning(routingSettings.m_turnWarningSeconds, routingSettings.m_minTurnWarningM,
+                                        routingSettings.m_maxTurnWarningM);
 }
 
 void RoutingSession::SetRoutingCallbacks(ReadyCallback const & buildReadyCallback,

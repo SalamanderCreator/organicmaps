@@ -986,6 +986,28 @@ zh-Hans = 您已到达目的地。
 zh-Hant = 你已到達目的地。
 yue = 你已經到咗目的地。
 
+[in_20_meters]
+en = In twenty meters
+de = In zwanzig Metern
+es = En veinte metros
+fr = Dans vingt mètres
+it = Tra venti metri
+nl = Over twintig meter
+pl = Za dwadzieścia metrów
+ru = Через двадцать метров
+uk = Через двадцять метрів
+
+[in_30_meters]
+en = In thirty meters
+de = In dreißig Metern
+es = En treinta metros
+fr = Dans trente mètres
+it = Tra trenta metri
+nl = Over dertig meter
+pl = Za trzydzieści metrów
+ru = Через тридцать метров
+uk = Через тридцять метрів
+
 [in_50_meters]
 en = In fifty meters
 ar = بعد خمسين متراً
