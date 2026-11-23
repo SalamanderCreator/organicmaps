@@ -890,10 +890,12 @@
     <string name="you">You</string>
     <!-- Maps&Fly place page while a route is planned: add the place where the route gets shortest and plan the route anew -->
     <string name="route_insert_optimal">Insert optimally</string>
+    <!-- Maps&Fly place page while a route is planned: keep most of the route, leave it for the place and join it again further on -->
+    <string name="route_insert_via">Detour</string>
     <!-- Maps&Fly place page while a route is planned: keep the route and add a way from it to the place and back -->
-    <string name="route_insert_detour">Side trip</string>
-    <!-- Maps&Fly: name of the route stop where a side trip leaves and rejoins the route -->
-    <string name="route_detour_entry">Side trip junction</string>
+    <string name="route_insert_detour">Side trip there and back</string>
+    <!-- Maps&Fly: name of the route stops where a detour or side trip leaves and rejoins the route -->
+    <string name="route_detour_entry">Junction</string>
 
     <!-- SECTION: gps strings -->
     <!-- Editor section title that shows recently used categories (types of objects) when adding a place on the map -->
