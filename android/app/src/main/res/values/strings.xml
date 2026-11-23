@@ -934,6 +934,10 @@
     <string name="change_stop_along_route">Change stop</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Maximum number of stops reached</string>
+    <!-- Maps&Fly map layer: circles of 500 m, 1 km and 2 km around the own position and the selected place -->
+    <string name="button_layer_distance_circles">Distance circles</string>
+    <!-- Maps&Fly map layer: dashed line from the selected place to the own position with the straight-line distance -->
+    <string name="button_layer_distance_line">Distance line</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Could not save the route as a track</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->
