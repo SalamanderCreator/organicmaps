@@ -25,8 +25,8 @@ import app.organicmaps.util.UiUtils;
 /**
  * Maps&amp;Fly: shows in the place page how far the place is along the paths from the current position,
  * with the climb and the walking or cycling time. A tap switches between walking and cycling.
- * While a walking or cycling route is planned, it offers two ways to add the place instead: inserted where the
- * route gets shortest, or as a side trip that keeps the route. Both are drawn on the map in their colors.
+ * While a walking or cycling route is planned or followed, it offers two ways to add the place instead: inserted where
+ * the route gets shortest, or as a side trip that keeps the route. Both are drawn on the map in their colors.
  */
 final class PlacePageRoutePreview
 {
@@ -141,15 +141,15 @@ final class PlacePageRoutePreview
 
   private static boolean isSupported(@NonNull MapObject object)
   {
-    return !object.isMyPosition() && !object.isTrack() && !object.isTrackRecording()
- && !RoutingController.get().isNavigating();
+    return !object.isMyPosition() && !object.isTrack() && !object.isTrackRecording();
   }
 
   private static boolean canInsertIntoRoute()
   {
     final RoutingController controller = RoutingController.get();
     final Router router = controller.getLastRouterType();
-    return controller.isPlanning() && controller.isBuilt() && (router == Router.Pedestrian || router == Router.Bicycle);
+    final boolean hasRoute = controller.isNavigating() || (controller.isPlanning() && controller.isBuilt());
+    return hasRoute && (router == Router.Pedestrian || router == Router.Bicycle);
   }
 
   private void showPreview(@NonNull Router router, @Nullable RoutePreview.Result result)

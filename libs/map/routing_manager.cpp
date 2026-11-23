@@ -1956,42 +1956,59 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
 
   auto const type = m_currentRouterType;
   auto const * route = m_routingSession.GetRoute();
-  if ((type != RouterType::Pedestrian && type != RouterType::Bicycle) || m_routingSession.IsFollowing() ||
-      route == nullptr || !route->IsValid())
-  {
+  if ((type != RouterType::Pedestrian && type != RouterType::Bicycle) || route == nullptr || !route->IsValid())
     return false;
-  }
   VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
 
-  std::vector<m2::PointD> checkpoints;
-  std::vector<std::vector<m2::PointD>> legs;
-  std::vector<RouteSegment> segments;
-  for (size_t i = 0; i < route->GetSubrouteCount(); ++i)
-  {
-    auto const & attrs = route->GetSubrouteAttrs(i);
-    if (i == 0)
-      checkpoints.push_back(attrs.GetStart().GetPoint());
-    checkpoints.push_back(attrs.GetFinish().GetPoint());
+  // While navigating, only the rest of the route from the current position counts.
+  bool const isFollowing = m_routingSession.IsFollowing();
+  auto const iter = route->GetCurrentIter();
+  size_t const firstSegmentIdx = isFollowing && iter.IsValid() ? iter.m_ind : 0;
+  size_t const firstLegIdx = isFollowing ? route->GetCurrentSubrouteIdx() : 0;
 
-    route->GetSubrouteInfo(i, segments);
-    auto & leg = legs.emplace_back();
-    leg.push_back(attrs.GetStart().GetPoint());
-    for (auto const & s : segments)
-      leg.push_back(s.GetJunction().GetPoint());
+  // Legs are indexed like the subroutes; passed ones stay empty.
+  std::vector<m2::PointD> checkpoints;
+  std::vector<std::vector<m2::PointD>> legs(route->GetSubrouteCount());
+  auto const & segments = route->GetRouteSegments();
+  for (size_t legIdx = firstLegIdx; legIdx < legs.size(); ++legIdx)
+  {
+    auto const & attrs = route->GetSubrouteAttrs(legIdx);
+    size_t const beginIdx = std::max(attrs.GetBeginSegmentIdx(), firstSegmentIdx);
+    auto & leg = legs[legIdx];
+    leg.push_back(beginIdx == attrs.GetBeginSegmentIdx() ? attrs.GetStart().GetPoint() : iter.m_pt);
+    for (size_t i = beginIdx; i < attrs.GetEndSegmentIdx(); ++i)
+      leg.push_back(segments[i].GetJunction().GetPoint());
     if (leg.size() < 2)
       leg.push_back(attrs.GetFinish().GetPoint());
+
+    if (checkpoints.empty())
+      checkpoints.push_back(leg.front());
+    checkpoints.push_back(attrs.GetFinish().GetPoint());
   }
 
-  auto const entry = route_preview::ProjectToRoute(legs, pt);
-  m_routeDetour = RouteDetour{pt, entry};
+  // Only the remaining legs are candidates for the side trip.
+  std::vector<std::vector<m2::PointD>> remainingLegs(legs.begin() + firstLegIdx, legs.end());
+  auto projection = route_preview::ProjectToRoute(remainingLegs, pt);
+  projection.m_legIdx += firstLegIdx;
+  // Leave and rejoin a few meters around the closest point: the route refuses equal route points.
+  double constexpr kDetourGapM = 3.0;
+  auto detour = route_preview::MakeDetour(legs, projection, kDetourGapM);
+  // The current position is no route point, so a side trip right from it leaves there.
+  if (!detour.m_leave && isFollowing && projection.m_legIdx == firstLegIdx)
+    detour.m_leave = legs[firstLegIdx].front();
+  m_routeDetour = RouteDetour{pt, detour};
+
+  auto const & leg = legs[detour.m_legIdx];
+  std::vector<m2::PointD> detourCheckpoints = {detour.m_leave.value_or(leg.front()), pt,
+                                               detour.m_rejoin.value_or(leg.back())};
 
   auto variants = std::make_shared<RouteInsertVariants>();
-  variants->m_current = route_preview::CalculateStats(*route, vehicleType);
+  variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
 
   // One router runs both: first the optimal insertion, then the detour.
-  m_routePreview->Calculate(
-      route_preview::InsertOptimally(std::move(checkpoints), pt), vehicleType,
-      [this, type, vehicleType, pt, entry, variants, callback = std::move(callback)](RouteBase const * optimal) mutable
+  m_routePreview->Calculate(route_preview::InsertOptimally(std::move(checkpoints), pt), vehicleType,
+                            [this, type, vehicleType, detourCheckpoints = std::move(detourCheckpoints), variants,
+                             callback = std::move(callback)](RouteBase const * optimal) mutable
   {
     if (optimal)
     {
@@ -1999,11 +2016,12 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
       ShowRouteVariant(*optimal, type, kRoutePreviewColor, kRouteOptimalDepth);
     }
     m_routePreview->Calculate(
-        {entry.m_point, pt, entry.m_point}, vehicleType,
+        std::move(detourCheckpoints), vehicleType,
         [this, type, vehicleType, variants, callback = std::move(callback)](RouteBase const * detour)
     {
       if (detour)
       {
+        // The side trip leaves and rejoins the route a few meters apart, which the planned route also covers.
         variants->m_detour =
             route_preview::Add(variants->m_current, route_preview::CalculateStats(*detour, vehicleType), vehicleType);
         ShowRouteVariant(*detour, type, kRouteDetourColor, kRouteDetourDepth);
@@ -2021,6 +2039,7 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
 
   if (!m_routeDetour || !m_routeDetour->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
     return false;
+  auto const & detour = m_routeDetour->m_detour;
 
   auto const * route = m_routingSession.GetRoute();
   size_t const pointsCount = GetRoutePointsCount();
@@ -2031,16 +2050,25 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
     return false;
   }
 
-  RouteMarkData entry;
-  entry.m_title = entryTitle;
-  entry.m_position = m_routeDetour->m_entry.m_point;
   point.m_isMyPosition = false;
+  std::vector<RouteMarkData> stops;
+  auto const addJunction = [&](std::optional<m2::PointD> const & position)
+  {
+    if (!position)
+      return;
+    RouteMarkData junction;
+    junction.m_title = entryTitle;
+    junction.m_position = *position;
+    stops.push_back(std::move(junction));
+  };
+  addJunction(detour.m_leave);
+  stops.push_back(std::move(point));
+  addJunction(detour.m_rejoin);
 
   // A new stop comes last among the stops, i.e. just before the finish; then it moves after the leg start.
-  size_t targetIdx = m_routeDetour->m_entry.m_legIdx + 1;
-  for (auto * data : {&entry, &point, &entry})
+  size_t targetIdx = detour.m_legIdx + 1;
+  for (auto & stop : stops)
   {
-    RouteMarkData stop = *data;
     stop.m_pointType = RouteMarkType::Intermediate;
     if (!AddRoutePoint(std::move(stop), false /* optimize */))
       return false;
@@ -2055,6 +2083,10 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
 
 void RoutingManager::ShowRouteVariant(RouteBase const & route, RouterType type, std::string const & color, double depth)
 {
+  // The renderer hides the passed part of every subroute while navigating, measured by the active route. A distance
+  // far beyond it keeps the previews whole. Taxi draws like the walking and cycling routes, without their masks for
+  // later legs, but a bit wider, which suits a proposal.
+  double constexpr kPreviewBaseDistance = 1e6;
   bool const isBicycle = type == RouterType::Bicycle;
   std::vector<RouteSegment> segments;
   double distance = 0.0;
@@ -2068,7 +2100,8 @@ void RoutingManager::ShowRouteVariant(RouteBase const & route, RouterType type, 
     if (!subroute)
       continue;
     distance = segments.back().GetDistFromBeginningMerc();
-    subroute->m_routeType = isBicycle ? df::RouteType::Bicycle : df::RouteType::Pedestrian;
+    subroute->m_baseDistance += kPreviewBaseDistance;
+    subroute->m_routeType = df::RouteType::Taxi;
     subroute->AddStyle(df::SubrouteStyle(color, isBicycle ? df::RoutePattern(8.0, 2.0) : df::RoutePattern(4.0, 2.0)));
     auto const id =
         m_drapeEngine.SafeCallWithResult(&df::DrapeEngine::AddSubroute, df::SubrouteConstPtr(subroute.release()));

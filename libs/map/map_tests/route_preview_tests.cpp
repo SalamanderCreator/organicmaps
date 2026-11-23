@@ -2,6 +2,8 @@
 
 #include "map/route_preview.hpp"
 
+#include "geometry/mercator.hpp"
+
 namespace route_preview_tests
 {
 using route_preview::EstimateHikingTimeSec;
@@ -45,11 +47,52 @@ UNIT_TEST(RoutePreview_ProjectToRoute)
   projection = ProjectToRoute(legs, {2.4, 1.5});
   TEST(projection.m_point.EqualDxDy({2, 1.5}, 1e-9), (projection.m_point));
   TEST_EQUAL(projection.m_legIdx, 1, ());
+  TEST_EQUAL(projection.m_segmentIdx, 1, ());
 
   // Behind the finish: the finish itself.
   projection = ProjectToRoute(legs, {2, 3});
   TEST(projection.m_point.EqualDxDy({2, 2}, 1e-9), (projection.m_point));
   TEST_EQUAL(projection.m_legIdx, 1, ());
+}
+
+UNIT_TEST(RoutePreview_MakeDetour)
+{
+  using route_preview::MakeDetour;
+  using route_preview::ProjectToRoute;
+
+  // Two legs of about 1.1 km along the equator, then north.
+  double const step = mercator::MetersToMercator(1000.0);
+  std::vector<std::vector<m2::PointD>> const legs = {{{0, 0}, {step, 0}}, {{step, 0}, {step, step}, {step, 2 * step}}};
+  double constexpr kGapM = 3.0;
+  double constexpr kEpsM = 0.1;
+
+  // In the middle of a segment: both points around the projection.
+  auto detour = MakeDetour(legs, ProjectToRoute(legs, {step / 2, step / 4}), kGapM);
+  TEST_EQUAL(detour.m_legIdx, 0, ());
+  TEST(detour.m_leave && detour.m_rejoin, ());
+  TEST_ALMOST_EQUAL_ABS(mercator::DistanceOnEarth(*detour.m_leave, {step / 2, 0}), kGapM, kEpsM, ());
+  TEST_ALMOST_EQUAL_ABS(mercator::DistanceOnEarth(*detour.m_rejoin, {step / 2, 0}), kGapM, kEpsM, ());
+  TEST_LESS(detour.m_leave->x, detour.m_rejoin->x, ());
+
+  // Across a leg point inside a leg: the walk continues on the next segment.
+  double const near = mercator::MetersToMercator(1.0);
+  detour = MakeDetour(legs, ProjectToRoute(legs, {step + 0.5 * step, step - near}), kGapM);
+  TEST_EQUAL(detour.m_legIdx, 1, ());
+  TEST(detour.m_leave && detour.m_rejoin, ());
+  TEST_ALMOST_EQUAL_ABS(mercator::DistanceOnEarth(*detour.m_rejoin, {step, step}), kGapM - 1.0, kEpsM, ());
+  TEST_ALMOST_EQUAL_ABS(detour.m_rejoin->x, step, 1e-12, ());
+
+  // At the finish: the side trip returns to the finish itself.
+  detour = MakeDetour(legs, ProjectToRoute(legs, {step, 3 * step}), kGapM);
+  TEST_EQUAL(detour.m_legIdx, 1, ());
+  TEST(detour.m_leave, ());
+  TEST(!detour.m_rejoin, ());
+
+  // At the start: it leaves from the start itself.
+  detour = MakeDetour(legs, ProjectToRoute(legs, {-step, 0}), kGapM);
+  TEST_EQUAL(detour.m_legIdx, 0, ());
+  TEST(!detour.m_leave, ());
+  TEST(detour.m_rejoin, ());
 }
 
 UNIT_TEST(RoutePreview_AddStats)

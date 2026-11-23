@@ -314,11 +314,12 @@ public:
     std::optional<route_preview::Stats> m_detour;
   };
   using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
-  /// Maps&Fly: while a walking or cycling route is planned, calculates both ways to add |pt| and draws them next to
-  /// the route until CancelRoutePreview(). @return false without such a route.
+  /// Maps&Fly: while a walking or cycling route is planned or followed, calculates both ways to add |pt| and draws
+  /// them next to the route until CancelRoutePreview(). While following, only the rest of the route counts.
+  /// @return false without such a route.
   bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
-  /// Maps&Fly: adds the detour of the last CalculateRouteInsertVariants() to |point| as three stops: the closest
-  /// route point with |entryTitle|, |point| and the closest route point again. Rebuild the route then.
+  /// Maps&Fly: adds the detour of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
+  /// route, with |entryTitle|, |point| and where it rejoins the route. Rebuild the route then.
   bool AddRouteDetour(RouteMarkData && point, std::string const & entryTitle);
 
 private:
@@ -433,7 +434,7 @@ private:
   struct RouteDetour
   {
     m2::PointD m_target;
-    route_preview::RouteProjection m_entry;
+    route_preview::Detour m_detour;
   };
   std::optional<RouteDetour> m_routeDetour;
 
