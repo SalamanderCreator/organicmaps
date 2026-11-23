@@ -7,6 +7,28 @@
 #include "geometry/parametrized_segment.hpp"
 
 #include <algorithm>
+#include <atomic>
+
+namespace
+{
+Track::TerrainElevationsFn g_terrainElevationsFn;
+std::atomic<bool> g_preferTerrainElevation = false;
+}  // namespace
+
+void Track::SetTerrainElevationsFn(TerrainElevationsFn fn)
+{
+  g_terrainElevationsFn = std::move(fn);
+}
+
+void Track::SetPreferTerrainElevation(bool prefer)
+{
+  g_preferTerrainElevation = prefer;
+}
+
+bool Track::IsTerrainElevationPreferred()
+{
+  return g_preferTerrainElevation;
+}
 
 Track::Track(kml::TrackData && data)
   : Base(data.m_id == kml::kInvalidTrackId ? UserMarkIdStorage::Instance().GetNextTrackId() : data.m_id)
@@ -272,10 +294,7 @@ std::pair<TrackStatistics, ElevationInfo const *> Track::GetStatisticsAndElevati
   auto const * ei = GetElevationInfo();
   if (ei)
   {
-    // Relation tracks from MWM have cleaner altitude data than raw GPS tracks.
-    auto const threshold =
-        (m_data.m_id == kml::kTempRelationTrackId) ? ElevationInfo::kDefThresholdMWM : ElevationInfo::kDefThresholdGPS;
-    auto const altInfo = ei->CalculateAltitudesInfo(threshold);
+    auto const altInfo = ei->CalculateAltitudesInfo(GetElevationThreshold());
     ts.m_ascent = altInfo.GetTotalAscent();
     ts.m_descent = altInfo.GetTotalDescent();
     ts.m_minElevation = altInfo.m_minAltitude;
@@ -286,18 +305,112 @@ std::pair<TrackStatistics, ElevationInfo const *> Track::GetStatisticsAndElevati
 
 ElevationInfo const * Track::GetElevationInfo() const
 {
-  if (!m_elevationInfo)
-  {
-    if (!HasAltitudes())
-      return nullptr;
-    m_elevationInfo = ElevationInfo(GetData().m_geometry.m_lines);
+  bool const preferTerrain = IsTerrainElevationPreferred();
+  if (m_elevationInfo && m_elevationPrefersTerrain == preferTerrain)
+    return &(*m_elevationInfo);
 
-    // Relation tracks from MWM have cleaner altitude data than raw GPS tracks.
-    if (m_data.m_id != kml::kTempRelationTrackId)
-      m_elevationInfo->SmoothSlopeOutliers();
-    m_elevationInfo->Simplify();
-  }
+  m_elevationInfo.reset();
+  bool const hasAltitudes = HasAltitudes();
+  std::optional<std::vector<ElevationInfo::GeometryLine>> terrainLines;
+  bool terrainOnly = false;
+  if (preferTerrain || !hasAltitudes)
+    terrainLines = GetTerrainLines(preferTerrain, terrainOnly);
+  // Not cached: the terrain may still be downloaded.
+  if (!terrainLines && !hasAltitudes)
+    return nullptr;
+
+  m_elevationInfo = ElevationInfo(terrainLines ? *terrainLines : GetData().m_geometry.m_lines);
+  m_elevationPrefersTerrain = preferTerrain;
+  m_terrainLines = std::move(terrainLines);
+  m_terrainOnly = m_terrainLines && terrainOnly;
+
+  // Relation tracks from MWM and the terrain have cleaner altitude data than raw GPS tracks.
+  if (m_data.m_id != kml::kTempRelationTrackId && !m_terrainOnly)
+    m_elevationInfo->SmoothSlopeOutliers();
+  m_elevationInfo->Simplify();
   return &(*m_elevationInfo);
+}
+
+ElevationInfo::Altitude Track::GetElevationThreshold() const
+{
+  ASSERT(m_elevationInfo, ("Call GetElevationInfo() first"));
+  // Relation tracks from MWM and the terrain have cleaner altitude data than raw GPS tracks.
+  return m_data.m_id == kml::kTempRelationTrackId || m_terrainOnly ? ElevationInfo::kDefThresholdMWM
+                                                                   : ElevationInfo::kDefThresholdGPS;
+}
+
+kml::MultiGeometry Track::GetGeometryWithElevation() const
+{
+  auto geometry = m_data.m_geometry;
+  if (GetElevationInfo() && m_terrainLines)
+    geometry.m_lines = *m_terrainLines;
+  return geometry;
+}
+
+std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(bool preferTerrain,
+                                                                               bool & terrainOnly) const
+{
+  if (!g_terrainElevationsFn)
+    return std::nullopt;
+
+  auto lines = m_data.m_geometry.m_lines;
+  // A track with only zero heights has none, e.g. a KML without altitudes.
+  bool const hasOwn = std::ranges::any_of(lines, [](auto const & line)
+  {
+    return std::ranges::any_of(line, [](geometry::PointWithAltitude const & pt)
+    {
+      auto const altitude = pt.GetAltitude();
+      return altitude != geometry::kInvalidAltitude && altitude != geometry::kDefaultAltitudeMeters;
+    });
+  });
+  bool const replaceAll = preferTerrain || !hasOwn;
+  terrainOnly = replaceAll;
+
+  // All the points, also with own heights, to recognize a flight.
+  std::vector<m2::PointD> points;
+  for (auto const & line : lines)
+    for (auto const & pt : line)
+      points.push_back(pt.GetPoint());
+  auto const elevations = g_terrainElevationsFn(points);
+  CHECK_EQUAL(elevations.size(), points.size(), ());
+
+  // A flight, e.g. by paraglider, keeps its own heights (Marisa): more than 5% of them far above the terrain.
+  // GPS noise and the ellipsoid/geoid difference stay well below the margin.
+  if (hasOwn)
+  {
+    double constexpr kFlightMarginM = 150;
+    size_t above = 0, own = 0;
+    size_t i = 0;
+    for (auto const & line : lines)
+    {
+      for (auto const & pt : line)
+      {
+        auto const & elevation = elevations[i++];
+        if (!elevation || pt.GetAltitude() == geometry::kInvalidAltitude)
+          continue;
+        ++own;
+        if (pt.GetAltitude() > *elevation + kFlightMarginM)
+          ++above;
+      }
+    }
+    if (above * 20 > own)
+      return std::nullopt;
+  }
+
+  size_t i = 0;
+  for (auto & line : lines)
+  {
+    for (auto & pt : line)
+    {
+      auto const & elevation = elevations[i++];
+      if (!replaceAll && pt.GetAltitude() != geometry::kInvalidAltitude)
+        continue;
+      if (!elevation)
+        return std::nullopt;
+      pt.SetAltitude(static_cast<geometry::Altitude>(std::lround(*elevation)));
+    }
+  }
+  return lines;
 }
 
 double Track::GetDurationInSeconds() const

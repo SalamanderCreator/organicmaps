@@ -103,6 +103,7 @@ std::string_view constexpr kAllowAutoZoom = "AutoZoom";
 std::string_view constexpr kTrafficEnabledKey = "TrafficEnabled";
 std::string_view constexpr kTransitSchemeEnabledKey = "TransitSchemeEnabled";
 std::string_view constexpr kIsolinesEnabledKey = "IsolinesEnabled";
+std::string_view constexpr kPreferTerrainElevationKey = "PreferTerrainElevation";
 std::string_view constexpr kOutdoorsEnabledKey = "OutdoorsEnabled";
 std::string_view constexpr kTrafficSimplifiedColorsKey = "TrafficSimplifiedColors";
 std::string_view constexpr kLargeFontsSize = "LargeFontsSize";
@@ -400,6 +401,10 @@ Framework::Framework(FrameworkParams const & params, bool loadMaps)
                  std::bind(&Framework::OnCountryFileDelete, this, _1, _2));
 
   m_terrainProvider.SetOnTerrainDeregisteredCallback(std::bind(&Framework::OnTerrainDeregistered, this, _1));
+  // Maps&Fly: the track elevation profiles fill the missing heights from the terrain.
+  Track::SetTerrainElevationsFn([this](std::vector<m2::PointD> const & points)
+  { return m_terrainProvider.GetElevations(points); });
+  Track::SetPreferTerrainElevation(LoadPreferTerrainElevation());
   // A downloaded block: Storage resolved the overlaps and the versions already.
   m_storage.SetTerrainCallbacks(
       [this](terrain::TwmFile const & file)
@@ -474,6 +479,7 @@ Framework::~Framework()
   DestroyDrapeEngine();
   m_featuresFetcher.SetOnMapDeregisteredCallback(nullptr);
   m_terrainProvider.SetOnTerrainDeregisteredCallback(nullptr);
+  Track::SetTerrainElevationsFn(nullptr);
 }
 
 void Framework::ShowNode(storage::CountryId const & countryId)
@@ -3297,6 +3303,20 @@ bool Framework::LoadIsolinesEnabled()
 void Framework::SaveIsolinesEnabled(bool enabled)
 {
   settings::Set(kIsolinesEnabledKey, enabled);
+}
+
+bool Framework::LoadPreferTerrainElevation()
+{
+  // On until the user turns it off: phones without a barometer measure the height poorly.
+  bool prefer = true;
+  settings::TryGet(kPreferTerrainElevationKey, prefer);
+  return prefer;
+}
+
+void Framework::SetPreferTerrainElevation(bool prefer)
+{
+  settings::Set(kPreferTerrainElevationKey, prefer);
+  Track::SetPreferTerrainElevation(prefer);
 }
 
 bool Framework::LoadOutdoorsEnabled()
