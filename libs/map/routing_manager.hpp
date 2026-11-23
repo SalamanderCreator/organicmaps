@@ -294,6 +294,16 @@ public:
   /// Returns true for a valid route with complete heights and a nonzero height after simplification.
   bool GetRouteElevationInfo(ElevationInfo & ei) const;
 
+  /// Maps&Fly: route length in meters by path grade (SAC T1-T2 or ungraded, T3, T4-T6).
+  struct PathGradeDistances
+  {
+    double m_normalM = 0;
+    double m_difficultM = 0;
+    double m_expertM = 0;
+  };
+  /// Returns nullopt without a valid route.
+  std::optional<PathGradeDistances> GetRoutePathGradeDistances() const;
+
   /// \brief Interpolates a point along the current route polyline at the given distance from start.
   /// \return Nullopt if the route is invalid.
   std::optional<m2::PointD> GetRoutePointAtDistance(double distanceMeters) const;

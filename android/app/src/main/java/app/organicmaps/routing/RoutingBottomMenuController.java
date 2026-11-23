@@ -26,13 +26,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.organicmaps.MwmActivity;
 import app.organicmaps.R;
 import app.organicmaps.sdk.Framework;
+import app.organicmaps.sdk.Router;
 import app.organicmaps.sdk.bookmarks.data.DistanceAndAzimut;
 import app.organicmaps.sdk.routing.RouteAltitudeData;
 import app.organicmaps.sdk.routing.RouteMarkData;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
+import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.routing.TransitRouteInfo;
 import app.organicmaps.sdk.routing.TransitStepInfo;
+import app.organicmaps.sdk.settings.RoadType;
 import app.organicmaps.sdk.util.Distance;
 import app.organicmaps.sdk.util.StringUtils;
 import app.organicmaps.util.ThemeUtils;
@@ -93,6 +96,8 @@ final class RoutingBottomMenuController
   private final RecyclerView mTransitRecyclerView;
   @NonNull
   private final View mSaveButton;
+  @NonNull
+  private final TextView mPathGrades;
   @Nullable
   private final View mManageRoutePanel;
   @Nullable
@@ -172,6 +177,7 @@ final class RoutingBottomMenuController
     mTimeVehicle = timeVehicle;
     mArrival = arrival;
     mSaveButton = saveButton;
+    mPathGrades = altitudeChartFrame.findViewById(R.id.route_path_grades);
     mListener = listener;
     int dividerRes = ThemeUtils.getResource(mContext, R.attr.transitStepDivider);
     Drawable dividerDrawable = ContextCompat.getDrawable(mContext, dividerRes);
@@ -247,6 +253,7 @@ final class RoutingBottomMenuController
     if (!RoutingController.get().isVehicleRouterType() && !RoutingController.get().isRulerRouterType())
       showRouteAltitudeChart();
     showRoutingDetails();
+    showPathGrades();
     UiUtils.show(mAltitudeChartFrame);
     notifyVisibilityChanged();
     refreshManageRoute();
@@ -271,7 +278,8 @@ final class RoutingBottomMenuController
 
   void hideAltitudeChartAndRoutingDetails()
   {
-    UiUtils.hide(mAltitudeChart, mTimeVehicle, mTimeElevationLine, mTransitTime, mTimeRuler, mTransitRecyclerView);
+    UiUtils.hide(mAltitudeChart, mTimeVehicle, mTimeElevationLine, mTransitTime, mTimeRuler, mTransitRecyclerView,
+                 mPathGrades);
     notifyVisibilityChanged();
   }
 
@@ -427,6 +435,48 @@ final class RoutingBottomMenuController
     final String descent = Framework.nativeFormatAltitude(data.getTotalDescent());
     mAltitudeDifference.setText(mContext.getString(formatResId, ascent, descent));
     UiUtils.show(mAltitudeDifference, mAltitudeChart);
+  }
+
+  // Maps&Fly: shows how much of a walking or cycling route runs on SAC T3 and T4-T6 paths, and warns
+  // when the route uses a grade the routing options avoid (e.g. because a stop lies on such a path).
+  private void showPathGrades()
+  {
+    final Router router = RoutingController.get().getLastRouterType();
+    final double[] grades = Framework.nativeGetRoutePathGradeDistances();
+    if (grades == null || (router != Router.Pedestrian && router != Router.Bicycle))
+    {
+      UiUtils.hide(mPathGrades);
+      return;
+    }
+
+    final SpannableStringBuilder text = new SpannableStringBuilder(mContext.getString(R.string.route_path_grades));
+    final String[] labels = {mContext.getString(R.string.route_path_grade_normal),
+                             mContext.getString(R.string.route_path_grade_difficult),
+                             mContext.getString(R.string.route_path_grade_expert)};
+    boolean first = true;
+    for (int i = 0; i < grades.length; ++i)
+    {
+      // Shorter parts are just junction snapping noise.
+      if (grades[i] < 1)
+        continue;
+      text.append(first ? " " : " · ").append(labels[i]);
+      if (grades[1] + grades[2] >= 1)
+        text.append(" ").append(StringUtils.nativeFormatDistance(grades[i]).toString(mContext));
+      first = false;
+    }
+
+    final boolean expertAvoided = grades[2] >= 1 && RoutingOptions.hasOption(router, RoadType.PathExpert);
+    final boolean difficultAvoided = grades[1] >= 1 && RoutingOptions.hasOption(router, RoadType.PathDifficult);
+    if (expertAvoided || difficultAvoided)
+    {
+      final int start = text.length();
+      text.append("\n").append(mContext.getString(expertAvoided ? R.string.route_path_grade_expert_warning
+                                                                : R.string.route_path_grade_difficult_warning));
+      text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.base_red)), start, text.length(),
+                   Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    mPathGrades.setText(text);
+    UiUtils.show(mPathGrades);
   }
 
   private void showRoutingDetails()

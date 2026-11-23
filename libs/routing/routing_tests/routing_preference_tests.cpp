@@ -411,6 +411,48 @@ UNIT_CLASS_TEST(StepsRoutingFixture, SubmittedOptionsOverrideSettingsForTheWhole
   }
 }
 
+class SacRoutingFixture : public RoutingPreferenceFixture
+{
+public:
+  // routing_steps.osm with the steps replaced by SAC T4 (alpine_hiking) paths and a 5x detour at latitude 1.
+  SacRoutingFixture() : RoutingPreferenceFixture("routing_sac.osm") {}
+};
+
+UNIT_CLASS_TEST(SacRoutingFixture, ExpertPathsAreAvoidedWhenPossible)
+{
+  for (auto const vehicle : {VehicleType::Bicycle, VehicleType::Pedestrian})
+  {
+    for (bool const avoid : {false, true})
+    {
+      RoutingOptions::SaveToSettings(vehicle, RoutingOptions(avoid ? RoutingOptions::PathExpert : 0));
+      auto router = Router(vehicle);
+      RoutesResult result;
+      TEST_EQUAL(Calculate(*router, result, {}, false, true), RouterResultCode::NoError, (vehicle, avoid));
+      TEST_EQUAL(UsesRoadType(result.GetActive(), RoutingOptions::PathExpert), !avoid, (vehicle, avoid));
+    }
+  }
+}
+
+UNIT_CLASS_TEST(SacRoutingFixture, RequiredExpertPathsStayRoutable)
+{
+  // Unlike steps, avoided path grades are soft: the route uses them when there is no other way.
+  for (auto const vehicle : {VehicleType::Bicycle, VehicleType::Pedestrian})
+  {
+    for (double const latitude : {2.0, 3.0})
+    {
+      RoutingOptions::SaveToSettings(vehicle,
+                                     RoutingOptions(RoutingOptions::PathExpert | RoutingOptions::PathDifficult));
+      auto router = Router(vehicle);
+      RoutesResult result;
+      TEST_EQUAL(router->CalculateRoute(
+                     Checkpoints(mercator::FromLatLon(latitude, 1.01), mercator::FromLatLon(latitude, 1.09)), {}, false,
+                     true, {}, result),
+                 RouterResultCode::NoError, (vehicle, latitude));
+      TEST(UsesRoadType(result.GetActive(), RoutingOptions::PathExpert), (vehicle, latitude));
+    }
+  }
+}
+
 UNIT_CLASS_TEST(StepsRoutingFixture, RequiredStepsFailTheRoute)
 {
   // Small isolated approaches fail endpoint snapping; larger components reach the path search.

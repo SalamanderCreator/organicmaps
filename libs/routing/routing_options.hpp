@@ -23,11 +23,20 @@ public:
     Ferry = 1u << 3,
     Dirty = 1u << 4,
     Steps = 1u << 5,
+    // Maps&Fly: paths graded from sac_scale/trail_visibility by the generator (_path_grade).
+    // Difficult is about SAC T3, Expert is T4-T6. They are avoided softly, see kSoftAvoidOptions.
+    PathDifficult = 1u << 6,
+    PathExpert = 1u << 7,
 
-    Max = (1u << 5) + 1
+    Max = (1u << 7) + 1
   };
 
   using RoadType = std::underlying_type_t<Road>;
+
+  /// Avoided roads of these types stay routable with a weight penalty, so a stop on such a path
+  /// can still be reached and the route reports it instead of failing.
+  static RoadType constexpr kSoftAvoidOptions = PathDifficult | PathExpert;
+  static double constexpr kSoftAvoidWeightFactor = 10.0;
 
   RoutingOptions() = default;
   explicit RoutingOptions(RoadType mask) : m_options(mask) {}
