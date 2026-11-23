@@ -95,6 +95,31 @@ UNIT_TEST(RoutePreview_MakeDetour)
   TEST(detour.m_rejoin, ());
 }
 
+UNIT_TEST(RoutePreview_FindDivergingParts)
+{
+  using route_preview::FindDivergingParts;
+
+  double const m = mercator::MetersToMercator(1.0);
+  // The planned route goes 1 km east.
+  std::vector<std::vector<m2::PointD>> const reference = {{{0, 0}, {1000 * m, 0}}};
+
+  // A variant that follows it 5 m aside, leaves north between 400 m and 600 m and comes back.
+  std::vector<m2::PointD> const variant = {{0, 5 * m},         {300 * m, 5 * m}, {400 * m, 5 * m}, {450 * m, 100 * m},
+                                           {550 * m, 100 * m}, {600 * m, 5 * m}, {1000 * m, 5 * m}};
+  auto const parts = FindDivergingParts(reference, variant, 15.0);
+  TEST_EQUAL(parts.size(), 1, ());
+  TEST_EQUAL(parts[0], (std::vector<m2::PointD>{variant[2], variant[3], variant[4], variant[5]}), ());
+
+  // The same route: nothing to draw.
+  TEST(FindDivergingParts(reference, {{0, 0}, {1000 * m, 0}}, 15.0).empty(), ());
+
+  // A variant that ends off the route keeps its end; one that starts off it keeps its start.
+  auto const tail = FindDivergingParts(reference, {{0, 0}, {500 * m, 0}, {500 * m, 200 * m}}, 15.0);
+  TEST_EQUAL(tail, (std::vector<std::vector<m2::PointD>>{{{500 * m, 0}, {500 * m, 200 * m}}}), ());
+  auto const head = FindDivergingParts(reference, {{0, 200 * m}, {0, 100 * m}, {0, 0}, {500 * m, 0}}, 15.0);
+  TEST_EQUAL(head, (std::vector<std::vector<m2::PointD>>{{{0, 200 * m}, {0, 100 * m}, {0, 0}}}), ());
+}
+
 UNIT_TEST(RoutePreview_AddStats)
 {
   using route_preview::Stats;

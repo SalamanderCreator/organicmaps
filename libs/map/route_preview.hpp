@@ -70,6 +70,12 @@ struct Detour
 /// @param gapM distance of the leave and rejoin points from the closest route point along the route.
 Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjection const & projection, double gapM);
 
+/// @param reference polylines of the planned route.
+/// @return the parts of |route| farther than |maxDistM| from |reference|, each one extended by a point on both ends
+/// where possible, so it joins the reference.
+std::vector<std::vector<m2::PointD>> FindDivergingParts(std::vector<std::vector<m2::PointD>> const & reference,
+                                                        std::vector<m2::PointD> const & route, double maxDistM);
+
 /// Runs its own router next to the routing session, so the user's route stays untouched.
 /// A new request cancels the previous one. Call from the GUI thread; callbacks come on it.
 class Calculator

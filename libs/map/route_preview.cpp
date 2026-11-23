@@ -155,6 +155,53 @@ Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjec
   return detour;
 }
 
+std::vector<std::vector<m2::PointD>> FindDivergingParts(std::vector<std::vector<m2::PointD>> const & reference,
+                                                        std::vector<m2::PointD> const & route, double maxDistM)
+{
+  std::vector<m2::ParametrizedSegment<m2::PointD>> segments;
+  for (auto const & line : reference)
+    for (size_t i = 1; i < line.size(); ++i)
+      segments.emplace_back(line[i - 1], line[i]);
+
+  auto const isOnReference = [&](m2::PointD const & pt)
+  {
+    m2::RectD const box = mercator::RectByCenterXYAndSizeInMeters(pt, maxDistM);
+    for (auto const & segment : segments)
+    {
+      if (!box.IsIntersect(m2::RectD(segment.GetP0(), segment.GetP1())))
+        continue;
+      if (mercator::DistanceOnEarth(pt, segment.ClosestPointTo(pt)) <= maxDistM)
+        return true;
+    }
+    return false;
+  };
+
+  std::vector<std::vector<m2::PointD>> parts;
+  bool previousOn = true;
+  for (size_t i = 0; i < route.size(); ++i)
+  {
+    bool const on = isOnReference(route[i]);
+    if (!on)
+    {
+      if (previousOn)
+      {
+        auto & part = parts.emplace_back();
+        if (i > 0)
+          part.push_back(route[i - 1]);
+      }
+      parts.back().push_back(route[i]);
+    }
+    else if (!previousOn)
+    {
+      parts.back().push_back(route[i]);
+    }
+    previousOn = on;
+  }
+  // A single point cannot be drawn.
+  std::erase_if(parts, [](auto const & part) { return part.size() < 2; });
+  return parts;
+}
+
 Calculator::Calculator(RouterFactory && routerFactory) : m_routerFactory(std::move(routerFactory)) {}
 
 Calculator::~Calculator()

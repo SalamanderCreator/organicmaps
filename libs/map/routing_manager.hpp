@@ -325,8 +325,9 @@ public:
 private:
   void SetRouterImpl(routing::RouterType type);
   std::unique_ptr<routing::IRouter> MakeIndexRouter(routing::VehicleType vehicleType, bool loadAltitudes) const;
-  void ShowRouteVariant(routing::RouteBase const & route, routing::RouterType type, std::string const & color,
-                        double depth);
+  /// Draws |route|, or only its parts off |reference| when that is not empty.
+  void ShowRouteVariant(routing::RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
+                        std::string const & color, double depth);
   void HideRouteVariants();
 
   struct RoadInfo

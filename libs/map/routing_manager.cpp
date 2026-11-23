@@ -1926,14 +1926,14 @@ void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD c
   HideRouteVariants();
   VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
   m_routePreview->Calculate({from, to}, vehicleType,
-                            [this, type, vehicleType, callback = std::move(callback)](RouteBase const * route)
+                            [this, vehicleType, callback = std::move(callback)](RouteBase const * route)
   {
     if (!route)
     {
       callback(std::nullopt);
       return;
     }
-    ShowRouteVariant(*route, type, kRoutePreviewColor, kRouteOptimalDepth);
+    ShowRouteVariant(*route, {} /* reference */, kRoutePreviewColor, kRouteOptimalDepth);
     callback(route_preview::CalculateStats(*route, vehicleType));
   });
 }
@@ -2005,26 +2005,33 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   auto variants = std::make_shared<RouteInsertVariants>();
   variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
 
-  // One router runs both: first the optimal insertion, then the detour.
+  // One router runs both: first the optimal insertion, then the detour. Only their parts off the route are drawn.
+  auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
   m_routePreview->Calculate(route_preview::InsertOptimally(std::move(checkpoints), pt), vehicleType,
-                            [this, type, vehicleType, detourCheckpoints = std::move(detourCheckpoints), variants,
+                            [this, vehicleType, detourCheckpoints = std::move(detourCheckpoints), reference, variants,
                              callback = std::move(callback)](RouteBase const * optimal) mutable
   {
     if (optimal)
     {
       variants->m_optimal = route_preview::CalculateStats(*optimal, vehicleType);
-      ShowRouteVariant(*optimal, type, kRoutePreviewColor, kRouteOptimalDepth);
+      ShowRouteVariant(*optimal, *reference, kRoutePreviewColor, kRouteOptimalDepth);
     }
     m_routePreview->Calculate(
         std::move(detourCheckpoints), vehicleType,
-        [this, type, vehicleType, variants, callback = std::move(callback)](RouteBase const * detour)
+        [this, vehicleType, reference, variants, callback = std::move(callback)](RouteBase const * detour)
     {
       if (detour)
       {
         // The side trip leaves and rejoins the route a few meters apart, which the planned route also covers.
-        variants->m_detour =
+        auto const stats =
             route_preview::Add(variants->m_current, route_preview::CalculateStats(*detour, vehicleType), vehicleType);
-        ShowRouteVariant(*detour, type, kRouteDetourColor, kRouteDetourDepth);
+        // A side trip that is not shorter than going there optimally is of no use: the optimal way changes the route
+        // only around the place then, e.g. when it lies just off the route.
+        if (!variants->m_optimal || stats.m_distanceM < variants->m_optimal->m_distanceM)
+        {
+          variants->m_detour = stats;
+          ShowRouteVariant(*detour, *reference, kRouteDetourColor, kRouteDetourDepth);
+        }
       }
       callback(*variants);
     });
@@ -2081,28 +2088,41 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
   return true;
 }
 
-void RoutingManager::ShowRouteVariant(RouteBase const & route, RouterType type, std::string const & color, double depth)
+void RoutingManager::ShowRouteVariant(RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
+                                      std::string const & color, double depth)
 {
+  std::vector<m2::PointD> points;
+  route.ForEachPoint([&points](geometry::PointWithAltitude const & p) { points.push_back(p.GetPoint()); });
+
+  std::vector<std::vector<m2::PointD>> lines;
+  if (reference.empty())
+  {
+    lines.push_back(std::move(points));
+  }
+  else
+  {
+    // Farther than the GPS and map inaccuracies, closer than a parallel path.
+    double constexpr kMaxDistToRouteM = 15.0;
+    lines = route_preview::FindDivergingParts(reference, points, kMaxDistToRouteM);
+  }
+
   // The renderer hides the passed part of every subroute while navigating, measured by the active route. A distance
   // far beyond it keeps the previews whole. Taxi draws like the walking and cycling routes, without their masks for
   // later legs, but a bit wider, which suits a proposal.
   double constexpr kPreviewBaseDistance = 1e6;
-  bool const isBicycle = type == RouterType::Bicycle;
-  std::vector<RouteSegment> segments;
-  double distance = 0.0;
-  for (size_t i = 0; i < route.GetSubrouteCount(); ++i)
+  double constexpr kBias = 1.0;
+  for (auto & line : lines)
   {
-    route.GetSubrouteInfo(i, segments);
-    if (segments.empty())
+    if (line.size() < 2)
       continue;
-    auto subroute =
-        CreateDrapeSubroute(segments, route.GetSubrouteAttrs(i).GetStart().GetPoint(), distance, depth, type);
-    if (!subroute)
-      continue;
-    distance = segments.back().GetDistFromBeginningMerc();
-    subroute->m_baseDistance += kPreviewBaseDistance;
+    auto subroute = make_unique_dp<df::Subroute>();
+    subroute->m_polyline = m2::PolylineD(std::move(line));
+    subroute->m_baseDistance = kPreviewBaseDistance;
+    subroute->m_baseDepthIndex = depth;
+    subroute->m_headFakeDistance = -kBias;
+    subroute->m_tailFakeDistance = subroute->m_polyline.GetLength() + kBias;
     subroute->m_routeType = df::RouteType::Taxi;
-    subroute->AddStyle(df::SubrouteStyle(color, isBicycle ? df::RoutePattern(8.0, 2.0) : df::RoutePattern(4.0, 2.0)));
+    subroute->AddStyle(df::SubrouteStyle(color, df::RoutePattern(4.0, 2.0)));
     auto const id =
         m_drapeEngine.SafeCallWithResult(&df::DrapeEngine::AddSubroute, df::SubrouteConstPtr(subroute.release()));
     m_routeVariantSubroutes.push_back(id);
