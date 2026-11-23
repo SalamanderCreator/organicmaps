@@ -954,8 +954,6 @@
     <string name="track_recording_gps_accuracy">GPS-Genauigkeit: ±%s</string>
     <!-- Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point -->
     <string name="track_follow_distance_title">Der nächstgelegene Trackpunkt ist %s entfernt (Luftlinie)</string>
-    <!-- Dialog option: navigate by road to the closest track point, then follow the track -->
-    <string name="track_follow_navigate_closest">Zum nächstgelegenen Trackpunkt navigieren</string>
     <!-- Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start -->
     <string name="track_follow_navigate_selected">Zum gewählten Punkt navigieren (%s auf dem Track)</string>
     <!-- Dialog option: navigate by road to the track start, then follow the whole track -->
