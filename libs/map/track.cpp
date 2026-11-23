@@ -373,9 +373,12 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
   CHECK_EQUAL(elevations.size(), points.size(), ());
 
   bool replaceAll = !hasOwn;
+  // The own heights above the terrain, to keep with the replaced heights.
+  double offset = 0;
+  // The own heights to replace, too far from the terrain.
+  std::vector<bool> inaccurate(points.size(), false);
   if (hasOwn)
   {
-    // The own heights above the terrain.
     std::vector<double> diffs;
     size_t i = 0;
     for (auto const & line : lines)
@@ -396,23 +399,38 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
     if (std::ranges::count_if(diffs, [](double d) { return d > kFlightMarginM; }) * 20 > std::ssize(diffs))
       return std::nullopt;
 
-    // Inaccurate heights, e.g. of a phone without a barometer, do not follow the terrain: their median
-    // deviation from it exceeds the margin, after a constant offset (geoid, barometer calibration) is removed.
-    // Copernicus is a surface model: forests and the 30 m cells stay within the margin on a good track.
-    double constexpr kInaccurateMarginM = 20;
-    auto const median = [](std::vector<double> & values)
+    // Inaccurate heights, e.g. GPS jumps or a phone without a barometer, leave the terrain by more than the
+    // margin, after the constant offset (geoid, barometer calibration) is removed. Copernicus is a surface
+    // model: forests and the 30 m cells stay within the margin on a good track.
+    auto const mid = diffs.begin() + diffs.size() / 2;
+    std::ranges::nth_element(diffs, mid);
+    offset = *mid;
+    if (preferTerrain)
     {
-      auto const mid = values.begin() + values.size() / 2;
-      std::ranges::nth_element(values, mid);
-      return *mid;
-    };
-    auto deviations = diffs;
-    double const offset = median(diffs);
-    for (auto & d : deviations)
-      d = std::abs(d - offset);
-    replaceAll = preferTerrain && median(deviations) > kInaccurateMarginM;
+      double constexpr kInaccurateMarginM = 20;
+      size_t count = 0;
+      i = 0;
+      for (auto const & line : lines)
+      {
+        for (auto const & pt : line)
+        {
+          auto const & elevation = elevations[i];
+          if (elevation && pt.GetAltitude() != geometry::kInvalidAltitude &&
+              std::abs(pt.GetAltitude() - *elevation - offset) > kInaccurateMarginM)
+          {
+            inaccurate[i] = true;
+            ++count;
+          }
+          ++i;
+        }
+      }
+      // Mostly inaccurate heights have no reliable offset either.
+      replaceAll = 2 * count > diffs.size();
+    }
   }
   terrainOnly = replaceAll;
+  if (replaceAll)
+    offset = 0;
 
   bool changed = false;
   size_t i = 0;
@@ -420,12 +438,14 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
   {
     for (auto & pt : line)
     {
-      auto const & elevation = elevations[i++];
-      if (!replaceAll && pt.GetAltitude() != geometry::kInvalidAltitude)
+      auto const & elevation = elevations[i];
+      bool const replace = replaceAll || inaccurate[i] || pt.GetAltitude() == geometry::kInvalidAltitude;
+      ++i;
+      if (!replace)
         continue;
       if (!elevation)
         return std::nullopt;
-      pt.SetAltitude(static_cast<geometry::Altitude>(std::lround(*elevation)));
+      pt.SetAltitude(static_cast<geometry::Altitude>(std::lround(*elevation + offset)));
       changed = true;
     }
   }

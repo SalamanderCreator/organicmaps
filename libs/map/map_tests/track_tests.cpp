@@ -674,15 +674,15 @@ UNIT_TEST(Track_TerrainElevation)
     TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{100, 200}), ());
   }
   {
-    // Some missing heights: only these from the terrain, the GPS threshold stays.
+    // Some missing heights: only these from the terrain, with the offset of the own heights.
     auto const track =
         MakeTrack({{{{0.01, 0}, 120}, {{0.02, 0}, kInvalidAltitude}}, {{{0.03, 0}, 310}, {{0.04, 0}, 390}}});
-    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 200, 310, 390}), ());
+    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 210, 310, 390}), ());
     TEST_EQUAL(track.GetElevationThreshold(), ElevationInfo::kDefThresholdGPS, ());
 
     // Accurate heights stay also when the terrain is preferred.
     Track::SetPreferTerrainElevation(true);
-    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 200, 310, 390}), ());
+    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 210, 310, 390}), ());
     Track::SetPreferTerrainElevation(false);
   }
   {
@@ -703,6 +703,19 @@ UNIT_TEST(Track_TerrainElevation)
     Track::SetPreferTerrainElevation(true);
     TEST_EQUAL(profileAltitudes(flat), (std::vector<Altitude>{100, 300}), ());
     TEST_EQUAL(flat.GetElevationThreshold(), ElevationInfo::kDefThresholdMWM, ());
+    Track::SetPreferTerrainElevation(false);
+  }
+  {
+    // A GPS jump: only the jumped heights from the terrain, with the track's offset of 5 m.
+    auto const jump = MakeTrack(
+        {{{{0.01, 0}, 105}, {{0.02, 0}, 205}, {{0.03, 0}, 365}, {{0.04, 0}, 345}, {{0.05, 0}, 505}, {{0.06, 0}, 604}}});
+    Track::SetPreferTerrainElevation(true);
+    std::vector<Altitude> altitudes;
+    auto const geometry = jump.GetGeometryWithElevation();
+    for (auto const & pt : geometry.m_lines.front())
+      altitudes.push_back(pt.GetAltitude());
+    TEST_EQUAL(altitudes, (std::vector<Altitude>{105, 205, 305, 405, 505, 604}), ());
+    TEST_EQUAL(jump.GetElevationThreshold(), ElevationInfo::kDefThresholdGPS, ());
     Track::SetPreferTerrainElevation(false);
   }
   {
