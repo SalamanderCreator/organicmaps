@@ -482,7 +482,7 @@ void RouteRenderer::RenderSubroute(ref_ptr<dp::GraphicsContext> context, ref_ptr
 
   auto const screenHalfWidth = static_cast<float>(currentHalfWidth * screen.GetScale());
   auto dist = static_cast<float>(kInvalidDistance);
-  if (m_followingEnabled)
+  if (m_followingEnabled && !subrouteInfo.m_subroute->m_isProposal)
   {
     auto const distanceOffset = subrouteInfo.m_subroute->m_baseDistance + subrouteData->m_distanceOffset;
     dist = static_cast<float>(m_distanceFromBegin - distanceOffset);
@@ -506,8 +506,10 @@ void RouteRenderer::RenderSubroute(ref_ptr<dp::GraphicsContext> context, ref_ptr
 
   // Adjust line color depending on route type and subroute distance. After the first stop point
   // route color is adjusted according to RouteMaskCar, RouteMaskBicycle or RouteMaskPedestrian properties.
-  params.m_maskColor =
-      glsl::ToVec4(GetRouteMaskColor(subrouteData->m_subroute->m_routeType, subrouteData->m_subroute->m_baseDistance));
+  params.m_maskColor = subrouteData->m_subroute->m_isProposal
+                         ? glsl::ToVec4(dp::Color::Transparent())
+                         : glsl::ToVec4(GetRouteMaskColor(subrouteData->m_subroute->m_routeType,
+                                                          subrouteData->m_subroute->m_baseDistance));
   if (style.m_pattern.m_isDashed)
   {
     params.m_pattern = glsl::vec2(static_cast<float>(screenHalfWidth * style.m_pattern.m_dashLength),

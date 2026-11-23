@@ -2,6 +2,7 @@
 
 #include "map/bookmark_manager.hpp"
 #include "map/extrapolation/extrapolator.hpp"
+#include "map/route_preview.hpp"
 #include "map/routing_mark.hpp"
 #include "map/transit/transit_display.hpp"
 #include "map/transit/transit_reader.hpp"
@@ -40,6 +41,11 @@ class CountryInfoGetter;
 namespace routing
 {
 class NumMwmIds;
+}
+
+namespace track_following
+{
+struct JoinedTrack;
 }
 
 class DataSource;
@@ -127,6 +133,14 @@ public:
   /// nullptr returns to normal routing.
   void SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track);
   bool IsFollowingTrack() const { return m_followedTrack != nullptr; }
+  /// Maps&Fly: until navigation reaches the followed track, moves its entry to the point of |track| closest to
+  /// the position, so the straight approach always leads there. |track| is the whole track, followed backwards
+  /// with |reverse|. Call after SetFollowedTrack(), which stops it.
+  /// Maps&Fly: shows a dotted straight line from |from| to |to|, e.g. from the position to the closest point of a
+  /// watched track. Replaces the previous line.
+  void ShowTrackApproachLine(m2::PointD const & from, m2::PointD const & to);
+  void HideTrackApproachLine();
+  void SetFollowedTrackLiveEntry(std::shared_ptr<track_following::JoinedTrack const> track, bool reverse);
   bool IsRoutingActive() const { return m_routingSession.IsActive(); }
   bool IsRouteBuilt() const { return m_routingSession.IsBuilt(); }
   bool IsRouteBuilding() const { return m_routingSession.IsBuilding(); }
@@ -254,6 +268,9 @@ public:
   void RemoveRoute(bool deactivateFollowing);
 
   void CheckLocationForRouting(location::GpsInfo const & info);
+  /// Maps&Fly: @return whether the entry of the followed track moved, so the route needs a rebuild.
+  bool UpdateLiveTrackEntry(m2::PointD const & position, bool force);
+  std::unique_ptr<routing::IRouter> MakeTrackRouter(routing::VehicleType vehicleType) const;
   void CallRouteBuilded(routing::RouterResultCode code, storage::CountriesSet const & absentCountries);
   void OnBuildRouteReady(routing::RoutesResult const & result, routing::RouterResultCode code);
   void OnRebuildRouteReady(routing::RoutesResult const & result, routing::RouterResultCode code);
@@ -301,8 +318,51 @@ public:
 
   routing::RouterType GetCurrentRouterType() const { return m_currentRouterType; }
 
+  /// Maps&Fly: calculates a pedestrian or bicycle route from |from| to |to| next to the routing session,
+  /// e.g. for a tapped place. A new request or CancelRoutePreview() drops the previous one.
+  /// The callback gets nullopt when no route was found.
+  using RoutePreviewCallback = std::function<void(std::optional<route_preview::Stats> const & stats)>;
+  void CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, routing::RouterType type,
+                             RoutePreviewCallback && callback);
+  /// Also hides the routes drawn by the preview.
+  void CancelRoutePreview();
+
+  struct RouteInsertVariants
+  {
+    route_preview::Stats m_current;
+    /// The point is inserted between the stops where it adds the least time, and that leg is planned anew.
+    std::optional<route_preview::Stats> m_optimal;
+    /// The planned route stays, with a way from its closest point to the point and back.
+    std::optional<route_preview::Stats> m_detour;
+    /// The planned route stays, but leaves for the point and joins again further on, chosen by the router within
+    /// a few hundred meters around the point. Unset when it equals another variant.
+    std::optional<route_preview::Stats> m_via;
+  };
+  using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
+  /// Maps&Fly: while a walking or cycling route is planned or followed, calculates the ways to add |pt| and draws
+  /// them next to the route until CancelRoutePreview(). While following, only the rest of the route counts.
+  /// @return false without such a route.
+  bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
+  enum class RouteInsertKind
+  {
+    Optimal,
+    Via,
+    SideTrip
+  };
+  /// Maps&Fly: adds a variant of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
+  /// route, with |junctionTitle|, |point| and where it rejoins the route. Rebuild the route then.
+  /// @return false when the variant is not calculated (yet) or the route changed.
+  bool AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, RouteInsertKind kind);
+
 private:
   void SetRouterImpl(routing::RouterType type);
+  std::unique_ptr<routing::IRouter> MakeIndexRouter(routing::VehicleType vehicleType, bool loadAltitudes) const;
+  /// Draws |route|, or only its parts off |reference| when that is not empty.
+  void ShowRouteVariant(routing::RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
+                        std::string const & color, double depth);
+  void ShowPreviewLine(std::vector<m2::PointD> points, std::vector<std::vector<m2::PointD>> const & reference,
+                       std::string const & color, double depth);
+  void HideRouteVariants();
 
   struct RoadInfo
   {
@@ -381,6 +441,9 @@ private:
   routing::RouterType m_currentRouterType = routing::RouterType::Count;
   bool m_loadAltitudes = false;
   std::shared_ptr<routing::TrackFollowingData const> m_followedTrack;
+  std::shared_ptr<track_following::JoinedTrack const> m_liveEntryTrack;
+  bool m_liveEntryReverse = false;
+  std::optional<dp::DrapeID> m_trackApproachLineId;
   routing::RoutingSession m_routingSession;
   Delegate & m_delegate;
 
@@ -404,6 +467,18 @@ private:
 
   std::shared_ptr<routing::NumMwmIds> m_numMwmIDs;
   std::shared_ptr<m4::Tree<routing::NumMwmId>> m_numMwmTree;
+
+  std::unique_ptr<route_preview::Calculator> m_routePreview;
+  std::vector<dp::DrapeID> m_routeVariantSubroutes;
+  struct RouteDetours
+  {
+    m2::PointD m_target;
+    /// Set when its calculation is done.
+    std::optional<route_preview::Detour> m_optimal;
+    route_preview::Detour m_via;
+    route_preview::Detour m_sideTrip;
+  };
+  std::optional<RouteDetours> m_routeDetours;
 
   TransitReadManager * m_transitReadManager = nullptr;
 

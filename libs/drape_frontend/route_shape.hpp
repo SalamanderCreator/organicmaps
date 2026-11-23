@@ -137,6 +137,9 @@ struct Subroute
   std::vector<traffic::SpeedGroup> m_traffic;
   double m_baseDistance = 0.0;
   double m_baseDepthIndex = 0.0;
+  // A proposal drawn next to the route, e.g. a variant to add a stop: stays whole while following the route and
+  // keeps its color after the first stop.
+  bool m_isProposal = false;
   float m_maxPixelWidth = -1.0f;
 
   SubrouteStyleType m_styleType = SubrouteStyleType::Single;
