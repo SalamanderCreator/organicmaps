@@ -938,6 +938,22 @@
     <string name="change_stop_along_route">Stopp ändern</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Die maximale Anzahl an Stopps wurde erreicht</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T3 (or with bad trail visibility) unless needed -->
+    <string name="avoid_path_difficult">T3-Wege meiden (SAC)</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T4-T6 (or hardly visible) unless needed -->
+    <string name="avoid_path_expert">T4–T6-Wege meiden (SAC)</string>
+    <!-- Maps&Fly route panel: label before the route length by SAC hiking grade -->
+    <string name="route_path_grades">Schwierigkeit:</string>
+    <!-- Maps&Fly route panel: roads and paths up to SAC T2 or without a grade -->
+    <string name="route_path_grade_normal">bis T2</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T3 -->
+    <string name="route_path_grade_difficult">T3</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T4 to T6 -->
+    <string name="route_path_grade_expert">T4–T6</string>
+    <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
+    <string name="route_path_grade_expert_warning">Die Route führt über T4–T6-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
+    <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->
+    <string name="route_path_grade_difficult_warning">Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Die Route konnte nicht als Track gespeichert werden</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->

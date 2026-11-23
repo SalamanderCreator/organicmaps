@@ -934,6 +934,22 @@
     <string name="change_stop_along_route">Change stop</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Maximum number of stops reached</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T3 (or with bad trail visibility) unless needed -->
+    <string name="avoid_path_difficult">Avoid T3 paths (SAC)</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T4-T6 (or hardly visible) unless needed -->
+    <string name="avoid_path_expert">Avoid T4–T6 paths (SAC)</string>
+    <!-- Maps&Fly route panel: label before the route length by SAC hiking grade -->
+    <string name="route_path_grades">Difficulty:</string>
+    <!-- Maps&Fly route panel: roads and paths up to SAC T2 or without a grade -->
+    <string name="route_path_grade_normal">up to T2</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T3 -->
+    <string name="route_path_grade_difficult">T3</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T4 to T6 -->
+    <string name="route_path_grade_expert">T4–T6</string>
+    <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
+    <string name="route_path_grade_expert_warning">The route uses T4–T6 paths that you avoid, e.g. because of a stop.</string>
+    <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->
+    <string name="route_path_grade_difficult_warning">The route uses T3 paths that you avoid, e.g. because of a stop.</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Could not save the route as a track</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->
