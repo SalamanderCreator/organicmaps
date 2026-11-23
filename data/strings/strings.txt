@@ -43939,6 +43939,30 @@ vi = Vùng đã tải về màu tím
 zh-Hans = 紫色已下载区域
 zh-Hant = 紫色已下載區域
 
+[route_insert_optimal]
+comment = Maps&Fly place page while a route is planned: add the place where the route gets shortest and plan the route anew
+tags = android-app
+en = Insert optimally
+de = Optimal einfügen
+
+[route_insert_via]
+comment = Maps&Fly place page while a route is planned: keep most of the route, leave it for the place and join it again further on
+tags = android-app
+en = Detour
+de = Umweg
+
+[route_insert_detour]
+comment = Maps&Fly place page while a route is planned: keep the route and add a way from it to the place and back
+tags = android-app
+en = Side trip there and back
+de = Abstecher hin und zurück
+
+[route_detour_entry]
+comment = Maps&Fly: name of the route stops where a detour or side trip leaves and rejoins the route
+tags = android-app
+en = Junction
+de = Abzweig
+
 [[Qt UI strings]]
 
 [download_region_with_size]

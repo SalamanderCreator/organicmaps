@@ -673,6 +673,26 @@ public class RoutingController
   }
 
   /**
+   * Maps&amp;Fly: adds the place to the planned route as one of the variants calculated by
+   * {@link RoutePreview#calculateInsertVariants}, and rebuilds.
+   * @param junctionTitle title of the stops where the detour leaves and rejoins the route
+   * @param kind one of the INSERT_ constants of {@link RoutePreview}
+   * @return false when the variant is not calculated yet, the route changed since or there are too many stops
+   */
+  public boolean addDetourStop(@NonNull MapObject mapObject, @NonNull String junctionTitle, int kind)
+  {
+    checkMapsReady();
+    final Pair<String, String> description = getDescriptionForPoint(mapObject);
+    if (!RoutePreview.nativeAddDetour(description.first, description.second, mapObject.getLat(), mapObject.getLon(),
+                                      junctionTitle, kind))
+    {
+      return false;
+    }
+    finalizeStopChange();
+    return true;
+  }
+
+  /**
    * Commits a selected place according to the currently armed add, replace, or append operation.
    * With no pick armed, the mode is SET and a plain place-page selection inserts an intermediate point.
    */

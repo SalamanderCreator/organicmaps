@@ -492,6 +492,8 @@ void RoutingManager::Init(std::shared_ptr<routing::NumMwmIds> ptr)
   m_numMwmTree = MakeNumMwmTree(*m_numMwmIDs, m_callbacks.m_countryInfoGetter());
 
   SetRouterImpl(GetLastUsedRouter());
+  m_routePreview = std::make_unique<route_preview::Calculator>([this](VehicleType vehicleType)
+  { return MakeIndexRouter(vehicleType, true /* loadAltitudes */); });
 }
 
 void RoutingManager::SetRouterImpl(RouterType type)
@@ -1971,4 +1973,367 @@ void RoutingManager::SetSubroutesVisibility(bool visible)
 bool RoutingManager::IsSpeedCamLimitExceeded() const
 {
   return m_routingSession.IsSpeedCamLimitExceeded();
+}
+
+std::unique_ptr<IRouter> RoutingManager::MakeIndexRouter(VehicleType vehicleType, bool loadAltitudes) const
+{
+  auto const countryFileGetter = [this](m2::PointD const & p)
+  { return m_callbacks.m_countryInfoGetter().GetRegionCountryId(p); };
+  auto const getMwmRectByName = [this](std::string const & countryId)
+  { return m_callbacks.m_countryInfoGetter().GetLimitRectForLeaf(countryId); };
+
+  return std::make_unique<IndexRouter>(vehicleType, loadAltitudes, m_callbacks.m_countryParentNameGetterFn,
+                                       countryFileGetter, getMwmRectByName, m_numMwmIDs, m_numMwmTree, m_routingSession,
+                                       m_callbacks.m_dataSourceGetter());
+}
+
+namespace
+{
+// Maps&Fly: colors of the previewed routes, from the route and traffic colors of the map styles.
+std::string const kRoutePreviewColor = "TrafficG4";
+std::string const kRouteDetourColor = "RoadShieldOrangeBackground";
+std::string const kRouteViaColor = "RoadShieldRedBackground";
+// Below the active route, which has depth 10 and more: the optimal variant shows only where it differs.
+double constexpr kRouteOptimalDepth = 5.0;
+double constexpr kRouteDetourDepth = 6.0;
+double constexpr kRouteViaDepth = 7.0;
+
+std::vector<m2::PointD> GetPolylinePoints(RouteBase const & route)
+{
+  std::vector<m2::PointD> points;
+  route.ForEachPoint([&points](geometry::PointWithAltitude const & p) { points.push_back(p.GetPoint()); });
+  return points;
+}
+}  // namespace
+
+void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, RouterType type,
+                                           RoutePreviewCallback && callback)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(m_routePreview, ("Routing is not initialized"));
+  CHECK(type == RouterType::Pedestrian || type == RouterType::Bicycle, (type));
+
+  HideRouteVariants();
+  VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
+  m_routePreview->Calculate({from, to}, vehicleType,
+                            [this, vehicleType, callback = std::move(callback)](RouteBase const * route)
+  {
+    if (!route)
+    {
+      callback(std::nullopt);
+      return;
+    }
+    ShowRouteVariant(*route, {} /* reference */, kRoutePreviewColor, kRouteOptimalDepth);
+    callback(route_preview::CalculateStats(*route, vehicleType));
+  });
+}
+
+void RoutingManager::CancelRoutePreview()
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (m_routePreview)
+    m_routePreview->Cancel();
+  HideRouteVariants();
+}
+
+bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(m_routePreview, ("Routing is not initialized"));
+
+  CancelRoutePreview();
+  m_routeDetours.reset();
+
+  auto const type = m_currentRouterType;
+  auto const * route = m_routingSession.GetRoute();
+  if ((type != RouterType::Pedestrian && type != RouterType::Bicycle) || route == nullptr || !route->IsValid())
+    return false;
+  VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
+
+  // While navigating, only the rest of the route from the current position counts.
+  bool const isFollowing = m_routingSession.IsFollowing();
+  auto const iter = route->GetCurrentIter();
+  size_t const firstSegmentIdx = isFollowing && iter.IsValid() ? iter.m_ind : 0;
+  size_t const firstLegIdx = isFollowing ? route->GetCurrentSubrouteIdx() : 0;
+
+  // Legs are indexed like the subroutes; passed ones stay empty.
+  std::vector<std::vector<m2::PointD>> legs(route->GetSubrouteCount());
+  // Leg segment i is route segment legBegins[legIdx] + i.
+  std::vector<size_t> legBegins(legs.size());
+  auto const & segments = route->GetRouteSegments();
+  for (size_t legIdx = firstLegIdx; legIdx < legs.size(); ++legIdx)
+  {
+    auto const & attrs = route->GetSubrouteAttrs(legIdx);
+    size_t const beginIdx = std::max(attrs.GetBeginSegmentIdx(), firstSegmentIdx);
+    legBegins[legIdx] = beginIdx;
+    auto & leg = legs[legIdx];
+    leg.push_back(beginIdx == attrs.GetBeginSegmentIdx() ? attrs.GetStart().GetPoint() : iter.m_pt);
+    for (size_t i = beginIdx; i < attrs.GetEndSegmentIdx(); ++i)
+      leg.push_back(segments[i].GetJunction().GetPoint());
+    if (leg.size() < 2)
+      leg.push_back(attrs.GetFinish().GetPoint());
+  }
+
+  // Only the remaining legs are candidates for detours.
+  std::vector<std::vector<m2::PointD>> remainingLegs(legs.begin() + firstLegIdx, legs.end());
+  auto projection = route_preview::ProjectToRoute(remainingLegs, pt);
+  projection.m_legIdx += firstLegIdx;
+  auto const makeDetour = [&](double gapM, bool snapToLegPoints)
+  {
+    auto detour = route_preview::MakeDetour(legs, projection, gapM, snapToLegPoints);
+    // The current position is no route point, so a detour right from it leaves there.
+    if (!detour.m_leave && isFollowing && projection.m_legIdx == firstLegIdx)
+      detour.m_leave = legs[firstLegIdx].front();
+    return detour;
+  };
+  auto const & leg = legs[projection.m_legIdx];
+  auto const leaveAndRejoin = [&leg](route_preview::Detour const & detour)
+  { return std::make_pair(detour.m_leave.value_or(leg.front()), detour.m_rejoin.value_or(leg.back())); };
+
+  // The side trip leaves and rejoins a few meters around the closest point: the route refuses equal route points.
+  double constexpr kSideTripGapM = 3.0;
+  auto const sideTrip = makeDetour(kSideTripGapM, false /* snapToLegPoints */);
+  // The via route may leave and rejoin anywhere within this distance around the closest point; the router chooses.
+  // Farther than the place to let the router find a way through it, but keeping most of the route.
+  double const viaGapM = std::clamp(2.0 * mercator::DistanceOnEarth(pt, projection.m_point), 300.0, 3000.0);
+  // It leaves and rejoins at route points, so the replaced part of the planned route is known exactly.
+  auto const via = makeDetour(viaGapM, true /* snapToLegPoints */);
+  m_routeDetours = RouteDetours{pt, std::nullopt, via, sideTrip};
+
+  auto const [sideLeave, sideRejoin] = leaveAndRejoin(sideTrip);
+  auto const [viaLeave, viaRejoin] = leaveAndRejoin(via);
+
+  auto variants = std::make_shared<RouteInsertVariants>();
+  variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
+  // Stats of the planned route on leg |legIdx| between the leg points |fromIdx| and |toIdx|.
+  auto const legStats = [&](size_t legIdx, size_t fromIdx, size_t toIdx)
+  {
+    size_t const from = legBegins[legIdx] + fromIdx;
+    size_t const to = std::min(legBegins[legIdx] + toIdx, route->GetSubrouteAttrs(legIdx).GetEndSegmentIdx());
+    if (from < to)
+      return route_preview::CalculateStats(*route, vehicleType, from, to);
+    route_preview::Stats empty;
+    empty.m_hasAltitudes = variants->m_current.m_hasAltitudes;
+    return empty;
+  };
+  // The part of the planned route that the via route replaces.
+  auto const replaced = legStats(via.m_legIdx, via.m_leaveIdx, via.m_rejoinIdx);
+  auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
+
+  // One router runs them one by one. Only the parts off the route are drawn.
+  struct Request
+  {
+    std::vector<m2::PointD> m_checkpoints;
+    route_preview::Calculator::Callback m_onResult;
+  };
+  auto requests = std::make_shared<std::vector<Request>>();
+  // The optimal variant takes the leg where the point adds the least time. Only the legs with the least straight
+  // detour are routed: one request each, and the farther ones hardly win.
+  std::vector<std::pair<double, size_t>> straightDetours;
+  for (size_t legIdx = firstLegIdx; legIdx < legs.size(); ++legIdx)
+  {
+    auto const & l = legs[legIdx];
+    straightDetours.emplace_back(mercator::DistanceOnEarth(l.front(), pt) + mercator::DistanceOnEarth(pt, l.back()) -
+                                     mercator::DistanceOnEarth(l.front(), l.back()),
+                                 legIdx);
+  }
+  size_t constexpr kMaxOptimalCandidates = 3;
+  std::sort(straightDetours.begin(), straightDetours.end());
+  if (straightDetours.size() > kMaxOptimalCandidates)
+    straightDetours.resize(kMaxOptimalCandidates);
+
+  struct Candidate
+  {
+    size_t m_legIdx = 0;
+    route_preview::Stats m_stats;
+    std::vector<m2::PointD> m_points;
+  };
+  auto best = std::make_shared<std::optional<Candidate>>();
+  for (auto const & [straightDetour, legIdx] : straightDetours)
+  {
+    auto const & l = legs[legIdx];
+    requests->push_back({{l.front(), pt, l.back()},
+                         [=, this, removed = legStats(legIdx, 0, l.size() - 1)](RouteBase const * r)
+    {
+      if (!r)
+        return;
+      auto const stats = route_preview::Replace(variants->m_current, removed,
+                                                route_preview::CalculateStats(*r, vehicleType), vehicleType);
+      if (!*best || stats.m_timeSec < (*best)->m_stats.m_timeSec)
+        *best = Candidate{legIdx, stats, GetPolylinePoints(*r)};
+    }});
+  }
+  // No route, just shows the best candidate.
+  requests->push_back({{},
+                       [=, this](RouteBase const *)
+  {
+    if (!*best || !m_routeDetours)
+      return;
+    variants->m_optimal = (*best)->m_stats;
+    route_preview::Detour optimal;
+    optimal.m_legIdx = (*best)->m_legIdx;
+    m_routeDetours->m_optimal = optimal;
+    ShowPreviewLine((*best)->m_points, *reference, kRoutePreviewColor, kRouteOptimalDepth);
+  }});
+  requests->push_back({{sideLeave, pt, sideRejoin},
+                       [=, this](RouteBase const * r)
+  {
+    if (!r)
+      return;
+    // The few meters between leaving and rejoining are also on the planned route.
+    variants->m_detour =
+        route_preview::Add(variants->m_current, route_preview::CalculateStats(*r, vehicleType), vehicleType);
+    ShowRouteVariant(*r, *reference, kRouteDetourColor, kRouteDetourDepth);
+  }});
+  requests->push_back({{viaLeave, pt, viaRejoin},
+                       [=, this](RouteBase const * r)
+  {
+    if (!r)
+      return;
+    auto const stats = route_preview::Replace(variants->m_current, replaced,
+                                              route_preview::CalculateStats(*r, vehicleType), vehicleType);
+    // Shown only when it differs from the other variants.
+    auto const differs = [&stats](std::optional<route_preview::Stats> const & other)
+    {
+      double constexpr kMinDiffM = 30.0;
+      double constexpr kMinDiffRatio = 0.03;
+      return !other ||
+             std::abs(other->m_distanceM - stats.m_distanceM) > std::max(kMinDiffM, kMinDiffRatio * stats.m_distanceM);
+    };
+    if (differs(variants->m_optimal) && differs(variants->m_detour))
+    {
+      variants->m_via = stats;
+      ShowRouteVariant(*r, *reference, kRouteViaColor, kRouteViaDepth);
+    }
+  }});
+
+  // Runs request |idx| and then the next ones; reports when all are done. The pending router callback owns |run|,
+  // so a cancelled chain is freed with it.
+  auto run = std::make_shared<std::function<void(size_t)>>();
+  *run =
+      [this, requests, variants, vehicleType, weakRun = std::weak_ptr(run), callback = std::move(callback)](size_t idx)
+  {
+    if (idx == requests->size())
+    {
+      callback(*variants);
+      return;
+    }
+    if ((*requests)[idx].m_checkpoints.empty())
+    {
+      (*requests)[idx].m_onResult(nullptr);
+      (*weakRun.lock())(idx + 1);
+      return;
+    }
+    auto checkpointsCopy = (*requests)[idx].m_checkpoints;
+    m_routePreview->Calculate(std::move(checkpointsCopy), vehicleType,
+                              [requests, run = weakRun.lock(), idx](RouteBase const * r)
+    {
+      (*requests)[idx].m_onResult(r);
+      (*run)(idx + 1);
+    });
+  };
+  (*run)(0);
+  return true;
+}
+
+bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, RouteInsertKind kind)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  ASSERT(m_bmManager != nullptr, ());
+
+  if (!m_routeDetours || !m_routeDetours->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
+    return false;
+  if (kind == RouteInsertKind::Optimal && !m_routeDetours->m_optimal)
+    return false;
+  auto const detour = kind == RouteInsertKind::Optimal ? *m_routeDetours->m_optimal
+                    : kind == RouteInsertKind::Via     ? m_routeDetours->m_via
+                                                       : m_routeDetours->m_sideTrip;
+
+  auto const * route = m_routingSession.GetRoute();
+  size_t const pointsCount = GetRoutePointsCount();
+  // The detour belongs to the route the variants were calculated for.
+  if (route == nullptr || route->GetSubrouteCount() + 1 != pointsCount ||
+      pointsCount + 3 > RoutePointsLayout::kMaxRoutePointsCount)
+  {
+    return false;
+  }
+
+  point.m_isMyPosition = false;
+  std::vector<RouteMarkData> stops;
+  auto const addJunction = [&](std::optional<m2::PointD> const & position)
+  {
+    if (!position)
+      return;
+    RouteMarkData junction;
+    junction.m_title = junctionTitle;
+    junction.m_position = *position;
+    stops.push_back(std::move(junction));
+  };
+  addJunction(detour.m_leave);
+  stops.push_back(std::move(point));
+  addJunction(detour.m_rejoin);
+
+  // A new stop comes last among the stops, i.e. just before the finish; then it moves after the leg start.
+  size_t targetIdx = detour.m_legIdx + 1;
+  for (auto & stop : stops)
+  {
+    stop.m_pointType = RouteMarkType::Intermediate;
+    if (!AddRoutePoint(std::move(stop), false /* optimize */))
+      return false;
+    size_t const addedIdx = GetRoutePointsCount() - 2;
+    if (addedIdx != targetIdx)
+      MoveRoutePoint(addedIdx, targetIdx);
+    ++targetIdx;
+  }
+  m_routeDetours.reset();
+  return true;
+}
+
+void RoutingManager::ShowRouteVariant(RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
+                                      std::string const & color, double depth)
+{
+  ShowPreviewLine(GetPolylinePoints(route), reference, color, depth);
+}
+
+void RoutingManager::ShowPreviewLine(std::vector<m2::PointD> points,
+                                     std::vector<std::vector<m2::PointD>> const & reference, std::string const & color,
+                                     double depth)
+{
+  std::vector<std::vector<m2::PointD>> lines;
+  if (reference.empty())
+  {
+    lines.push_back(std::move(points));
+  }
+  else
+  {
+    // Farther than the GPS and map inaccuracies, closer than a parallel path.
+    double constexpr kMaxDistToRouteM = 15.0;
+    lines = route_preview::FindDivergingParts(reference, points, kMaxDistToRouteM);
+  }
+
+  double constexpr kBias = 1.0;
+  for (auto & line : lines)
+  {
+    if (line.size() < 2)
+      continue;
+    auto subroute = make_unique_dp<df::Subroute>();
+    subroute->m_polyline = m2::PolylineD(std::move(line));
+    subroute->m_baseDepthIndex = depth;
+    subroute->m_headFakeDistance = -kBias;
+    subroute->m_tailFakeDistance = subroute->m_polyline.GetLength() + kBias;
+    // The width of the walking and cycling routes.
+    subroute->m_routeType = df::RouteType::Pedestrian;
+    subroute->m_isProposal = true;
+    subroute->AddStyle(df::SubrouteStyle(color, df::RoutePattern(4.0, 2.0)));
+    auto const id =
+        m_drapeEngine.SafeCallWithResult(&df::DrapeEngine::AddSubroute, df::SubrouteConstPtr(subroute.release()));
+    m_routeVariantSubroutes.push_back(id);
+  }
+}
+
+void RoutingManager::HideRouteVariants()
+{
+  for (auto const id : m_routeVariantSubroutes)
+    m_drapeEngine.SafeCall(&df::DrapeEngine::RemoveSubroute, id, false /* deactivateFollowing */);
+  m_routeVariantSubroutes.clear();
 }

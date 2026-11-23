@@ -2,6 +2,7 @@
 
 #include "map/bookmark_manager.hpp"
 #include "map/extrapolation/extrapolator.hpp"
+#include "map/route_preview.hpp"
 #include "map/routing_mark.hpp"
 #include "map/transit/transit_display.hpp"
 #include "map/transit/transit_reader.hpp"
@@ -317,8 +318,51 @@ public:
 
   routing::RouterType GetCurrentRouterType() const { return m_currentRouterType; }
 
+  /// Maps&Fly: calculates a pedestrian or bicycle route from |from| to |to| next to the routing session,
+  /// e.g. for a tapped place. A new request or CancelRoutePreview() drops the previous one.
+  /// The callback gets nullopt when no route was found.
+  using RoutePreviewCallback = std::function<void(std::optional<route_preview::Stats> const & stats)>;
+  void CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, routing::RouterType type,
+                             RoutePreviewCallback && callback);
+  /// Also hides the routes drawn by the preview.
+  void CancelRoutePreview();
+
+  struct RouteInsertVariants
+  {
+    route_preview::Stats m_current;
+    /// The point is inserted between the stops where it adds the least time, and that leg is planned anew.
+    std::optional<route_preview::Stats> m_optimal;
+    /// The planned route stays, with a way from its closest point to the point and back.
+    std::optional<route_preview::Stats> m_detour;
+    /// The planned route stays, but leaves for the point and joins again further on, chosen by the router within
+    /// a few hundred meters around the point. Unset when it equals another variant.
+    std::optional<route_preview::Stats> m_via;
+  };
+  using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
+  /// Maps&Fly: while a walking or cycling route is planned or followed, calculates the ways to add |pt| and draws
+  /// them next to the route until CancelRoutePreview(). While following, only the rest of the route counts.
+  /// @return false without such a route.
+  bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
+  enum class RouteInsertKind
+  {
+    Optimal,
+    Via,
+    SideTrip
+  };
+  /// Maps&Fly: adds a variant of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
+  /// route, with |junctionTitle|, |point| and where it rejoins the route. Rebuild the route then.
+  /// @return false when the variant is not calculated (yet) or the route changed.
+  bool AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, RouteInsertKind kind);
+
 private:
   void SetRouterImpl(routing::RouterType type);
+  std::unique_ptr<routing::IRouter> MakeIndexRouter(routing::VehicleType vehicleType, bool loadAltitudes) const;
+  /// Draws |route|, or only its parts off |reference| when that is not empty.
+  void ShowRouteVariant(routing::RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
+                        std::string const & color, double depth);
+  void ShowPreviewLine(std::vector<m2::PointD> points, std::vector<std::vector<m2::PointD>> const & reference,
+                       std::string const & color, double depth);
+  void HideRouteVariants();
 
   struct RoadInfo
   {
@@ -423,6 +467,18 @@ private:
 
   std::shared_ptr<routing::NumMwmIds> m_numMwmIDs;
   std::shared_ptr<m4::Tree<routing::NumMwmId>> m_numMwmTree;
+
+  std::unique_ptr<route_preview::Calculator> m_routePreview;
+  std::vector<dp::DrapeID> m_routeVariantSubroutes;
+  struct RouteDetours
+  {
+    m2::PointD m_target;
+    /// Set when its calculation is done.
+    std::optional<route_preview::Detour> m_optimal;
+    route_preview::Detour m_via;
+    route_preview::Detour m_sideTrip;
+  };
+  std::optional<RouteDetours> m_routeDetours;
 
   TransitReadManager * m_transitReadManager = nullptr;
 

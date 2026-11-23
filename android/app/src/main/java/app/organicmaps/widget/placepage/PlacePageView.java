@@ -114,6 +114,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
   private TextView mTvSubtitle;
   private ArrowView mAvDirection;
   private TextView mTvDistance;
+  private PlacePageRoutePreview mRoutePreview;
   private TextView mTvAddress;
   // Details.
   private TextView mTvLatlon;
@@ -296,6 +297,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
     UiUtils.hide(mTvDistance);
     UiUtils.hide(mAvDirection);
     directionFrame.setOnClickListener(this);
+    mRoutePreview = new PlacePageRoutePreview(mPreview);
 
     mTvAddress = mPreview.findViewById(R.id.tv__address);
     mTvAddress.setOnLongClickListener(this);
@@ -408,6 +410,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
     MwmApplication.from(requireContext()).getLocationHelper().removeListener(this);
     MwmApplication.from(requireContext()).getSensorHelper().removeListener(this);
     detachCountry();
+    mRoutePreview.clear();
   }
 
   private void setCurrentCountry()
@@ -777,6 +780,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
 
   private void refreshMyPosition(Location l)
   {
+    mRoutePreview.clear();
     if (mMapObject.isTrack() || mMapObject.isTrackRecording())
       return;
 
@@ -802,6 +806,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
 
   private void refreshDistanceToObject(Location l)
   {
+    mRoutePreview.update(mMapObject, l);
     if (mMapObject.isTrack() || mMapObject.isTrackRecording())
       return;
     UiUtils.showIf(l != null, mTvDistance);
