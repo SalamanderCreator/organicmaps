@@ -48,24 +48,27 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_routing_RoutePreview_nativeCalculate
     JNIEnv * env = jni::GetEnv();
     jni::TScopedLocalRef current(env, ToJavaResult(env, variants.m_current));
     jni::TScopedLocalRef optimal(env, ToJavaResult(env, variants.m_optimal));
+    jni::TScopedLocalRef via(env, ToJavaResult(env, variants.m_via));
     jni::TScopedLocalRef detour(env, ToJavaResult(env, variants.m_detour));
     char const * const sig =
         "(Lapp/organicmaps/sdk/routing/RoutePreview$Result;Lapp/organicmaps/sdk/routing/RoutePreview$Result;"
-        "Lapp/organicmaps/sdk/routing/RoutePreview$Result;)V";
+        "Lapp/organicmaps/sdk/routing/RoutePreview$Result;Lapp/organicmaps/sdk/routing/RoutePreview$Result;)V";
     jmethodID const methodId = jni::GetMethodID(env, *listener, "onInsertVariants", sig);
-    env->CallVoidMethod(*listener, methodId, current.get(), optimal.get(), detour.get());
+    env->CallVoidMethod(*listener, methodId, current.get(), optimal.get(), via.get(), detour.get());
   });
 }
 
 JNIEXPORT jboolean Java_app_organicmaps_sdk_routing_RoutePreview_nativeAddDetour(JNIEnv * env, jclass, jstring title,
                                                                                  jstring subtitle, jdouble lat,
-                                                                                 jdouble lon, jstring entryTitle)
+                                                                                 jdouble lon, jstring junctionTitle,
+                                                                                 jboolean sideTrip)
 {
   RouteMarkData data;
   data.m_title = jni::ToNativeString(env, title);
   data.m_subTitle = jni::ToNativeString(env, subtitle);
   data.m_position = mercator::FromLatLon(lat, lon);
-  return frm()->GetRoutingManager().AddRouteDetour(std::move(data), jni::ToNativeString(env, entryTitle));
+  return frm()->GetRoutingManager().AddRouteDetour(std::move(data), jni::ToNativeString(env, junctionTitle),
+                                                   static_cast<bool>(sideTrip));
 }
 
 JNIEXPORT void Java_app_organicmaps_sdk_routing_RoutePreview_nativeCancel(JNIEnv *, jclass)

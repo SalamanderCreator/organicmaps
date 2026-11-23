@@ -312,15 +312,19 @@ public:
     std::optional<route_preview::Stats> m_optimal;
     /// The planned route stays, with a way from its closest point to the point and back.
     std::optional<route_preview::Stats> m_detour;
+    /// The planned route stays, but leaves for the point and joins again further on, chosen by the router within
+    /// a few hundred meters around the point. Unset when it equals another variant.
+    std::optional<route_preview::Stats> m_via;
   };
   using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
   /// Maps&Fly: while a walking or cycling route is planned or followed, calculates both ways to add |pt| and draws
   /// them next to the route until CancelRoutePreview(). While following, only the rest of the route counts.
   /// @return false without such a route.
   bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
-  /// Maps&Fly: adds the detour of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
-  /// route, with |entryTitle|, |point| and where it rejoins the route. Rebuild the route then.
-  bool AddRouteDetour(RouteMarkData && point, std::string const & entryTitle);
+  /// Maps&Fly: adds a detour of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
+  /// route, with |junctionTitle|, |point| and where it rejoins the route. Rebuild the route then.
+  /// |sideTrip| adds the way there and back instead of the via route.
+  bool AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, bool sideTrip);
 
 private:
   void SetRouterImpl(routing::RouterType type);
@@ -328,6 +332,8 @@ private:
   /// Draws |route|, or only its parts off |reference| when that is not empty.
   void ShowRouteVariant(routing::RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
                         std::string const & color, double depth);
+  void ShowPreviewLine(std::vector<m2::PointD> points, std::vector<std::vector<m2::PointD>> const & reference,
+                       std::string const & color, double depth);
   void HideRouteVariants();
 
   struct RoadInfo
@@ -432,12 +438,13 @@ private:
 
   std::unique_ptr<route_preview::Calculator> m_routePreview;
   std::vector<dp::DrapeID> m_routeVariantSubroutes;
-  struct RouteDetour
+  struct RouteDetours
   {
     m2::PointD m_target;
-    route_preview::Detour m_detour;
+    route_preview::Detour m_via;
+    route_preview::Detour m_sideTrip;
   };
-  std::optional<RouteDetour> m_routeDetour;
+  std::optional<RouteDetours> m_routeDetours;
 
   TransitReadManager * m_transitReadManager = nullptr;
 

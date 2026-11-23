@@ -83,6 +83,22 @@ Stats Add(Stats const & a, Stats const & b, VehicleType vehicleType)
   return sum;
 }
 
+Stats Replace(Stats const & route, Stats const & removed, Stats const & added, VehicleType vehicleType)
+{
+  auto const replace = [](uint32_t total, uint32_t minus, uint32_t plus)
+  { return total + plus > minus ? total + plus - minus : 0; };
+
+  Stats result;
+  result.m_distanceM = std::max(0.0, route.m_distanceM - removed.m_distanceM + added.m_distanceM);
+  result.m_timeSec = std::max(0.0, route.m_timeSec - removed.m_timeSec + added.m_timeSec);
+  result.m_ascentM = replace(route.m_ascentM, removed.m_ascentM, added.m_ascentM);
+  result.m_descentM = replace(route.m_descentM, removed.m_descentM, added.m_descentM);
+  result.m_hasAltitudes = route.m_hasAltitudes && removed.m_hasAltitudes && added.m_hasAltitudes;
+  if (vehicleType == VehicleType::Pedestrian)
+    result.m_timeSec = EstimateHikingTimeSec(result.m_distanceM, result.m_ascentM, result.m_descentM);
+  return result;
+}
+
 std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt)
 {
   CHECK_GREATER_OR_EQUAL(checkpoints.size(), 2, ());

@@ -38,11 +38,15 @@ final class PlacePageRoutePreview
   // The route colors TrafficG4 and RoadShieldOrangeBackground of the light map styles.
   private static final int OPTIMAL_COLOR = Color.rgb(0x39, 0x96, 0x2E);
   private static final int DETOUR_COLOR = Color.rgb(0xFF, 0xBE, 0x00);
+  // RoadShieldRedBackground of the light map styles.
+  private static final int VIA_COLOR = Color.rgb(0xE6, 0x35, 0x34);
 
   @NonNull
   private final TextView mPreviewView;
   @NonNull
   private final TextView mOptimalView;
+  @NonNull
+  private final TextView mViaView;
   @NonNull
   private final TextView mDetourView;
   @Nullable
@@ -55,10 +59,12 @@ final class PlacePageRoutePreview
   {
     mPreviewView = root.findViewById(R.id.tv__route_preview);
     mOptimalView = root.findViewById(R.id.tv__route_insert_optimal);
+    mViaView = root.findViewById(R.id.tv__route_insert_via);
     mDetourView = root.findViewById(R.id.tv__route_insert_detour);
     mPreviewView.setOnClickListener(v -> toggleRouter());
     mOptimalView.setOnClickListener(v -> addOptimal());
-    mDetourView.setOnClickListener(v -> addDetour());
+    mViaView.setOnClickListener(v -> addDetour(false));
+    mDetourView.setOnClickListener(v -> addDetour(true));
     hideAll();
   }
 
@@ -135,8 +141,9 @@ final class PlacePageRoutePreview
     mFrom = null;
     mShowsVariants = true;
     mOptimalView.setText(makeVariantTitle(OPTIMAL_COLOR, R.string.route_insert_optimal).append("  …"));
+    mViaView.setText(makeVariantTitle(VIA_COLOR, R.string.route_insert_via).append("  …"));
     mDetourView.setText(makeVariantTitle(DETOUR_COLOR, R.string.route_insert_detour).append("  …"));
-    UiUtils.show(mOptimalView, mDetourView);
+    UiUtils.show(mOptimalView, mViaView, mDetourView);
   }
 
   private static boolean isSupported(@NonNull MapObject object)
@@ -174,9 +181,10 @@ final class PlacePageRoutePreview
   }
 
   private void showVariants(@NonNull RoutePreview.Result current, @Nullable RoutePreview.Result optimal,
-                            @Nullable RoutePreview.Result detour)
+                            @Nullable RoutePreview.Result via, @Nullable RoutePreview.Result detour)
   {
     showVariant(mOptimalView, OPTIMAL_COLOR, R.string.route_insert_optimal, current, optimal);
+    showVariant(mViaView, VIA_COLOR, R.string.route_insert_via, current, via);
     showVariant(mDetourView, DETOUR_COLOR, R.string.route_insert_detour, current, detour);
   }
 
@@ -237,13 +245,13 @@ final class PlacePageRoutePreview
     RoutingController.get().addStop(object);
   }
 
-  private void addDetour()
+  private void addDetour(boolean sideTrip)
   {
     final MapObject object = mObject;
     if (object == null)
       return;
     // The detour is kept until the next calculation, so add it before clear() hides it.
-    RoutingController.get().addDetourStop(object, getContext().getString(R.string.route_detour_entry));
+    RoutingController.get().addDetourStop(object, getContext().getString(R.string.route_detour_entry), sideTrip);
     clear();
   }
 
@@ -259,7 +267,7 @@ final class PlacePageRoutePreview
 
   private void hideAll()
   {
-    UiUtils.hide(mPreviewView, mOptimalView, mDetourView);
+    UiUtils.hide(mPreviewView, mOptimalView, mViaView, mDetourView);
   }
 
   @NonNull

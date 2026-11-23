@@ -29,9 +29,12 @@ public final class RoutePreview
     /**
      * @param current the planned route
      * @param optimal the route with the place inserted where it gets shortest, {@code null} when not found
+     * @param via the planned route, which leaves for the place and joins again further on; {@code null} when not
+     *            found or when it equals another variant
      * @param detour the planned route with a way to the place and back, {@code null} when not found
      */
-    void onInsertVariants(@NonNull Result current, @Nullable Result optimal, @Nullable Result detour);
+    void onInsertVariants(@NonNull Result current, @Nullable Result optimal, @Nullable Result via,
+                          @Nullable Result detour);
   }
 
   private RoutePreview() {}
@@ -64,9 +67,9 @@ public final class RoutePreview
   private static native boolean nativeCalculateInsertVariants(double lat, double lon,
                                                               @NonNull InsertVariantsListener listener);
 
-  /** Adds the detour of the last {@link #calculateInsertVariants} as stops, see RoutingController. */
+  /** Adds a detour of the last {@link #calculateInsertVariants} as stops, see RoutingController. */
   static native boolean nativeAddDetour(@NonNull String title, @NonNull String subtitle, double lat, double lon,
-                                        @NonNull String entryTitle);
+                                        @NonNull String junctionTitle, boolean sideTrip);
 
   private static native void nativeCancel();
 }

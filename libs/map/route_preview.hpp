@@ -41,6 +41,10 @@ Stats CalculateStats(routing::RouteBase const & route, routing::VehicleType vehi
 /// Pedestrians get the hiking time of the sum.
 Stats Add(Stats const & a, Stats const & b, routing::VehicleType vehicleType);
 
+/// @return |route| where the part |removed| is replaced by |added|, e.g. a stretch of the planned route by a detour.
+/// Pedestrians get the hiking time of the result.
+Stats Replace(Stats const & route, Stats const & removed, Stats const & added, routing::VehicleType vehicleType);
+
 /// @return |checkpoints| with |pt| inserted where it lengthens the straight lines between them the least.
 std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt);
 

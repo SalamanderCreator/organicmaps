@@ -617,15 +617,16 @@ public class RoutingController
   /**
    * Maps&amp;Fly: adds the place as a detour from the planned route, as calculated by
    * {@link RoutePreview#calculateInsertVariants}, and rebuilds.
-   * @param entryTitle title of the stops where the detour leaves and rejoins the route
+   * @param junctionTitle title of the stops where the detour leaves and rejoins the route
+   * @param sideTrip the way there and back instead of the one that joins the route further on
    * @return false when the route changed since the calculation or there are too many stops
    */
-  public boolean addDetourStop(@NonNull MapObject mapObject, @NonNull String entryTitle)
+  public boolean addDetourStop(@NonNull MapObject mapObject, @NonNull String junctionTitle, boolean sideTrip)
   {
     checkMapsReady();
     final Pair<String, String> description = getDescriptionForPoint(mapObject);
     if (!RoutePreview.nativeAddDetour(description.first, description.second, mapObject.getLat(), mapObject.getLon(),
-                                      entryTitle))
+                                      junctionTitle, sideTrip))
     {
       return false;
     }

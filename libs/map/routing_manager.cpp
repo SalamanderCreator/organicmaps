@@ -1911,9 +1911,18 @@ namespace
 // Maps&Fly: colors of the previewed routes, from the route and traffic colors of the map styles.
 std::string const kRoutePreviewColor = "TrafficG4";
 std::string const kRouteDetourColor = "RoadShieldOrangeBackground";
+std::string const kRouteViaColor = "RoadShieldRedBackground";
 // Below the active route, which has depth 10 and more: the optimal variant shows only where it differs.
 double constexpr kRouteOptimalDepth = 5.0;
 double constexpr kRouteDetourDepth = 6.0;
+double constexpr kRouteViaDepth = 7.0;
+
+std::vector<m2::PointD> GetPolylinePoints(RouteBase const & route)
+{
+  std::vector<m2::PointD> points;
+  route.ForEachPoint([&points](geometry::PointWithAltitude const & p) { points.push_back(p.GetPoint()); });
+  return points;
+}
 }  // namespace
 
 void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, RouterType type,
@@ -1952,7 +1961,7 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   CHECK(m_routePreview, ("Routing is not initialized"));
 
   CancelRoutePreview();
-  m_routeDetour.reset();
+  m_routeDetours.reset();
 
   auto const type = m_currentRouterType;
   auto const * route = m_routingSession.GetRoute();
@@ -1986,67 +1995,129 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
     checkpoints.push_back(attrs.GetFinish().GetPoint());
   }
 
-  // Only the remaining legs are candidates for the side trip.
+  // Only the remaining legs are candidates for detours.
   std::vector<std::vector<m2::PointD>> remainingLegs(legs.begin() + firstLegIdx, legs.end());
   auto projection = route_preview::ProjectToRoute(remainingLegs, pt);
   projection.m_legIdx += firstLegIdx;
-  // Leave and rejoin a few meters around the closest point: the route refuses equal route points.
-  double constexpr kDetourGapM = 3.0;
-  auto detour = route_preview::MakeDetour(legs, projection, kDetourGapM);
-  // The current position is no route point, so a side trip right from it leaves there.
-  if (!detour.m_leave && isFollowing && projection.m_legIdx == firstLegIdx)
-    detour.m_leave = legs[firstLegIdx].front();
-  m_routeDetour = RouteDetour{pt, detour};
+  auto const makeDetour = [&](double gapM)
+  {
+    auto detour = route_preview::MakeDetour(legs, projection, gapM);
+    // The current position is no route point, so a detour right from it leaves there.
+    if (!detour.m_leave && isFollowing && projection.m_legIdx == firstLegIdx)
+      detour.m_leave = legs[firstLegIdx].front();
+    return detour;
+  };
+  auto const & leg = legs[projection.m_legIdx];
+  auto const leaveAndRejoin = [&leg](route_preview::Detour const & detour)
+  { return std::make_pair(detour.m_leave.value_or(leg.front()), detour.m_rejoin.value_or(leg.back())); };
 
-  auto const & leg = legs[detour.m_legIdx];
-  std::vector<m2::PointD> detourCheckpoints = {detour.m_leave.value_or(leg.front()), pt,
-                                               detour.m_rejoin.value_or(leg.back())};
+  // The side trip leaves and rejoins a few meters around the closest point: the route refuses equal route points.
+  double constexpr kSideTripGapM = 3.0;
+  auto const sideTrip = makeDetour(kSideTripGapM);
+  // The via route may leave and rejoin anywhere within this distance around the closest point; the router chooses.
+  // Farther than the place to let the router find a way through it, but keeping most of the route.
+  double const viaGapM = std::clamp(2.0 * mercator::DistanceOnEarth(pt, projection.m_point), 300.0, 3000.0);
+  auto const via = makeDetour(viaGapM);
+  m_routeDetours = RouteDetours{pt, via, sideTrip};
+
+  auto const [sideLeave, sideRejoin] = leaveAndRejoin(sideTrip);
+  auto const [viaLeave, viaRejoin] = leaveAndRejoin(via);
 
   auto variants = std::make_shared<RouteInsertVariants>();
   variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
-
-  // One router runs both: first the optimal insertion, then the detour. Only their parts off the route are drawn.
   auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
-  m_routePreview->Calculate(route_preview::InsertOptimally(std::move(checkpoints), pt), vehicleType,
-                            [this, vehicleType, detourCheckpoints = std::move(detourCheckpoints), reference, variants,
-                             callback = std::move(callback)](RouteBase const * optimal) mutable
+  struct ViaRoute
   {
-    if (optimal)
+    route_preview::Stats m_stats;
+    std::vector<m2::PointD> m_points;
+  };
+  auto viaRoute = std::make_shared<std::optional<ViaRoute>>();
+
+  // One router runs them one by one. Only the parts off the route are drawn.
+  struct Request
+  {
+    std::vector<m2::PointD> m_checkpoints;
+    route_preview::Calculator::Callback m_onResult;
+  };
+  auto requests = std::make_shared<std::vector<Request>>();
+  requests->push_back({route_preview::InsertOptimally(std::move(checkpoints), pt), [=, this](RouteBase const * r)
+  {
+    if (!r)
+      return;
+    variants->m_optimal = route_preview::CalculateStats(*r, vehicleType);
+    ShowRouteVariant(*r, *reference, kRoutePreviewColor, kRouteOptimalDepth);
+  }});
+  requests->push_back({{sideLeave, pt, sideRejoin},
+                       [=, this](RouteBase const * r)
+  {
+    if (!r)
+      return;
+    // The few meters between leaving and rejoining are also on the planned route.
+    variants->m_detour =
+        route_preview::Add(variants->m_current, route_preview::CalculateStats(*r, vehicleType), vehicleType);
+    ShowRouteVariant(*r, *reference, kRouteDetourColor, kRouteDetourDepth);
+  }});
+  // The via route replaces the planned route between its leave and rejoin points, so that part is needed too.
+  requests->push_back({{viaLeave, pt, viaRejoin},
+                       [=, this](RouteBase const * r)
+  {
+    if (r)
+      *viaRoute = ViaRoute{route_preview::CalculateStats(*r, vehicleType), GetPolylinePoints(*r)};
+  }});
+  requests->push_back({{viaLeave, viaRejoin},
+                       [=, this](RouteBase const * r)
+  {
+    if (!r || !*viaRoute)
+      return;
+    auto const stats = route_preview::Replace(variants->m_current, route_preview::CalculateStats(*r, vehicleType),
+                                              (*viaRoute)->m_stats, vehicleType);
+    // Shown only when it differs from the other variants.
+    auto const differs = [&stats](std::optional<route_preview::Stats> const & other)
     {
-      variants->m_optimal = route_preview::CalculateStats(*optimal, vehicleType);
-      ShowRouteVariant(*optimal, *reference, kRoutePreviewColor, kRouteOptimalDepth);
+      double constexpr kMinDiffM = 30.0;
+      double constexpr kMinDiffRatio = 0.03;
+      return !other ||
+             std::abs(other->m_distanceM - stats.m_distanceM) > std::max(kMinDiffM, kMinDiffRatio * stats.m_distanceM);
+    };
+    if (differs(variants->m_optimal) && differs(variants->m_detour))
+    {
+      variants->m_via = stats;
+      ShowPreviewLine((*viaRoute)->m_points, *reference, kRouteViaColor, kRouteViaDepth);
     }
-    m_routePreview->Calculate(
-        std::move(detourCheckpoints), vehicleType,
-        [this, vehicleType, reference, variants, callback = std::move(callback)](RouteBase const * detour)
+  }});
+
+  // Runs request |idx| and then the next ones; reports when all are done.
+  // Runs request |idx| and then the next ones; reports when all are done. The pending router callback owns |run|,
+  // so a cancelled chain is freed with it.
+  auto run = std::make_shared<std::function<void(size_t)>>();
+  *run =
+      [this, requests, variants, vehicleType, weakRun = std::weak_ptr(run), callback = std::move(callback)](size_t idx)
+  {
+    if (idx == requests->size())
     {
-      if (detour)
-      {
-        // The side trip leaves and rejoins the route a few meters apart, which the planned route also covers.
-        auto const stats =
-            route_preview::Add(variants->m_current, route_preview::CalculateStats(*detour, vehicleType), vehicleType);
-        // A side trip that is not shorter than going there optimally is of no use: the optimal way changes the route
-        // only around the place then, e.g. when it lies just off the route.
-        if (!variants->m_optimal || stats.m_distanceM < variants->m_optimal->m_distanceM)
-        {
-          variants->m_detour = stats;
-          ShowRouteVariant(*detour, *reference, kRouteDetourColor, kRouteDetourDepth);
-        }
-      }
       callback(*variants);
+      return;
+    }
+    auto checkpointsCopy = (*requests)[idx].m_checkpoints;
+    m_routePreview->Calculate(std::move(checkpointsCopy), vehicleType,
+                              [requests, run = weakRun.lock(), idx](RouteBase const * r)
+    {
+      (*requests)[idx].m_onResult(r);
+      (*run)(idx + 1);
     });
-  });
+  };
+  (*run)(0);
   return true;
 }
 
-bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & entryTitle)
+bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, bool sideTrip)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   ASSERT(m_bmManager != nullptr, ());
 
-  if (!m_routeDetour || !m_routeDetour->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
+  if (!m_routeDetours || !m_routeDetours->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
     return false;
-  auto const & detour = m_routeDetour->m_detour;
+  auto const detour = sideTrip ? m_routeDetours->m_sideTrip : m_routeDetours->m_via;
 
   auto const * route = m_routingSession.GetRoute();
   size_t const pointsCount = GetRoutePointsCount();
@@ -2064,7 +2135,7 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
     if (!position)
       return;
     RouteMarkData junction;
-    junction.m_title = entryTitle;
+    junction.m_title = junctionTitle;
     junction.m_position = *position;
     stops.push_back(std::move(junction));
   };
@@ -2084,16 +2155,20 @@ bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & 
       MoveRoutePoint(addedIdx, targetIdx);
     ++targetIdx;
   }
-  m_routeDetour.reset();
+  m_routeDetours.reset();
   return true;
 }
 
 void RoutingManager::ShowRouteVariant(RouteBase const & route, std::vector<std::vector<m2::PointD>> const & reference,
                                       std::string const & color, double depth)
 {
-  std::vector<m2::PointD> points;
-  route.ForEachPoint([&points](geometry::PointWithAltitude const & p) { points.push_back(p.GetPoint()); });
+  ShowPreviewLine(GetPolylinePoints(route), reference, color, depth);
+}
 
+void RoutingManager::ShowPreviewLine(std::vector<m2::PointD> points,
+                                     std::vector<std::vector<m2::PointD>> const & reference, std::string const & color,
+                                     double depth)
+{
   std::vector<std::vector<m2::PointD>> lines;
   if (reference.empty())
   {

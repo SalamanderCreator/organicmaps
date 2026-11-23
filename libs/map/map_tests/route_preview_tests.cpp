@@ -139,4 +139,27 @@ UNIT_TEST(RoutePreview_AddStats)
   TEST_ALMOST_EQUAL_ABS(bike.m_timeSec, 150.0, 1e-9, ());
   TEST(!bike.m_hasAltitudes, ());
 }
+
+UNIT_TEST(RoutePreview_ReplaceStats)
+{
+  using route_preview::Stats;
+
+  Stats const route{10000.0, 3000.0, 500, 400, true};
+  Stats const removed{1000.0, 300.0, 100, 0, true};
+  Stats const added{1500.0, 500.0, 50, 80, true};
+
+  auto const bike = route_preview::Replace(route, removed, added, routing::VehicleType::Bicycle);
+  TEST_ALMOST_EQUAL_ABS(bike.m_distanceM, 10500.0, 1e-9, ());
+  TEST_ALMOST_EQUAL_ABS(bike.m_timeSec, 3200.0, 1e-9, ());
+  TEST_EQUAL(bike.m_ascentM, 450, ());
+  TEST_EQUAL(bike.m_descentM, 480, ());
+
+  auto const walk = route_preview::Replace(route, removed, added, routing::VehicleType::Pedestrian);
+  TEST_ALMOST_EQUAL_ABS(walk.m_timeSec, route_preview::EstimateHikingTimeSec(10500.0, 450.0, 480.0), 1e-9, ());
+
+  // Climbs never get negative.
+  auto const flat =
+      route_preview::Replace(Stats{1000.0, 0.0, 10, 10, true}, removed, added, routing::VehicleType::Bicycle);
+  TEST_EQUAL(flat.m_ascentM, 0, ());
+}
 }  // namespace route_preview_tests

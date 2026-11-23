@@ -43945,17 +43945,23 @@ tags = android-app
 en = Insert optimally
 de = Optimal einfügen
 
+[route_insert_via]
+comment = Maps&Fly place page while a route is planned: keep most of the route, leave it for the place and join it again further on
+tags = android-app
+en = Detour
+de = Umweg
+
 [route_insert_detour]
 comment = Maps&Fly place page while a route is planned: keep the route and add a way from it to the place and back
 tags = android-app
-en = Side trip
-de = Abstecher
+en = Side trip there and back
+de = Abstecher hin und zurück
 
 [route_detour_entry]
-comment = Maps&Fly: name of the route stop where a side trip leaves and rejoins the route
+comment = Maps&Fly: name of the route stops where a detour or side trip leaves and rejoins the route
 tags = android-app
-en = Side trip junction
-de = Abzweig zum Abstecher
+en = Junction
+de = Abzweig
 
 [[Qt UI strings]]
 
