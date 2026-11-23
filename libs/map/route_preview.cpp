@@ -3,7 +3,6 @@
 #include "map/elevation_info.hpp"
 
 #include "routing/async_router.hpp"
-#include "routing/checkpoint_predictor.hpp"
 #include "routing/checkpoints.hpp"
 
 #include "geometry/mercator.hpp"
@@ -101,16 +100,6 @@ Stats Replace(Stats const & route, Stats const & removed, Stats const & added, V
   if (vehicleType == VehicleType::Pedestrian)
     result.m_timeSec = EstimateHikingTimeSec(result.m_distanceM, result.m_ascentM, result.m_descentM);
   return result;
-}
-
-std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt)
-{
-  CHECK_GREATER_OR_EQUAL(checkpoints.size(), 2, ());
-  // The same choice as RoutingManager::AddRoutePoint() with optimization makes for a new stop.
-  std::vector<m2::PointD> const intermediates(checkpoints.begin() + 1, checkpoints.end() - 1);
-  size_t const idx = CheckpointPredictor(checkpoints.front(), checkpoints.back()).PredictPosition(intermediates, pt);
-  checkpoints.insert(checkpoints.begin() + 1 + idx, pt);
-  return checkpoints;
 }
 
 RouteProjection ProjectToRoute(std::vector<std::vector<m2::PointD>> const & legs, m2::PointD const & pt)

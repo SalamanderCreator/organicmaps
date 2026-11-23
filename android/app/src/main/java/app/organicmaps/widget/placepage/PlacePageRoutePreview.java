@@ -25,8 +25,9 @@ import app.organicmaps.util.UiUtils;
 /**
  * Maps&amp;Fly: shows in the place page how far the place is along the paths from the current position,
  * with the climb and the walking or cycling time. A tap switches between walking and cycling.
- * While a walking or cycling route is planned or followed, it offers two ways to add the place instead: inserted where
- * the route gets shortest, or as a side trip that keeps the route. Both are drawn on the map in their colors.
+ * While a walking or cycling route is planned or followed, it offers three ways to add the place instead: between the
+ * stops where it adds the least time, as a detour that keeps most of the route, or as a side trip there and back.
+ * They are drawn on the map in their colors.
  */
 final class PlacePageRoutePreview
 {
@@ -62,9 +63,9 @@ final class PlacePageRoutePreview
     mViaView = root.findViewById(R.id.tv__route_insert_via);
     mDetourView = root.findViewById(R.id.tv__route_insert_detour);
     mPreviewView.setOnClickListener(v -> toggleRouter());
-    mOptimalView.setOnClickListener(v -> addOptimal());
-    mViaView.setOnClickListener(v -> addDetour(false));
-    mDetourView.setOnClickListener(v -> addDetour(true));
+    mOptimalView.setOnClickListener(v -> addVariant(RoutePreview.INSERT_OPTIMAL));
+    mViaView.setOnClickListener(v -> addVariant(RoutePreview.INSERT_VIA));
+    mDetourView.setOnClickListener(v -> addVariant(RoutePreview.INSERT_SIDE_TRIP));
     hideAll();
   }
 
@@ -235,23 +236,17 @@ final class PlacePageRoutePreview
     return StringUtils.nativeFormatDistance(meters).toString(getContext());
   }
 
-  private void addOptimal()
+  private void addVariant(int kind)
   {
     final MapObject object = mObject;
     if (object == null)
       return;
-    clear();
-    // A new stop is inserted at the same place as in the preview.
-    RoutingController.get().addStop(object);
-  }
-
-  private void addDetour(boolean sideTrip)
-  {
-    final MapObject object = mObject;
-    if (object == null)
-      return;
-    // The detour is kept until the next calculation, so add it before clear() hides it.
-    RoutingController.get().addDetourStop(object, getContext().getString(R.string.route_detour_entry), sideTrip);
+    // The variant is kept until the next calculation, so add it before clear() hides it.
+    final RoutingController controller = RoutingController.get();
+    final boolean added = controller.addDetourStop(object, getContext().getString(R.string.route_detour_entry), kind);
+    // Before its calculation is done, the optimal variant falls back to the usual new stop.
+    if (!added && kind == RoutePreview.INSERT_OPTIMAL)
+      controller.addStop(object);
     clear();
   }
 

@@ -308,7 +308,7 @@ public:
   struct RouteInsertVariants
   {
     route_preview::Stats m_current;
-    /// The point is inserted where the whole route gets shortest, and the route is planned anew.
+    /// The point is inserted between the stops where it adds the least time, and that leg is planned anew.
     std::optional<route_preview::Stats> m_optimal;
     /// The planned route stays, with a way from its closest point to the point and back.
     std::optional<route_preview::Stats> m_detour;
@@ -317,14 +317,20 @@ public:
     std::optional<route_preview::Stats> m_via;
   };
   using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
-  /// Maps&Fly: while a walking or cycling route is planned or followed, calculates both ways to add |pt| and draws
+  /// Maps&Fly: while a walking or cycling route is planned or followed, calculates the ways to add |pt| and draws
   /// them next to the route until CancelRoutePreview(). While following, only the rest of the route counts.
   /// @return false without such a route.
   bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
-  /// Maps&Fly: adds a detour of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
+  enum class RouteInsertKind
+  {
+    Optimal,
+    Via,
+    SideTrip
+  };
+  /// Maps&Fly: adds a variant of the last CalculateRouteInsertVariants() to |point| as stops: where it leaves the
   /// route, with |junctionTitle|, |point| and where it rejoins the route. Rebuild the route then.
-  /// |sideTrip| adds the way there and back instead of the via route.
-  bool AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, bool sideTrip);
+  /// @return false when the variant is not calculated (yet) or the route changed.
+  bool AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, RouteInsertKind kind);
 
 private:
   void SetRouterImpl(routing::RouterType type);
@@ -441,6 +447,8 @@ private:
   struct RouteDetours
   {
     m2::PointD m_target;
+    /// Set when its calculation is done.
+    std::optional<route_preview::Detour> m_optimal;
     route_preview::Detour m_via;
     route_preview::Detour m_sideTrip;
   };

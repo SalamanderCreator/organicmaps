@@ -22,17 +22,6 @@ UNIT_TEST(RoutePreview_HikingTime)
   TEST_EQUAL(EstimateHikingTimeSec(0.0, 0.0, 0.0), 0.0, ());
 }
 
-UNIT_TEST(RoutePreview_InsertOptimally)
-{
-  using route_preview::InsertOptimally;
-
-  // Start, stop, finish on a line: a point near the second half goes after the stop.
-  std::vector<m2::PointD> const points = {{0, 0}, {1, 0}, {2, 0}};
-  TEST_EQUAL(InsertOptimally(points, {1.5, 0.1}), (std::vector<m2::PointD>{{0, 0}, {1, 0}, {1.5, 0.1}, {2, 0}}), ());
-  TEST_EQUAL(InsertOptimally(points, {0.5, -0.1}), (std::vector<m2::PointD>{{0, 0}, {0.5, -0.1}, {1, 0}, {2, 0}}), ());
-  TEST_EQUAL(InsertOptimally({{0, 0}, {2, 0}}, {1, 1}), (std::vector<m2::PointD>{{0, 0}, {1, 1}, {2, 0}}), ());
-}
-
 UNIT_TEST(RoutePreview_ProjectToRoute)
 {
   using route_preview::ProjectToRoute;

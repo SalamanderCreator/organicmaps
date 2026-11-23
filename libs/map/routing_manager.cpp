@@ -1976,7 +1976,6 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   size_t const firstLegIdx = isFollowing ? route->GetCurrentSubrouteIdx() : 0;
 
   // Legs are indexed like the subroutes; passed ones stay empty.
-  std::vector<m2::PointD> checkpoints;
   std::vector<std::vector<m2::PointD>> legs(route->GetSubrouteCount());
   // Leg segment i is route segment legBegins[legIdx] + i.
   std::vector<size_t> legBegins(legs.size());
@@ -1992,10 +1991,6 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
       leg.push_back(segments[i].GetJunction().GetPoint());
     if (leg.size() < 2)
       leg.push_back(attrs.GetFinish().GetPoint());
-
-    if (checkpoints.empty())
-      checkpoints.push_back(leg.front());
-    checkpoints.push_back(attrs.GetFinish().GetPoint());
   }
 
   // Only the remaining legs are candidates for detours.
@@ -2022,24 +2017,26 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   double const viaGapM = std::clamp(2.0 * mercator::DistanceOnEarth(pt, projection.m_point), 300.0, 3000.0);
   // It leaves and rejoins at route points, so the replaced part of the planned route is known exactly.
   auto const via = makeDetour(viaGapM, true /* snapToLegPoints */);
-  m_routeDetours = RouteDetours{pt, via, sideTrip};
+  m_routeDetours = RouteDetours{pt, std::nullopt, via, sideTrip};
 
   auto const [sideLeave, sideRejoin] = leaveAndRejoin(sideTrip);
   auto const [viaLeave, viaRejoin] = leaveAndRejoin(via);
 
   auto variants = std::make_shared<RouteInsertVariants>();
   variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
-  // The part of the planned route that the via route replaces.
-  route_preview::Stats replaced;
-  replaced.m_hasAltitudes = variants->m_current.m_hasAltitudes;
+  // Stats of the planned route on leg |legIdx| between the leg points |fromIdx| and |toIdx|.
+  auto const legStats = [&](size_t legIdx, size_t fromIdx, size_t toIdx)
   {
-    size_t const legBegin = legBegins[via.m_legIdx];
-    size_t const legEnd = route->GetSubrouteAttrs(via.m_legIdx).GetEndSegmentIdx();
-    size_t const from = legBegin + via.m_leaveIdx;
-    size_t const to = std::min(legBegin + via.m_rejoinIdx, legEnd);
+    size_t const from = legBegins[legIdx] + fromIdx;
+    size_t const to = std::min(legBegins[legIdx] + toIdx, route->GetSubrouteAttrs(legIdx).GetEndSegmentIdx());
     if (from < to)
-      replaced = route_preview::CalculateStats(*route, vehicleType, from, to);
-  }
+      return route_preview::CalculateStats(*route, vehicleType, from, to);
+    route_preview::Stats empty;
+    empty.m_hasAltitudes = variants->m_current.m_hasAltitudes;
+    return empty;
+  };
+  // The part of the planned route that the via route replaces.
+  auto const replaced = legStats(via.m_legIdx, via.m_leaveIdx, via.m_rejoinIdx);
   auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
 
   // One router runs them one by one. Only the parts off the route are drawn.
@@ -2049,12 +2046,53 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
     route_preview::Calculator::Callback m_onResult;
   };
   auto requests = std::make_shared<std::vector<Request>>();
-  requests->push_back({route_preview::InsertOptimally(std::move(checkpoints), pt), [=, this](RouteBase const * r)
+  // The optimal variant takes the leg where the point adds the least time. Only the legs with the least straight
+  // detour are routed: one request each, and the farther ones hardly win.
+  std::vector<std::pair<double, size_t>> straightDetours;
+  for (size_t legIdx = firstLegIdx; legIdx < legs.size(); ++legIdx)
   {
-    if (!r)
+    auto const & l = legs[legIdx];
+    straightDetours.emplace_back(mercator::DistanceOnEarth(l.front(), pt) + mercator::DistanceOnEarth(pt, l.back()) -
+                                     mercator::DistanceOnEarth(l.front(), l.back()),
+                                 legIdx);
+  }
+  size_t constexpr kMaxOptimalCandidates = 3;
+  std::sort(straightDetours.begin(), straightDetours.end());
+  if (straightDetours.size() > kMaxOptimalCandidates)
+    straightDetours.resize(kMaxOptimalCandidates);
+
+  struct Candidate
+  {
+    size_t m_legIdx = 0;
+    route_preview::Stats m_stats;
+    std::vector<m2::PointD> m_points;
+  };
+  auto best = std::make_shared<std::optional<Candidate>>();
+  for (auto const & [straightDetour, legIdx] : straightDetours)
+  {
+    auto const & l = legs[legIdx];
+    requests->push_back({{l.front(), pt, l.back()},
+                         [=, this, removed = legStats(legIdx, 0, l.size() - 1)](RouteBase const * r)
+    {
+      if (!r)
+        return;
+      auto const stats = route_preview::Replace(variants->m_current, removed,
+                                                route_preview::CalculateStats(*r, vehicleType), vehicleType);
+      if (!*best || stats.m_timeSec < (*best)->m_stats.m_timeSec)
+        *best = Candidate{legIdx, stats, GetPolylinePoints(*r)};
+    }});
+  }
+  // No route, just shows the best candidate.
+  requests->push_back({{},
+                       [=, this](RouteBase const *)
+  {
+    if (!*best || !m_routeDetours)
       return;
-    variants->m_optimal = route_preview::CalculateStats(*r, vehicleType);
-    ShowRouteVariant(*r, *reference, kRoutePreviewColor, kRouteOptimalDepth);
+    variants->m_optimal = (*best)->m_stats;
+    route_preview::Detour optimal;
+    optimal.m_legIdx = (*best)->m_legIdx;
+    m_routeDetours->m_optimal = optimal;
+    ShowPreviewLine((*best)->m_points, *reference, kRoutePreviewColor, kRouteOptimalDepth);
   }});
   requests->push_back({{sideLeave, pt, sideRejoin},
                        [=, this](RouteBase const * r)
@@ -2099,6 +2137,12 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
       callback(*variants);
       return;
     }
+    if ((*requests)[idx].m_checkpoints.empty())
+    {
+      (*requests)[idx].m_onResult(nullptr);
+      (*weakRun.lock())(idx + 1);
+      return;
+    }
     auto checkpointsCopy = (*requests)[idx].m_checkpoints;
     m_routePreview->Calculate(std::move(checkpointsCopy), vehicleType,
                               [requests, run = weakRun.lock(), idx](RouteBase const * r)
@@ -2111,14 +2155,18 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   return true;
 }
 
-bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, bool sideTrip)
+bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & junctionTitle, RouteInsertKind kind)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   ASSERT(m_bmManager != nullptr, ());
 
   if (!m_routeDetours || !m_routeDetours->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
     return false;
-  auto const detour = sideTrip ? m_routeDetours->m_sideTrip : m_routeDetours->m_via;
+  if (kind == RouteInsertKind::Optimal && !m_routeDetours->m_optimal)
+    return false;
+  auto const detour = kind == RouteInsertKind::Optimal ? *m_routeDetours->m_optimal
+                    : kind == RouteInsertKind::Via     ? m_routeDetours->m_via
+                                                       : m_routeDetours->m_sideTrip;
 
   auto const * route = m_routingSession.GetRoute();
   size_t const pointsCount = GetRoutePointsCount();

@@ -47,9 +47,6 @@ Stats Add(Stats const & a, Stats const & b, routing::VehicleType vehicleType);
 /// Pedestrians get the hiking time of the result.
 Stats Replace(Stats const & route, Stats const & removed, Stats const & added, routing::VehicleType vehicleType);
 
-/// @return |checkpoints| with |pt| inserted where it lengthens the straight lines between them the least.
-std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt);
-
 struct RouteProjection
 {
   m2::PointD m_point;

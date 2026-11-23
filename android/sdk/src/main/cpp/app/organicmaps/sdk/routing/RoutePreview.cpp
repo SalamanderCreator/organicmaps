@@ -61,14 +61,14 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_routing_RoutePreview_nativeCalculate
 JNIEXPORT jboolean Java_app_organicmaps_sdk_routing_RoutePreview_nativeAddDetour(JNIEnv * env, jclass, jstring title,
                                                                                  jstring subtitle, jdouble lat,
                                                                                  jdouble lon, jstring junctionTitle,
-                                                                                 jboolean sideTrip)
+                                                                                 jint kind)
 {
   RouteMarkData data;
   data.m_title = jni::ToNativeString(env, title);
   data.m_subTitle = jni::ToNativeString(env, subtitle);
   data.m_position = mercator::FromLatLon(lat, lon);
   return frm()->GetRoutingManager().AddRouteDetour(std::move(data), jni::ToNativeString(env, junctionTitle),
-                                                   static_cast<bool>(sideTrip));
+                                                   static_cast<RoutingManager::RouteInsertKind>(kind));
 }
 
 JNIEXPORT void Java_app_organicmaps_sdk_routing_RoutePreview_nativeCancel(JNIEnv *, jclass)
