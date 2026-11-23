@@ -9,6 +9,8 @@
 #include <cmath>
 #include <limits>
 #include <optional>
+#include <utility>
+#include <vector>
 
 namespace track_following
 {
@@ -57,7 +59,7 @@ JoinedTrack::JoinedTrack(kml::MultiGeometry const & geometry)
   }
 }
 
-TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point)
+TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point, bool reverse)
 {
   auto const & points = track.m_points;
   CHECK(!points.empty(), ());
@@ -65,24 +67,33 @@ TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point)
     return MakePosition(track, 0, 0.0);
 
   // Mercator is conformal, so the closest point in mercator is also the closest one on the Earth nearby.
-  size_t bestIndex = 0;
-  double bestT = 0;
-  double bestSquaredDist = std::numeric_limits<double>::max();
+  std::vector<std::pair<TrackPosition, double>> candidates;
+  candidates.reserve(points.size() - 1);
+  double bestDistM = std::numeric_limits<double>::max();
   for (size_t i = 0; i + 1 < points.size(); ++i)
   {
     auto const & from = points[i].GetPoint();
     auto const & to = points[i + 1].GetPoint();
     auto const closest = m2::ParametrizedSegment<m2::PointD>(from, to).ClosestPointTo(point);
-    double const squaredDist = closest.SquaredLength(point);
-    if (squaredDist < bestSquaredDist)
-    {
-      bestSquaredDist = squaredDist;
-      bestIndex = i;
-      double const squaredLength = from.SquaredLength(to);
-      bestT = squaredLength > 0 ? std::sqrt(from.SquaredLength(closest) / squaredLength) : 0.0;
-    }
+    double const squaredLength = from.SquaredLength(to);
+    double const t = squaredLength > 0 ? std::sqrt(from.SquaredLength(closest) / squaredLength) : 0.0;
+    double const distM = mercator::DistanceOnEarth(point, closest);
+    bestDistM = std::min(bestDistM, distM);
+    candidates.emplace_back(MakePosition(track, i, t), distM);
   }
-  return MakePosition(track, bestIndex, bestT);
+
+  // A track that passes the same place twice, like a round trip at its start and end, has several closest
+  // points. The one with the most track left in the direction of travel is meant.
+  double constexpr kSamePlaceM = 10.0;
+  TrackPosition const * best = nullptr;
+  for (auto const & [pos, distM] : candidates)
+  {
+    if (distM > bestDistM + kSamePlaceM)
+      continue;
+    if (!best || (reverse ? pos.m_distFromBegM > best->m_distFromBegM : pos.m_distFromBegM < best->m_distFromBegM))
+      best = &pos;
+  }
+  return *best;
 }
 
 TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM)

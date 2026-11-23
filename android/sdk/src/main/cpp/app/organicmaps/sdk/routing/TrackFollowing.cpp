@@ -39,13 +39,14 @@ extern "C"
 {
 JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetClosestPoint(JNIEnv * env, jclass,
                                                                                              jlong trackId, jdouble lat,
-                                                                                             jdouble lon)
+                                                                                             jdouble lon,
+                                                                                             jboolean reverse)
 {
   auto const track = GetJoinedTrack(trackId);
   if (!track)
     return nullptr;
   auto const point = mercator::FromLatLon(lat, lon);
-  auto const pos = track_following::FindClosest(*track, point);
+  auto const pos = track_following::FindClosest(*track, point, reverse);
   return ToJava(env, pos, mercator::DistanceOnEarth(point, pos.m_point.GetPoint()));
 }
 

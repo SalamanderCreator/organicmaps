@@ -63,6 +63,31 @@ UNIT_TEST(TrackFollowing_FindClosest)
   TEST_EQUAL(end.m_point, Pt(0.003, 500), ());
 }
 
+UNIT_TEST(TrackFollowing_FindClosestOnRoundTrip)
+{
+  // A round trip: east, north, back west and south to the start.
+  kml::MultiGeometry geometry;
+  geometry.m_lines.push_back({Pt(0),
+                              Pt(0.001),
+                              {mercator::FromLatLon(0.001, 0.001), geometry::kInvalidAltitude},
+                              {mercator::FromLatLon(0.001, 0), geometry::kInvalidAltitude},
+                              Pt(0)});
+  JoinedTrack const track(geometry);
+  auto const nearStart = mercator::FromLatLon(-0.0002, -0.0002);
+
+  // Forward from the start, backwards from the end: both are at the same place.
+  auto const forward = FindClosest(track, nearStart);
+  TEST_ALMOST_EQUAL_ABS(forward.m_distFromBegM, 0.0, 1e-6, ());
+  auto const backward = FindClosest(track, nearStart, true /* reverse */);
+  TEST_ALMOST_EQUAL_ABS(backward.m_distFromBegM, track.m_distFromBegM.back(), 1e-6, ());
+  TEST(MakeRemainder(track, backward, true /* reverse */), ());
+
+  // Away from the shared start, the direction does not matter.
+  auto const side = mercator::FromLatLon(0.0005, 0.0012);
+  TEST_EQUAL(FindClosest(track, side).m_index, 1, ());
+  TEST_EQUAL(FindClosest(track, side, true /* reverse */).m_index, 1, ());
+}
+
 UNIT_TEST(TrackFollowing_AtDistance)
 {
   JoinedTrack const track(MakeGeometry());

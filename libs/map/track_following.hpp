@@ -35,7 +35,8 @@ struct TrackPosition
 };
 
 /// @param track must have at least one point.
-TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point);
+/// @param reverse prefer, among points (almost) as close, the one with the most track left backwards.
+TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point, bool reverse = false);
 
 /// @return the position at the given distance from the start, clamped to the track ends.
 TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM);

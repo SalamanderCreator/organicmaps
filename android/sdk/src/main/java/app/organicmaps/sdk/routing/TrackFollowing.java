@@ -31,11 +31,16 @@ public final class TrackFollowing
 
   private TrackFollowing() {}
 
-  /** Returns the track point closest to the position, or {@code null} if the track is gone. */
+  /**
+   * Returns the track point closest to the position, or {@code null} if the track is gone. Where the track passes
+   * the position more than once, e.g. at the start and end of a round trip, it returns the point with the most track
+   * left in the direction of travel.
+   * @param reverse the track is followed backwards
+   */
   @Nullable
-  public static TrackPoint getClosestPoint(long trackId, double lat, double lon)
+  public static TrackPoint getClosestPoint(long trackId, double lat, double lon, boolean reverse)
   {
-    return TrackPoint.of(nativeGetClosestPoint(trackId, lat, lon));
+    return TrackPoint.of(nativeGetClosestPoint(trackId, lat, lon, reverse));
   }
 
   /** Returns the point at the distance from the track start, or {@code null} if the track is gone. */
@@ -109,7 +114,7 @@ public final class TrackFollowing
   }
 
   @Nullable
-  private static native double[] nativeGetClosestPoint(long trackId, double lat, double lon);
+  private static native double[] nativeGetClosestPoint(long trackId, double lat, double lon, boolean reverse);
   @Nullable
   private static native double[] nativeGetPointAt(long trackId, double distFromBegM);
   @Nullable

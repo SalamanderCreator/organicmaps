@@ -1058,7 +1058,7 @@ bool RoutingManager::UpdateLiveTrackEntry(m2::PointD const & position, bool forc
 
   // A new entry this close to the current one does not change the approach visibly.
   double constexpr kMinEntryMoveM = 5.0;
-  auto const entry = track_following::FindClosest(*m_liveEntryTrack, position);
+  auto const entry = track_following::FindClosest(*m_liveEntryTrack, position, m_liveEntryReverse);
   if (!force && mercator::DistanceOnEarth(entry.m_point.GetPoint(), m_followedTrack->m_points.front().GetPoint()) <
                     kMinEntryMoveM)
   {
