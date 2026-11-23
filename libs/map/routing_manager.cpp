@@ -1,6 +1,7 @@
 #include "routing_manager.hpp"
 
 #include "map/routing_mark.hpp"
+#include "map/track_following.hpp"
 
 #include "routing/absent_regions_finder.hpp"
 #include "routing/checkpoint_predictor.hpp"
@@ -508,8 +509,7 @@ void RoutingManager::SetRouterImpl(RouterType type)
   else if (m_followedTrack)
   {
     // Maps&Fly: the track has no road data, so missing maps do not matter.
-    router = std::make_unique<TrackRouter>(
-        vehicleType == VehicleType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian, m_followedTrack);
+    router = MakeTrackRouter(vehicleType);
   }
   else
   {
@@ -1008,13 +1008,69 @@ void RoutingManager::CloseRouting(bool removeRoutePoints)
   }
 }
 
+std::unique_ptr<IRouter> RoutingManager::MakeTrackRouter(VehicleType vehicleType) const
+{
+  return std::make_unique<TrackRouter>(
+      vehicleType == VehicleType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian, m_followedTrack);
+}
+
 void RoutingManager::SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   CHECK(m_numMwmIDs, ("Routing is not initialized"));
   m_followedTrack = std::move(track);
+  m_liveEntryTrack.reset();
   HidePreviewSegments();
   SetRouterImpl(m_currentRouterType);
+}
+
+void RoutingManager::ShowTrackApproachLine(m2::PointD const & from, m2::PointD const & to)
+{
+  HideTrackApproachLine();
+  // The route preview segment: a dotted line, as while a route is built.
+  df::DrapeEngineLockGuard lock(m_drapeEngine);
+  if (lock)
+    m_trackApproachLineId = lock.Get()->AddRoutePreviewSegment(from, to);
+}
+
+void RoutingManager::HideTrackApproachLine()
+{
+  if (m_trackApproachLineId)
+    m_drapeEngine.SafeCall(&df::DrapeEngine::RemoveRoutePreviewSegment, *m_trackApproachLineId);
+  m_trackApproachLineId.reset();
+}
+
+void RoutingManager::SetFollowedTrackLiveEntry(std::shared_ptr<track_following::JoinedTrack const> track, bool reverse)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(!track || m_followedTrack, ());
+  m_liveEntryTrack = std::move(track);
+  m_liveEntryReverse = reverse;
+}
+
+bool RoutingManager::UpdateLiveTrackEntry(m2::PointD const & position, bool force)
+{
+  // Once reached, the track matching keeps the progress, also after leaving the track.
+  if (m_routingSession.HasReachedFollowedTrack())
+    m_liveEntryTrack.reset();
+  if (!m_liveEntryTrack || !m_routingSession.IsFollowing())
+    return false;
+
+  // A new entry this close to the current one does not change the approach visibly.
+  double constexpr kMinEntryMoveM = 5.0;
+  auto const entry = track_following::FindClosest(*m_liveEntryTrack, position, m_liveEntryReverse);
+  if (!force && mercator::DistanceOnEarth(entry.m_point.GetPoint(), m_followedTrack->m_points.front().GetPoint()) <
+                    kMinEntryMoveM)
+  {
+    return false;
+  }
+  auto remainder = track_following::MakeRemainder(*m_liveEntryTrack, entry, m_liveEntryReverse);
+  if (!remainder)
+    return false;
+  m_followedTrack = std::move(remainder);
+  VehicleType const vehicleType = RoutingOptions::GetVehicleType(m_currentRouterType).value_or(VehicleType::Transit);
+  m_routingSession.ReplaceRouterKeepingRoute(MakeTrackRouter(vehicleType));
+  return true;
 }
 
 void RoutingManager::SetLastUsedRouter(RouterType type)
@@ -1531,10 +1587,14 @@ void RoutingManager::CheckLocationForRouting(location::GpsInfo const & info)
     return;
 
   SessionState const state = m_routingSession.OnLocationPositionChanged(info);
-  if (state == SessionState::RouteNeedRebuild)
+  auto const position = mercator::FromLatLon(info.m_latitude, info.m_longitude);
+  bool const needRebuild = state == SessionState::RouteNeedRebuild;
+  // Maps&Fly: the straight approach to a followed track turns to the closest track point.
+  bool const entryMoved =
+      (needRebuild || state == SessionState::OnRoute) && UpdateLiveTrackEntry(position, needRebuild);
+  if (needRebuild || entryMoved)
   {
-    m_routingSession.RebuildRoute(mercator::FromLatLon(info.m_latitude, info.m_longitude),
-                                  [this](RoutesResult const & result, RouterResultCode code)
+    m_routingSession.RebuildRoute(position, [this](RoutesResult const & result, RouterResultCode code)
     { OnRebuildRouteReady(result, code); }, nullptr /* needMoreMapsCallback */, nullptr /* removeRouteCallback */,
                                   RouterDelegate::kNoTimeout, SessionState::RouteRebuilding,
                                   true /* adjustToPrevRoute */);

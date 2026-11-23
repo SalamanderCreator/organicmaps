@@ -41,6 +41,16 @@ UNIT_TEST(OffTrackMonitor_OnTrack)
   TEST_LESS(monitor.GetDistanceMeters(), 1, ());
 }
 
+UNIT_TEST(OffTrackMonitor_ClosestPoint)
+{
+  OffTrackMonitor monitor(MakeTrack(), 30);
+  monitor.Update(MakeFix(0, 100, 60));
+  TEST(monitor.GetClosestPoint().EqualDxDy(mercator::FromLatLon(0, 100 * kDegPerMeter), 1e-9), ());
+  // Before the track start: its first point.
+  monitor.Update(MakeFix(1, -60, 10));
+  TEST(monitor.GetClosestPoint().EqualDxDy(mercator::FromLatLon(0, 0), 1e-9), ());
+}
+
 UNIT_TEST(OffTrackMonitor_AlarmAfterDelayAndBack)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);

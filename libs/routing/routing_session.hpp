@@ -72,6 +72,10 @@ public:
   bool IsNoFollowing() const;
   bool IsOnRoute() const;
   bool IsFollowing() const;
+  /// Maps&Fly: whether the followed track was reached since the route was built or left.
+  bool HasReachedFollowedTrack() const { return m_reachedFollowedTrack; }
+  /// Maps&Fly: replaces the router while keeping the current route, so a rebuild uses the new one.
+  void ReplaceRouterKeepingRoute(std::unique_ptr<IRouter> && router);
   void Reset();
 
   void SetState(SessionState state);
