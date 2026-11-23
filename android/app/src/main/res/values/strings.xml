@@ -954,14 +954,10 @@
     <string name="track_debug_share">Debug: share latest raw track data</string>
     <!-- Map layers menu: toggle button for the rain radar layer -->
     <string name="button_layer_rain_radar">Rain radar</string>
-    <!-- Settings: which rain radar service is shown -->
-    <string name="rain_radar_source_title">Rain radar source</string>
-    <!-- Settings: rain radar source option, the German weather service -->
-    <string name="rain_radar_source_dwd">DWD (Germany, with 2 h forecast)</string>
-    <!-- Settings: rain radar source option, the worldwide RainViewer service -->
-    <string name="rain_radar_source_rainviewer">RainViewer (worldwide, last 2 h)</string>
-    <!-- Settings: opacity of the rain radar layer in percent -->
-    <string name="rain_radar_opacity_title">Rain radar opacity (%)</string>
+    <!-- Rain radar settings: what the German weather service source covers -->
+    <string name="rain_radar_source_dwd">Germany and border regions, 2 h back and 2 h forecast</string>
+    <!-- Rain radar settings: what the RainViewer source covers -->
+    <string name="rain_radar_source_rainviewer">Worldwide, last 2 h, no forecast, coarse</string>
     <!-- Rain radar panel on the map: the radar times are being loaded -->
     <string name="rain_radar_loading">Loading rain radar…</string>
     <!-- Rain radar panel on the map: the radar times could not be loaded -->
@@ -998,8 +994,24 @@
     <string name="hillshade_light_w">From the west</string>
     <!-- Settings: relief light direction option, the usual map look -->
     <string name="hillshade_light_nw">From the north-west (default)</string>
-    <!-- Satellite settings: button that opens a list of ready-made tile sources -->
-    <string name="pref_bg_tiles_presets">Choose a source…</string>
+    <!-- Layer settings: opacity of a map layer in percent -->
+    <string name="layer_opacity">Opacity</string>
+    <!-- Terrain layer settings: switch for the contour lines (the relief shading stays) -->
+    <string name="contour_lines_title">Contour lines</string>
+    <!-- Map layers menu: hint below the layer buttons -->
+    <string name="layers_long_press_hint">Long press Terrain, Satellite or Rain radar for its settings</string>
+    <!-- Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed -->
+    <string name="rain_radar_status">%1$d tiles loaded, %2$d failed</string>
+    <!-- Rain radar panel: the last tile failed for lack of a connection -->
+    <string name="rain_radar_error_network">no connection</string>
+    <!-- Rain radar panel: the server answered with something that is not an image -->
+    <string name="rain_radar_error_image">no image from the server</string>
+    <!-- Settings group: map display -->
+    <string name="prefs_group_map">Map and display</string>
+    <!-- Settings group: track recording, off-track alarm and elevations -->
+    <string name="prefs_group_tracks">Tracks and elevations</string>
+    <!-- Settings group: downloads, storage, battery and screen -->
+    <string name="prefs_group_device">Device and data</string>
     <!-- Toast when there is no raw track data file to share -->
     <string name="track_debug_nothing_to_share">No raw track data yet</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->

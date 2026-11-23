@@ -958,14 +958,10 @@
     <string name="track_debug_share">Debug: letzte Track-Rohdaten teilen</string>
     <!-- Map layers menu: toggle button for the rain radar layer -->
     <string name="button_layer_rain_radar">Regenradar</string>
-    <!-- Settings: which rain radar service is shown -->
-    <string name="rain_radar_source_title">Regenradar-Quelle</string>
-    <!-- Settings: rain radar source option, the German weather service -->
-    <string name="rain_radar_source_dwd">DWD (Deutschland, mit 2 h Vorhersage)</string>
-    <!-- Settings: rain radar source option, the worldwide RainViewer service -->
-    <string name="rain_radar_source_rainviewer">RainViewer (weltweit, letzte 2 h)</string>
-    <!-- Settings: opacity of the rain radar layer in percent -->
-    <string name="rain_radar_opacity_title">Deckkraft Regenradar (%)</string>
+    <!-- Rain radar settings: what the German weather service source covers -->
+    <string name="rain_radar_source_dwd">Deutschland und Grenzgebiete, 2 h zurück und 2 h Vorhersage</string>
+    <!-- Rain radar settings: what the RainViewer source covers -->
+    <string name="rain_radar_source_rainviewer">Weltweit, letzte 2 h, keine Vorhersage, grob</string>
     <!-- Rain radar panel on the map: the radar times are being loaded -->
     <string name="rain_radar_loading">Regenradar wird geladen…</string>
     <!-- Rain radar panel on the map: the radar times could not be loaded -->
@@ -1002,8 +998,24 @@
     <string name="hillshade_light_w">Von Westen</string>
     <!-- Settings: relief light direction option, the usual map look -->
     <string name="hillshade_light_nw">Von Nordwesten (Standard)</string>
-    <!-- Satellite settings: button that opens a list of ready-made tile sources -->
-    <string name="pref_bg_tiles_presets">Quelle auswählen…</string>
+    <!-- Layer settings: opacity of a map layer in percent -->
+    <string name="layer_opacity">Deckkraft</string>
+    <!-- Terrain layer settings: switch for the contour lines (the relief shading stays) -->
+    <string name="contour_lines_title">Höhenlinien</string>
+    <!-- Map layers menu: hint below the layer buttons -->
+    <string name="layers_long_press_hint">Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen</string>
+    <!-- Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed -->
+    <string name="rain_radar_status">%1$d Kacheln geladen, %2$d Fehler</string>
+    <!-- Rain radar panel: the last tile failed for lack of a connection -->
+    <string name="rain_radar_error_network">keine Verbindung</string>
+    <!-- Rain radar panel: the server answered with something that is not an image -->
+    <string name="rain_radar_error_image">kein Bild vom Server</string>
+    <!-- Settings group: map display -->
+    <string name="prefs_group_map">Karte und Anzeige</string>
+    <!-- Settings group: track recording, off-track alarm and elevations -->
+    <string name="prefs_group_tracks">Tracks und Höhen</string>
+    <!-- Settings group: downloads, storage, battery and screen -->
+    <string name="prefs_group_device">Gerät und Daten</string>
     <!-- Toast when there is no raw track data file to share -->
     <string name="track_debug_nothing_to_share">Noch keine Track-Rohdaten vorhanden</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
