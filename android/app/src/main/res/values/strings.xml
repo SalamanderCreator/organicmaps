@@ -1013,7 +1013,7 @@
     <!-- Settings: switch to take the track elevation profile heights from the downloaded terrain -->
     <string name="prefer_terrain_elevation_title">Inaccurate track elevations from terrain</string>
     <!-- Settings: description of the switch to take the track elevation profile heights from the downloaded terrain -->
-    <string name="prefer_terrain_elevation_description">If the heights of a track deviate strongly from the terrain, e.g. GPS heights of a phone without a barometer, the elevation profile uses the terrain heights. Missing heights always come from the terrain. Flights keep their heights.</string>
+    <string name="prefer_terrain_elevation_description">Where the heights of a track deviate strongly from the terrain, e.g. GPS jumps or a phone without a barometer, the elevation profile uses the terrain heights for these parts. Missing heights always come from the terrain. Flights keep their heights.</string>
     <!-- Settings: title of the off-track alarm distance -->
     <string name="off_track_threshold_title">Off-track alarm: distance</string>
     <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->
