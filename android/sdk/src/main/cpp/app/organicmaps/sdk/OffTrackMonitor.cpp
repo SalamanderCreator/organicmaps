@@ -3,6 +3,8 @@
 #include "map/off_track_monitor.hpp"
 #include "map/track.hpp"
 
+#include "geometry/mercator.hpp"
+
 #include <memory>
 
 // Maps&Fly: the off track alarm. All calls come from the UI thread, like the location updates.
@@ -42,6 +44,7 @@ JNIEXPORT void Java_app_organicmaps_sdk_location_OffTrackMonitor_nativeStop(JNIE
 {
   g_monitor.reset();
   g_trackId = kml::kInvalidTrackId;
+  frm()->GetRoutingManager().HideTrackApproachLine();
 }
 
 JNIEXPORT jboolean Java_app_organicmaps_sdk_location_OffTrackMonitor_nativeIsActive(JNIEnv *, jclass)
@@ -72,7 +75,14 @@ JNIEXPORT jint Java_app_organicmaps_sdk_location_OffTrackMonitor_nativeUpdate(JN
   info.m_longitude = lon;
   info.m_horizontalAccuracy = accuracy;
   info.m_timestamp = timestampSeconds;
-  return static_cast<jint>(g_monitor->Update(info));
+  auto const state = g_monitor->Update(info);
+  // A dotted line shows the way to the track while away from it.
+  auto & routingManager = frm()->GetRoutingManager();
+  if (state == OffTrackMonitor::State::OffTrack || state == OffTrackMonitor::State::NotReached)
+    routingManager.ShowTrackApproachLine(mercator::FromLatLon(lat, lon), g_monitor->GetClosestPoint());
+  else
+    routingManager.HideTrackApproachLine();
+  return static_cast<jint>(state);
 }
 
 JNIEXPORT jdouble Java_app_organicmaps_sdk_location_OffTrackMonitor_nativeGetDistance(JNIEnv *, jclass)

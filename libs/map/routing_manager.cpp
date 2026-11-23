@@ -1024,6 +1024,22 @@ void RoutingManager::SetFollowedTrack(std::shared_ptr<routing::TrackFollowingDat
   SetRouterImpl(m_currentRouterType);
 }
 
+void RoutingManager::ShowTrackApproachLine(m2::PointD const & from, m2::PointD const & to)
+{
+  HideTrackApproachLine();
+  // The route preview segment: a dotted line, as while a route is built.
+  df::DrapeEngineLockGuard lock(m_drapeEngine);
+  if (lock)
+    m_trackApproachLineId = lock.Get()->AddRoutePreviewSegment(from, to);
+}
+
+void RoutingManager::HideTrackApproachLine()
+{
+  if (m_trackApproachLineId)
+    m_drapeEngine.SafeCall(&df::DrapeEngine::RemoveRoutePreviewSegment, *m_trackApproachLineId);
+  m_trackApproachLineId.reset();
+}
+
 void RoutingManager::SetFollowedTrackLiveEntry(std::shared_ptr<track_following::JoinedTrack const> track, bool reverse)
 {
   CHECK_THREAD_CHECKER(m_threadChecker, ());

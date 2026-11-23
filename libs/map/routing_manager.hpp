@@ -135,6 +135,10 @@ public:
   /// Maps&Fly: until navigation reaches the followed track, moves its entry to the point of |track| closest to
   /// the position, so the straight approach always leads there. |track| is the whole track, followed backwards
   /// with |reverse|. Call after SetFollowedTrack(), which stops it.
+  /// Maps&Fly: shows a dotted straight line from |from| to |to|, e.g. from the position to the closest point of a
+  /// watched track. Replaces the previous line.
+  void ShowTrackApproachLine(m2::PointD const & from, m2::PointD const & to);
+  void HideTrackApproachLine();
   void SetFollowedTrackLiveEntry(std::shared_ptr<track_following::JoinedTrack const> track, bool reverse);
   bool IsRoutingActive() const { return m_routingSession.IsActive(); }
   bool IsRouteBuilt() const { return m_routingSession.IsBuilt(); }
@@ -395,6 +399,7 @@ private:
   std::shared_ptr<routing::TrackFollowingData const> m_followedTrack;
   std::shared_ptr<track_following::JoinedTrack const> m_liveEntryTrack;
   bool m_liveEntryReverse = false;
+  std::optional<dp::DrapeID> m_trackApproachLineId;
   routing::RoutingSession m_routingSession;
   Delegate & m_delegate;
 
