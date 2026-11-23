@@ -1004,6 +1004,14 @@
     <string name="contour_lines_title">Höhenlinien</string>
     <!-- Map layers menu: hint below the layer buttons -->
     <string name="layers_long_press_hint">Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen</string>
+    <!-- Map button: content description of the north arrow -->
+    <string name="compass_button">Nordpfeil</string>
+    <!-- Toast after a long press on the north arrow: the map stays north up and cannot be turned -->
+    <string name="compass_north_locked">Nordausrichtung festgestellt</string>
+    <!-- Toast after a long press on the locked north arrow -->
+    <string name="compass_north_unlocked">Nordausrichtung gelöst</string>
+    <!-- Toast on a tap on the locked north arrow -->
+    <string name="compass_north_locked_hint">Nordausrichtung ist festgestellt. Zum Lösen lange drücken.</string>
     <!-- Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed -->
     <string name="rain_radar_status">%1$d Kacheln geladen, %2$d Fehler</string>
     <!-- Rain radar panel: the last tile failed for lack of a connection -->
