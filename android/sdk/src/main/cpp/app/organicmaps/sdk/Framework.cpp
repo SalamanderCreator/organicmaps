@@ -1603,6 +1603,16 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsIsolinesLayerEnabl
   return static_cast<jboolean>(Framework::LoadIsolinesEnabled());
 }
 
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetPreferTerrainElevation(JNIEnv *, jclass, jboolean prefer)
+{
+  Framework::SetPreferTerrainElevation(static_cast<bool>(prefer));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPreferred(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(Track::IsTerrainElevationPreferred());
+}
+
 JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetOutdoorsLayerEnabled(JNIEnv * env, jclass, jboolean enabled)
 {
   Framework::SaveOutdoorsEnabled(enabled);

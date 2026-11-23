@@ -72,6 +72,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     initBookmarksTextPlacementPrefsCallbacks();
     initTrackDebugPrefsCallbacks();
     initOffTrackThresholdPrefsCallbacks();
+    initPreferTerrainElevationPrefsCallbacks();
     initShowDownloadedRegionsPrefsCallbacks();
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
@@ -638,6 +639,16 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
   private void updateOffTrackThresholdSummary(@NonNull ListPreference pref, @NonNull String meters)
   {
     pref.setSummary(getString(R.string.off_track_threshold_description, meters + " m"));
+  }
+
+  private void initPreferTerrainElevationPrefsCallbacks()
+  {
+    final TwoStatePreference pref = getPreference(getString(R.string.pref_prefer_terrain_elevation));
+    pref.setChecked(Framework.nativeIsTerrainElevationPreferred());
+    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+      Framework.nativeSetPreferTerrainElevation((boolean) newValue);
+      return true;
+    });
   }
 
   private void initShowDownloadedRegionsPrefsCallbacks()

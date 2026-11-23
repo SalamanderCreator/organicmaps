@@ -18,7 +18,8 @@ std::optional<track_following::JoinedTrack> GetJoinedTrack(jlong trackId)
   auto const * track = frm()->GetBookmarkManager().GetTrack(static_cast<kml::TrackId>(trackId));
   if (track == nullptr)
     return {};
-  track_following::JoinedTrack joined(track->GetData().m_geometry);
+  // B1: the route along the track gets the terrain heights, as the track elevation profile.
+  track_following::JoinedTrack joined(track->GetGeometryWithElevation());
   if (joined.m_points.empty())
     return {};
   return joined;
@@ -96,9 +97,7 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGet
   if (profile == nullptr)
     return nullptr;
   // The same threshold as the track totals.
-  auto const threshold =
-      track->GetId() == kml::kTempRelationTrackId ? ElevationInfo::kDefThresholdMWM : ElevationInfo::kDefThresholdGPS;
-  auto const info = track_following::GetSectionAltitudes(*profile, fromDistM, toDistM, threshold);
+  auto const info = track_following::GetSectionAltitudes(*profile, fromDistM, toDistM, track->GetElevationThreshold());
   jdouble const values[] = {std::abs(toDistM - fromDistM), static_cast<jdouble>(info.GetTotalAscent()),
                             static_cast<jdouble>(info.GetTotalDescent())};
   jdoubleArray result = env->NewDoubleArray(3);

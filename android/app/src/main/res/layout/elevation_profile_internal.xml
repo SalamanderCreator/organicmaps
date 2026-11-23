@@ -197,6 +197,19 @@
     android:orientation="vertical">
     <include layout="@layout/elevation_profile" />
   </LinearLayout>
+  <!-- Maps&Fly: distance, ascent and descent from the track start to the selected point. -->
+  <TextView
+    android:id="@+id/start_to_point"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_base"
+    android:layout_marginTop="@dimen/margin_quarter"
+    android:layout_marginEnd="@dimen/margin_base"
+    android:gravity="center"
+    android:textAppearance="@style/MwmTextAppearance.Body2"
+    android:visibility="gone"
+    tools:text="Vom Start: 5,4 km  ↑ 620 m  ↓ 80 m"
+    tools:visibility="visible" />
   <!-- Maps&Fly: distance, ascent and descent from the current position to the selected point. -->
   <TextView
     android:id="@+id/position_to_point"

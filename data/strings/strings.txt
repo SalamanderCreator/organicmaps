@@ -46106,6 +46106,12 @@ tags = android-app
 en = ↑ %1$s   ↓ %2$s to go
 de = ↑ %1$s   ↓ %2$s bis zum Ziel
 
+[elevation_start_to_point]
+comment = Below a track elevation profile: from the track start to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent
+tags = android-app
+en = From the start: %1$s   ↑ %2$s   ↓ %3$s
+de = Vom Start: %1$s   ↑ %2$s   ↓ %3$s
+
 [elevation_position_to_point]
 comment = Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent
 tags = android-app
@@ -46207,6 +46213,18 @@ comment = Banner on the map while the user is off the watched track. %s is the d
 tags = android-app
 en = Off the track: %s
 de = Trackabweichung: %s
+
+[prefer_terrain_elevation_title]
+comment = Settings: switch to take the track elevation profile heights from the downloaded terrain
+tags = android-app
+en = Track elevations from terrain
+de = Track-Höhen aus dem Gelände
+
+[prefer_terrain_elevation_description]
+comment = Settings: description of the switch to take the track elevation profile heights from the downloaded terrain
+tags = android-app
+en = Elevation profiles use the terrain heights instead of the often noisy GPS heights of the track. Missing heights always come from the terrain.
+de = Höhenprofile nutzen die Geländehöhen statt der oft verrauschten GPS-Höhen des Tracks. Fehlende Höhen kommen immer aus dem Gelände.
 
 [off_track_threshold_title]
 comment = Settings: title of the off-track alarm distance

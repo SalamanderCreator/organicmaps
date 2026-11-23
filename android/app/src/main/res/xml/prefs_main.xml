@@ -155,6 +155,14 @@
       android:entries="@array/off_track_threshold_options"
       android:entryValues="@array/off_track_threshold_values"
       android:order="23" />
+    <!-- Maps&Fly: track elevation profiles from the terrain. -->
+    <SwitchPreferenceCompat
+      android:key="@string/pref_prefer_terrain_elevation"
+      android:title="@string/prefer_terrain_elevation_title"
+      app:singleLineTitle="false"
+      android:summary="@string/prefer_terrain_elevation_description"
+      android:persistent="false"
+      android:order="24"/>
   </androidx.preference.PreferenceCategory>
 
   <androidx.preference.PreferenceCategory

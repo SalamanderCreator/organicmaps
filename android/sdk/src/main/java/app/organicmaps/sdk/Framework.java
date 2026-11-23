@@ -379,6 +379,11 @@ public class Framework
   public static native void nativeSetIsolinesLayerEnabled(boolean enabled);
   public static native boolean nativeIsIsolinesLayerEnabled();
 
+  // Maps&Fly: track elevation profiles from the terrain heights instead of the track's own.
+  public static native void nativeSetPreferTerrainElevation(boolean prefer);
+
+  public static native boolean nativeIsTerrainElevationPreferred();
+
   public static native void nativeSetOutdoorsLayerEnabled(boolean enabled);
   public static native boolean nativeIsOutdoorsLayerEnabled();
 
