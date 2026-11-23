@@ -3,11 +3,15 @@
 #include "map/elevation_info.hpp"
 
 #include "routing/async_router.hpp"
+#include "routing/checkpoint_predictor.hpp"
 #include "routing/checkpoints.hpp"
+
+#include "geometry/parametrized_segment.hpp"
 
 #include "base/assert.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <utility>
 
 namespace route_preview
@@ -56,6 +60,53 @@ Stats CalculateStats(RouteBase const & route, VehicleType vehicleType)
     stats.m_timeSec = EstimateHikingTimeSec(stats.m_distanceM, stats.m_ascentM, stats.m_descentM);
 
   return stats;
+}
+
+Stats Add(Stats const & a, Stats const & b, VehicleType vehicleType)
+{
+  Stats sum;
+  sum.m_distanceM = a.m_distanceM + b.m_distanceM;
+  sum.m_timeSec = a.m_timeSec + b.m_timeSec;
+  sum.m_ascentM = a.m_ascentM + b.m_ascentM;
+  sum.m_descentM = a.m_descentM + b.m_descentM;
+  sum.m_hasAltitudes = a.m_hasAltitudes && b.m_hasAltitudes;
+  if (vehicleType == VehicleType::Pedestrian)
+    sum.m_timeSec = EstimateHikingTimeSec(sum.m_distanceM, sum.m_ascentM, sum.m_descentM);
+  return sum;
+}
+
+std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt)
+{
+  CHECK_GREATER_OR_EQUAL(checkpoints.size(), 2, ());
+  // The same choice as RoutingManager::AddRoutePoint() with optimization makes for a new stop.
+  std::vector<m2::PointD> const intermediates(checkpoints.begin() + 1, checkpoints.end() - 1);
+  size_t const idx = CheckpointPredictor(checkpoints.front(), checkpoints.back()).PredictPosition(intermediates, pt);
+  checkpoints.insert(checkpoints.begin() + 1 + idx, pt);
+  return checkpoints;
+}
+
+RouteProjection ProjectToRoute(std::vector<std::vector<m2::PointD>> const & legs, m2::PointD const & pt)
+{
+  CHECK(!legs.empty(), ());
+  RouteProjection best;
+  double bestDistSq = std::numeric_limits<double>::max();
+  for (size_t legIdx = 0; legIdx < legs.size(); ++legIdx)
+  {
+    auto const & leg = legs[legIdx];
+    ASSERT_GREATER_OR_EQUAL(leg.size(), 2, ());
+    for (size_t i = 1; i < leg.size(); ++i)
+    {
+      m2::ParametrizedSegment<m2::PointD> const segment(leg[i - 1], leg[i]);
+      auto const closest = segment.ClosestPointTo(pt);
+      double const distSq = closest.SquaredLength(pt);
+      if (distSq < bestDistSq)
+      {
+        bestDistSq = distSq;
+        best = {closest, legIdx};
+      }
+    }
+  }
+  return best;
 }
 
 Calculator::Calculator(RouterFactory && routerFactory) : m_routerFactory(std::move(routerFactory)) {}

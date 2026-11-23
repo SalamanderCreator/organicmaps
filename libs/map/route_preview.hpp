@@ -36,6 +36,24 @@ double EstimateHikingTimeSec(double distanceM, double ascentM, double descentM);
 /// Pedestrians get the hiking time; other vehicles keep the router's ETA.
 Stats CalculateStats(routing::RouteBase const & route, routing::VehicleType vehicleType);
 
+/// Adds the distances, climbs and times of two routes, e.g. the planned one and a detour from it.
+/// Pedestrians get the hiking time of the sum.
+Stats Add(Stats const & a, Stats const & b, routing::VehicleType vehicleType);
+
+/// @return |checkpoints| with |pt| inserted where it lengthens the straight lines between them the least.
+std::vector<m2::PointD> InsertOptimally(std::vector<m2::PointD> checkpoints, m2::PointD const & pt);
+
+struct RouteProjection
+{
+  m2::PointD m_point;
+  /// Index of the leg between two checkpoints that holds |m_point|.
+  size_t m_legIdx = 0;
+};
+
+/// @param legs polylines of the route legs, each one with at least two points.
+/// @return the route point closest to |pt|.
+RouteProjection ProjectToRoute(std::vector<std::vector<m2::PointD>> const & legs, m2::PointD const & pt);
+
 /// Runs its own router next to the routing session, so the user's route stays untouched.
 /// A new request cancels the previous one. Call from the GUI thread; callbacks come on it.
 class Calculator

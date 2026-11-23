@@ -297,7 +297,7 @@ public class PlacePageView extends Fragment implements View.OnClickListener, Vie
     UiUtils.hide(mTvDistance);
     UiUtils.hide(mAvDirection);
     directionFrame.setOnClickListener(this);
-    mRoutePreview = new PlacePageRoutePreview(mPreview.findViewById(R.id.tv__route_preview));
+    mRoutePreview = new PlacePageRoutePreview(mPreview);
 
     mTvAddress = mPreview.findViewById(R.id.tv__address);
     mTvAddress.setOnLongClickListener(this);

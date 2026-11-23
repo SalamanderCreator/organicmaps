@@ -1906,6 +1906,16 @@ std::unique_ptr<IRouter> RoutingManager::MakeIndexRouter(VehicleType vehicleType
                                        m_callbacks.m_dataSourceGetter());
 }
 
+namespace
+{
+// Maps&Fly: colors of the previewed routes, from the route and traffic colors of the map styles.
+std::string const kRoutePreviewColor = "TrafficG4";
+std::string const kRouteDetourColor = "RoadShieldOrangeBackground";
+// Below the active route, which has depth 10 and more: the optimal variant shows only where it differs.
+double constexpr kRouteOptimalDepth = 5.0;
+double constexpr kRouteDetourDepth = 6.0;
+}  // namespace
+
 void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, RouterType type,
                                            RoutePreviewCallback && callback)
 {
@@ -1913,14 +1923,18 @@ void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD c
   CHECK(m_routePreview, ("Routing is not initialized"));
   CHECK(type == RouterType::Pedestrian || type == RouterType::Bicycle, (type));
 
+  HideRouteVariants();
   VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
   m_routePreview->Calculate({from, to}, vehicleType,
-                            [vehicleType, callback = std::move(callback)](RouteBase const * route)
+                            [this, type, vehicleType, callback = std::move(callback)](RouteBase const * route)
   {
-    if (route)
-      callback(route_preview::CalculateStats(*route, vehicleType));
-    else
+    if (!route)
+    {
       callback(std::nullopt);
+      return;
+    }
+    ShowRouteVariant(*route, type, kRoutePreviewColor, kRouteOptimalDepth);
+    callback(route_preview::CalculateStats(*route, vehicleType));
   });
 }
 
@@ -1929,4 +1943,142 @@ void RoutingManager::CancelRoutePreview()
   CHECK_THREAD_CHECKER(m_threadChecker, ());
   if (m_routePreview)
     m_routePreview->Cancel();
+  HideRouteVariants();
+}
+
+bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(m_routePreview, ("Routing is not initialized"));
+
+  CancelRoutePreview();
+  m_routeDetour.reset();
+
+  auto const type = m_currentRouterType;
+  auto const * route = m_routingSession.GetRoute();
+  if ((type != RouterType::Pedestrian && type != RouterType::Bicycle) || m_routingSession.IsFollowing() ||
+      route == nullptr || !route->IsValid())
+  {
+    return false;
+  }
+  VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
+
+  std::vector<m2::PointD> checkpoints;
+  std::vector<std::vector<m2::PointD>> legs;
+  std::vector<RouteSegment> segments;
+  for (size_t i = 0; i < route->GetSubrouteCount(); ++i)
+  {
+    auto const & attrs = route->GetSubrouteAttrs(i);
+    if (i == 0)
+      checkpoints.push_back(attrs.GetStart().GetPoint());
+    checkpoints.push_back(attrs.GetFinish().GetPoint());
+
+    route->GetSubrouteInfo(i, segments);
+    auto & leg = legs.emplace_back();
+    leg.push_back(attrs.GetStart().GetPoint());
+    for (auto const & s : segments)
+      leg.push_back(s.GetJunction().GetPoint());
+    if (leg.size() < 2)
+      leg.push_back(attrs.GetFinish().GetPoint());
+  }
+
+  auto const entry = route_preview::ProjectToRoute(legs, pt);
+  m_routeDetour = RouteDetour{pt, entry};
+
+  auto variants = std::make_shared<RouteInsertVariants>();
+  variants->m_current = route_preview::CalculateStats(*route, vehicleType);
+
+  // One router runs both: first the optimal insertion, then the detour.
+  m_routePreview->Calculate(
+      route_preview::InsertOptimally(std::move(checkpoints), pt), vehicleType,
+      [this, type, vehicleType, pt, entry, variants, callback = std::move(callback)](RouteBase const * optimal) mutable
+  {
+    if (optimal)
+    {
+      variants->m_optimal = route_preview::CalculateStats(*optimal, vehicleType);
+      ShowRouteVariant(*optimal, type, kRoutePreviewColor, kRouteOptimalDepth);
+    }
+    m_routePreview->Calculate(
+        {entry.m_point, pt, entry.m_point}, vehicleType,
+        [this, type, vehicleType, variants, callback = std::move(callback)](RouteBase const * detour)
+    {
+      if (detour)
+      {
+        variants->m_detour =
+            route_preview::Add(variants->m_current, route_preview::CalculateStats(*detour, vehicleType), vehicleType);
+        ShowRouteVariant(*detour, type, kRouteDetourColor, kRouteDetourDepth);
+      }
+      callback(*variants);
+    });
+  });
+  return true;
+}
+
+bool RoutingManager::AddRouteDetour(RouteMarkData && point, std::string const & entryTitle)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  ASSERT(m_bmManager != nullptr, ());
+
+  if (!m_routeDetour || !m_routeDetour->m_target.EqualDxDy(point.m_position, mercator::kPointEqualityEps))
+    return false;
+
+  auto const * route = m_routingSession.GetRoute();
+  size_t const pointsCount = GetRoutePointsCount();
+  // The detour belongs to the route the variants were calculated for.
+  if (route == nullptr || route->GetSubrouteCount() + 1 != pointsCount ||
+      pointsCount + 3 > RoutePointsLayout::kMaxRoutePointsCount)
+  {
+    return false;
+  }
+
+  RouteMarkData entry;
+  entry.m_title = entryTitle;
+  entry.m_position = m_routeDetour->m_entry.m_point;
+  point.m_isMyPosition = false;
+
+  // A new stop comes last among the stops, i.e. just before the finish; then it moves after the leg start.
+  size_t targetIdx = m_routeDetour->m_entry.m_legIdx + 1;
+  for (auto * data : {&entry, &point, &entry})
+  {
+    RouteMarkData stop = *data;
+    stop.m_pointType = RouteMarkType::Intermediate;
+    if (!AddRoutePoint(std::move(stop), false /* optimize */))
+      return false;
+    size_t const addedIdx = GetRoutePointsCount() - 2;
+    if (addedIdx != targetIdx)
+      MoveRoutePoint(addedIdx, targetIdx);
+    ++targetIdx;
+  }
+  m_routeDetour.reset();
+  return true;
+}
+
+void RoutingManager::ShowRouteVariant(RouteBase const & route, RouterType type, std::string const & color, double depth)
+{
+  bool const isBicycle = type == RouterType::Bicycle;
+  std::vector<RouteSegment> segments;
+  double distance = 0.0;
+  for (size_t i = 0; i < route.GetSubrouteCount(); ++i)
+  {
+    route.GetSubrouteInfo(i, segments);
+    if (segments.empty())
+      continue;
+    auto subroute =
+        CreateDrapeSubroute(segments, route.GetSubrouteAttrs(i).GetStart().GetPoint(), distance, depth, type);
+    if (!subroute)
+      continue;
+    distance = segments.back().GetDistFromBeginningMerc();
+    subroute->m_routeType = isBicycle ? df::RouteType::Bicycle : df::RouteType::Pedestrian;
+    subroute->AddStyle(df::SubrouteStyle(color, isBicycle ? df::RoutePattern(8.0, 2.0) : df::RoutePattern(4.0, 2.0)));
+    auto const id =
+        m_drapeEngine.SafeCallWithResult(&df::DrapeEngine::AddSubroute, df::SubrouteConstPtr(subroute.release()));
+    m_routeVariantSubroutes.push_back(id);
+  }
+}
+
+void RoutingManager::HideRouteVariants()
+{
+  for (auto const id : m_routeVariantSubroutes)
+    m_drapeEngine.SafeCall(&df::DrapeEngine::RemoveSubroute, id, false /* deactivateFollowing */);
+  m_routeVariantSubroutes.clear();
 }

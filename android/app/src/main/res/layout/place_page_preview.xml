@@ -139,6 +139,36 @@
         android:visibility="gone"
         tools:text="🥾 3.2 km  ↗ 240 m  ↘ 80 m  ⏱ 1 h 15 min"
         tools:visibility="visible" />
+
+      <TextView
+        android:id="@+id/tv__route_insert_optimal"
+        android:textAlignment="viewStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_quarter"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/organic_maps_emoji"
+        android:minHeight="40dp"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/MwmTextAppearance.Body3"
+        android:visibility="gone"
+        tools:text="● Insert optimally  +1.2 km  ↗ +80 m  ⏱ +25 min"
+        tools:visibility="visible" />
+
+      <TextView
+        android:id="@+id/tv__route_insert_detour"
+        android:textAlignment="viewStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_quarter"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/organic_maps_emoji"
+        android:minHeight="40dp"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/MwmTextAppearance.Body3"
+        android:visibility="gone"
+        tools:text="● Side trip  +2.0 km  ↗ +120 m  ⏱ +40 min"
+        tools:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout

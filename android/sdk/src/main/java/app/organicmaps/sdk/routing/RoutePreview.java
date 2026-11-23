@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 import app.organicmaps.sdk.Router;
 
 /**
- * Maps&amp;Fly: a walking or cycling route to a place, calculated next to the current route, which stays untouched.
- * Use from the main thread; the listener is called on it.
+ * Maps&amp;Fly: walking or cycling routes to a place, calculated next to the planned route, which stays untouched.
+ * The routes are drawn on the map until {@link #cancel()}. Use from the main thread; listeners are called on it.
  */
 public final class RoutePreview
 {
@@ -24,32 +24,49 @@ public final class RoutePreview
     void onRoutePreview(@Nullable Result result);
   }
 
+  public interface InsertVariantsListener
+  {
+    /**
+     * @param current the planned route
+     * @param optimal the route with the place inserted where it gets shortest, {@code null} when not found
+     * @param detour the planned route with a way to the place and back, {@code null} when not found
+     */
+    void onInsertVariants(@NonNull Result current, @Nullable Result optimal, @Nullable Result detour);
+  }
+
   private RoutePreview() {}
 
   /** Replaces a running calculation. Only {@link Router#Pedestrian} and {@link Router#Bicycle} are supported. */
   public static void calculate(double fromLat, double fromLon, double toLat, double toLon, @NonNull Router router,
                                @NonNull Listener listener)
   {
-    nativeCalculate(fromLat, fromLon, toLat, toLon, router.getType(), new NativeListener(listener));
+    nativeCalculate(fromLat, fromLon, toLat, toLon, router.getType(), listener);
   }
 
+  /**
+   * While a walking or cycling route is planned, calculates both ways to add the place as a stop.
+   * @return false without such a route; the listener is not called then
+   */
+  public static boolean calculateInsertVariants(double lat, double lon, @NonNull InsertVariantsListener listener)
+  {
+    return nativeCalculateInsertVariants(lat, lon, listener);
+  }
+
+  /** Stops the calculation and hides the drawn routes. */
   public static void cancel()
   {
     nativeCancel();
   }
 
-  private record NativeListener(@NonNull Listener listener)
-  {
-    // Called from JNI.
-    @SuppressWarnings("unused")
-    void onResult(boolean found, double distanceM, double timeSec, int ascentM, int descentM, boolean hasAltitudes)
-    {
-      listener.onRoutePreview(found ? new Result(distanceM, timeSec, ascentM, descentM, hasAltitudes) : null);
-    }
-  }
-
   private static native void nativeCalculate(double fromLat, double fromLon, double toLat, double toLon, int routerType,
-                                             @NonNull NativeListener listener);
+                                             @NonNull Listener listener);
+
+  private static native boolean nativeCalculateInsertVariants(double lat, double lon,
+                                                              @NonNull InsertVariantsListener listener);
+
+  /** Adds the detour of the last {@link #calculateInsertVariants} as stops, see RoutingController. */
+  static native boolean nativeAddDetour(@NonNull String title, @NonNull String subtitle, double lat, double lon,
+                                        @NonNull String entryTitle);
 
   private static native void nativeCancel();
 }

@@ -302,11 +302,31 @@ public:
   using RoutePreviewCallback = std::function<void(std::optional<route_preview::Stats> const & stats)>;
   void CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, routing::RouterType type,
                              RoutePreviewCallback && callback);
+  /// Also hides the routes drawn by the preview.
   void CancelRoutePreview();
+
+  struct RouteInsertVariants
+  {
+    route_preview::Stats m_current;
+    /// The point is inserted where the whole route gets shortest, and the route is planned anew.
+    std::optional<route_preview::Stats> m_optimal;
+    /// The planned route stays, with a way from its closest point to the point and back.
+    std::optional<route_preview::Stats> m_detour;
+  };
+  using RouteInsertVariantsCallback = std::function<void(RouteInsertVariants const & variants)>;
+  /// Maps&Fly: while a walking or cycling route is planned, calculates both ways to add |pt| and draws them next to
+  /// the route until CancelRoutePreview(). @return false without such a route.
+  bool CalculateRouteInsertVariants(m2::PointD const & pt, RouteInsertVariantsCallback && callback);
+  /// Maps&Fly: adds the detour of the last CalculateRouteInsertVariants() to |point| as three stops: the closest
+  /// route point with |entryTitle|, |point| and the closest route point again. Rebuild the route then.
+  bool AddRouteDetour(RouteMarkData && point, std::string const & entryTitle);
 
 private:
   void SetRouterImpl(routing::RouterType type);
   std::unique_ptr<routing::IRouter> MakeIndexRouter(routing::VehicleType vehicleType, bool loadAltitudes) const;
+  void ShowRouteVariant(routing::RouteBase const & route, routing::RouterType type, std::string const & color,
+                        double depth);
+  void HideRouteVariants();
 
   struct RoadInfo
   {
@@ -409,6 +429,13 @@ private:
   std::shared_ptr<m4::Tree<routing::NumMwmId>> m_numMwmTree;
 
   std::unique_ptr<route_preview::Calculator> m_routePreview;
+  std::vector<dp::DrapeID> m_routeVariantSubroutes;
+  struct RouteDetour
+  {
+    m2::PointD m_target;
+    route_preview::RouteProjection m_entry;
+  };
+  std::optional<RouteDetour> m_routeDetour;
 
   TransitReadManager * m_transitReadManager = nullptr;
 
