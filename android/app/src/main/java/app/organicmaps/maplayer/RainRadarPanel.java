@@ -42,7 +42,7 @@ public class RainRadarPanel
   @NonNull
   private RainRadar.State mState;
 
-  public RainRadarPanel(@NonNull View panel, @NonNull LifecycleOwner owner)
+  public RainRadarPanel(@NonNull View panel, @NonNull LifecycleOwner owner, @NonNull Runnable onClosed)
   {
     mPanel = panel;
     mTime = panel.findViewById(R.id.rain_radar_time);
@@ -50,6 +50,10 @@ public class RainRadarPanel
     mSlider = panel.findViewById(R.id.rain_radar_slider);
     mStatus = panel.findViewById(R.id.rain_radar_status);
     mState = RainRadar.getState().getValue();
+    panel.findViewById(R.id.rain_radar_close).setOnClickListener(v -> {
+      RainRadar.setEnabled(v.getContext(), false);
+      onClosed.run();
+    });
 
     // The label follows the finger; the frame is loaded on release, every frame costs downloads.
     mSlider.addOnChangeListener((slider, value, fromUser) -> {
@@ -87,7 +91,7 @@ public class RainRadarPanel
     mStatusUpdater.run();
 
     mCredit.setText(RainRadar.SOURCE_RAINVIEWER.equals(state.mSource) ? R.string.rain_radar_credit_rainviewer
-                                                                       : R.string.rain_radar_credit_dwd);
+                                                                      : R.string.rain_radar_credit_dwd);
     final boolean ready = state.mIndex >= 0;
     UiUtils.showIf(ready, mSlider);
     if (!ready)

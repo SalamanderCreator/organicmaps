@@ -70,8 +70,8 @@ import app.organicmaps.intent.IntentProcessor;
 import app.organicmaps.location.OffTrackService;
 import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
-import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.LayerSettingsPanel;
+import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
 import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
@@ -574,13 +574,15 @@ public class MwmActivity extends BaseMwmFragmentActivity
       offTrackBanner.setText(banner.text);
       offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
-    mRainRadarPanel = new RainRadarPanel(findViewById(R.id.rain_radar_panel), this);
-    mLayerSettingsPanel = new LayerSettingsPanel(findViewById(R.id.layer_settings_panel), () -> {
+    final Runnable updateLayerButton = () ->
+    {
       final MapButtonsController buttons =
           (MapButtonsController) getSupportFragmentManager().findFragmentById(R.id.map_buttons);
       if (buttons != null)
         buttons.updateLayerButton();
-    });
+    };
+    mRainRadarPanel = new RainRadarPanel(findViewById(R.id.rain_radar_panel), this, updateLayerButton);
+    mLayerSettingsPanel = new LayerSettingsPanel(findViewById(R.id.layer_settings_panel), updateLayerButton);
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
     mMapButtonsViewModel.getLayoutMode().observe(this, this::initNavigationButtons);
