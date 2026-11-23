@@ -888,6 +888,12 @@
     <!-- SECTION: Uncategorized -->
     <!-- Short label of the user's position marker on the elevation profile chart. Where a bare pronoun would be unnatural or gendered, a location noun ("My location") is preferred. -->
     <string name="you">You</string>
+    <!-- Maps&Fly place page while a route is planned: add the place where the route gets shortest and plan the route anew -->
+    <string name="route_insert_optimal">Insert optimally</string>
+    <!-- Maps&Fly place page while a route is planned: keep the route and add a way from it to the place and back -->
+    <string name="route_insert_detour">Side trip</string>
+    <!-- Maps&Fly: name of the route stop where a side trip leaves and rejoins the route -->
+    <string name="route_detour_entry">Side trip junction</string>
 
     <!-- SECTION: gps strings -->
     <!-- Editor section title that shows recently used categories (types of objects) when adding a place on the map -->
