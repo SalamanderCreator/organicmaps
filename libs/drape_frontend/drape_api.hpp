@@ -40,9 +40,29 @@ struct DrapeApiLineData
     return *this;
   }
 
+  /// Dashes of one of the patterns in data/patterns.txt (in dp). |baseGtoPScale| is the 1 / scale of
+  /// the screen the line is built for, as dashes keep their pixel length only around that zoom.
+  DrapeApiLineData & Dashed(std::vector<double> const & pattern, double baseGtoPScale)
+  {
+    m_pattern = pattern;
+    m_baseGtoPScale = baseGtoPScale;
+    return *this;
+  }
+
+  /// A text drawn at the first point.
+  DrapeApiLineData & Label(std::string const & label)
+  {
+    m_label = label;
+    return *this;
+  }
+
   std::vector<m2::PointD> m_points;
   float m_width = 1.0f;
   dp::Color m_color;
+
+  std::vector<double> m_pattern;
+  double m_baseGtoPScale = 1.0;
+  std::string m_label;
 
   bool m_showPoints = false;
   bool m_markPoints = false;

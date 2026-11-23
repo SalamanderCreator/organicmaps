@@ -7,6 +7,7 @@ set(SRC
   check_mwms.cpp
   coordinate_formats_tests.cpp
   countries_names_tests.cpp
+  distance_overlay_tests.cpp
   editor_notes_tests.cpp
   extrapolator_tests.cpp
   feature_getters_tests.cpp

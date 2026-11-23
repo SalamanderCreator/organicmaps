@@ -4,6 +4,7 @@
 #include "drape_frontend/gui/gui_text.hpp"
 #include "drape_frontend/line_shape.hpp"
 #include "drape_frontend/shape_view_params.hpp"
+#include "drape_frontend/visual_params.hpp"
 
 #include "drape/batcher.hpp"
 
@@ -78,6 +79,14 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
         lvp.m_color = data.m_color;
         lvp.m_width = data.m_width;
         lvp.m_join = dp::RoundJoin;
+        if (!data.m_pattern.empty())
+        {
+          double const visualScale = VisualParams::Instance().GetVisualScale();
+          for (double const d : data.m_pattern)
+            lvp.m_pattern.push_back(dp::PatternFloat2Pixel(d * visualScale));
+          lvp.m_baseGtoPScale = data.m_baseGtoPScale;
+          lvp.m_cap = dp::ButtCap;
+        }
         LineShape(spline, lvp).Draw(context, make_ref(&batcher), textures);
       }
 
@@ -95,6 +104,12 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
           ColoredSymbolShape(m2::PointD(pt), cvp, TileKey(), 0 /* textIndex */, false /* need overlay */)
               .Draw(context, make_ref(&batcher), textures);
         }
+      }
+
+      if (!data.m_label.empty() && !data.m_points.empty())
+      {
+        dp::FontDecl const font(data.m_color, kFontSize);
+        BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher);
       }
 
       if (data.m_markPoints || data.m_showId)

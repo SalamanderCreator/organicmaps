@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="54dp"
+    android:height="54dp"
+    android:viewportWidth="54"
+    android:viewportHeight="54">
+  <!-- Maps&Fly layer icon -->
+  <path
+      android:pathData="M10,0L44,0A10,10 0,0 1,54 10L54,44A10,10 0,0 1,44 54L10,54A10,10 0,0 1,0 44L0,10A10,10 0,0 1,10 0z"
+      android:fillColor="#3A3A3A"/>
+  <path
+      android:pathData="M12.0,42.0L15.3,38.7"
+      android:strokeWidth="3"
+      android:strokeLineCap="butt"
+      android:strokeColor="#6FA3F0"/>
+  <path
+      android:pathData="M18.0,36.0L21.3,32.7"
+      android:strokeWidth="3"
+      android:strokeLineCap="butt"
+      android:strokeColor="#6FA3F0"/>
+  <path
+      android:pathData="M24.0,30.0L27.3,26.7"
+      android:strokeWidth="3"
+      android:strokeLineCap="butt"
+      android:strokeColor="#6FA3F0"/>
+  <path
+      android:pathData="M30.0,24.0L33.3,20.7"
+      android:strokeWidth="3"
+      android:strokeLineCap="butt"
+      android:strokeColor="#6FA3F0"/>
+  <path
+      android:pathData="M36.0,18.0L39.3,14.7"
+      android:strokeWidth="3"
+      android:strokeLineCap="butt"
+      android:strokeColor="#6FA3F0"/>
+  <path
+      android:pathData="M8,42a4,4 0,1 0,8,0a4,4 0,1 0,-8,0"
+      android:fillColor="#6FA3F0"/>
+  <path
+      android:pathData="M42,4c-4.4,0 -8,3.4 -8,7.8c0,5.6 8,12.2 8,12.2s8,-6.6 8,-12.2C50,7.4 46.4,4 42,4zM42,14.5a2.7,2.7 0,1 1,0 -5.4a2.7,2.7 0,1 1,0 5.4z"
+      android:fillColor="#F08A3C"/>
+</vector>

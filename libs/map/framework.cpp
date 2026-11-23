@@ -203,6 +203,12 @@ std::pair<MwmSet::MwmId, MwmSet::RegResult> Framework::RegisterMap(LocalCountryF
   return res;
 }
 
+namespace
+{
+std::string_view constexpr kDistanceCirclesKey = "DistanceCircles";
+std::string_view constexpr kDistanceLineKey = "DistanceLine";
+}  // namespace
+
 void Framework::OnLocationError(TLocationError /*error*/)
 {
   m_trafficManager.UpdateMyPosition(TrafficManager::MyPosition());
@@ -294,6 +300,7 @@ void Framework::OnUserPositionChanged(m2::PointD const & position, bool hasPosit
 
   m_routingManager.SetUserCurrentPosition(position);
   m_trafficManager.UpdateMyPosition(TrafficManager::MyPosition(position));
+  m_distanceOverlay.SetMyPosition(hasPosition ? std::optional(position) : std::nullopt);
 }
 
 void Framework::OnViewportChanged(ScreenBase const & screen)
@@ -316,6 +323,7 @@ void Framework::OnViewportChanged(ScreenBase const & screen)
   m_transitManager.UpdateViewport(m_currentModelView);
   m_isolinesManager.UpdateViewport(m_currentModelView);
   UpdateIsolinesAvailability();
+  m_distanceOverlay.SetViewport(m_currentModelView);
 
   if (m_viewportChangedFn != nullptr)
     m_viewportChangedFn(screen);
@@ -445,6 +453,14 @@ Framework::Framework(FrameworkParams const & params, bool loadMaps)
   // m_trafficManager.SetEnabled(LoadTrafficEnabled());
 
   SetIsolinesEnabled(LoadIsolinesEnabled());
+  {
+    bool enabled = false;
+    settings::TryGet(kDistanceCirclesKey, enabled);
+    m_distanceOverlay.SetCirclesEnabled(enabled);
+    enabled = false;
+    settings::TryGet(kDistanceLineKey, enabled);
+    m_distanceOverlay.SetLineEnabled(enabled);
+  }
 
   InitTransliteration();
   LOG(LDEBUG, ("Transliterators initialized"));
@@ -2219,6 +2235,18 @@ bool Framework::SaveTrackRecordingWithName(std::string const & name)
   return true;
 }
 
+void Framework::SetDistanceCirclesEnabled(bool enabled)
+{
+  settings::Set(kDistanceCirclesKey, enabled);
+  m_distanceOverlay.SetCirclesEnabled(enabled);
+}
+
+void Framework::SetDistanceLineEnabled(bool enabled)
+{
+  settings::Set(kDistanceLineKey, enabled);
+  m_distanceOverlay.SetLineEnabled(enabled);
+}
+
 bool Framework::IsTrackRecordingEnabled() const
 {
   return GpsTracker::Instance().IsEnabled();
@@ -2448,6 +2476,10 @@ void Framework::ActivateMapSelection()
                                 bi.m_isGeometrySelectionAllowed, true);
   }
 
+  // Maps&Fly: distances are shown for places, not for tracks or the own position.
+  bool const isPlace = selObj == df::SelectionShape::OBJECT_POI || selObj == df::SelectionShape::OBJECT_USER_MARK;
+  m_distanceOverlay.SetSelection(isPlace ? std::optional(m_currentPlacePageInfo->GetMercator()) : std::nullopt);
+
   /// @todo Current android logic is strange (see SetPlacePageListeners comments), so skip assert.
   // ASSERT(m_onPlacePageOpen, ());
   if (m_onPlacePageOpen)
@@ -2493,6 +2525,7 @@ bool Framework::DeactivateMapSelection()
     bm.ResetRecentlyDeletedBookmark();
 
     m_currentPlacePageInfo = {};
+    m_distanceOverlay.SetSelection(std::nullopt);
 
     if (m_drapeEngine != nullptr)
       m_drapeEngine->DeselectObject(false /* restoreViewport */);

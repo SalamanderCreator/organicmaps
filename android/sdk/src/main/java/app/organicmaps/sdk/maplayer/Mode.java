@@ -101,6 +101,36 @@ public enum Mode
     }
   },
 
+  // Maps&Fly: 500 m, 1 km and 2 km circles around the own position and the selected place.
+  DISTANCE_CIRCLES {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return Framework.nativeAreDistanceCirclesEnabled();
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      Framework.nativeSetDistanceCirclesEnabled(isEnabled);
+    }
+  },
+
+  // Maps&Fly: dashed line with the straight-line distance from the selected place to the own position.
+  DISTANCE_LINE {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return Framework.nativeIsDistanceLineEnabled();
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      Framework.nativeSetDistanceLineEnabled(isEnabled);
+    }
+  },
+
   SATELLITE {
     @Override
     public boolean isEnabled(@NonNull Context context)

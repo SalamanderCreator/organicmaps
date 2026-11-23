@@ -3,6 +3,7 @@
 #include "map/api_mark_point.hpp"
 #include "map/bookmark.hpp"
 #include "map/bookmark_manager.hpp"
+#include "map/distance_overlay.hpp"
 #include "map/features_fetcher.hpp"
 #include "map/isolines_manager.hpp"
 #include "map/mwm_url.hpp"
@@ -183,6 +184,7 @@ protected:
   SearchMarks m_searchMarks;
 
   df::DrapeApi m_drapeApi;
+  DistanceOverlay m_distanceOverlay{m_drapeApi};
 
   bool m_isRenderingEnabled;
 
@@ -487,6 +489,13 @@ public:
   /// Returns true when finalization created a bookmark track. Bookmark persistence is asynchronous.
   bool SaveTrackRecordingWithName(std::string const & name);
   bool IsTrackRecordingEnabled() const;
+
+  /// Maps&Fly: distance circles around the own position and the selected place.
+  void SetDistanceCirclesEnabled(bool enabled);
+  bool AreDistanceCirclesEnabled() const { return m_distanceOverlay.AreCirclesEnabled(); }
+  /// Maps&Fly: dashed line with the straight-line distance from the selected place to the own position.
+  void SetDistanceLineEnabled(bool enabled);
+  bool IsDistanceLineEnabled() const { return m_distanceOverlay.IsLineEnabled(); }
 
   bool SaveRoute();
   /// Returns the elevation profile data of the currently recorded track.
