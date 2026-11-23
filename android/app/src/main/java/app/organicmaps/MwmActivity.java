@@ -1477,6 +1477,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
   }
 
   @Override
+  @NonNull
+  public ActivityResultLauncher<SharingUtils.SharingIntent> getShareLauncher()
+  {
+    return mShareLauncher;
+  }
+
   public void onStopPointLimitReached()
   {
     Toast.makeText(this, R.string.routing_max_stops_reached, Toast.LENGTH_LONG).show();

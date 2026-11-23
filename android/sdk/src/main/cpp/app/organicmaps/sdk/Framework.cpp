@@ -1186,9 +1186,10 @@ JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSelectTrackCandidate(JNI
   frm()->SelectTrackCandidate(c.m_trackId, c.m_relationId);
 }
 
-JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeSaveRoute(JNIEnv *, jclass)
+JNIEXPORT jlong Java_app_organicmaps_sdk_Framework_nativeSaveRoute(JNIEnv *, jclass)
 {
-  return frm()->SaveRoute();
+  auto const trackId = frm()->SaveRoute();
+  return trackId == kml::kInvalidTrackId ? -1 : static_cast<jlong>(trackId);
 }
 
 JNIEXPORT jstring Java_app_organicmaps_sdk_Framework_nativeGetBookmarkDir(JNIEnv * env, jclass)
