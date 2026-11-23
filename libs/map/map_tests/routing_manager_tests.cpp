@@ -4,7 +4,6 @@
 #include "map/framework.hpp"
 #include "map/routing_mark.hpp"
 #include "map/track.hpp"
-#include "map/track_following.hpp"
 
 #include "drape_frontend/visual_params.hpp"
 
@@ -1579,60 +1578,6 @@ UNIT_TEST(RoutingManager_FollowedTrackSurvivesBuild)
     TEST(manager.RoutingSession().GetRouteJunctionPoints(junctions), ());
     TEST_EQUAL(junctions.size(), track->m_points.size() + 1, ());
     TEST_EQUAL(junctions.back().GetPoint(), track->m_points.back().GetPoint(), ());
-
-    // Without map regions only Ruler can replace the track router.
-    manager.SetRouter(routing::RouterType::Ruler);
-    manager.CloseRouting(true /* removeRoutePoints */);
-    TEST(!manager.IsFollowingTrack(), ());
-  });
-}
-
-// Maps&Fly: a direct approach to a followed track leads to the track point closest to the position.
-UNIT_TEST(RoutingManager_FollowedTrackLiveEntry)
-{
-  WithSavedRoute([](RoutingManager & manager, BookmarkManager &, TestGuiThread & guiThread)
-  {
-    manager.SetRouter(routing::RouterType::Ruler);
-    manager.Init(std::make_shared<routing::NumMwmIds>());
-
-    kml::MultiGeometry geometry;
-    geometry.m_lines.push_back({});
-    for (double const x : {0.001, 0.002, 0.003, 0.004})
-      geometry.m_lines.back().emplace_back(m2::PointD(x, 0.0), geometry::kInvalidAltitude);
-    auto const track = std::make_shared<track_following::JoinedTrack>(geometry);
-
-    m2::PointD const start(0.002, 0.001);
-    manager.SetFollowedTrack(track_following::MakeRemainder(*track, track_following::FindClosest(*track, start)));
-    manager.SetFollowedTrackLiveEntry(track, false /* reverse */);
-    manager.SetRouter(routing::RouterType::Pedestrian);
-    auto startPoint = MakeRoutePointOnXAxis(RouteMarkType::Start, 0, start.x);
-    startPoint.m_position = start;
-    manager.AddRoutePoint(std::move(startPoint), false /* optimize */);
-    manager.AddRoutePoint(MakeRoutePointOnXAxis(RouteMarkType::Finish, 0, 0.004), false /* optimize */);
-
-    size_t builds = 0;
-    manager.SetRouteBuildingListener([&](routing::RouterResultCode code, storage::CountriesSet const &)
-    {
-      TEST_EQUAL(code, routing::RouterResultCode::NoError, ());
-      ++builds;
-    });
-    manager.BuildRoute();
-    guiThread.RunUntil([&] { return builds == 1; });
-    TEST(manager.RoutingSession().EnableFollowMode(), ());
-
-    // Walking 100 m east, the closest track point is 100 m further along the track.
-    location::GpsInfo info;
-    info.m_longitude = 0.003;
-    info.m_latitude = mercator::YToLat(0.001);
-    info.m_horizontalAccuracy = 5;
-    manager.CheckLocationForRouting(info);
-    guiThread.RunUntil([&] { return builds == 2; });
-
-    routing::RouteJunctions junctions;
-    TEST(manager.RoutingSession().GetRouteJunctionPoints(junctions), ());
-    TEST_EQUAL(junctions.size(), 3, ());
-    TEST(junctions[1].GetPoint().EqualDxDy(m2::PointD(0.003, 0.0), 1e-9), (junctions[1].GetPoint()));
-    TEST(junctions.back().GetPoint().EqualDxDy(m2::PointD(0.004, 0.0), 1e-9), ());
 
     // Without map regions only Ruler can replace the track router.
     manager.SetRouter(routing::RouterType::Ruler);

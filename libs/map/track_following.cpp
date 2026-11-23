@@ -102,30 +102,18 @@ TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM)
   return MakePosition(track, end - 1, (distFromBegM - dists[end - 1]) / length);
 }
 
-std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track, TrackPosition const & entry,
-                                                                 bool reverse)
+std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track, TrackPosition const & entry)
 {
   auto const & points = track.m_points;
   auto data = std::make_shared<routing::TrackFollowingData>();
+  data->m_points.reserve(points.size() - entry.m_index + 1);
   data->m_points.push_back(entry.m_point);
   double lengthM = 0;
-  auto const add = [&](size_t i)
+  for (size_t i = entry.m_index + 1; i < points.size(); ++i)
   {
     // Gaps count here: the user covers them too.
     lengthM += mercator::DistanceOnEarth(data->m_points.back().GetPoint(), points[i].GetPoint());
     data->m_points.push_back(points[i]);
-  };
-  if (!reverse)
-  {
-    for (size_t i = entry.m_index + 1; i < points.size(); ++i)
-      add(i);
-  }
-  else
-  {
-    // The entry lies on [m_index, m_index + 1], or is the point m_index itself.
-    for (size_t i = entry.m_index + 1; i-- > 0;)
-      if (i != entry.m_index || points[i] != entry.m_point)
-        add(i);
   }
   if (lengthM < kMinRemainderM)
     return nullptr;

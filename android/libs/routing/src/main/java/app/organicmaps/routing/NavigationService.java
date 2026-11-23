@@ -338,9 +338,8 @@ public class NavigationService extends Service implements LocationListener
       stopSelf();
       final MapObject myPosition = sOrganicMaps.getLocationHelper().getMyPosition();
       if (track != null && myPosition != null)
-        routingController.followTrack(myPosition, track.trackId(), track.title(), track.distFromBegM(), track.reverse(),
-                                      false /* liveEntry */, routingController.getLastRouterType(),
-                                      true /* startWhenBuilt */);
+        routingController.followTrack(myPosition, track.trackId(), track.title(), track.distFromBegM(),
+                                      routingController.getLastRouterType(), true /* startWhenBuilt */);
       return;
     }
 

@@ -21,8 +21,7 @@ public final class TrackFollowing
   }
 
   /** The track to follow after arriving at its entry point with normal navigation. */
-  public record
-      Pending(long trackId, @NonNull String title, double distFromBegM, boolean reverse, @NonNull Router router)
+  public record Pending(long trackId, @NonNull String title, double distFromBegM, @NonNull Router router)
   {
   }
 
@@ -98,14 +97,12 @@ public final class TrackFollowing
 
   /**
    * Makes the next routes follow the track from the distance until routing closes.
-   * @param reverse follow the track backwards, to its start
-   * @param liveEntry until the track is reached, approach the track point closest to the position
-   * @return the end of the way, or {@code null} if the track is gone or nothing is left after that distance
+   * @return the track end, or {@code null} if the track is gone or nothing is left after that distance
    */
   @Nullable
-  static TrackPoint start(long trackId, double distFromBegM, boolean reverse, boolean liveEntry)
+  static TrackPoint start(long trackId, double distFromBegM)
   {
-    return TrackPoint.of(nativeStart(trackId, distFromBegM, reverse, liveEntry));
+    return TrackPoint.of(nativeStart(trackId, distFromBegM));
   }
 
   @Nullable
@@ -115,7 +112,7 @@ public final class TrackFollowing
   @Nullable
   private static native double[] nativeGetSelectedPoint(long trackId);
   @Nullable
-  private static native double[] nativeStart(long trackId, double distFromBegM, boolean reverse, boolean liveEntry);
+  private static native double[] nativeStart(long trackId, double distFromBegM);
   @Nullable
   private static native double[] nativeGetSection(long trackId, double fromDistM, double toDistM);
   private static native boolean nativeIsActive();

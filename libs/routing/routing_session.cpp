@@ -677,13 +677,6 @@ void RoutingSession::SetRouter(std::unique_ptr<IRouter> && router, std::unique_p
   m_router->SetRouter(std::move(router), std::move(finder));
 }
 
-void RoutingSession::ReplaceRouterKeepingRoute(std::unique_ptr<IRouter> && router)
-{
-  CHECK_THREAD_CHECKER(m_threadChecker, ());
-  ASSERT(m_router != nullptr, ());
-  m_router->SetRouter(std::move(router), nullptr /* finder */);
-}
-
 void RoutingSession::MatchLocationToRoadGraph(location::GpsInfo & location)
 {
   auto const locationMerc = mercator::FromLatLon(location.m_latitude, location.m_longitude);

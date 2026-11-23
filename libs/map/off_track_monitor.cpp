@@ -15,25 +15,19 @@ OffTrackMonitor::OffTrackMonitor(std::vector<Line> lines, double thresholdMeters
   ASSERT(!m_lines.empty(), ());
 }
 
-double OffTrackMonitor::DistanceToTrack(m2::PointD const & point)
+double OffTrackMonitor::DistanceToTrack(m2::PointD const & point) const
 {
   // Mercator is conformal, so the closest point in mercator is also the closest one on the Earth nearby.
   double minDistance = std::numeric_limits<double>::max();
-  auto const consider = [&](m2::PointD const & closest)
-  {
-    double const distance = mercator::DistanceOnEarth(point, closest);
-    if (distance < minDistance)
-    {
-      minDistance = distance;
-      m_closestPoint = closest;
-    }
-  };
   for (auto const & line : m_lines)
   {
     if (line.size() == 1)
-      consider(line.front());
+      minDistance = std::min(minDistance, mercator::DistanceOnEarth(point, line.front()));
     for (size_t i = 1; i < line.size(); ++i)
-      consider(m2::ParametrizedSegment<m2::PointD>(line[i - 1], line[i]).ClosestPointTo(point));
+    {
+      auto const closest = m2::ParametrizedSegment<m2::PointD>(line[i - 1], line[i]).ClosestPointTo(point);
+      minDistance = std::min(minDistance, mercator::DistanceOnEarth(point, closest));
+    }
   }
   return minDistance;
 }

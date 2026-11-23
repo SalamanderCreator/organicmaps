@@ -552,14 +552,12 @@ public class RoutingController
   }
 
   /**
-   * Maps&amp;Fly: plans a route along the track from the distance to its end, or backwards to its start, with a
-   * straight approach from the start.
-   * @param liveEntry until the track is reached, the approach leads to the track point closest to the position
+   * Maps&amp;Fly: plans a route along the track from the distance to its end, with a straight approach from the start.
    * @param startWhenBuilt whether to start navigation as soon as the route is built
    * @return {@code false} if the track is gone or nothing is left of it after that distance
    */
   public boolean followTrack(@NonNull MapObject startPoint, long trackId, @NonNull String title, double distFromBegM,
-                             boolean reverse, boolean liveEntry, @NonNull Router router, boolean startWhenBuilt)
+                             @NonNull Router router, boolean startWhenBuilt)
   {
     checkMapsReady();
     if (!cancel())
@@ -568,7 +566,7 @@ public class RoutingController
       Framework.nativeDeleteSavedRoutePoints();
     }
     // Closing routing above ends any earlier track following, so this comes after it.
-    final TrackFollowing.TrackPoint end = TrackFollowing.start(trackId, distFromBegM, reverse, liveEntry);
+    final TrackFollowing.TrackPoint end = TrackFollowing.start(trackId, distFromBegM);
     if (end == null)
       return false;
     setState(State.PREPARE);
@@ -588,7 +586,7 @@ public class RoutingController
    * arrival.
    */
   public void navigateToTrack(@NonNull MapObject startPoint, long trackId, @NonNull String title, double distFromBegM,
-                              boolean reverse, @NonNull Router router)
+                              @NonNull Router router)
   {
     final TrackFollowing.TrackPoint entry = TrackFollowing.getPointAt(trackId, distFromBegM);
     if (entry == null)
@@ -597,7 +595,7 @@ public class RoutingController
     prepare(startPoint, MapObject.createMapObject(MapObject.API_POINT, title, "", entry.lat(), entry.lon()),
             routerType);
     // After prepare(), which cancels the previous routing and its pending track.
-    TrackFollowing.setPending(new TrackFollowing.Pending(trackId, title, distFromBegM, reverse, routerType));
+    TrackFollowing.setPending(new TrackFollowing.Pending(trackId, title, distFromBegM, routerType));
   }
 
   /**
