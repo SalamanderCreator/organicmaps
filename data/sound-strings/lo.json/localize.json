@@ -32,6 +32,8 @@
 "you_have_left_the_track":"ທ່ານໄດ້ອອກຈາກເສັ້ນທາງແລ້ວ.",
 "destination":"ທ່ານຈະໄປຮອດ.",
 "you_have_reached_the_destination":"ທ່ານມາຮອດຈຸດໝາຍແລ້ວ.",
+"in_20_meters":"In twenty meters",
+"in_30_meters":"In thirty meters",
 "in_50_meters":"ໃນອີກ ຫ້າສິບ ແມັດ",
 "in_100_meters":"ໃນອີກ ໜຶ່ງຮ້ອຍ ແມັດ",
 "in_200_meters":"ໃນອີກ ສອງຮ້ອຍ ແມັດ",

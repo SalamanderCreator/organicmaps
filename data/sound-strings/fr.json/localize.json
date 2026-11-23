@@ -32,6 +32,8 @@
 "you_have_left_the_track":"Vous avez quitté le parcours.",
 "destination":"Vous arriverez.",
 "you_have_reached_the_destination":"Vous êtes arrivé.",
+"in_20_meters":"Dans vingt mètres",
+"in_30_meters":"Dans trente mètres",
 "in_50_meters":"Dans cinquante mètres",
 "in_100_meters":"Dans cents mètres",
 "in_200_meters":"Dans deux cents mètres",
