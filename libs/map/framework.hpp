@@ -809,6 +809,9 @@ public:
 
   static bool LoadIsolinesEnabled();
   static void SaveIsolinesEnabled(bool enabled);
+  // Maps&Fly: the track elevation profiles take the terrain heights instead of the track's own (see Track).
+  static bool LoadPreferTerrainElevation();
+  static void SetPreferTerrainElevation(bool prefer);
   // Switches the isolines layer and evaluates its terrain hint for the current viewport.
   void SetIsolinesEnabled(bool enabled);
 

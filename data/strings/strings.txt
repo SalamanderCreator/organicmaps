@@ -46136,6 +46136,12 @@ tags = android-app
 en = ↑ %1$s   ↓ %2$s to go
 de = ↑ %1$s   ↓ %2$s bis zum Ziel
 
+[elevation_start_to_point]
+comment = Below a track elevation profile: from the track start to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent
+tags = android-app
+en = From the start: %1$s   ↑ %2$s   ↓ %3$s
+de = Vom Start: %1$s   ↑ %2$s   ↓ %3$s
+
 [elevation_position_to_point]
 comment = Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent
 tags = android-app
@@ -46237,6 +46243,18 @@ comment = Banner on the map while the user is off the watched track. %s is the d
 tags = android-app
 en = Off the track: %s
 de = Trackabweichung: %s
+
+[prefer_terrain_elevation_title]
+comment = Settings: switch to take the track elevation profile heights from the downloaded terrain
+tags = android-app
+en = Inaccurate track elevations from terrain
+de = Ungenaue Track-Höhen aus dem Gelände
+
+[prefer_terrain_elevation_description]
+comment = Settings: description of the switch to take the track elevation profile heights from the downloaded terrain
+tags = android-app
+en = Where the heights of a track deviate strongly from the terrain, e.g. GPS jumps or a phone without a barometer, the elevation profile uses the terrain heights for these parts. Missing heights always come from the terrain. Flights keep their heights.
+de = Wo die Höhen eines Tracks stark vom Gelände abweichen, z. B. bei GPS-Sprüngen oder einem Handy ohne Barometer, nutzt das Höhenprofil für diese Abschnitte die Geländehöhen. Fehlende Höhen kommen immer aus dem Gelände. Flugtracks behalten ihre Höhen.
 
 [off_track_threshold_title]
 comment = Settings: title of the off-track alarm distance

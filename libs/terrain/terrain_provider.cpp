@@ -91,6 +91,32 @@ std::optional<double> TerrainProvider::GetElevation(m2::PointD const & point) co
   return readAt(canonical);
 }
 
+std::vector<std::optional<double>> TerrainProvider::GetElevations(std::vector<m2::PointD> const & points) const
+{
+  // About 1 km: a few raster patches of the finest geometry.
+  double constexpr kReadSize = 0.01;
+
+  std::vector<std::optional<double>> elevations;
+  elevations.reserve(points.size());
+  TerrainData data;
+  m2::RectD dataRect;
+  for (auto const & point : points)
+  {
+    m2::PointD const canonical(mercator::WrapX(point.x), point.y);
+    auto elevation = data.GetElevation(canonical);
+    if (!elevation && !dataRect.IsPointInside(canonical))
+    {
+      dataRect = m2::RectD(canonical, canonical);
+      dataRect.Inflate(kReadSize / 2, kReadSize / 2);
+      dataRect.Intersect(mercator::Bounds::FullRect());
+      ReadTerrain(dataRect, scales::GetUpperScale(), data);
+      elevation = data.GetElevation(canonical);
+    }
+    elevations.push_back(elevation);
+  }
+  return elevations;
+}
+
 void TerrainProvider::ReadTerrain(m2::RectD const & rect, int zoom, TerrainData & data,
                                   base::SharedCancellable const & isCancellable) const
 {

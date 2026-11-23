@@ -36,7 +36,9 @@ public class ElevationProfileViewRenderer
   private final TextView mMinAltitude;
   @NonNull
   private final View mDifficultyContainer;
-  // Maps&Fly: from the current position on the track to the selected point.
+  // Maps&Fly: from the track start and from the current position on the track to the selected point.
+  @NonNull
+  private final TextView mStartToPoint;
   @NonNull
   private final TextView mPositionToPoint;
   @Nullable
@@ -55,6 +57,7 @@ public class ElevationProfileViewRenderer
     mDifficultyLevels[0] = mDifficultyContainer.findViewById(R.id.difficulty_level_1);
     mDifficultyLevels[1] = mDifficultyContainer.findViewById(R.id.difficulty_level_2);
     mDifficultyLevels[2] = mDifficultyContainer.findViewById(R.id.difficulty_level_3);
+    mStartToPoint = view.findViewById(R.id.start_to_point);
     mPositionToPoint = view.findViewById(R.id.position_to_point);
   }
 
@@ -91,20 +94,29 @@ public class ElevationProfileViewRenderer
 
   private void updatePositionToPoint()
   {
-    final TrackFollowing.Section section =
-        mTrack == null || mCurrentPositionDistance == CURRENT_POSITION_OUT_OF_TRACK
-            ? null
-            : TrackFollowing.getSection(mTrack.getTrackId(), mCurrentPositionDistance, mActivePointDistance);
+    // A point at the very start has nothing to show from there.
+    setSection(mStartToPoint, R.string.elevation_start_to_point,
+               mTrack == null || mActivePointDistance <= 0
+                   ? null
+                   : TrackFollowing.getSection(mTrack.getTrackId(), 0, mActivePointDistance));
+    setSection(mPositionToPoint, R.string.elevation_position_to_point,
+               mTrack == null || mCurrentPositionDistance == CURRENT_POSITION_OUT_OF_TRACK
+                   ? null
+                   : TrackFollowing.getSection(mTrack.getTrackId(), mCurrentPositionDistance, mActivePointDistance));
+  }
+
+  private static void setSection(@NonNull TextView view, int formatId, @Nullable TrackFollowing.Section section)
+  {
     if (section == null)
     {
-      UiUtils.hide(mPositionToPoint);
+      UiUtils.hide(view);
       return;
     }
-    final Context context = mPositionToPoint.getContext();
-    mPositionToPoint.setText(context.getString(
-        R.string.elevation_position_to_point, StringUtils.nativeFormatDistance(section.distanceM()).toString(context),
-        Framework.nativeFormatAltitude(section.ascentM()), Framework.nativeFormatAltitude(section.descentM())));
-    UiUtils.show(mPositionToPoint);
+    final Context context = view.getContext();
+    view.setText(context.getString(formatId, StringUtils.nativeFormatDistance(section.distanceM()).toString(context),
+                                   Framework.nativeFormatAltitude(section.ascentM()),
+                                   Framework.nativeFormatAltitude(section.descentM())));
+    UiUtils.show(view);
   }
 
   private void setDifficulty(int level)

@@ -9,8 +9,11 @@
 
 #include "geometry/any_rect2d.hpp"
 
+#include <functional>
+#include <optional>
 #include <string>
 #include <utility>
+#include <vector>
 
 class Track : public df::UserLineMark
 {
@@ -39,6 +42,18 @@ public:
 
   std::pair<TrackStatistics, ElevationInfo const *> GetStatisticsAndElevationInfo() const;
   ElevationInfo const * GetElevationInfo() const;
+  /// The geometry with the heights of the elevation profile, e.g. filled from the terrain, to follow the track.
+  kml::MultiGeometry GetGeometryWithElevation() const;
+  /// The ascent/descent threshold of the elevation profile; call after GetElevationInfo().
+  ElevationInfo::Altitude GetElevationThreshold() const;
+
+  /// Maps&Fly: the downloaded terrain heights for the elevation profile (see TerrainProvider::GetElevations).
+  using TerrainElevationsFn = std::function<std::vector<std::optional<double>>(std::vector<m2::PointD> const &)>;
+  static void SetTerrainElevationsFn(TerrainElevationsFn fn);
+  /// Maps&Fly: the profile takes the terrain heights also where the track has its own, when they are inaccurate,
+  /// e.g. GPS heights of a phone without a barometer. Without it the terrain fills only the missing heights.
+  static void SetPreferTerrainElevation(bool prefer);
+  static bool IsTerrainElevationPreferred();
 
   std::pair<m2::PointD, double> GetCenterPoint() const;
 
@@ -123,9 +138,17 @@ private:
 
   double GetLengthMetersImpl(size_t lineIndex, size_t ptIdx) const;
 
+  // The track lines with the terrain heights, if the terrain covers every height to take.
+  // |terrainOnly| tells whether all the heights come from the terrain.
+  std::optional<std::vector<ElevationInfo::GeometryLine>> GetTerrainLines(bool preferTerrain, bool & terrainOnly) const;
+
   kml::TrackData m_data;
   kml::MarkGroupId m_groupID = kml::kInvalidMarkGroupId;
   mutable std::optional<ElevationInfo> m_elevationInfo;
+  mutable bool m_elevationPrefersTerrain = false;
+  // The lines with the terrain heights of m_elevationInfo, if it has them.
+  mutable std::optional<std::vector<ElevationInfo::GeometryLine>> m_terrainLines;
+  mutable bool m_terrainOnly = false;
 
   struct InteractionData
   {

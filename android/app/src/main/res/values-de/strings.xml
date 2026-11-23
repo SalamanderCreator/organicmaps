@@ -978,6 +978,8 @@
     <string name="track_follow_direct">Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)</string>
     <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->
     <string name="nav_elevation_remaining">↑ %1$s   ↓ %2$s bis zum Ziel</string>
+    <!-- Below a track elevation profile: from the track start to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
+    <string name="elevation_start_to_point">Vom Start: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
     <string name="elevation_position_to_point">Von deiner Position: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
@@ -1012,6 +1014,10 @@
     <string name="off_track_not_reached_speech">Träck ist %s entfernt</string>
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Trackabweichung: %s</string>
+    <!-- Settings: switch to take the track elevation profile heights from the downloaded terrain -->
+    <string name="prefer_terrain_elevation_title">Ungenaue Track-Höhen aus dem Gelände</string>
+    <!-- Settings: description of the switch to take the track elevation profile heights from the downloaded terrain -->
+    <string name="prefer_terrain_elevation_description">Wo die Höhen eines Tracks stark vom Gelände abweichen, z. B. bei GPS-Sprüngen oder einem Handy ohne Barometer, nutzt das Höhenprofil für diese Abschnitte die Geländehöhen. Fehlende Höhen kommen immer aus dem Gelände. Flugtracks behalten ihre Höhen.</string>
     <!-- Settings: title of the off-track alarm distance -->
     <string name="off_track_threshold_title">Off-Track-Alarm: Abstand</string>
     <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->

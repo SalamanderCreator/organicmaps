@@ -974,6 +974,8 @@
     <string name="track_follow_direct">Follow directly (straight line to the closest track point)</string>
     <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->
     <string name="nav_elevation_remaining">↑ %1$s   ↓ %2$s to go</string>
+    <!-- Below a track elevation profile: from the track start to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
+    <string name="elevation_start_to_point">From the start: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
     <string name="elevation_position_to_point">From your position: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
@@ -1008,6 +1010,10 @@
     <string name="off_track_not_reached_speech">Track is %s away</string>
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Off the track: %s</string>
+    <!-- Settings: switch to take the track elevation profile heights from the downloaded terrain -->
+    <string name="prefer_terrain_elevation_title">Inaccurate track elevations from terrain</string>
+    <!-- Settings: description of the switch to take the track elevation profile heights from the downloaded terrain -->
+    <string name="prefer_terrain_elevation_description">Where the heights of a track deviate strongly from the terrain, e.g. GPS jumps or a phone without a barometer, the elevation profile uses the terrain heights for these parts. Missing heights always come from the terrain. Flights keep their heights.</string>
     <!-- Settings: title of the off-track alarm distance -->
     <string name="off_track_threshold_title">Off-track alarm: distance</string>
     <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->

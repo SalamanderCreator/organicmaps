@@ -33,6 +33,7 @@
 #include "geometry/mercator.hpp"
 
 #include "base/file_name_utils.hpp"
+#include "base/timer.hpp"
 
 #include "defines.hpp"
 
@@ -558,5 +559,36 @@ UNIT_TEST(TerrainProvider_RegisterAndRead)
 
   provider.Clear();
   TEST(!provider.HasTerrain(file.m_rect), ());
+}
+
+// Maps&Fly B1: a track reads its heights in a few surfaces, the same as one by one.
+UNIT_TEST(TerrainProvider_TrackElevations)
+{
+  terrain::TerrainProvider provider;
+  provider.RegisterBlock(GetElevationTestFile());
+
+  // About 30 km over the raster and the TIN samples, then a point without terrain.
+  std::vector<m2::PointD> points;
+  auto const from = GetSamplePoint(kElevationSamples[0]);
+  auto const to = GetSamplePoint(kElevationSamples[1]);
+  size_t constexpr kCount = 1000;
+  for (size_t i = 0; i <= kCount; ++i)
+    points.push_back(from + (to - from) * (double(i) / kCount));
+  points.push_back({0, 0});
+
+  base::Timer timer;
+  auto const elevations = provider.GetElevations(points);
+  LOG(LINFO, ("Track elevations of", points.size(), "points in", timer.ElapsedSeconds(), "s"));
+  TEST_EQUAL(elevations.size(), points.size(), ());
+  for (size_t i = 0; i < points.size(); ++i)
+  {
+    auto const single = provider.GetElevation(points[i]);
+    TEST_EQUAL(elevations[i].has_value(), single.has_value(), (i, points[i]));
+    if (single)
+      TEST_ALMOST_EQUAL_ABS(*elevations[i], *single, 1e-6, (i, points[i]));
+  }
+  TEST(elevations.front(), ());
+  TEST_ALMOST_EQUAL_ABS(*elevations.front(), kElevationSamples[0].m_altitude, kElevationSamples[0].m_maxError, ());
+  TEST(!elevations.back(), ());
 }
 }  // namespace terrain_provider_tests

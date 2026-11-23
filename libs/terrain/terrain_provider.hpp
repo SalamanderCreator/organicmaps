@@ -43,6 +43,9 @@ public:
 
   // Elevation in meters from the finest downloaded terrain surface, if present.
   std::optional<double> GetElevation(m2::PointD const & point) const;
+  // The same for a sequence of nearby points, e.g. a track: each decoded surface serves
+  // the following points it covers, so a whole track costs a few reads, not one per point.
+  std::vector<std::optional<double>> GetElevations(std::vector<m2::PointD> const & points) const;
 
   /// The rects of the downloaded (registered) blocks intersecting the mercator rect,
   /// e.g. for the ?terrain-blocks debug highlight on the world zooms.
