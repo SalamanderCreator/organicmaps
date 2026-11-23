@@ -50,8 +50,8 @@ public:
   /// Maps&Fly: the downloaded terrain heights for the elevation profile (see TerrainProvider::GetElevations).
   using TerrainElevationsFn = std::function<std::vector<std::optional<double>>(std::vector<m2::PointD> const &)>;
   static void SetTerrainElevationsFn(TerrainElevationsFn fn);
-  /// Maps&Fly: the profile takes the terrain heights also where the track has its own, e.g. noisy GPS heights.
-  /// Without it the terrain fills only the missing heights.
+  /// Maps&Fly: the profile takes the terrain heights also where the track has its own, when they are inaccurate,
+  /// e.g. GPS heights of a phone without a barometer. Without it the terrain fills only the missing heights.
   static void SetPreferTerrainElevation(bool prefer);
   static bool IsTerrainElevationPreferred();
 

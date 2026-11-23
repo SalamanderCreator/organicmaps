@@ -363,10 +363,8 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
       return altitude != geometry::kInvalidAltitude && altitude != geometry::kDefaultAltitudeMeters;
     });
   });
-  bool const replaceAll = preferTerrain || !hasOwn;
-  terrainOnly = replaceAll;
 
-  // All the points, also with own heights, to recognize a flight.
+  // All the points, also with own heights, to compare them with the terrain.
   std::vector<m2::PointD> points;
   for (auto const & line : lines)
     for (auto const & pt : line)
@@ -374,29 +372,49 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
   auto const elevations = g_terrainElevationsFn(points);
   CHECK_EQUAL(elevations.size(), points.size(), ());
 
-  // A flight, e.g. by paraglider, keeps its own heights (Marisa): more than 5% of them far above the terrain.
-  // GPS noise and the ellipsoid/geoid difference stay well below the margin.
+  bool replaceAll = !hasOwn;
   if (hasOwn)
   {
-    double constexpr kFlightMarginM = 150;
-    size_t above = 0, own = 0;
+    // The own heights above the terrain.
+    std::vector<double> diffs;
     size_t i = 0;
     for (auto const & line : lines)
     {
       for (auto const & pt : line)
       {
         auto const & elevation = elevations[i++];
-        if (!elevation || pt.GetAltitude() == geometry::kInvalidAltitude)
-          continue;
-        ++own;
-        if (pt.GetAltitude() > *elevation + kFlightMarginM)
-          ++above;
+        if (elevation && pt.GetAltitude() != geometry::kInvalidAltitude)
+          diffs.push_back(pt.GetAltitude() - *elevation);
       }
     }
-    if (above * 20 > own)
+    if (diffs.empty())
       return std::nullopt;
-  }
 
+    // A flight, e.g. by paraglider, keeps its own heights (Marisa): more than 5% of them far above the terrain.
+    // GPS noise and the ellipsoid/geoid difference stay well below the margin.
+    double constexpr kFlightMarginM = 150;
+    if (std::ranges::count_if(diffs, [](double d) { return d > kFlightMarginM; }) * 20 > std::ssize(diffs))
+      return std::nullopt;
+
+    // Inaccurate heights, e.g. of a phone without a barometer, do not follow the terrain: their median
+    // deviation from it exceeds the margin, after a constant offset (geoid, barometer calibration) is removed.
+    // Copernicus is a surface model: forests and the 30 m cells stay within the margin on a good track.
+    double constexpr kInaccurateMarginM = 20;
+    auto const median = [](std::vector<double> & values)
+    {
+      auto const mid = values.begin() + values.size() / 2;
+      std::ranges::nth_element(values, mid);
+      return *mid;
+    };
+    auto deviations = diffs;
+    double const offset = median(diffs);
+    for (auto & d : deviations)
+      d = std::abs(d - offset);
+    replaceAll = preferTerrain && median(deviations) > kInaccurateMarginM;
+  }
+  terrainOnly = replaceAll;
+
+  bool changed = false;
   size_t i = 0;
   for (auto & line : lines)
   {
@@ -408,8 +426,11 @@ std::optional<std::vector<ElevationInfo::GeometryLine>> Track::GetTerrainLines(b
       if (!elevation)
         return std::nullopt;
       pt.SetAltitude(static_cast<geometry::Altitude>(std::lround(*elevation)));
+      changed = true;
     }
   }
+  if (!changed)
+    return std::nullopt;
   return lines;
 }
 

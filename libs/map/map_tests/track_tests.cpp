@@ -680,20 +680,29 @@ UNIT_TEST(Track_TerrainElevation)
     TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 200, 310, 390}), ());
     TEST_EQUAL(track.GetElevationThreshold(), ElevationInfo::kDefThresholdGPS, ());
 
-    // Preferred terrain: all heights from the terrain, also for the cached profile.
+    // Accurate heights stay also when the terrain is preferred.
     Track::SetPreferTerrainElevation(true);
-    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{100, 200, 300, 400}), ());
+    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{120, 200, 310, 390}), ());
     Track::SetPreferTerrainElevation(false);
   }
   {
-    // Complete own heights: the terrain only when preferred.
+    // Complete accurate own heights: no terrain.
     auto const track = MakeTrack({{{{0.01, 0}, 110}, {{0.02, 0}, 190}}});
     calls = 0;
     TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{110, 190}), ());
     TEST_EQUAL(calls, 0, ());
     TEST_EQUAL(track.GetElevationThreshold(), ElevationInfo::kDefThresholdGPS, ());
     Track::SetPreferTerrainElevation(true);
-    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{100, 200}), ());
+    TEST_EQUAL(profileAltitudes(track), (std::vector<Altitude>{110, 190}), ());
+    Track::SetPreferTerrainElevation(false);
+
+    // Inaccurate heights, flat on a slope of 200 m: the terrain, when preferred.
+    auto const flat =
+        MakeTrack({{{{0.01, 0}, 200}, {{0.015, 0}, 200}, {{0.02, 0}, 200}, {{0.025, 0}, 200}, {{0.03, 0}, 200}}});
+    TEST_EQUAL(profileAltitudes(flat), (std::vector<Altitude>{200, 200}), ());
+    Track::SetPreferTerrainElevation(true);
+    TEST_EQUAL(profileAltitudes(flat), (std::vector<Altitude>{100, 300}), ());
+    TEST_EQUAL(flat.GetElevationThreshold(), ElevationInfo::kDefThresholdMWM, ());
     Track::SetPreferTerrainElevation(false);
   }
   {
@@ -713,7 +722,7 @@ UNIT_TEST(Track_TerrainElevation)
     Track::SetPreferTerrainElevation(false);
     auto const incomplete = MakeTrack({{{{0.01, 0}, 100}, {{0.02, 0}, 900}, {{0.03, 0}, kInvalidAltitude}}});
     TEST(!incomplete.GetElevationInfo(), ());
-    // Heights near the terrain are no flight.
+    // Heights near the terrain are no flight, these are inaccurate.
     auto const hike = MakeTrack({{{{0.01, 0}, 150}, {{0.02, 0}, 300}, {{0.03, 0}, 290}}});
     Track::SetPreferTerrainElevation(true);
     TEST_EQUAL(profileAltitudes(hike), (std::vector<Altitude>{100, 300}), ("The straight middle is simplified"));

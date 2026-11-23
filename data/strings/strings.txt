@@ -46247,14 +46247,14 @@ de = Trackabweichung: %s
 [prefer_terrain_elevation_title]
 comment = Settings: switch to take the track elevation profile heights from the downloaded terrain
 tags = android-app
-en = Track elevations from terrain
-de = Track-Höhen aus dem Gelände
+en = Inaccurate track elevations from terrain
+de = Ungenaue Track-Höhen aus dem Gelände
 
 [prefer_terrain_elevation_description]
 comment = Settings: description of the switch to take the track elevation profile heights from the downloaded terrain
 tags = android-app
-en = Elevation profiles use the terrain heights instead of the often noisy GPS heights of the track. Missing heights always come from the terrain.
-de = Höhenprofile nutzen die Geländehöhen statt der oft verrauschten GPS-Höhen des Tracks. Fehlende Höhen kommen immer aus dem Gelände.
+en = If the heights of a track deviate strongly from the terrain, e.g. GPS heights of a phone without a barometer, the elevation profile uses the terrain heights. Missing heights always come from the terrain. Flights keep their heights.
+de = Weichen die Höhen eines Tracks stark vom Gelände ab, z. B. GPS-Höhen eines Handys ohne Barometer, nutzt das Höhenprofil die Geländehöhen. Fehlende Höhen kommen immer aus dem Gelände. Flugtracks behalten ihre Höhen.
 
 [off_track_threshold_title]
 comment = Settings: title of the off-track alarm distance
