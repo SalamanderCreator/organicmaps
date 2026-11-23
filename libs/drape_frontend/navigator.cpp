@@ -149,7 +149,7 @@ void Navigator::StartScale(m2::PointD const & pt1, m2::PointD const & pt2)
   m_StartPt1 = m_LastPt1 = pt1;
   m_StartPt2 = m_LastPt2 = pt2;
 
-  m_DoCheckRotationThreshold = true;
+  m_DoCheckRotationThreshold = !m_rotationLocked;
   m_IsRotatingDuringScale = false;
   m_InAction = true;
 }

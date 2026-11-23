@@ -183,6 +183,9 @@ public:
   void SetCompassInfo(location::CompassInfo const & info);
   void SetGpsInfo(location::GpsInfo const & info, bool isNavigable, location::RouteMatchingInfo const & routeInfo);
   void SwitchMyPositionNextMode();
+  void CenterOnMyPosition();
+  void ToggleNorthUp();
+  void SetNorthLocked(bool locked);
   void LoseLocation();
   void StopLocationFollow();
 

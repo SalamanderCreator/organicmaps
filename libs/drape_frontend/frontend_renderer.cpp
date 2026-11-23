@@ -443,6 +443,20 @@ void FrontendRenderer::AcceptMessage(ref_ptr<Message> message)
       break;
     case ChangeMyPositionModeMessage::StopFollowing: m_myPositionController->StopLocationFollow(); break;
     case ChangeMyPositionModeMessage::LoseLocation: m_myPositionController->LoseLocation(); break;
+    case ChangeMyPositionModeMessage::CenterOnPosition:
+      m_myPositionController->CenterOnPosition(m_userEventStream.GetCurrentScreen());
+      break;
+    case ChangeMyPositionModeMessage::ToggleNorthUp:
+      m_myPositionController->ToggleNorthUp(m_userEventStream.GetCurrentScreen());
+      break;
+    case ChangeMyPositionModeMessage::LockNorth:
+    case ChangeMyPositionModeMessage::UnlockNorth:
+    {
+      bool const locked = msg->GetChangeType() == ChangeMyPositionModeMessage::LockNorth;
+      m_userEventStream.SetRotationLocked(locked);
+      m_myPositionController->SetNorthLocked(locked);
+      break;
+    }
     default: ASSERT(false, ("Unknown change type:", static_cast<int>(msg->GetChangeType()))); break;
     }
     break;

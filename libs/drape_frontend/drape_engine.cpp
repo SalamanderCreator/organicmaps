@@ -544,6 +544,31 @@ void DrapeEngine::SwitchMyPositionNextMode()
                                   MessagePriority::Normal);
 }
 
+void DrapeEngine::CenterOnMyPosition()
+{
+  using Mode = ChangeMyPositionModeMessage::EChangeType;
+  m_threadCommutator->PostMessage(ThreadsCommutator::RenderThread,
+                                  make_unique_dp<ChangeMyPositionModeMessage>(Mode::CenterOnPosition),
+                                  MessagePriority::Normal);
+}
+
+void DrapeEngine::ToggleNorthUp()
+{
+  using Mode = ChangeMyPositionModeMessage::EChangeType;
+  m_threadCommutator->PostMessage(ThreadsCommutator::RenderThread,
+                                  make_unique_dp<ChangeMyPositionModeMessage>(Mode::ToggleNorthUp),
+                                  MessagePriority::Normal);
+}
+
+void DrapeEngine::SetNorthLocked(bool locked)
+{
+  using Mode = ChangeMyPositionModeMessage::EChangeType;
+  m_threadCommutator->PostMessage(
+      ThreadsCommutator::RenderThread,
+      make_unique_dp<ChangeMyPositionModeMessage>(locked ? Mode::LockNorth : Mode::UnlockNorth),
+      MessagePriority::Normal);
+}
+
 void DrapeEngine::LoseLocation()
 {
   using Mode = ChangeMyPositionModeMessage::EChangeType;

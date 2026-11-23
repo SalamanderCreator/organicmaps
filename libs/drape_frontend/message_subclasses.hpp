@@ -488,7 +488,11 @@ public:
   {
     SwitchNextMode,
     LoseLocation,
-    StopFollowing
+    StopFollowing,
+    CenterOnPosition,
+    ToggleNorthUp,
+    LockNorth,
+    UnlockNorth
   };
 
   explicit ChangeMyPositionModeMessage(EChangeType changeType) : m_changeType(changeType) {}

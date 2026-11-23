@@ -46,6 +46,26 @@ UNIT_CLASS_TEST(VisualParamsFixture, Navigator_Scale2Points)
   TEST_EQUAL(screen.ClipRect(), m2::RectD(-1, -1, 15, 7), ());
 }
 
+UNIT_CLASS_TEST(VisualParamsFixture, Navigator_RotationLocked)
+{
+  // Two fingers turned by 30 degrees around the screen center.
+  m2::PointD const start1(50, 50), start2(150, 50);
+  m2::PointD const end1(100 - 50 * std::cos(math::pi / 6), 50 - 50 * std::sin(math::pi / 6));
+  m2::PointD const end2(100 + 50 * std::cos(math::pi / 6), 50 + 50 * std::sin(math::pi / 6));
+
+  for (bool const locked : {false, true})
+  {
+    df::Navigator navigator;
+    navigator.OnSize(200, 100);
+    navigator.SetFromRect(m2::AnyRectD(m2::RectD(0, 0, 8, 4)));
+    navigator.SetRotationLocked(locked);
+    navigator.StartScale(start1, start2);
+    navigator.DoScale(end1, end2);
+    navigator.StopScale(end1, end2);
+    TEST_EQUAL(std::abs(navigator.Screen().GetAngle()) > 0.1, !locked, (navigator.Screen().GetAngle()));
+  }
+}
+
 namespace
 {
 void CheckNavigator(df::Navigator const & nav)

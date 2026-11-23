@@ -104,6 +104,7 @@ std::string_view constexpr kTerrainLightAzimuthKey = "TerrainLightAzimuth";
 std::string_view constexpr kTerrainLightAltitudeKey = "TerrainLightAltitude";
 std::string_view constexpr kTerrainShadeStrengthKey = "TerrainShadeStrength";
 std::string_view constexpr kContourLinesEnabledKey = "ContourLinesEnabled";
+std::string_view constexpr kNorthLockedKey = "NorthLocked";
 double constexpr kTerrainLightMinAltitudeDeg = 10;
 double constexpr kTerrainLightMaxAltitudeDeg = 80;
 double constexpr kTerrainShadeMaxStrength = 3;  // half-transparent area fills by default in Satellite mode
@@ -264,6 +265,31 @@ void Framework::SwitchMyPositionNextMode()
 {
   if (m_drapeEngine != nullptr)
     m_drapeEngine->SwitchMyPositionNextMode();
+}
+
+void Framework::CenterOnMyPosition()
+{
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->CenterOnMyPosition();
+}
+
+void Framework::ToggleNorthUp()
+{
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->ToggleNorthUp();
+}
+
+void Framework::SetNorthLocked(bool locked)
+{
+  settings::Set(kNorthLockedKey, locked);
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->SetNorthLocked(locked);
+}
+
+bool Framework::LoadNorthLocked()
+{
+  bool locked = false;
+  return settings::Get(kNorthLockedKey, locked) && locked;
 }
 
 void Framework::SetMyPositionModeListener(TMyPositionModeChanged && fn)
@@ -2124,6 +2150,8 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
     m_drapeEngine->SetTileOverlay(true);
   if (!LoadContourLinesEnabled())
     m_drapeEngine->SetContourLinesEnabled(false);
+  if (LoadNorthLocked())
+    m_drapeEngine->SetNorthLocked(true);
 
   InvalidateUserMarks();
 

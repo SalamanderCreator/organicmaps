@@ -431,6 +431,11 @@ public:
   void OnLocationUpdate(location::GpsInfo const & info);
   void OnCompassUpdate(location::CompassInfo const & info);
   void SwitchMyPositionNextMode();
+  /// Maps&Fly map buttons, see df::MyPositionController::CenterOnPosition().
+  void CenterOnMyPosition();
+  void ToggleNorthUp();
+  void SetNorthLocked(bool locked);
+  static bool LoadNorthLocked();
   /// Should be set before Drape initialization. Guarantees that fn is called in main thread context.
   void SetMyPositionModeListener(location::TMyPositionModeChanged && fn);
 
