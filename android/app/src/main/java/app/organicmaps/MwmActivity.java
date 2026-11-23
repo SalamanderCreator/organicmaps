@@ -2309,9 +2309,6 @@ public class MwmActivity extends BaseMwmFragmentActivity
     int startItem = -1;
     if (!onTrack)
     {
-      labels.add(getString(R.string.track_follow_navigate_closest));
-      actions.add(() -> followClosest(track, myPosition, reverse.isChecked(), true /* byRoad */));
-
       final TrackFollowing.TrackPoint selected = TrackFollowing.getSelectedPoint(track.getTrackId());
       if (selected != null && Math.abs(selected.distFromBegM() - closest.distFromBegM()) > TRACK_FOLLOW_ON_TRACK_METERS)
       {
@@ -2332,7 +2329,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       }
     }
     labels.add(getString(onTrack ? R.string.off_track_monitor_start : R.string.track_follow_direct));
-    actions.add(() -> followClosest(track, myPosition, reverse.isChecked(), false /* byRoad */));
+    actions.add(() -> followDirectly(track, myPosition, reverse.isChecked()));
 
     final String[] items = labels.toArray(new String[0]);
     final String title = onTrack ? getString(R.string.off_track_monitor_start)
@@ -2355,13 +2352,16 @@ public class MwmActivity extends BaseMwmFragmentActivity
     }
   }
 
-  /** Maps&Fly: follows the track from its point closest to the position, in the direction of travel. */
-  private void followClosest(@NonNull Track track, @NonNull MapObject myPosition, boolean reverse, boolean byRoad)
+  /**
+   * Maps&Fly: follows the track from its point closest to the position, in the direction of travel, with a straight
+   * approach.
+   */
+  private void followDirectly(@NonNull Track track, @NonNull MapObject myPosition, boolean reverse)
   {
     final TrackFollowing.TrackPoint closest =
         TrackFollowing.getClosestPoint(track.getTrackId(), myPosition.getLat(), myPosition.getLon(), reverse);
     if (closest != null)
-      followTrack(track, myPosition, closest.distFromBegM(), reverse, byRoad);
+      followTrack(track, myPosition, closest.distFromBegM(), reverse, false /* byRoad */);
   }
 
   /**
