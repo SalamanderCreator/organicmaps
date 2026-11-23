@@ -46049,8 +46049,20 @@ de = Debug: Track-Rohdaten mitschreiben
 [track_debug_description]
 comment = Settings: summary of the track recording debug switch
 tags = android-app
-en = While recording, every GPS position is written to a file with its accuracy and source. Applies from the next recording.
-de = Beim Aufzeichnen wird jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben. Gilt ab der nächsten Aufzeichnung.
+en = When a recording starts, you can choose to write every GPS position to a file with its accuracy and source.
+de = Beim Start einer Aufzeichnung kannst du wählen, ob jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben wird.
+
+[track_record]
+comment = Dialog when a track recording starts: record the track only
+tags = android-app
+en = Record track
+de = Track aufzeichnen
+
+[track_record_with_debug]
+comment = Dialog when a track recording starts: record the track and also write the raw GPS data for debugging
+tags = android-app
+en = Record track + debug
+de = Track aufzeichnen + Debug
 
 [track_debug_share]
 comment = Settings: shares the newest raw track data file
@@ -46070,17 +46082,71 @@ tags = android-app
 en = GPS accuracy: ±%s
 de = GPS-Genauigkeit: ±%s
 
+[track_follow_distance_title]
+comment = Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point
+tags = android-app
+en = The closest track point is %s away (straight line)
+de = Der nächstgelegene Trackpunkt ist %s entfernt (Luftlinie)
+
+[track_follow_navigate_closest]
+comment = Dialog option: navigate by road to the closest track point, then follow the track
+tags = android-app
+en = Navigate to the closest track point
+de = Zum nächstgelegenen Trackpunkt navigieren
+
+[track_follow_navigate_selected]
+comment = Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start
+tags = android-app
+en = Navigate to the selected point (%s along the track)
+de = Zum gewählten Punkt navigieren (%s auf dem Track)
+
+[track_follow_navigate_start]
+comment = Dialog option: navigate by road to the track start, then follow the whole track
+tags = android-app
+en = Navigate to the track start
+de = Zum Trackanfang navigieren
+
+[track_follow_no_location]
+comment = Toast when the user wants to follow a track before the GPS position is known
+tags = android-app
+en = Waiting for your location…
+de = Warte auf deinen Standort…
+
+[track_follow_nothing_left]
+comment = Toast when the chosen point is the end of the track
+tags = android-app
+en = Nothing left to follow: this is the track end
+de = Hier endet der Track, nichts mehr zu folgen
+
+[track_follow_direct]
+comment = Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads
+tags = android-app
+en = Follow directly (straight line to the closest track point)
+de = Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)
+
+[nav_elevation_remaining]
+comment = Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m
+tags = android-app
+en = ↑ %1$s   ↓ %2$s to go
+de = ↑ %1$s   ↓ %2$s bis zum Ziel
+
+[elevation_position_to_point]
+comment = Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent
+tags = android-app
+en = From your position: %1$s   ↑ %2$s   ↓ %3$s
+de = Von deiner Position: %1$s   ↑ %2$s   ↓ %3$s
+
 [off_track_monitor_start]
 comment = Place page button for a track: start the off-track alarm for it
 tags = android-app
-en = Watch track
-de = Track überwachen
+en = Follow track
+de = Track folgen
 
 [off_track_monitor_stop]
 comment = Place page and notification button: stop the off-track alarm
 tags = android-app
-en = Stop watching
-de = Überwachung beenden
+en = Stop following
+de = Track folgen beenden
 
 [off_track_monitor_started]
 comment = Toast after the off-track alarm started
@@ -46091,8 +46157,8 @@ de = Warnung, wenn du den Track verlässt
 [off_track_status_channel]
 comment = Android notification channel name for the ongoing off-track alarm notification
 tags = android-app
-en = Track watching
-de = Track-Überwachung
+en = Track following
+de = Track folgen
 
 [off_track_alarm_channel]
 comment = Android notification channel name for the off-track alarm itself
@@ -46103,8 +46169,8 @@ de = Off-Track-Alarm
 [off_track_watching]
 comment = Notification title while a track is watched. %s is the track name
 tags = android-app
-en = Watching %s
-de = Überwache %s
+en = Following %s
+de = Folge %s
 
 [off_track_waiting_for_gps]
 comment = Notification text of the off-track alarm before a GPS position is known
@@ -46137,16 +46203,28 @@ en = %s from the track
 de = %s vom Track entfernt
 
 [off_track_alarm_speech]
-comment = Voice announcement when the user left the watched track
+comment = Voice announcement when the user left the watched track. German spells Track as Träck so that the voice says it in English
 tags = android-app
 en = Attention, off the track.
-de = Achtung, Trackabweichung.
+de = Achtung, Träck-Abweichung.
 
 [off_track_back_speech]
-comment = Voice announcement when the user is back on the watched track
+comment = Voice announcement when the user is back on the watched track. German spells Track as Träck so that the voice says it in English
 tags = android-app
 en = Back on the track.
-de = Zurück auf dem Track.
+de = Zurück auf dem Träck.
+
+[off_track_not_reached]
+comment = Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km
+tags = android-app
+en = Track is %s away
+de = Track ist %s entfernt
+
+[off_track_not_reached_speech]
+comment = Voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point. German spells Track as Träck so that the voice says it in English
+tags = android-app
+en = Track is %s away
+de = Träck ist %s entfernt
 
 [off_track_banner]
 comment = Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m

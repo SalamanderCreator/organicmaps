@@ -10,7 +10,8 @@
 /// Maps&Fly: watches the distance between the GPS position and a chosen track. The position counts as off the track
 /// only if it is farther than the threshold plus the GPS accuracy, so a poor fix does not raise an alarm. A state
 /// changes only after the new condition has held for some seconds. A fix less accurate than kMaxAccuracyMeters gives
-/// "GPS inaccurate" instead of an alarm.
+/// "GPS inaccurate" instead of an alarm. Until the position has been on the track once, being away from it is no
+/// alarm but NotReached, e.g. on the way to the start of the track.
 class OffTrackMonitor
 {
 public:
@@ -21,6 +22,7 @@ public:
     OnTrack,
     OffTrack,
     GpsInaccurate,
+    NotReached,
   };
 
   static double constexpr kMaxAccuracyMeters = 50;
@@ -45,9 +47,10 @@ private:
 
   std::vector<Line> m_lines;
   double m_thresholdMeters;
-  State m_state = State::OnTrack;
+  State m_state = State::NotReached;
   // The state the recent fixes point to, since m_candidateSince.
-  State m_candidate = State::OnTrack;
+  State m_candidate = State::NotReached;
+  bool m_reached = false;
   double m_candidateSince = 0;
   double m_distanceMeters = -1;
 };

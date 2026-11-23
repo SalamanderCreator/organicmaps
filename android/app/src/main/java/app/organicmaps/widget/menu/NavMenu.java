@@ -13,6 +13,9 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
+import app.organicmaps.routing.RouteElevationChartController;
+import app.organicmaps.sdk.Framework;
+import app.organicmaps.sdk.routing.RouteElevation;
 import app.organicmaps.sdk.routing.RoutingInfo;
 import app.organicmaps.sdk.sound.TtsPlayer;
 import app.organicmaps.sdk.util.StringUtils;
@@ -40,6 +43,12 @@ public class NavMenu implements DefaultLifecycleObserver
   private final TextView mDistanceValue;
   private final TextView mDistanceUnits;
   private final LinearProgressIndicator mRouteProgress;
+  // Maps&Fly: ascent and descent left, and the route profile with the current position.
+  private final TextView mElevationRemaining;
+  private final View mElevationChartFrame;
+  private final RouteElevationChartController mElevationChart;
+  // The length of the route shown in the chart, to reload it after a rebuild.
+  private double mElevationRouteLengthM = -1;
 
   private final AppCompatActivity mActivity;
   private final NavMenuListener mNavMenuListener;
@@ -102,6 +111,9 @@ public class NavMenu implements DefaultLifecycleObserver
     mDistanceValue = bottomFrame.findViewById(R.id.distance_value);
     mDistanceUnits = bottomFrame.findViewById(R.id.distance_dimen);
     mRouteProgress = bottomFrame.findViewById(R.id.navigation_progress);
+    mElevationRemaining = bottomFrame.findViewById(R.id.nav_elevation_remaining);
+    mElevationChartFrame = bottomFrame.findViewById(R.id.nav_elevation_chart);
+    mElevationChart = new RouteElevationChartController(mElevationChartFrame);
 
     // Bottom frame buttons
     ImageView mSettings = bottomFrame.findViewById(R.id.settings);
@@ -245,6 +257,28 @@ public class NavMenu implements DefaultLifecycleObserver
     mDistanceValue.setText(info.distToTarget.mDistanceStr);
     mDistanceUnits.setText(info.distToTarget.getUnitsStr(mActivity.getApplicationContext()));
     mRouteProgress.setProgressCompat((int) info.completionPercent, true);
+    updateElevation();
+  }
+
+  private void updateElevation()
+  {
+    final RouteElevation.Remaining remaining = RouteElevation.getRemaining();
+    if (remaining == null)
+    {
+      UiUtils.hide(mElevationRemaining, mElevationChartFrame);
+      mElevationRouteLengthM = -1;
+      return;
+    }
+    mElevationRemaining.setText(mActivity.getString(R.string.nav_elevation_remaining,
+                                                    Framework.nativeFormatAltitude(remaining.ascentM()),
+                                                    Framework.nativeFormatAltitude(remaining.descentM())));
+    UiUtils.show(mElevationRemaining, mElevationChartFrame);
+    if (Math.abs(remaining.totalM() - mElevationRouteLengthM) > 1)
+    {
+      mElevationChart.setData(Framework.nativeGetRouteAltitudeData());
+      mElevationRouteLengthM = remaining.totalM();
+    }
+    mElevationChart.setMyPosition(remaining.fromStartM());
   }
 
   public interface NavMenuListener

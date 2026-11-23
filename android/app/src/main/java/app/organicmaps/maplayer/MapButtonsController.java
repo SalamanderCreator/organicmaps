@@ -205,7 +205,8 @@ public class MapButtonsController extends Fragment
     case bookmarks:
     case menu: UiUtils.showIf(show, buttonView); break;
     case trackRecordingStatus:
-      UiUtils.showIf(show, buttonView);
+      // Maps&Fly: the button stays visible to start a recording, also during navigation; it blinks while recording.
+      UiUtils.show(buttonView);
       animateIconBlinking(show, (FloatingActionButton) buttonView);
     }
   }
@@ -226,6 +227,10 @@ public class MapButtonsController extends Fragment
       mBlinkingAnimator.setRepeatCount(ObjectAnimator.INFINITE);
       mBlinkingAnimator.setRepeatMode(ObjectAnimator.REVERSE);
       mBlinkingAnimator.start();
+    }
+    else
+    {
+      button.getDrawable().setTint(0xFF757575);
     }
   }
 

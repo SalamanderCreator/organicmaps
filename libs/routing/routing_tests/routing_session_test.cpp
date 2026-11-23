@@ -841,6 +841,30 @@ UNIT_CLASS_TEST(AsyncGuiThreadTestWithRoutingSession, TestFollowingInfoPreserves
   TEST(signal.WaitUntil(steady_clock::now() + kRouteBuildingMaxDuration), ("Following info timeout."));
 }
 
+UNIT_CLASS_TEST(AsyncGuiThreadTestWithRoutingSession, TestFollowingInfoShowsFarPedestrianTurn)
+{
+  TimedSignal signal;
+  GetPlatform().RunTask(Platform::Thread::Gui, [this, &signal]()
+  {
+    InitRoutingSession();
+    Route route;
+    route.SetGeometry(kTestRoute.begin(), kTestRoute.end());
+    FillSubroutesInfo(route, {turns::TurnItem(1, turns::PedestrianDirection::None),
+                              turns::TurnItem(2, turns::PedestrianDirection::TurnLeft),
+                              turns::TurnItem(3, turns::PedestrianDirection::ReachedYourDestination)});
+    m_session->AssignRouteForTesting(std::move(route), RouterResultCode::NoError);
+
+    FollowingInfo info;
+    m_session->GetRouteFollowingInfo(info);
+    TEST(info.IsValid(), ());
+    // The turn is more than 200 km ahead.
+    TEST_EQUAL(info.m_distToTurn.GetUnits(), platform::Distance::Units::Kilometers, ());
+    TEST_EQUAL(info.m_pedestrianTurn, turns::PedestrianDirection::TurnLeft, ());
+    signal.Signal();
+  });
+  TEST(signal.WaitUntil(steady_clock::now() + kRouteBuildingMaxDuration), ("Following info timeout."));
+}
+
 UNIT_CLASS_TEST(AsyncGuiThreadTestWithRoutingSession, TestAlternativeEstimatesPreserveSeconds)
 {
   TimedSignal builtSignal;

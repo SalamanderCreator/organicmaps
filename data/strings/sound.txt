@@ -789,7 +789,7 @@ bg = Насочете се към пътеката.
 ca = Adreceu-vos al recorregut.
 cs = Vydejte se k trase.
 da = Fortsæt til sporet.
-de = Begeben Sie sich zum Track.
+de = Begeben Sie sich zum Träck.
 el = Κατευθυνθείτε προς το ίχνος.
 es = Diríjase al trayecto.
 es-MX = Diríjase al trayecto.
@@ -843,7 +843,7 @@ bg = Излязохте от пътеката.
 ca = Heu sortit del recorregut.
 cs = Opustili jste trasu.
 da = Du har forladt sporet.
-de = Sie haben den Track verlassen.
+de = Sie haben den Träck verlassen.
 el = Βγήκατε εκτός ίχνους.
 es = Ha salido del trayecto.
 et = Lahkusid rajalt.
@@ -985,6 +985,28 @@ vi = Bạn đã đến.
 zh-Hans = 您已到达目的地。
 zh-Hant = 你已到達目的地。
 yue = 你已經到咗目的地。
+
+[in_20_meters]
+en = In twenty meters
+de = In zwanzig Metern
+es = En veinte metros
+fr = Dans vingt mètres
+it = Tra venti metri
+nl = Over twintig meter
+pl = Za dwadzieścia metrów
+ru = Через двадцать метров
+uk = Через двадцять метрів
+
+[in_30_meters]
+en = In thirty meters
+de = In dreißig Metern
+es = En treinta metros
+fr = Dans trente mètres
+it = Tra trenta metri
+nl = Over dertig meter
+pl = Za trzydzieści metrów
+ru = Через тридцать метров
+uk = Через тридцять метрів
 
 [in_50_meters]
 en = In fifty meters

@@ -122,11 +122,13 @@ VecPairDist const & GetAllSoundedDistMeters()
 {
   // The vector below has to be sorted. It is checked in unit test GetAllSoundedDistMetersTest
   static VecPairDist const inst = {
-      {50, "in_50_meters"},      {100, "in_100_meters"},      {200, "in_200_meters"},   {250, "in_250_meters"},
-      {300, "in_300_meters"},    {400, "in_400_meters"},      {500, "in_500_meters"},   {600, "in_600_meters"},
-      {700, "in_700_meters"},    {750, "in_750_meters"},  // Hm :)
-      {800, "in_800_meters"},    {900, "in_900_meters"},      {1000, "in_1_kilometer"}, {1500, "in_1_5_kilometers"},
-      {2000, "in_2_kilometers"}, {2500, "in_2_5_kilometers"}, {3000, "in_3_kilometers"}};
+      {20, "in_20_meters"},        {30, "in_30_meters"},      {50, "in_50_meters"},
+      {100, "in_100_meters"},      {200, "in_200_meters"},    {250, "in_250_meters"},
+      {300, "in_300_meters"},      {400, "in_400_meters"},    {500, "in_500_meters"},
+      {600, "in_600_meters"},      {700, "in_700_meters"},    {750, "in_750_meters"},  // Hm :)
+      {800, "in_800_meters"},      {900, "in_900_meters"},    {1000, "in_1_kilometer"},
+      {1500, "in_1_5_kilometers"}, {2000, "in_2_kilometers"}, {2500, "in_2_5_kilometers"},
+      {3000, "in_3_kilometers"}};
   return inst;
 }
 

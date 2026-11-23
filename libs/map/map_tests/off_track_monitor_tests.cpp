@@ -35,6 +35,7 @@ UNIT_TEST(OffTrackMonitor_OnTrack)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);
   TEST_EQUAL(monitor.GetDistanceMeters(), -1, ());
+  TEST_EQUAL(monitor.GetState(), State::NotReached, ());
   for (int t = 0; t < 30; ++t)
     TEST_EQUAL(monitor.Update(MakeFix(t, 10 * t, 0)), State::OnTrack, ());
   TEST_LESS(monitor.GetDistanceMeters(), 1, ());
@@ -63,6 +64,7 @@ UNIT_TEST(OffTrackMonitor_AlarmAfterDelayAndBack)
 UNIT_TEST(OffTrackMonitor_ShortExcursionIsNoAlarm)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);
+  TEST_EQUAL(monitor.Update(MakeFix(-1, 100, 0)), State::OnTrack, ());
   for (int t = 0; t < 30; ++t)
   {
     // Every 9 s out of 10 off the track: never long enough in a row.
@@ -74,6 +76,7 @@ UNIT_TEST(OffTrackMonitor_ShortExcursionIsNoAlarm)
 UNIT_TEST(OffTrackMonitor_AccuracyIsAdded)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);
+  TEST_EQUAL(monitor.Update(MakeFix(-1, 100, 0)), State::OnTrack, ());
   // 45 m away, but 20 m accuracy: the position may be 25 m away, within the threshold.
   for (int t = 0; t < 30; ++t)
     TEST_EQUAL(monitor.Update(MakeFix(t, 100, 45, 20)), State::OnTrack, (t));
@@ -87,6 +90,7 @@ UNIT_TEST(OffTrackMonitor_AccuracyIsAdded)
 UNIT_TEST(OffTrackMonitor_GpsInaccurate)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);
+  TEST_EQUAL(monitor.Update(MakeFix(-1, 100, 0)), State::OnTrack, ());
   // Far away, but with an accuracy worse than kMaxAccuracyMeters: a hint, no alarm.
   for (int t = 0; t < 10; ++t)
     TEST_EQUAL(monitor.Update(MakeFix(t, 100, 300, 80)), State::OnTrack, (t));
@@ -98,6 +102,31 @@ UNIT_TEST(OffTrackMonitor_GpsInaccurate)
   for (int t = 30; t < 40; ++t)
     TEST_EQUAL(monitor.Update(MakeFix(t, 100, 300)), State::GpsInaccurate, (t));
   TEST_EQUAL(monitor.Update(MakeFix(40, 100, 300)), State::OffTrack, ());
+}
+
+UNIT_TEST(OffTrackMonitor_NotReachedYet)
+{
+  OffTrackMonitor monitor(MakeTrack(), 30);
+  // Starting 1 km away: no alarm, however long it takes to get there.
+  for (int t = 0; t < 60; ++t)
+    TEST_EQUAL(monitor.Update(MakeFix(t, -1000 + 15 * t, 0)), State::NotReached, (t));
+  TEST_ALMOST_EQUAL_ABS(monitor.GetDistanceMeters(), 115.0, 2.0, ());
+
+  // Reaching the track counts at once, leaving it afterwards is an alarm.
+  TEST_EQUAL(monitor.Update(MakeFix(60, 10, 0)), State::OnTrack, ());
+  for (int t = 61; t < 71; ++t)
+    TEST_EQUAL(monitor.Update(MakeFix(t, 100, 60)), State::OnTrack, (t));
+  TEST_EQUAL(monitor.Update(MakeFix(71, 100, 60)), State::OffTrack, ());
+}
+
+UNIT_TEST(OffTrackMonitor_NotReachedWithInaccurateGps)
+{
+  OffTrackMonitor monitor(MakeTrack(), 30);
+  for (int t = 0; t < 10; ++t)
+    TEST_EQUAL(monitor.Update(MakeFix(t, 100, 300, 80)), State::NotReached, (t));
+  TEST_EQUAL(monitor.Update(MakeFix(10, 100, 300, 80)), State::GpsInaccurate, ());
+  // Accurate again and still not on the track: back to the info at once, no alarm.
+  TEST_EQUAL(monitor.Update(MakeFix(11, 100, 300)), State::NotReached, ());
 }
 
 UNIT_TEST(OffTrackMonitor_ClosestOfSeveralLines)
@@ -116,6 +145,7 @@ UNIT_TEST(OffTrackMonitor_ClosestOfSeveralLines)
 UNIT_TEST(OffTrackMonitor_SetThreshold)
 {
   OffTrackMonitor monitor(MakeTrack(), 30);
+  TEST_EQUAL(monitor.Update(MakeFix(-1, 100, 0)), State::OnTrack, ());
   for (int t = 0; t < 15; ++t)
     monitor.Update(MakeFix(t, 100, 60));
   TEST_EQUAL(monitor.GetState(), State::OffTrack, ());

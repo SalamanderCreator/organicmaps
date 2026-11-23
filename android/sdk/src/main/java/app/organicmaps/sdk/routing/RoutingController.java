@@ -138,6 +138,8 @@ public class RoutingController
   private boolean mPendingOptionsRebuild;
   private boolean mHasContainerSavedState;
   private boolean mContainsCachedResult;
+  // Maps&Fly: start following the track as soon as its route is built.
+  private boolean mStartWhenBuilt;
   private int mLastResultCode;
   private String[] mLastMissingMaps;
   @Nullable
@@ -174,6 +176,11 @@ public class RoutingController
     mLastBuildProgress = 100;
     if (mContainer != null)
       mContainer.onBuiltRoute();
+    if (mStartWhenBuilt)
+    {
+      mStartWhenBuilt = false;
+      start();
+    }
   }
 
   private final RoutingProgressListener mRoutingProgressListener = progress ->
@@ -545,6 +552,53 @@ public class RoutingController
   }
 
   /**
+   * Maps&amp;Fly: plans a route along the track from the distance to its end, with a straight approach from the start.
+   * @param startWhenBuilt whether to start navigation as soon as the route is built
+   * @return {@code false} if the track is gone or nothing is left of it after that distance
+   */
+  public boolean followTrack(@NonNull MapObject startPoint, long trackId, @NonNull String title, double distFromBegM,
+                             @NonNull Router router, boolean startWhenBuilt)
+  {
+    checkMapsReady();
+    if (!cancel())
+    {
+      Framework.nativeRemoveRoutePoints();
+      Framework.nativeDeleteSavedRoutePoints();
+    }
+    // Closing routing above ends any earlier track following, so this comes after it.
+    final TrackFollowing.TrackPoint end = TrackFollowing.start(trackId, distFromBegM);
+    if (end == null)
+      return false;
+    setState(State.PREPARE);
+
+    mLastRouterType = router == Router.Bicycle ? Router.Bicycle : Router.Pedestrian;
+    Router.set(mLastRouterType);
+
+    final MapObject endPoint = MapObject.createMapObject(MapObject.API_POINT, title, "", end.lat(), end.lon());
+    setPointsInternal(startPoint, endPoint);
+    mStartWhenBuilt = startWhenBuilt;
+    startPlanning(startPoint, endPoint);
+    return true;
+  }
+
+  /**
+   * Maps&amp;Fly: plans a normal route to the track point at the distance, then follows the track from there on
+   * arrival.
+   */
+  public void navigateToTrack(@NonNull MapObject startPoint, long trackId, @NonNull String title, double distFromBegM,
+                              @NonNull Router router)
+  {
+    final TrackFollowing.TrackPoint entry = TrackFollowing.getPointAt(trackId, distFromBegM);
+    if (entry == null)
+      return;
+    final Router routerType = router == Router.Bicycle ? Router.Bicycle : Router.Pedestrian;
+    prepare(startPoint, MapObject.createMapObject(MapObject.API_POINT, title, "", entry.lat(), entry.lon()),
+            routerType);
+    // After prepare(), which cancels the previous routing and its pending track.
+    TrackFollowing.setPending(new TrackFollowing.Pending(trackId, title, distFromBegM, routerType));
+  }
+
+  /**
    * Starts following a successfully built planned route; otherwise does nothing.
    * The host supplies location updates and any foreground-service lifecycle required for navigation.
    */
@@ -557,7 +611,9 @@ public class RoutingController
 
     // This saving is needed just for situation when the user starts navigation
     // and then app crashes. So, the previous route will be restored on the next app launch.
-    saveRoute();
+    // Maps&Fly: a restored followed track would become a road route to the track end.
+    if (!TrackFollowing.isActive())
+      saveRoute();
 
     // Clear stale elevation preview marker.
     Framework.nativeRouteRemoveElevationActivePoint();
@@ -776,6 +832,8 @@ public class RoutingController
   private void cancelInternal(boolean deleteSavedRoute)
   {
     mContainsCachedResult = false;
+    mStartWhenBuilt = false;
+    TrackFollowing.setPending(null);
     Logger.d(TAG, "cancelInternal");
 
     resetPoiPickState();

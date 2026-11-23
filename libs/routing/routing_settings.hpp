@@ -46,6 +46,13 @@ struct RoutingSettings
   double m_minOutgoingDistMeters;
   size_t m_maxIngoingPointsCount;
   double m_minIngoingDistMeters;
+
+  /// Maps&Fly: the last turn notification says the distance, e.g. "In 20 meters turn right", about this many
+  /// seconds of travel before the turn, clamped to [m_minTurnWarningM, m_maxTurnWarningM]. 0 keeps the plain
+  /// "Turn right" just before the turn.
+  double m_turnWarningSeconds = 0;
+  double m_minTurnWarningM = 0;
+  double m_maxTurnWarningM = 0;
 };
 
 RoutingSettings GetRoutingSettings(VehicleType vehicleType);

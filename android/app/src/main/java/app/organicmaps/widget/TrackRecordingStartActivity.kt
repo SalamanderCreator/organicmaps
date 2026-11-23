@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import app.organicmaps.MwmActivity
 import app.organicmaps.MwmApplication
+import app.organicmaps.location.TrackRecordingDebugLog
 import app.organicmaps.location.TrackRecordingService
 import app.organicmaps.sdk.display.DisplayType
 import app.organicmaps.sdk.location.LocationUtils
@@ -50,6 +51,8 @@ class TrackRecordingStartActivity : Activity() {
             }
         }
 
+        // The widget cannot ask, so it writes the debug log whenever the debug mode is on.
+        TrackRecordingDebugLog.setForNextRecording(this, TrackRecordingDebugLog.isEnabled(this))
         TrackRecordingService.startForegroundService(this)
         return true
     }

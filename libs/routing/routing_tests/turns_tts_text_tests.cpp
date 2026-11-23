@@ -494,13 +494,13 @@ UNIT_TEST(GetAllSoundedDistMetersTest)
                  [](PairDist const & p1, PairDist const & p2) { return p1.first < p2.first; }),
        ());
 
-  TEST_EQUAL(allSoundedDistMeters.size(), 17, ());
-  PairDist const expected1 = {50, "in_50_meters"};
+  TEST_EQUAL(allSoundedDistMeters.size(), 19, ());
+  PairDist const expected1 = {20, "in_20_meters"};
   TEST(PairDistEquals(allSoundedDistMeters[0], expected1), (allSoundedDistMeters[0], expected1));
   PairDist const expected2 = {700, "in_700_meters"};
-  TEST(PairDistEquals(allSoundedDistMeters[8], expected2), (allSoundedDistMeters[8], expected2));
+  TEST(PairDistEquals(allSoundedDistMeters[10], expected2), (allSoundedDistMeters[10], expected2));
   PairDist const expected3 = {3000, "in_3_kilometers"};
-  TEST(PairDistEquals(allSoundedDistMeters[16], expected3), (allSoundedDistMeters[16], expected3));
+  TEST(PairDistEquals(allSoundedDistMeters[18], expected3), (allSoundedDistMeters[18], expected3));
 }
 
 UNIT_TEST(GetAllSoundedDistFeet)

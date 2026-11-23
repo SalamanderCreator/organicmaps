@@ -949,25 +949,47 @@
     <!-- Settings: debug switch that logs every GPS fix of a track recording to a file -->
     <string name="track_debug_title">Debug: Track-Rohdaten mitschreiben</string>
     <!-- Settings: summary of the track recording debug switch -->
-    <string name="track_debug_description">Beim Aufzeichnen wird jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben. Gilt ab der nächsten Aufzeichnung.</string>
+    <string name="track_debug_description">Beim Start einer Aufzeichnung kannst du wählen, ob jede GPS-Position mit Genauigkeit und Quelle in eine Datei geschrieben wird.</string>
+    <!-- Dialog when a track recording starts: record the track only -->
+    <string name="track_record">Track aufzeichnen</string>
+    <!-- Dialog when a track recording starts: record the track and also write the raw GPS data for debugging -->
+    <string name="track_record_with_debug">Track aufzeichnen + Debug</string>
     <!-- Settings: shares the newest raw track data file -->
     <string name="track_debug_share">Debug: letzte Track-Rohdaten teilen</string>
     <!-- Toast when there is no raw track data file to share -->
     <string name="track_debug_nothing_to_share">Noch keine Track-Rohdaten vorhanden</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->
     <string name="track_recording_gps_accuracy">GPS-Genauigkeit: ±%s</string>
+    <!-- Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point -->
+    <string name="track_follow_distance_title">Der nächstgelegene Trackpunkt ist %s entfernt (Luftlinie)</string>
+    <!-- Dialog option: navigate by road to the closest track point, then follow the track -->
+    <string name="track_follow_navigate_closest">Zum nächstgelegenen Trackpunkt navigieren</string>
+    <!-- Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start -->
+    <string name="track_follow_navigate_selected">Zum gewählten Punkt navigieren (%s auf dem Track)</string>
+    <!-- Dialog option: navigate by road to the track start, then follow the whole track -->
+    <string name="track_follow_navigate_start">Zum Trackanfang navigieren</string>
+    <!-- Toast when the user wants to follow a track before the GPS position is known -->
+    <string name="track_follow_no_location">Warte auf deinen Standort…</string>
+    <!-- Toast when the chosen point is the end of the track -->
+    <string name="track_follow_nothing_left">Hier endet der Track, nichts mehr zu folgen</string>
+    <!-- Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads -->
+    <string name="track_follow_direct">Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)</string>
+    <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->
+    <string name="nav_elevation_remaining">↑ %1$s   ↓ %2$s bis zum Ziel</string>
+    <!-- Below a track elevation profile: from the current position on the track to the selected point. %1$s is the distance along the track, %2$s the ascent, %3$s the descent -->
+    <string name="elevation_position_to_point">Von deiner Position: %1$s   ↑ %2$s   ↓ %3$s</string>
     <!-- Place page button for a track: start the off-track alarm for it -->
-    <string name="off_track_monitor_start">Track überwachen</string>
+    <string name="off_track_monitor_start">Track folgen</string>
     <!-- Place page and notification button: stop the off-track alarm -->
-    <string name="off_track_monitor_stop">Überwachung beenden</string>
+    <string name="off_track_monitor_stop">Track folgen beenden</string>
     <!-- Toast after the off-track alarm started -->
     <string name="off_track_monitor_started">Warnung, wenn du den Track verlässt</string>
     <!-- Android notification channel name for the ongoing off-track alarm notification -->
-    <string name="off_track_status_channel">Track-Überwachung</string>
+    <string name="off_track_status_channel">Track folgen</string>
     <!-- Android notification channel name for the off-track alarm itself -->
     <string name="off_track_alarm_channel">Off-Track-Alarm</string>
     <!-- Notification title while a track is watched. %s is the track name -->
-    <string name="off_track_watching">Überwache %s</string>
+    <string name="off_track_watching">Folge %s</string>
     <!-- Notification text of the off-track alarm before a GPS position is known -->
     <string name="off_track_waiting_for_gps">Warte auf GPS…</string>
     <!-- Notification text of the off-track alarm. %s is the distance to the track, e.g. 8 m -->
@@ -978,10 +1000,14 @@
     <string name="off_track_alarm_title">Trackabweichung</string>
     <!-- Notification text when the user left the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_alarm_text">%s vom Track entfernt</string>
-    <!-- Voice announcement when the user left the watched track -->
-    <string name="off_track_alarm_speech">Achtung, Trackabweichung.</string>
-    <!-- Voice announcement when the user is back on the watched track -->
-    <string name="off_track_back_speech">Zurück auf dem Track.</string>
+    <!-- Voice announcement when the user left the watched track. German spells Track as Träck so that the voice says it in English -->
+    <string name="off_track_alarm_speech">Achtung, Träck-Abweichung.</string>
+    <!-- Voice announcement when the user is back on the watched track. German spells Track as Träck so that the voice says it in English -->
+    <string name="off_track_back_speech">Zurück auf dem Träck.</string>
+    <!-- Banner, notification and voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point, e.g. 1.2 km -->
+    <string name="off_track_not_reached">Track ist %s entfernt</string>
+    <!-- Voice announcement when following a track that the user has not reached yet. %s is the distance to the closest track point. German spells Track as Träck so that the voice says it in English -->
+    <string name="off_track_not_reached_speech">Träck ist %s entfernt</string>
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Trackabweichung: %s</string>
     <!-- Settings: title of the off-track alarm distance -->

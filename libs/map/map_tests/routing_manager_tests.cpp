@@ -1540,3 +1540,49 @@ UNIT_TEST(RoutingManager_SaveRouteDeduplicatesWithoutLosingMovement)
   });
 }
 }  // namespace routing_manager_tests
+
+namespace routing_manager_tests
+{
+// Maps&Fly: building a route closes the previous one, which must not end the track following.
+UNIT_TEST(RoutingManager_FollowedTrackSurvivesBuild)
+{
+  WithSavedRoute([](RoutingManager & manager, BookmarkManager &, TestGuiThread & guiThread)
+  {
+    // Ruler initializes without map regions; the track router needs none either.
+    manager.SetRouter(routing::RouterType::Ruler);
+    manager.Init(std::make_shared<routing::NumMwmIds>());
+
+    auto track = std::make_shared<routing::TrackFollowingData>();
+    for (double const x : {0.001, 0.002, 0.003, 0.004})
+      track->m_points.emplace_back(m2::PointD(x, 0.0), geometry::kInvalidAltitude);
+    manager.SetFollowedTrack(track);
+    manager.SetRouter(routing::RouterType::Pedestrian);
+    TEST(manager.IsFollowingTrack(), ());
+
+    manager.AddRoutePoint(MakeRoutePointOnXAxis(RouteMarkType::Start, 0, -0.001), false /* optimize */);
+    manager.AddRoutePoint(MakeRoutePointOnXAxis(RouteMarkType::Finish, 0, 0.004), false /* optimize */);
+
+    bool built = false;
+    manager.SetRouteBuildingListener([&](routing::RouterResultCode code, storage::CountriesSet const &)
+    {
+      TEST_EQUAL(code, routing::RouterResultCode::NoError, ());
+      built = true;
+    });
+    manager.BuildRoute();
+    guiThread.RunUntil([&] { return built; });
+    TEST(manager.IsFollowingTrack(), ());
+    TEST(manager.IsRouteValid(), ());
+
+    // The start, then all track points: no road route.
+    routing::RouteJunctions junctions;
+    TEST(manager.RoutingSession().GetRouteJunctionPoints(junctions), ());
+    TEST_EQUAL(junctions.size(), track->m_points.size() + 1, ());
+    TEST_EQUAL(junctions.back().GetPoint(), track->m_points.back().GetPoint(), ());
+
+    // Without map regions only Ruler can replace the track router.
+    manager.SetRouter(routing::RouterType::Ruler);
+    manager.CloseRouting(true /* removeRoutePoints */);
+    TEST(!manager.IsFollowingTrack(), ());
+  });
+}
+}  // namespace routing_manager_tests
