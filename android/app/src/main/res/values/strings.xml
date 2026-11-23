@@ -937,7 +937,11 @@
     <!-- Settings: debug switch that logs every GPS fix of a track recording to a file -->
     <string name="track_debug_title">Debug: log raw track data</string>
     <!-- Settings: summary of the track recording debug switch -->
-    <string name="track_debug_description">While recording, every GPS position is written to a file with its accuracy and source. Applies from the next recording.</string>
+    <string name="track_debug_description">When a recording starts, you can choose to write every GPS position to a file with its accuracy and source.</string>
+    <!-- Dialog when a track recording starts: record the track only -->
+    <string name="track_record">Record track</string>
+    <!-- Dialog when a track recording starts: record the track and also write the raw GPS data for debugging -->
+    <string name="track_record_with_debug">Record track + debug</string>
     <!-- Settings: shares the newest raw track data file -->
     <string name="track_debug_share">Debug: share latest raw track data</string>
     <!-- Toast when there is no raw track data file to share -->
