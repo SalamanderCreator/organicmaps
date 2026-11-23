@@ -29,6 +29,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.SystemBarStyle;
@@ -42,6 +45,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -2263,57 +2267,88 @@ public class MwmActivity extends BaseMwmFragmentActivity
         TrackFollowing.getClosestPoint(trackId, myPosition.getLat(), myPosition.getLon());
     if (closest == null)
       return;
-    if (closest.distanceM() <= Math.max(TRACK_FOLLOW_ON_TRACK_METERS, OffTrackService.getThresholdMeters(this)))
-    {
-      followTrack(track, myPosition, closest.distFromBegM(), false /* byRoad */);
-      return;
-    }
-    showTrackFollowDialog(track, myPosition, closest);
+    final boolean onTrack =
+        closest.distanceM() <= Math.max(TRACK_FOLLOW_ON_TRACK_METERS, OffTrackService.getThresholdMeters(this));
+    showTrackFollowDialog(track, myPosition, closest, onTrack);
   }
 
+  /** Maps&Fly: asks how to get to the track, and in which direction to follow it. */
   private void showTrackFollowDialog(@NonNull Track track, @NonNull MapObject myPosition,
-                                     @NonNull TrackFollowing.TrackPoint closest)
+                                     @NonNull TrackFollowing.TrackPoint closest, boolean onTrack)
   {
+    final CheckBox reverse = new CheckBox(this);
+    reverse.setText(R.string.track_follow_reverse);
+    final int padding = getResources().getDimensionPixelSize(R.dimen.margin_base_plus);
+    final FrameLayout reverseFrame = new FrameLayout(this);
+    reverseFrame.setPadding(padding, 0, padding, 0);
+    reverseFrame.addView(reverse);
+
     final List<String> labels = new ArrayList<>();
     final List<Runnable> actions = new ArrayList<>();
-    labels.add(getString(R.string.track_follow_navigate_closest));
-    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), true /* byRoad */));
-
-    final TrackFollowing.TrackPoint selected = TrackFollowing.getSelectedPoint(track.getTrackId());
-    if (selected != null && Math.abs(selected.distFromBegM() - closest.distFromBegM()) > TRACK_FOLLOW_ON_TRACK_METERS)
+    // The way's start: the track start, or its end backwards. Its label changes with the direction.
+    int startItem = -1;
+    if (!onTrack)
     {
-      labels.add(getString(R.string.track_follow_navigate_selected,
-                           StringUtils.nativeFormatDistance(selected.distFromBegM()).toString(this)));
-      actions.add(() -> followTrack(track, myPosition, selected.distFromBegM(), true /* byRoad */));
-    }
-    if (closest.distFromBegM() > TRACK_FOLLOW_ON_TRACK_METERS)
-    {
-      labels.add(getString(R.string.track_follow_navigate_start));
-      actions.add(() -> followTrack(track, myPosition, 0, true /* byRoad */));
-    }
-    labels.add(getString(R.string.track_follow_direct));
-    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), false /* byRoad */));
+      labels.add(getString(R.string.track_follow_navigate_closest));
+      actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), reverse.isChecked(), true /* byRoad */));
 
-    new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
-        .setTitle(getString(R.string.track_follow_distance_title,
-                            StringUtils.nativeFormatDistance(closest.distanceM()).toString(this)))
-        .setItems(labels.toArray(new String[0]), (dialog, which) -> actions.get(which).run())
-        .setNegativeButton(R.string.cancel, null)
-        .show();
+      final TrackFollowing.TrackPoint selected = TrackFollowing.getSelectedPoint(track.getTrackId());
+      if (selected != null && Math.abs(selected.distFromBegM() - closest.distFromBegM()) > TRACK_FOLLOW_ON_TRACK_METERS)
+      {
+        labels.add(getString(R.string.track_follow_navigate_selected,
+                             StringUtils.nativeFormatDistance(selected.distFromBegM()).toString(this)));
+        actions.add(
+            () -> followTrack(track, myPosition, selected.distFromBegM(), reverse.isChecked(), true /* byRoad */));
+      }
+      final TrackFollowing.TrackPoint end = TrackFollowing.getPointAt(track.getTrackId(), Double.MAX_VALUE);
+      if (end != null)
+      {
+        startItem = labels.size();
+        labels.add(getString(R.string.track_follow_navigate_start));
+        actions.add(() -> {
+          final boolean backwards = reverse.isChecked();
+          followTrack(track, myPosition, backwards ? end.distFromBegM() : 0, backwards, true /* byRoad */);
+        });
+      }
+    }
+    labels.add(getString(onTrack ? R.string.off_track_monitor_start : R.string.track_follow_direct));
+    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), reverse.isChecked(), false /* byRoad */));
+
+    final String[] items = labels.toArray(new String[0]);
+    final String title = onTrack ? getString(R.string.off_track_monitor_start)
+                                 : getString(R.string.track_follow_distance_title,
+                                             StringUtils.nativeFormatDistance(closest.distanceM()).toString(this));
+    final AlertDialog dialog = new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
+                                   .setTitle(title)
+                                   .setItems(items, (d, which) -> actions.get(which).run())
+                                   .setView(reverseFrame)
+                                   .setNegativeButton(R.string.cancel, null)
+                                   .show();
+    final int startIndex = startItem;
+    if (startIndex >= 0)
+    {
+      reverse.setOnCheckedChangeListener((button, checked) -> {
+        items[startIndex] =
+            getString(checked ? R.string.track_follow_navigate_end : R.string.track_follow_navigate_start);
+        ((BaseAdapter) dialog.getListView().getAdapter()).notifyDataSetChanged();
+      });
+    }
   }
 
   /**
-   * Maps&Fly: starts the off track alarm and navigation along the track from the distance. With {@code byRoad} it
-   * first navigates to that track point by the roads.
+   * Maps&Fly: starts the off track alarm and navigation along the track from the distance, to its end or backwards to
+   * its start. With {@code byRoad} it first navigates to that track point by the roads; otherwise it approaches the
+   * track point closest to the position in a straight line.
    */
-  private void followTrack(@NonNull Track track, @NonNull MapObject myPosition, double distFromBegM, boolean byRoad)
+  private void followTrack(@NonNull Track track, @NonNull MapObject myPosition, double distFromBegM, boolean reverse,
+                           boolean byRoad)
   {
     final RoutingController controller = RoutingController.get();
     final Router router = controller.getLastRouterType();
     if (byRoad)
-      controller.navigateToTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, router);
-    else if (!controller.followTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, router,
-                                     true /* startWhenBuilt */))
+      controller.navigateToTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, reverse, router);
+    else if (!controller.followTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, reverse,
+                                     true /* liveEntry */, router, true /* startWhenBuilt */))
     {
       Toast.makeText(this, R.string.track_follow_nothing_left, Toast.LENGTH_SHORT).show();
       return;
