@@ -35,7 +35,9 @@ double EstimateHikingTimeSec(double distanceM, double ascentM, double descentM);
 
 /// Pedestrians get the hiking time; other vehicles keep the router's ETA.
 /// @param firstSegmentIdx counts only the route from this segment on, e.g. what is left while navigating.
-Stats CalculateStats(routing::RouteBase const & route, routing::VehicleType vehicleType, size_t firstSegmentIdx = 0);
+/// @param endSegmentIdx counts only the route before this segment; the whole rest without it.
+Stats CalculateStats(routing::RouteBase const & route, routing::VehicleType vehicleType, size_t firstSegmentIdx = 0,
+                     std::optional<size_t> endSegmentIdx = {});
 
 /// Adds the distances, climbs and times of two routes, e.g. the planned one and a detour from it.
 /// Pedestrians get the hiking time of the sum.
@@ -69,10 +71,16 @@ struct Detour
   size_t m_legIdx = 0;
   std::optional<m2::PointD> m_leave;
   std::optional<m2::PointD> m_rejoin;
+  /// Leg point indices of the leave and rejoin points, or of the leg ends when missing. Exact with snapping only.
+  size_t m_leaveIdx = 0;
+  size_t m_rejoinIdx = 0;
 };
 
 /// @param gapM distance of the leave and rejoin points from the closest route point along the route.
-Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjection const & projection, double gapM);
+/// @param snapToLegPoints moves the leave and rejoin points on to the next leg points, so the planned route between
+/// them consists of whole route segments.
+Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjection const & projection, double gapM,
+                  bool snapToLegPoints = false);
 
 /// @param reference polylines of the planned route.
 /// @return the parts of |route| farther than |maxDistM| from |reference|, each one extended by a point on both ends

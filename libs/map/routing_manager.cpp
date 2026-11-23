@@ -1978,11 +1978,14 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   // Legs are indexed like the subroutes; passed ones stay empty.
   std::vector<m2::PointD> checkpoints;
   std::vector<std::vector<m2::PointD>> legs(route->GetSubrouteCount());
+  // Leg segment i is route segment legBegins[legIdx] + i.
+  std::vector<size_t> legBegins(legs.size());
   auto const & segments = route->GetRouteSegments();
   for (size_t legIdx = firstLegIdx; legIdx < legs.size(); ++legIdx)
   {
     auto const & attrs = route->GetSubrouteAttrs(legIdx);
     size_t const beginIdx = std::max(attrs.GetBeginSegmentIdx(), firstSegmentIdx);
+    legBegins[legIdx] = beginIdx;
     auto & leg = legs[legIdx];
     leg.push_back(beginIdx == attrs.GetBeginSegmentIdx() ? attrs.GetStart().GetPoint() : iter.m_pt);
     for (size_t i = beginIdx; i < attrs.GetEndSegmentIdx(); ++i)
@@ -1999,9 +2002,9 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
   std::vector<std::vector<m2::PointD>> remainingLegs(legs.begin() + firstLegIdx, legs.end());
   auto projection = route_preview::ProjectToRoute(remainingLegs, pt);
   projection.m_legIdx += firstLegIdx;
-  auto const makeDetour = [&](double gapM)
+  auto const makeDetour = [&](double gapM, bool snapToLegPoints)
   {
-    auto detour = route_preview::MakeDetour(legs, projection, gapM);
+    auto detour = route_preview::MakeDetour(legs, projection, gapM, snapToLegPoints);
     // The current position is no route point, so a detour right from it leaves there.
     if (!detour.m_leave && isFollowing && projection.m_legIdx == firstLegIdx)
       detour.m_leave = legs[firstLegIdx].front();
@@ -2013,11 +2016,12 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
 
   // The side trip leaves and rejoins a few meters around the closest point: the route refuses equal route points.
   double constexpr kSideTripGapM = 3.0;
-  auto const sideTrip = makeDetour(kSideTripGapM);
+  auto const sideTrip = makeDetour(kSideTripGapM, false /* snapToLegPoints */);
   // The via route may leave and rejoin anywhere within this distance around the closest point; the router chooses.
   // Farther than the place to let the router find a way through it, but keeping most of the route.
   double const viaGapM = std::clamp(2.0 * mercator::DistanceOnEarth(pt, projection.m_point), 300.0, 3000.0);
-  auto const via = makeDetour(viaGapM);
+  // It leaves and rejoins at route points, so the replaced part of the planned route is known exactly.
+  auto const via = makeDetour(viaGapM, true /* snapToLegPoints */);
   m_routeDetours = RouteDetours{pt, via, sideTrip};
 
   auto const [sideLeave, sideRejoin] = leaveAndRejoin(sideTrip);
@@ -2025,13 +2029,18 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
 
   auto variants = std::make_shared<RouteInsertVariants>();
   variants->m_current = route_preview::CalculateStats(*route, vehicleType, firstSegmentIdx);
-  auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
-  struct ViaRoute
+  // The part of the planned route that the via route replaces.
+  route_preview::Stats replaced;
+  replaced.m_hasAltitudes = variants->m_current.m_hasAltitudes;
   {
-    route_preview::Stats m_stats;
-    std::vector<m2::PointD> m_points;
-  };
-  auto viaRoute = std::make_shared<std::optional<ViaRoute>>();
+    size_t const legBegin = legBegins[via.m_legIdx];
+    size_t const legEnd = route->GetSubrouteAttrs(via.m_legIdx).GetEndSegmentIdx();
+    size_t const from = legBegin + via.m_leaveIdx;
+    size_t const to = std::min(legBegin + via.m_rejoinIdx, legEnd);
+    if (from < to)
+      replaced = route_preview::CalculateStats(*route, vehicleType, from, to);
+  }
+  auto reference = std::make_shared<std::vector<std::vector<m2::PointD>>>(std::move(remainingLegs));
 
   // One router runs them one by one. Only the parts off the route are drawn.
   struct Request
@@ -2057,20 +2066,13 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
         route_preview::Add(variants->m_current, route_preview::CalculateStats(*r, vehicleType), vehicleType);
     ShowRouteVariant(*r, *reference, kRouteDetourColor, kRouteDetourDepth);
   }});
-  // The via route replaces the planned route between its leave and rejoin points, so that part is needed too.
   requests->push_back({{viaLeave, pt, viaRejoin},
                        [=, this](RouteBase const * r)
   {
-    if (r)
-      *viaRoute = ViaRoute{route_preview::CalculateStats(*r, vehicleType), GetPolylinePoints(*r)};
-  }});
-  requests->push_back({{viaLeave, viaRejoin},
-                       [=, this](RouteBase const * r)
-  {
-    if (!r || !*viaRoute)
+    if (!r)
       return;
-    auto const stats = route_preview::Replace(variants->m_current, route_preview::CalculateStats(*r, vehicleType),
-                                              (*viaRoute)->m_stats, vehicleType);
+    auto const stats = route_preview::Replace(variants->m_current, replaced,
+                                              route_preview::CalculateStats(*r, vehicleType), vehicleType);
     // Shown only when it differs from the other variants.
     auto const differs = [&stats](std::optional<route_preview::Stats> const & other)
     {
@@ -2082,11 +2084,10 @@ bool RoutingManager::CalculateRouteInsertVariants(m2::PointD const & pt, RouteIn
     if (differs(variants->m_optimal) && differs(variants->m_detour))
     {
       variants->m_via = stats;
-      ShowPreviewLine((*viaRoute)->m_points, *reference, kRouteViaColor, kRouteViaDepth);
+      ShowRouteVariant(*r, *reference, kRouteViaColor, kRouteViaDepth);
     }
   }});
 
-  // Runs request |idx| and then the next ones; reports when all are done.
   // Runs request |idx| and then the next ones; reports when all are done. The pending router callback owns |run|,
   // so a cancelled chain is freed with it.
   auto run = std::make_shared<std::function<void(size_t)>>();

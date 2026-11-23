@@ -93,6 +93,25 @@ UNIT_TEST(RoutePreview_MakeDetour)
   TEST_EQUAL(detour.m_legIdx, 0, ());
   TEST(!detour.m_leave, ());
   TEST(detour.m_rejoin, ());
+
+  // Snapped to the leg points beyond the gap: here the middle point of the second leg and its finish.
+  std::vector<std::vector<m2::PointD>> const longLeg = {{{0, 0}, {step, 0}, {2 * step, 0}, {3 * step, 0}}};
+  detour = MakeDetour(longLeg, ProjectToRoute(longLeg, {1.5 * step, step}), kGapM, true /* snapToLegPoints */);
+  TEST(detour.m_leave && detour.m_rejoin, ());
+  TEST_EQUAL(*detour.m_leave, m2::PointD(step, 0), ());
+  TEST_EQUAL(*detour.m_rejoin, m2::PointD(2 * step, 0), ());
+  TEST_EQUAL(detour.m_leaveIdx, 1, ());
+  TEST_EQUAL(detour.m_rejoinIdx, 2, ());
+
+  // A snap onto a leg end is that checkpoint, so no extra point.
+  detour = MakeDetour(longLeg, ProjectToRoute(longLeg, {0.5 * step, step}), kGapM, true /* snapToLegPoints */);
+  TEST(!detour.m_leave, ());
+  TEST_EQUAL(detour.m_leaveIdx, 0, ());
+  TEST_EQUAL(detour.m_rejoinIdx, 1, ());
+  detour = MakeDetour(longLeg, ProjectToRoute(longLeg, {2.5 * step, step}), 1200.0, true /* snapToLegPoints */);
+  TEST_EQUAL(detour.m_leaveIdx, 1, ());
+  TEST(!detour.m_rejoin, ());
+  TEST_EQUAL(detour.m_rejoinIdx, 3, ());
 }
 
 UNIT_TEST(RoutePreview_FindDivergingParts)

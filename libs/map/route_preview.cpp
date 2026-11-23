@@ -31,29 +31,33 @@ double EstimateHikingTimeSec(double distanceM, double ascentM, double descentM)
   return (std::max(horizontalH, verticalH) + std::min(horizontalH, verticalH) / 2.0) * 3600.0;
 }
 
-Stats CalculateStats(RouteBase const & route, VehicleType vehicleType, size_t firstSegmentIdx)
+Stats CalculateStats(RouteBase const & route, VehicleType vehicleType, size_t firstSegmentIdx,
+                     std::optional<size_t> endSegmentIdx)
 {
   ASSERT(route.IsValid(), ());
   auto const & segments = route.GetRouteSegments();
-  ASSERT_LESS(firstSegmentIdx, segments.size(), ());
+  size_t const endIdx = endSegmentIdx.value_or(segments.size());
+  ASSERT_LESS(firstSegmentIdx, endIdx, ());
+  ASSERT_LESS_OR_EQUAL(endIdx, segments.size(), ());
 
   double const startDistM = firstSegmentIdx == 0 ? 0.0 : segments[firstSegmentIdx - 1].GetDistFromBeginningMeters();
   double const startTimeSec = firstSegmentIdx == 0 ? 0.0 : segments[firstSegmentIdx - 1].GetTimeFromBeginningSec();
 
   Stats stats;
-  stats.m_distanceM = segments.back().GetDistFromBeginningMeters() - startDistM;
-  stats.m_timeSec = route.GetTotalTimeSec() - startTimeSec;
+  stats.m_distanceM = segments[endIdx - 1].GetDistFromBeginningMeters() - startDistM;
+  stats.m_timeSec = segments[endIdx - 1].GetTimeFromBeginningSec() - startTimeSec;
 
   if (route.HaveAltitudes())
   {
     // Point i is the start of segment i.
     geometry::Altitudes altitudes;
     route.GetAltitudes(altitudes);
+    altitudes.erase(altitudes.begin() + endIdx + 1, altitudes.end());
     altitudes.erase(altitudes.begin(), altitudes.begin() + firstSegmentIdx);
 
     std::vector<double> distances;
-    distances.reserve(segments.size() - firstSegmentIdx);
-    for (size_t i = firstSegmentIdx; i < segments.size(); ++i)
+    distances.reserve(endIdx - firstSegmentIdx);
+    for (size_t i = firstSegmentIdx; i < endIdx; ++i)
       distances.push_back(segments[i].GetDistFromBeginningMeters() - startDistM);
 
     ElevationInfo ei;
@@ -135,10 +139,17 @@ RouteProjection ProjectToRoute(std::vector<std::vector<m2::PointD>> const & legs
 
 namespace
 {
+struct LegPoint
+{
+  m2::PointD m_point;
+  size_t m_idx = 0;
+};
+
 // Walks |distM| meters along |leg| from |pt| on segment |segmentIdx|, backwards for a negative distance.
+// With |snap| it goes on to the next leg point; |m_idx| is the index of that leg point then.
 // @return nullopt when the walk reaches the leg end.
-std::optional<m2::PointD> MoveAlongLeg(std::vector<m2::PointD> const & leg, size_t segmentIdx, m2::PointD pt,
-                                       double distM)
+std::optional<LegPoint> MoveAlongLeg(std::vector<m2::PointD> const & leg, size_t segmentIdx, m2::PointD pt,
+                                     double distM, bool snap)
 {
   bool const forward = distM > 0;
   double left = std::abs(distM);
@@ -147,18 +158,26 @@ std::optional<m2::PointD> MoveAlongLeg(std::vector<m2::PointD> const & leg, size
   {
     auto const & next = leg[idx];
     double const stepM = mercator::DistanceOnEarth(pt, next);
+    bool const isEnd = forward ? idx + 1 == leg.size() : idx == 0;
     if (stepM > left)
-      return pt + (next - pt) * (left / stepM);
+    {
+      if (!snap)
+        return LegPoint{pt + (next - pt) * (left / stepM), idx};
+      if (isEnd)
+        return std::nullopt;
+      return LegPoint{next, idx};
+    }
     left -= stepM;
     pt = next;
-    if (forward ? idx + 1 == leg.size() : idx == 0)
+    if (isEnd)
       return std::nullopt;
     idx = forward ? idx + 1 : idx - 1;
   }
 }
 }  // namespace
 
-Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjection const & projection, double gapM)
+Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjection const & projection, double gapM,
+                  bool snapToLegPoints)
 {
   CHECK_LESS(projection.m_legIdx, legs.size(), ());
   auto const & leg = legs[projection.m_legIdx];
@@ -166,8 +185,17 @@ Detour MakeDetour(std::vector<std::vector<m2::PointD>> const & legs, RouteProjec
 
   Detour detour;
   detour.m_legIdx = projection.m_legIdx;
-  detour.m_leave = MoveAlongLeg(leg, projection.m_segmentIdx, projection.m_point, -gapM);
-  detour.m_rejoin = MoveAlongLeg(leg, projection.m_segmentIdx, projection.m_point, gapM);
+  detour.m_rejoinIdx = leg.size() - 1;
+  if (auto const leave = MoveAlongLeg(leg, projection.m_segmentIdx, projection.m_point, -gapM, snapToLegPoints))
+  {
+    detour.m_leave = leave->m_point;
+    detour.m_leaveIdx = leave->m_idx;
+  }
+  if (auto const rejoin = MoveAlongLeg(leg, projection.m_segmentIdx, projection.m_point, gapM, snapToLegPoints))
+  {
+    detour.m_rejoin = rejoin->m_point;
+    detour.m_rejoinIdx = rejoin->m_idx;
+  }
   return detour;
 }
 
