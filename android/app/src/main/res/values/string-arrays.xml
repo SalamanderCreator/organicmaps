@@ -82,6 +82,17 @@
   </string-array>
 
   <!-- Maps&Fly: off track alarm distances, in meters. -->
+  <!-- Maps&Fly: rain radar sources, see RainRadar. -->
+  <string-array name="rain_radar_source_options">
+    <item>@string/rain_radar_source_dwd</item>
+    <item>@string/rain_radar_source_rainviewer</item>
+  </string-array>
+
+  <string-array name="rain_radar_source_values" translatable="false">
+    <item>dwd</item>
+    <item>rainviewer</item>
+  </string-array>
+
   <string-array name="off_track_threshold_options" translatable="false">
     <item>15 m</item>
     <item>30 m</item>

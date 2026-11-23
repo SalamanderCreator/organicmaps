@@ -230,7 +230,8 @@ public:
   // The terrain hillshade light (azimuth/altitude degrees) and the shadow gamma;
   // re-lights the standing terrain geometry on the next frame (a per-frame uniform,
   // no tile re-read) - cheap enough for a device-motion stream.
-  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma);
+  // Maps&Fly: strength multiplies the hillshade opacity (1 = the upstream look).
+  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength = 1.0);
 
   void OnEnterForeground();
   void OnEnterBackground();
@@ -287,7 +288,10 @@ public:
 
   void AddTileBackgroundImage(TileKey const & tileKey, std::string const & uid, uint32_t width, uint32_t height,
                               dp::TextureFormat format, dp::BackgroundMode mode, std::vector<uint8_t> && bytes);
-  void SetTileBackgroundData(df::TileKey const & tileKey, std::string const & imageUid, m2::RectF const & rect);
+  void SetTileBackgroundData(df::TileKey const & tileKey, std::string const & imageUid, m2::RectF const & rect,
+                             dp::BackgroundMode mode);
+  // Maps&Fly: (re)starts or stops the overlay raster layer (dp::BackgroundMode::Overlay).
+  void SetTileOverlay(bool enabled);
   void SetTileBackgroundMode(dp::BackgroundMode mode, float satelliteAreaOpacity = 0.5f);
 
   dp::ApiVersion GetApiVersion() const { return m_frontend->GetApiVersion(); }

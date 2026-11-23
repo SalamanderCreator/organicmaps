@@ -72,6 +72,7 @@ import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
+import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
 import app.organicmaps.routing.NavigationController;
 import app.organicmaps.routing.NavigationService;
@@ -105,6 +106,7 @@ import app.organicmaps.sdk.location.LocationUtils;
 import app.organicmaps.sdk.location.SensorListener;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesState;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.routing.TrackFollowing;
@@ -185,6 +187,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private PlacePageViewModel mPlacePageViewModel;
   private SearchPageViewModel mSearchPageViewModel;
   private MapButtonsViewModel mMapButtonsViewModel;
+  @Nullable
+  private RainRadarPanel mRainRadarPanel;
   private MapButtonsController.LayoutMode mPreviousMapLayoutMode;
 
   @Nullable
@@ -567,6 +571,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       offTrackBanner.setText(banner.text);
       offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
+    mRainRadarPanel = new RainRadarPanel(findViewById(R.id.rain_radar_panel), this);
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
     mMapButtonsViewModel.getLayoutMode().observe(this, this::initNavigationButtons);
@@ -1039,6 +1044,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   protected void onResume()
   {
     super.onResume();
+    // Maps&Fly: the radar frames age; also turns a radar left on at the last start back on.
+    RainRadar.refreshIfStale(this);
     ThemeSwitcher.INSTANCE.synchronizeApplicationTheme();
     ThemeSwitcher.INSTANCE.synchronizeMapStyle(this, mMapController.isRenderingActive());
     makeNavigationBarTransparentInLightMode();
@@ -1296,6 +1303,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     final View navBottomSheetNavBar = findViewById(R.id.nav_bottom_sheet_nav_bar);
     if (navBottomSheetLineFrame != null)
       offsetY = Math.max(offsetY, navBottomSheetLineFrame.getHeight() + navBottomSheetNavBar.getHeight());
+    if (mRainRadarPanel != null)
+      mRainRadarPanel.getView().setTranslationY(-offsetY);
     if (mDisplayManager.isDeviceDisplayUsed())
     {
       mMapController.updateBottomWidgetsOffset(offsetX, offsetY);

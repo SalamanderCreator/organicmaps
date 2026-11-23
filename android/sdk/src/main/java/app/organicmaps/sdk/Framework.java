@@ -203,6 +203,15 @@ public class Framework
   public static native int nativeGetBackgroundTilesCacheSizeMB();
   public static native boolean nativeIsBackgroundTilesEnabled();
   public static native int nativeGetBackgroundTilesAreaOpacity();
+  // Maps&Fly: the raster layer over the map (rain radar); an empty url switches it off. The url takes
+  // {z}/{x}/{y} or {bbox}; every call restarts the layer.
+  public static native void nativeSetTileOverlay(@NonNull String url, int maxZoom, int opacityPct,
+                                                 boolean dropNeutralPixels);
+  // Maps&Fly: hillshade light azimuth and altitude (degrees) and strength (1 = default), persisted.
+  public static native void nativeSetTerrainShading(double azimuthDeg, double altitudeDeg, double strength);
+  @NonNull
+  @Size(3)
+  public static native double[] nativeGetTerrainShading();
   public static native ParsedSearchRequest nativeGetParsedSearchRequest();
   public static native @Nullable String nativeGetParsedAppName();
   public static native @Nullable String nativeGetParsedOAuth2Code();

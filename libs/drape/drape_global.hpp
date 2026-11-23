@@ -66,6 +66,8 @@ enum BackgroundMode
 {
   Default = 0,
   Satellite,
+  // Maps&Fly: a semi-transparent raster layer over the map areas (e.g. a rain radar).
+  Overlay,
 
   Count
 };

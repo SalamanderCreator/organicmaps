@@ -1608,6 +1608,28 @@ JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetPreferTerrainElevatio
   Framework::SetPreferTerrainElevation(static_cast<bool>(prefer));
 }
 
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetTileOverlay(JNIEnv * env, jclass, jstring url, jint maxZoom,
+                                                                       jint opacityPct, jboolean dropNeutralPixels)
+{
+  frm()->SetTileOverlay(jni::ToNativeString(env, url), static_cast<int>(maxZoom), static_cast<uint32_t>(opacityPct),
+                        static_cast<bool>(dropNeutralPixels));
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetTerrainShading(JNIEnv *, jclass, jdouble azimuthDeg,
+                                                                          jdouble altitudeDeg, jdouble strength)
+{
+  frm()->SetTerrainShading(azimuthDeg, altitudeDeg, strength);
+}
+
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetTerrainShading(JNIEnv * env, jclass)
+{
+  auto const s = Framework::LoadTerrainShading();
+  jdouble const values[] = {s.m_azimuthDeg, s.m_altitudeDeg, s.m_strength};
+  jdoubleArray result = env->NewDoubleArray(3);
+  env->SetDoubleArrayRegion(result, 0, 3, values);
+  return result;
+}
+
 JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPreferred(JNIEnv *, jclass)
 {
   return static_cast<jboolean>(Track::IsTerrainElevationPreferred());

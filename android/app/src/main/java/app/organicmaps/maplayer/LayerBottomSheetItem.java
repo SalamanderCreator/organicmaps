@@ -68,6 +68,10 @@ public class LayerBottomSheetItem
       drawableResId = R.drawable.ic_layers_satellite;
       buttonTextResource = R.string.button_layer_satellite;
       break;
+    case RAIN_RADAR:
+      drawableResId = R.drawable.ic_layers_rain_radar;
+      buttonTextResource = R.string.button_layer_rain_radar;
+      break;
     }
     return new LayerBottomSheetItem(drawableResId, buttonTextResource, mode, layerItemClickListener);
   }

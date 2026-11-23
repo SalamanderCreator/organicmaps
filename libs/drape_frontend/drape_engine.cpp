@@ -712,11 +712,11 @@ void DrapeEngine::SetMapLangIndex(int8_t mapLangIndex)
                                   MessagePriority::Normal);
 }
 
-void DrapeEngine::SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma)
+void DrapeEngine::SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength)
 {
-  m_threadCommutator->PostMessage(ThreadsCommutator::RenderThread,
-                                  make_unique_dp<SetTerrainLightMessage>(azimuthDeg, altitudeDeg, shadowGamma),
-                                  MessagePriority::Normal);
+  m_threadCommutator->PostMessage(
+      ThreadsCommutator::RenderThread,
+      make_unique_dp<SetTerrainLightMessage>(azimuthDeg, altitudeDeg, shadowGamma, strength), MessagePriority::Normal);
 }
 
 void DrapeEngine::EnablePerspective()
@@ -1054,11 +1054,17 @@ void DrapeEngine::AddTileBackgroundImage(TileKey const & tileKey, std::string co
 }
 
 void DrapeEngine::SetTileBackgroundData(df::TileKey const & tileKey, std::string const & imageUid,
-                                        m2::RectF const & rect)
+                                        m2::RectF const & rect, dp::BackgroundMode mode)
 {
   m_threadCommutator->PostMessage(ThreadsCommutator::ResourceUploadThread,
-                                  make_unique_dp<SetTileBackgroundDataMessage>(tileKey, imageUid, rect),
+                                  make_unique_dp<SetTileBackgroundDataMessage>(tileKey, imageUid, rect, mode),
                                   MessagePriority::Normal);
+}
+
+void DrapeEngine::SetTileOverlay(bool enabled)
+{
+  m_threadCommutator->PostMessage(ThreadsCommutator::ResourceUploadThread,
+                                  make_unique_dp<SetTileOverlayMessage>(enabled), MessagePriority::Normal);
 }
 
 void DrapeEngine::SetTileBackgroundMode(dp::BackgroundMode mode, float satelliteAreaOpacity /* = 0.5f */)

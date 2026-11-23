@@ -163,6 +163,54 @@
       android:summary="@string/prefer_terrain_elevation_description"
       android:persistent="false"
       android:order="24"/>
+    <!-- Maps&Fly: rain radar layer (B3). -->
+    <ListPreference
+      android:key="@string/pref_rain_radar_source"
+      android:title="@string/rain_radar_source_title"
+      app:singleLineTitle="false"
+      android:defaultValue="dwd"
+      android:entries="@array/rain_radar_source_options"
+      android:entryValues="@array/rain_radar_source_values"
+      app:useSimpleSummaryProvider="true"
+      android:order="25" />
+    <SeekBarPreference
+      android:key="@string/pref_rain_radar_opacity"
+      android:title="@string/rain_radar_opacity_title"
+      app:singleLineTitle="false"
+      android:defaultValue="70"
+      app:min="10"
+      android:max="100"
+      app:seekBarIncrement="5"
+      app:showSeekBarValue="true"
+      android:order="26" />
+    <!-- Maps&Fly: hillshade look (B4), stored in the core settings. -->
+    <SeekBarPreference
+      android:key="@string/pref_hillshade_strength"
+      android:title="@string/hillshade_strength_title"
+      app:singleLineTitle="false"
+      android:persistent="false"
+      app:min="0"
+      android:max="300"
+      app:seekBarIncrement="10"
+      app:showSeekBarValue="true"
+      android:order="27" />
+    <ListPreference
+      android:key="@string/pref_hillshade_light"
+      android:title="@string/hillshade_light_title"
+      app:singleLineTitle="false"
+      android:persistent="false"
+      app:useSimpleSummaryProvider="true"
+      android:order="28" />
+    <SeekBarPreference
+      android:key="@string/pref_hillshade_altitude"
+      android:title="@string/hillshade_altitude_title"
+      app:singleLineTitle="false"
+      android:persistent="false"
+      app:min="10"
+      android:max="80"
+      app:seekBarIncrement="5"
+      app:showSeekBarValue="true"
+      android:order="29" />
   </androidx.preference.PreferenceCategory>
 
   <androidx.preference.PreferenceCategory

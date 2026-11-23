@@ -44,6 +44,12 @@
   <string name="pref_prefer_terrain_elevation" translatable="false">PreferTerrainElevation</string>
   <string name="pref_track_debug_share" translatable="false">TrackDebugShare</string>
   <string name="pref_off_track_threshold" translatable="false">OffTrackThreshold</string>
+  <!-- Maps&Fly: the same keys as app.organicmaps.sdk.maplayer.radar.RainRadar. -->
+  <string name="pref_rain_radar_source" translatable="false">RainRadarSource</string>
+  <string name="pref_rain_radar_opacity" translatable="false">RainRadarOpacity</string>
+  <string name="pref_hillshade_strength" translatable="false">HillshadeStrength</string>
+  <string name="pref_hillshade_light" translatable="false">HillshadeLight</string>
+  <string name="pref_hillshade_altitude" translatable="false">HillshadeAltitude</string>
   <string name="pref_show_downloaded_regions" translatable="false">ShowDownloadedRegions</string>
   <string name="pref_keep_screen_on" translatable="false">KeepScreenOn</string>
   <string name="pref_show_on_lock_screen" translatable="false">ShowOnLockScreen</string>

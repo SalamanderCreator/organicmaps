@@ -962,10 +962,11 @@ private:
 class SetTerrainLightMessage : public Message
 {
 public:
-  SetTerrainLightMessage(double azimuthDeg, double altitudeDeg, double shadowGamma)
+  SetTerrainLightMessage(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength)
     : m_azimuthDeg(azimuthDeg)
     , m_altitudeDeg(altitudeDeg)
     , m_shadowGamma(shadowGamma)
+    , m_strength(strength)
   {}
 
   Type GetType() const override { return Type::SetTerrainLight; }
@@ -973,11 +974,13 @@ public:
   double AzimuthDeg() const { return m_azimuthDeg; }
   double AltitudeDeg() const { return m_altitudeDeg; }
   double ShadowGamma() const { return m_shadowGamma; }
+  double Strength() const { return m_strength; }
 
 private:
   double const m_azimuthDeg;
   double const m_altitudeDeg;
   double const m_shadowGamma;
+  double const m_strength;
 };
 
 class EnablePerspectiveMessage : public Message
@@ -1556,10 +1559,12 @@ private:
 class SetTileBackgroundDataMessage : public Message
 {
 public:
-  SetTileBackgroundDataMessage(df::TileKey const & tileKey, std::string const & imageUid, m2::RectF const & rect)
+  SetTileBackgroundDataMessage(df::TileKey const & tileKey, std::string const & imageUid, m2::RectF const & rect,
+                               dp::BackgroundMode mode)
     : m_tileKey(tileKey)
     , m_imageUid(imageUid)
     , m_rect(rect)
+    , m_mode(mode)
   {}
 
   Type GetType() const override { return Type::SetTileBackgroundData; }
@@ -1567,11 +1572,28 @@ public:
   df::TileKey const & GetTileKey() const { return m_tileKey; }
   std::string const & GetImageUid() const { return m_imageUid; }
   m2::RectF const & GetRect() const { return m_rect; }
+  dp::BackgroundMode GetMode() const { return m_mode; }
 
 private:
   df::TileKey m_tileKey;
   std::string m_imageUid;
   m2::RectF m_rect;
+  dp::BackgroundMode m_mode;
+};
+
+// Maps&Fly: switches the overlay raster layer. Every message restarts the layer, so a changed
+// source (e.g. the next radar frame) is re-read instead of showing the old images.
+class SetTileOverlayMessage : public Message
+{
+public:
+  explicit SetTileOverlayMessage(bool enabled) : m_enabled(enabled) {}
+
+  Type GetType() const override { return Type::SetTileOverlay; }
+
+  bool IsEnabled() const { return m_enabled; }
+
+private:
+  bool m_enabled;
 };
 
 class SetTileBackgroundModeMessage : public Message

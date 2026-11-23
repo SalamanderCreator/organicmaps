@@ -1,6 +1,7 @@
 package app.organicmaps.settings;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
+import androidx.preference.SeekBarPreference;
 import androidx.preference.TwoStatePreference;
 import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
@@ -26,6 +28,7 @@ import app.organicmaps.sdk.downloader.MapManager;
 import app.organicmaps.sdk.editor.OsmOAuth;
 import app.organicmaps.sdk.editor.data.Language;
 import app.organicmaps.sdk.location.LocationHelper;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.search.SearchRecents;
 import app.organicmaps.sdk.settings.MapLanguageCode;
@@ -34,6 +37,7 @@ import app.organicmaps.sdk.util.Config;
 import app.organicmaps.sdk.util.NetworkPolicy;
 import app.organicmaps.sdk.util.PowerManagment;
 import app.organicmaps.sdk.util.SharedPropertiesUtils;
+import app.organicmaps.sdk.util.concurrency.UiThread;
 import app.organicmaps.sdk.util.log.LogsManager;
 import app.organicmaps.util.ThemeSwitcher;
 import app.organicmaps.util.Utils;
@@ -73,6 +77,8 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     initTrackDebugPrefsCallbacks();
     initOffTrackThresholdPrefsCallbacks();
     initPreferTerrainElevationPrefsCallbacks();
+    initRainRadarPrefsCallbacks();
+    initHillshadePrefsCallbacks();
     initShowDownloadedRegionsPrefsCallbacks();
     initPlayServicesPrefsCallbacks();
     initSearchPrivacyPrefsCallbacks();
@@ -647,6 +653,61 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
     pref.setChecked(Framework.nativeIsTerrainElevationPreferred());
     pref.setOnPreferenceChangeListener((preference, newValue) -> {
       Framework.nativeSetPreferTerrainElevation((boolean) newValue);
+      return true;
+    });
+  }
+
+  // Maps&Fly B3: the values are stored by the preferences themselves, RainRadar re-reads them.
+  private void initRainRadarPrefsCallbacks()
+  {
+    final Context appContext = requireContext().getApplicationContext();
+    final Preference.OnPreferenceChangeListener listener = (preference, newValue) -> {
+      // Called before the new value is stored.
+      UiThread.runLater(() -> RainRadar.onSettingsChanged(appContext));
+      return true;
+    };
+    getPreference(getString(R.string.pref_rain_radar_source)).setOnPreferenceChangeListener(listener);
+    getPreference(getString(R.string.pref_rain_radar_opacity)).setOnPreferenceChangeListener(listener);
+  }
+
+  // Maps&Fly B4: the hillshade look, stored in the core settings.
+  private void initHillshadePrefsCallbacks()
+  {
+    final SeekBarPreference strength = getPreference(getString(R.string.pref_hillshade_strength));
+    final ListPreference light = getPreference(getString(R.string.pref_hillshade_light));
+    final SeekBarPreference altitude = getPreference(getString(R.string.pref_hillshade_altitude));
+
+    final int[] directionNames = {R.string.hillshade_light_n,  R.string.hillshade_light_ne, R.string.hillshade_light_e,
+                                  R.string.hillshade_light_se, R.string.hillshade_light_s,  R.string.hillshade_light_sw,
+                                  R.string.hillshade_light_w,  R.string.hillshade_light_nw};
+    final CharSequence[] entries = new CharSequence[directionNames.length];
+    final CharSequence[] values = new CharSequence[directionNames.length];
+    for (int i = 0; i < directionNames.length; ++i)
+    {
+      entries[i] = getString(directionNames[i]);
+      values[i] = String.valueOf(i * 45);
+    }
+    light.setEntries(entries);
+    light.setEntryValues(values);
+
+    final double[] shading = Framework.nativeGetTerrainShading();
+    strength.setValue((int) Math.round(shading[2] * 100));
+    light.setValue(String.valueOf((int) (Math.round(shading[0] / 45.0) % 8) * 45));
+    altitude.setValue((int) Math.round(shading[1]));
+
+    strength.setOnPreferenceChangeListener((preference, newValue) -> {
+      Framework.nativeSetTerrainShading(Double.parseDouble(light.getValue()), altitude.getValue(),
+                                        (Integer) newValue / 100.0);
+      return true;
+    });
+    light.setOnPreferenceChangeListener((preference, newValue) -> {
+      Framework.nativeSetTerrainShading(Double.parseDouble((String) newValue), altitude.getValue(),
+                                        strength.getValue() / 100.0);
+      return true;
+    });
+    altitude.setOnPreferenceChangeListener((preference, newValue) -> {
+      Framework.nativeSetTerrainShading(Double.parseDouble(light.getValue()), (Integer) newValue,
+                                        strength.getValue() / 100.0);
       return true;
     });
   }

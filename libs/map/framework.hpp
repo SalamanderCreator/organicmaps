@@ -171,6 +171,9 @@ protected:
 
   // POC source of raster background tiles (see tileBackgroundReadFn in CreateDrapeEngine).
   std::unique_ptr<RasterTileProvider> m_rasterTileProvider;
+  // Maps&Fly: the overlay raster layer (rain radar), see SetTileOverlay.
+  std::unique_ptr<RasterTileProvider> m_overlayTileProvider;
+  bool m_overlayTilesActive = false;
 
   StorageDownloadingPolicy m_storageDownloadingPolicy;
   storage::Storage m_storage;
@@ -204,6 +207,7 @@ protected:
     double m_azimuthDeg;
     double m_altitudeDeg;
     double m_shadowGamma;
+    double m_strength = 1.0;
   };
   // The last SetTerrainLight, re-applied to a re-created drape engine.
   std::optional<TerrainLight> m_terrainLight;
@@ -583,7 +587,17 @@ public:
   /// The terrain hillshade light (the desktop ALT+SHIFT hotkeys, see DrapeEngine): azimuth
   /// degrees clockwise from north towards the light, altitude degrees above the
   /// horizon, and the shadow gamma (the gentle slopes lift, 1 = linear).
-  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma);
+  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength = 1.0);
+  /// Maps&Fly: the persisted hillshade settings of the app (light azimuth and altitude degrees,
+  /// strength 1 = the upstream look), applied at once and on every later start.
+  void SetTerrainShading(double azimuthDeg, double altitudeDeg, double strength);
+  struct TerrainShading
+  {
+    double m_azimuthDeg;
+    double m_altitudeDeg;
+    double m_strength;
+  };
+  static TerrainShading LoadTerrainShading();
   void SetVisibleViewport(m2::RectD const & rect);
 
   void ShowRect(m2::RectD const & rect, bool animation = true, bool useVisibleViewport = false);
@@ -775,6 +789,11 @@ public:
   // and all three {z}/{x}/{y} placeholders present literally (the braces must not be percent-encoded).
   // The settings UI calls this before committing and refuses to close on an enabled, malformed URL.
   static bool IsWellFormedBackgroundTilesURL(std::string const & url);
+
+  // Maps&Fly: the raster layer over the map areas (rain radar). An empty url switches it off.
+  // url takes {z}/{x}/{y} or {bbox} (see RasterTileProvider::Params); tiles deeper than maxZoom
+  // are cut from the maxZoom tile. Every call restarts the layer, e.g. for the next radar frame.
+  void SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels);
 
   void SetLargeFontsSize(bool isLargeSize);
   // Multiplied on top of the SetLargeFontsSize (Large Fonts) factor.

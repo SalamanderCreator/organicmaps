@@ -37,6 +37,8 @@ struct FrameValues
   float m_zScale = 1.0f;
   // The terrain hillshade light, see MapProgramParams::m_terrainLightDir.
   glsl::vec4 m_terrainLightDir = gpu::kDefaultTerrainLightDir;
+  // Maps&Fly: see MapProgramParams::m_terrainShadeStrength.
+  float m_terrainShadeStrength = 1.0f;
 
   template <typename ParamsType>
   void SetTo(ParamsType & params) const
@@ -45,6 +47,7 @@ struct FrameValues
     SetPivotTransform(params);
     SetZScale(params);
     SetTerrainLightDir(params);
+    SetTerrainShadeStrength(params);
   }
 
 private:
@@ -52,5 +55,6 @@ private:
   DECLARE_SETTER(SetPivotTransform, m_pivotTransform)
   DECLARE_SETTER(SetZScale, m_zScale)
   DECLARE_SETTER(SetTerrainLightDir, m_terrainLightDir)
+  DECLARE_SETTER(SetTerrainShadeStrength, m_terrainShadeStrength)
 };
 }  // namespace df

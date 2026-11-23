@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.R;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.maplayer.subway.SubwayManager;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
 
@@ -115,6 +116,21 @@ public enum Mode
       // URL the core stays inactive, so the UI layer opens the Satellite Imagery settings instead of
       // calling this (see ToggleMapLayerFragment).
       Framework.nativeSetBackgroundTilesEnabled(isEnabled);
+    }
+  },
+
+  // Maps&Fly: rain radar over the map, see RainRadar.
+  RAIN_RADAR {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return RainRadar.isEnabled(context);
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      RainRadar.setEnabled(context, isEnabled);
     }
   };
 
