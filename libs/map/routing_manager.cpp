@@ -2181,10 +2181,6 @@ void RoutingManager::ShowPreviewLine(std::vector<m2::PointD> points,
     lines = route_preview::FindDivergingParts(reference, points, kMaxDistToRouteM);
   }
 
-  // The renderer hides the passed part of every subroute while navigating, measured by the active route. A distance
-  // far beyond it keeps the previews whole. Taxi draws like the walking and cycling routes, without their masks for
-  // later legs, but a bit wider, which suits a proposal.
-  double constexpr kPreviewBaseDistance = 1e6;
   double constexpr kBias = 1.0;
   for (auto & line : lines)
   {
@@ -2192,11 +2188,12 @@ void RoutingManager::ShowPreviewLine(std::vector<m2::PointD> points,
       continue;
     auto subroute = make_unique_dp<df::Subroute>();
     subroute->m_polyline = m2::PolylineD(std::move(line));
-    subroute->m_baseDistance = kPreviewBaseDistance;
     subroute->m_baseDepthIndex = depth;
     subroute->m_headFakeDistance = -kBias;
     subroute->m_tailFakeDistance = subroute->m_polyline.GetLength() + kBias;
-    subroute->m_routeType = df::RouteType::Taxi;
+    // The width of the walking and cycling routes.
+    subroute->m_routeType = df::RouteType::Pedestrian;
+    subroute->m_isProposal = true;
     subroute->AddStyle(df::SubrouteStyle(color, df::RoutePattern(4.0, 2.0)));
     auto const id =
         m_drapeEngine.SafeCallWithResult(&df::DrapeEngine::AddSubroute, df::SubrouteConstPtr(subroute.release()));
