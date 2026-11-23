@@ -7,6 +7,8 @@ public final class OffTrackMonitor
   public static final int STATE_ON_TRACK = 0;
   public static final int STATE_OFF_TRACK = 1;
   public static final int STATE_GPS_INACCURATE = 2;
+  // Not on the track since the start, e.g. on the way to it.
+  public static final int STATE_NOT_REACHED = 3;
 
   private OffTrackMonitor() {}
 

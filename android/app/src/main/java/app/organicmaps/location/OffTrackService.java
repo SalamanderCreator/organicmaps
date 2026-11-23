@@ -62,14 +62,31 @@ public class OffTrackService extends Service implements LocationListener
 
   // The watched track, or null.
   private static final MutableLiveData<Long> sActiveTrackId = new MutableLiveData<>(null);
-  // The map banner text while off the track, else null.
-  private static final MutableLiveData<String> sOffTrackText = new MutableLiveData<>(null);
+  /** The map banner while away from the track. */
+  public static final class Banner
+  {
+    @NonNull
+    public final String text;
+    // Off the track, else not reached yet.
+    public final boolean alarm;
+
+    Banner(@NonNull String text, boolean alarm)
+    {
+      this.text = text;
+      this.alarm = alarm;
+    }
+  }
+
+  // Null while on the track.
+  private static final MutableLiveData<Banner> sBanner = new MutableLiveData<>(null);
   // Plays the alarm tone, then the announcement: the tone and the speech must not overlap.
   @Nullable
   private MediaPlayer mAlarmPlayer;
 
   private String mTrackName = "";
-  private int mState = OffTrackMonitor.STATE_ON_TRACK;
+  private int mState = OffTrackMonitor.STATE_NOT_REACHED;
+  // The distance to a track that is not reached yet is announced once.
+  private boolean mDistanceAnnounced;
   private boolean mHasFix;
   private long mStatusTimeMs;
   @Nullable
@@ -82,9 +99,9 @@ public class OffTrackService extends Service implements LocationListener
   }
 
   @NonNull
-  public static LiveData<String> getOffTrackText()
+  public static LiveData<Banner> getBanner()
   {
-    return sOffTrackText;
+    return sBanner;
   }
 
   public static boolean isWatching(long trackId)
@@ -175,7 +192,8 @@ public class OffTrackService extends Service implements LocationListener
     if (intent != null && intent.hasExtra(EXTRA_TRACK_NAME))
     {
       mTrackName = intent.getStringExtra(EXTRA_TRACK_NAME);
-      mState = OffTrackMonitor.STATE_ON_TRACK;
+      mState = OffTrackMonitor.STATE_NOT_REACHED;
+      mDistanceAnnounced = false;
       mHasFix = false;
       mStatusBuilder = null;
       NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
@@ -212,7 +230,7 @@ public class OffTrackService extends Service implements LocationListener
     }
     releaseAlarmPlayer();
     sActiveTrackId.setValue(null);
-    sOffTrackText.setValue(null);
+    sBanner.setValue(null);
     NotificationManagerCompat.from(this).cancel(ALARM_NOTIFICATION_ID);
     super.onDestroy();
   }
@@ -231,7 +249,13 @@ public class OffTrackService extends Service implements LocationListener
     mState = state;
     mHasFix = true;
 
-    if (state == OffTrackMonitor.STATE_OFF_TRACK && previous != OffTrackMonitor.STATE_OFF_TRACK)
+    if (state == OffTrackMonitor.STATE_NOT_REACHED && !mDistanceAnnounced)
+    {
+      mDistanceAnnounced = true;
+      TtsPlayer.INSTANCE.speak(
+          getString(R.string.off_track_not_reached_speech, formatDistance(OffTrackMonitor.nativeGetDistance())));
+    }
+    else if (state == OffTrackMonitor.STATE_OFF_TRACK && previous != OffTrackMonitor.STATE_OFF_TRACK)
       raiseAlarm();
     else if (state != OffTrackMonitor.STATE_OFF_TRACK && previous == OffTrackMonitor.STATE_OFF_TRACK)
     {
@@ -352,13 +376,18 @@ public class OffTrackService extends Service implements LocationListener
       text = getString(R.string.off_track_gps_inaccurate, formatDistance(accuracy));
     else if (mState == OffTrackMonitor.STATE_OFF_TRACK)
       text = getString(R.string.off_track_alarm_text, formatDistance(OffTrackMonitor.nativeGetDistance()));
+    else if (mState == OffTrackMonitor.STATE_NOT_REACHED)
+      text = getString(R.string.off_track_not_reached, formatDistance(OffTrackMonitor.nativeGetDistance()));
     else
       text = getString(R.string.off_track_on_track, formatDistance(OffTrackMonitor.nativeGetDistance()));
     getStatusBuilder().setContentText(text);
-    sOffTrackText.setValue(
-        mHasFix && mState == OffTrackMonitor.STATE_OFF_TRACK
-            ? getString(R.string.off_track_banner, formatDistance(OffTrackMonitor.nativeGetDistance()))
-            : null);
+    final String distance = formatDistance(OffTrackMonitor.nativeGetDistance());
+    if (mHasFix && mState == OffTrackMonitor.STATE_OFF_TRACK)
+      sBanner.setValue(new Banner(getString(R.string.off_track_banner, distance), true));
+    else if (mHasFix && mState == OffTrackMonitor.STATE_NOT_REACHED)
+      sBanner.setValue(new Banner(getString(R.string.off_track_not_reached, distance), false));
+    else
+      sBanner.setValue(null);
     if (canNotify())
       NotificationManagerCompat.from(this).notify(STATUS_NOTIFICATION_ID, getStatusBuilder().build());
   }

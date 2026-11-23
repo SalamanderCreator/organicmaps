@@ -12,6 +12,7 @@
 #include "routing/routing_callbacks.hpp"
 #include "routing/routing_session.hpp"
 #include "routing/speed_camera_manager.hpp"
+#include "routing/track_router.hpp"
 
 #include "storage/storage_defines.hpp"
 
@@ -121,6 +122,11 @@ public:
   routing::RoutingSession & RoutingSession() { return m_routingSession; }
   void SetRouter(routing::RouterType type);
   routing::RouterType GetRouter() const { return m_currentRouterType; }
+  /// Maps&Fly: routes follow |track| (pedestrian or bicycle profile) instead of the roads until
+  /// CloseRouting(true) removes the route points. The route points must be the start and the track end.
+  /// nullptr returns to normal routing.
+  void SetFollowedTrack(std::shared_ptr<routing::TrackFollowingData const> track);
+  bool IsFollowingTrack() const { return m_followedTrack != nullptr; }
   bool IsRoutingActive() const { return m_routingSession.IsActive(); }
   bool IsRouteBuilt() const { return m_routingSession.IsBuilt(); }
   bool IsRouteBuilding() const { return m_routingSession.IsBuilding(); }
@@ -374,6 +380,7 @@ private:
   df::DrapeEngineSafePtr m_drapeEngine;
   routing::RouterType m_currentRouterType = routing::RouterType::Count;
   bool m_loadAltitudes = false;
+  std::shared_ptr<routing::TrackFollowingData const> m_followedTrack;
   routing::RoutingSession m_routingSession;
   Delegate & m_delegate;
 

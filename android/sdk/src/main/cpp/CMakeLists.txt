@@ -27,6 +27,8 @@ set(SRC
   app/organicmaps/sdk/search/SearchRecents.cpp
   app/organicmaps/sdk/routing/RoutingJni.cpp
   app/organicmaps/sdk/routing/RoutingJni.hpp
+  app/organicmaps/sdk/routing/RouteElevation.cpp
+  app/organicmaps/sdk/routing/TrackFollowing.cpp
   app/organicmaps/sdk/ChoosePositionMode.cpp
   app/organicmaps/sdk/MapStyle.cpp
   app/organicmaps/sdk/OffTrackMonitor.cpp

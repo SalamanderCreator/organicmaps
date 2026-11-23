@@ -64,6 +64,7 @@ import app.organicmaps.help.HelpActivity;
 import app.organicmaps.intent.Factory;
 import app.organicmaps.intent.IntentProcessor;
 import app.organicmaps.location.OffTrackService;
+import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
@@ -102,6 +103,7 @@ import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesState;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingOptions;
+import app.organicmaps.sdk.routing.TrackFollowing;
 import app.organicmaps.sdk.search.SearchEngine;
 import app.organicmaps.sdk.settings.RoadType;
 import app.organicmaps.sdk.settings.UnitLocale;
@@ -128,6 +130,7 @@ import app.organicmaps.widget.placepage.PlacePageViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MwmActivity extends BaseMwmFragmentActivity
@@ -137,6 +140,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
                MapButtonsController.MapButtonClickListener, DisplayChangedListener, RoutingPlanController
 {
   private static final String TAG = MwmActivity.class.getSimpleName();
+  // Maps&Fly: closer than this to a track counts as on it when following starts.
+  private static final int TRACK_FOLLOW_ON_TRACK_METERS = 50;
 
   public static final String EXTRA_COUNTRY_ID = "country_id";
   public static final String EXTRA_CATEGORY_ID = "category_id";
@@ -280,7 +285,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (intent.getBooleanExtra(EXTRA_START_TRACK_RECORDING, false))
     {
       if (!TrackRecorder.nativeIsTrackRecordingEnabled())
-        startTrackRecording();
+        startTrackRecording(TrackRecordingDebugLog.isEnabled(this));
       return;
     }
     if (intent.getBooleanExtra(EXTRA_FINISH_TRACK_RECORDING, false))
@@ -544,9 +549,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
     });
     final TextView offTrackBanner = findViewById(R.id.off_track_banner);
     ViewCompat.setOnApplyWindowInsetsListener(offTrackBanner, BaselinePaddingInsetsListener.excludeBottom());
-    OffTrackService.getOffTrackText().observe(this, text -> {
-      offTrackBanner.setText(text);
-      UiUtils.showIf(text != null, offTrackBanner);
+    OffTrackService.getBanner().observe(this, banner -> {
+      UiUtils.showIf(banner != null, offTrackBanner);
+      if (banner == null)
+        return;
+      offTrackBanner.setText(banner.text);
+      offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
@@ -627,8 +635,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     // Global listener on the activity's semantic root, so insets are captured regardless
     // of which overlay views happen to be present at dispatch time.
     ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.coordinator), (view, windowInsets) -> {
-      final int trackRecorderOffset =
-          TrackRecorder.nativeIsTrackRecordingEnabled() ? dimen(this, R.dimen.map_button_size) : 0;
+      // Maps&Fly always shows the track recording button below the compass position.
+      final int trackRecorderOffset = dimen(this, R.dimen.map_button_size);
       final Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
       // Drive nav-bar height from the AndroidX visibility signal — pre-R FLAG_FULLSCREEN
       // hides only the status bar, so inferring from app state misreports the nav bar.
@@ -868,7 +876,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       showBottomSheet(MAIN_MENU_ID);
     }
     case help -> showHelp();
-    case trackRecordingStatus -> toggleTrackRecordingPP();
+    case trackRecordingStatus -> onTrackRecordingOptionSelected();
     }
   }
 
@@ -2101,22 +2109,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
   private void showTrackRecordingUi()
   {
-    if (mCurrentWindowInsets != null)
-    {
-      final int offset = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-      updateCompassOffset(offset + dimen(this, R.dimen.map_button_size));
-    }
     mMapButtonsViewModel.setTrackRecorderState(true);
   }
 
   private void stopTrackRecording()
   {
-    if (mCurrentWindowInsets != null)
-    {
-      final int offsetY = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-      final int offsetX = mCurrentWindowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).right;
-      updateCompassOffset(offsetY, offsetX);
-    }
     // Reset the state before stopping the service: its observer re-enters this method while the state is on.
     mMapButtonsViewModel.setTrackRecorderState(false);
     TrackRecordingService.stopService(getApplicationContext());
@@ -2135,9 +2132,28 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private void onTrackRecordingOptionSelected()
   {
     if (TrackRecorder.nativeIsTrackRecordingEnabled())
+    {
       toggleTrackRecordingPP();
-    else
-      startTrackRecording();
+      return;
+    }
+    // Maps&Fly: the debug log is offered per recording; switched off in the settings, it is never written.
+    if (!TrackRecordingDebugLog.isEnabled(this))
+    {
+      startTrackRecording(false);
+      return;
+    }
+    new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
+        .setTitle(R.string.start_track_recording)
+        .setItems(new String[] {getString(R.string.track_record), getString(R.string.track_record_with_debug)},
+                  (dialog, which) -> startTrackRecording(which == 1))
+        .setNegativeButton(R.string.cancel, null)
+        .show();
+  }
+
+  private void startTrackRecording(boolean withDebugLog)
+  {
+    TrackRecordingDebugLog.setForNextRecording(this, withDebugLog);
+    startTrackRecording();
   }
 
   private void toggleTrackRecordingPP()
@@ -2222,6 +2238,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
     if (OffTrackService.isWatching(track.getTrackId()))
     {
       OffTrackService.stop(this);
+      // Maps&Fly C3: stopping to follow the track also ends its navigation.
+      if (TrackFollowing.isActive() || TrackFollowing.hasPending())
+        RoutingController.get().cancel();
       return;
     }
     if (!LocationUtils.checkFineLocationPermission(this))
@@ -2231,11 +2250,77 @@ public class MwmActivity extends BaseMwmFragmentActivity
       return;
     }
     requestPostNotificationsPermission();
-    if (OffTrackService.start(getApplicationContext(), track.getTrackId(), track.getTitle()))
+
+    // Maps&Fly C3: following a track navigates along it, with the off track alarm.
+    final MapObject myPosition = MwmApplication.from(this).getLocationHelper().getMyPosition();
+    if (myPosition == null)
     {
-      Toast.makeText(this, R.string.off_track_monitor_started, Toast.LENGTH_SHORT).show();
-      Utils.showBatteryOptimizationWarningIfNeeded(this);
+      Toast.makeText(this, R.string.track_follow_no_location, Toast.LENGTH_SHORT).show();
+      return;
     }
+    final long trackId = track.getTrackId();
+    final TrackFollowing.TrackPoint closest =
+        TrackFollowing.getClosestPoint(trackId, myPosition.getLat(), myPosition.getLon());
+    if (closest == null)
+      return;
+    if (closest.distanceM() <= Math.max(TRACK_FOLLOW_ON_TRACK_METERS, OffTrackService.getThresholdMeters(this)))
+    {
+      followTrack(track, myPosition, closest.distFromBegM(), false /* byRoad */);
+      return;
+    }
+    showTrackFollowDialog(track, myPosition, closest);
+  }
+
+  private void showTrackFollowDialog(@NonNull Track track, @NonNull MapObject myPosition,
+                                     @NonNull TrackFollowing.TrackPoint closest)
+  {
+    final List<String> labels = new ArrayList<>();
+    final List<Runnable> actions = new ArrayList<>();
+    labels.add(getString(R.string.track_follow_navigate_closest));
+    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), true /* byRoad */));
+
+    final TrackFollowing.TrackPoint selected = TrackFollowing.getSelectedPoint(track.getTrackId());
+    if (selected != null && Math.abs(selected.distFromBegM() - closest.distFromBegM()) > TRACK_FOLLOW_ON_TRACK_METERS)
+    {
+      labels.add(getString(R.string.track_follow_navigate_selected,
+                           StringUtils.nativeFormatDistance(selected.distFromBegM()).toString(this)));
+      actions.add(() -> followTrack(track, myPosition, selected.distFromBegM(), true /* byRoad */));
+    }
+    if (closest.distFromBegM() > TRACK_FOLLOW_ON_TRACK_METERS)
+    {
+      labels.add(getString(R.string.track_follow_navigate_start));
+      actions.add(() -> followTrack(track, myPosition, 0, true /* byRoad */));
+    }
+    labels.add(getString(R.string.track_follow_direct));
+    actions.add(() -> followTrack(track, myPosition, closest.distFromBegM(), false /* byRoad */));
+
+    new MaterialAlertDialogBuilder(this, R.style.MwmTheme_AlertDialog)
+        .setTitle(getString(R.string.track_follow_distance_title,
+                            StringUtils.nativeFormatDistance(closest.distanceM()).toString(this)))
+        .setItems(labels.toArray(new String[0]), (dialog, which) -> actions.get(which).run())
+        .setNegativeButton(R.string.cancel, null)
+        .show();
+  }
+
+  /**
+   * Maps&Fly: starts the off track alarm and navigation along the track from the distance. With {@code byRoad} it
+   * first navigates to that track point by the roads.
+   */
+  private void followTrack(@NonNull Track track, @NonNull MapObject myPosition, double distFromBegM, boolean byRoad)
+  {
+    final RoutingController controller = RoutingController.get();
+    final Router router = controller.getLastRouterType();
+    if (byRoad)
+      controller.navigateToTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, router);
+    else if (!controller.followTrack(myPosition, track.getTrackId(), track.getTitle(), distFromBegM, router,
+                                     true /* startWhenBuilt */))
+    {
+      Toast.makeText(this, R.string.track_follow_nothing_left, Toast.LENGTH_SHORT).show();
+      return;
+    }
+    closePlacePage();
+    if (OffTrackService.start(getApplicationContext(), track.getTrackId(), track.getTitle()))
+      Utils.showBatteryOptimizationWarningIfNeeded(this);
   }
 
   public void onTrackRecordingCancelled()

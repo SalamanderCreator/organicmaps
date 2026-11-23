@@ -21,7 +21,10 @@ RoutingSettings GetRoutingSettings(VehicleType vehicleType)
             .m_maxOutgoingPointsCount = 6,
             .m_minOutgoingDistMeters = 5.0,
             .m_maxIngoingPointsCount = 2,
-            .m_minIngoingDistMeters = 4.0};
+            .m_minIngoingDistMeters = 4.0,
+            .m_turnWarningSeconds = 15.0,
+            .m_minTurnWarningM = 20.0,
+            .m_maxTurnWarningM = 50.0};
   case VehicleType::Transit:
     return {.m_useDirectionForRouteBuilding = false,
             .m_matchRoute = true,
@@ -45,7 +48,10 @@ RoutingSettings GetRoutingSettings(VehicleType vehicleType)
             .m_maxOutgoingPointsCount = 9,
             .m_minOutgoingDistMeters = 10.0,
             .m_maxIngoingPointsCount = 2,
-            .m_minIngoingDistMeters = 10.0};
+            .m_minIngoingDistMeters = 10.0,
+            .m_turnWarningSeconds = 20.0,
+            .m_minTurnWarningM = 50.0,
+            .m_maxTurnWarningM = 200.0};
   case VehicleType::Car:
     return {.m_useDirectionForRouteBuilding = true,
             .m_matchRoute = true,

@@ -31,6 +31,7 @@ set(SRC
   relation_track_tests.cpp
   routing_manager_tests.cpp
   terrain_provider_tests.cpp
+  track_following_tests.cpp
   track_import_tests.cpp
   track_tests.cpp
   transit_display_tests.cpp

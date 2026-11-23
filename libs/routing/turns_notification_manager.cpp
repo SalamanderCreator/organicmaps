@@ -1,6 +1,7 @@
 #include "routing/turns_notification_manager.hpp"
 
 #include "base/assert.hpp"
+#include "base/math.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -21,6 +22,19 @@ double constexpr kSecondTurnThresholdDistM = 400.0;
 // If the distance between two sequential turns is less than kDistanceNotifyThresholdM
 // the notification will *not* append second distance, (like "In 500 meters. Turn left. Then. Turn right.")
 double constexpr kDistanceNotifyThresholdM = 50.0;
+
+/// Maps&Fly: time to say "In 100 meters" before the distance is right.
+double constexpr kTurnWarningSpeechSeconds = 2.0;
+
+/// Maps&Fly: the largest distance up to |meters| that a turn warning can say, or 0 if there is none.
+uint32_t RoundDownTurnWarningM(double meters)
+{
+  static uint32_t constexpr kWarningDistancesM[] = {200, 100, 50, 30, 20};
+  for (uint32_t const distM : kWarningDistancesM)
+    if (distM <= meters)
+      return distM;
+  return 0;
+}
 
 // Returns true if the closest turn is an entrance to a roundabout and the second is
 // an exit form a roundabout.
@@ -222,16 +236,23 @@ std::string NotificationManager::GenerateFirstTurnSound(TurnItem const & turn, d
     return {};
   }
 
-  if (m_nextTurnNotificationProgress == PronouncedNotification::First &&
-      distanceToTurnMeters < distanceToPronounceNotificationM)
+  // Maps&Fly: the turn warning replaces the plain "Turn right" just before the turn.
+  uint32_t const warningM = ComputeTurnWarningM();
+  double const warningSpeechM = m_speedMetersPerSecond * kTurnWarningSpeechSeconds;
+  double const lastNotificationM = warningM > 0 ? warningM + warningSpeechM : distanceToPronounceNotificationM;
+  if (m_nextTurnNotificationProgress == PronouncedNotification::First && distanceToTurnMeters < lastNotificationM)
   {
     m_nextTurnNotificationProgress = PronouncedNotification::Second;
     FastForwardFirstTurnNotification();
 
+    // A turn closer than the shortest distance to say gets the plain notification.
+    uint32_t distanceUnits = 0;
+    if (warningM > 0)
+      distanceUnits = RoundDownTurnWarningM(std::min<double>(warningM, distanceToTurnMeters));
+
     LOG(LDEBUG, ("TTS meters to pronounce", distanceToPronounceNotificationM, "meters to turn", distanceToTurnMeters,
-                 "speed m/s", m_speedMetersPerSecond));
-    return GenerateTurnText(0 /* distMeters */, turn.m_exitNum, false /* useThenInsteadOfDistance */, turn,
-                            nextStreetInfo);
+                 "warning meters", distanceUnits, "speed m/s", m_speedMetersPerSecond));
+    return GenerateTurnText(distanceUnits, turn.m_exitNum, false /* useThenInsteadOfDistance */, turn, nextStreetInfo);
   }
   return {};
 }
@@ -267,6 +288,23 @@ void NotificationManager::SetSpeedMetersPerSecond(double speed)
   // It's easy to reproduce at an office with Nexus 5.
   // In that case zero meters per second is used.
   m_speedMetersPerSecond = std::max(0., speed);
+}
+
+void NotificationManager::SetTurnWarning(double seconds, double minM, double maxM)
+{
+  ASSERT_LESS_OR_EQUAL(minM, maxM, ());
+  m_turnWarningSeconds = seconds;
+  m_minTurnWarningM = minM;
+  m_maxTurnWarningM = maxM;
+}
+
+uint32_t NotificationManager::ComputeTurnWarningM() const
+{
+  // Only metric distances this short can be said.
+  if (m_turnWarningSeconds <= 0 || m_settings.GetLengthUnits() != measurement_utils::Units::Metric)
+    return 0;
+  return RoundDownTurnWarningM(
+      math::Clamp(m_speedMetersPerSecond * m_turnWarningSeconds, m_minTurnWarningM, m_maxTurnWarningM));
 }
 
 void NotificationManager::Reset()

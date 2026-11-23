@@ -32,6 +32,8 @@
 "you_have_left_the_track":"Olet poistunut reitiltä.",
 "destination":"Olet perillä.",
 "you_have_reached_the_destination":"Olet saapunut.",
+"in_20_meters":"In twenty meters",
+"in_30_meters":"In thirty meters",
 "in_50_meters":"Viidenkymmenen metrin päässä",
 "in_100_meters":"Sadan metrin päässä",
 "in_200_meters":"Kahdensadan metrin päässä",

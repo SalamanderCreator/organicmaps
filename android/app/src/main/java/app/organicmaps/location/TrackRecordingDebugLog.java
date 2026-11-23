@@ -34,6 +34,7 @@ public final class TrackRecordingDebugLog implements LocationHelper.RawLocationL
   private static final String TAG = TrackRecordingDebugLog.class.getSimpleName();
   private static final String PREFS = "track_debug";
   private static final String KEY_ENABLED = "enabled";
+  private static final String KEY_FOR_RECORDING = "for_recording";
   private static final String DIR = "track_debug";
   private static final String HEADER = "time_utc,provider,status,lat,lon,accuracy_m,altitude_m,vertical_accuracy_m,"
                                      + "speed_mps,speed_accuracy_mps,bearing_deg,satellites,mock";
@@ -62,10 +63,19 @@ public final class TrackRecordingDebugLog implements LocationHelper.RawLocationL
     prefs(context).edit().putBoolean(KEY_ENABLED, enabled).apply();
   }
 
-  /** Starts a new file if the debug mode is on. Does nothing if a file is already being written. */
+  /** Whether the next (or the current, after a restart) recording writes the debug file. */
+  public static void setForNextRecording(@NonNull Context context, boolean enabled)
+  {
+    prefs(context).edit().putBoolean(KEY_FOR_RECORDING, enabled).apply();
+  }
+
+  /**
+   * Starts a new file if the debug mode is on and was chosen for this recording. Does nothing if a file is already
+   * being written.
+   */
   static void start(@NonNull Context context, @NonNull LocationHelper locationHelper)
   {
-    if (sInstance != null || !isEnabled(context))
+    if (sInstance != null || !isEnabled(context) || !prefs(context).getBoolean(KEY_FOR_RECORDING, false))
       return;
 
     final File dir = getDir(context);

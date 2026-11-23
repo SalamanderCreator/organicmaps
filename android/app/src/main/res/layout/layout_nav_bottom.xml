@@ -21,6 +21,18 @@
     <include layout="@layout/bottom_sheet_handle" />
     <include layout="@layout/layout_nav_bottom_numbers" />
 
+    <!-- Maps&Fly: ascent and descent left to the destination. -->
+    <TextView
+      android:id="@+id/nav_elevation_remaining"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/margin_quarter"
+      android:gravity="center"
+      android:textAppearance="@style/MwmTextAppearance.Body2"
+      android:visibility="gone"
+      tools:text="↑ 230 m   ↓ 850 m"
+      tools:visibility="visible" />
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
       android:id="@+id/navigation_progress"
       style="@style/Widget.MaterialComponents.LinearProgressIndicator"
@@ -31,6 +43,12 @@
       app:trackThickness="@dimen/nav_progress"
       app:trackColor="@color/bg_routing_progress" />
   </LinearLayout>
+
+  <!-- Maps&Fly: elevation profile of the route with the current position. -->
+  <include
+    android:id="@+id/nav_elevation_chart"
+    layout="@layout/route_elevation_profile"
+    android:visibility="gone" />
 
   <LinearLayout
     android:id="@+id/content_frame"

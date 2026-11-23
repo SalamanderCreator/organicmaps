@@ -166,6 +166,55 @@ UNIT_TEST(TurnsSound_MetersTest)
   TEST(notificationManager.IsEnabled(), ());
 }
 
+// Maps&Fly: the last notification says the distance to the turn, depending on the speed.
+UNIT_TEST(TurnsSound_TurnWarningTest)
+{
+  string const engShortJson =
+      "\
+      {\
+      \"in_50_meters\":\"In 50 meters.\",\
+      \"in_100_meters\":\"In 100 meters.\",\
+      \"in_200_meters\":\"In 200 meters.\",\
+      \"make_a_right_turn\":\"Make a right turn.\"\
+      }";
+  auto notificationManager = NotificationManager::CreateNotificationManagerForTesting(
+      8 /* startBeforeSeconds */, 35 /* minStartBeforeMeters */, 150 /* maxStartBeforeMeters */,
+      170 /* minDistToSayNotificationMeters */, measurement_utils::Units::Metric, engShortJson,
+      30 /* notificationTimeSecond */, 5.0 /* speedMeterPerSecond */);
+  // 20 s at 5 m/s: in 100 m, said 2 s (10 m) before.
+  notificationManager.SetTurnWarning(20 /* seconds */, 50 /* minM */, 200 /* maxM */);
+
+  vector<TurnItemDist> turns = {{{5 /* idx */, CarDirection::TurnRight}, 239.}};
+  vector<string> turnNotifications;
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST_EQUAL(turnNotifications, vector<string>{"In 200 meters. Make a right turn."}, ());
+
+  turns.front().m_distMeters = 111.;
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST(turnNotifications.empty(), ());
+
+  turns.front().m_distMeters = 109.;
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST_EQUAL(turnNotifications, vector<string>{"In 100 meters. Make a right turn."}, ());
+
+  turns.front().m_distMeters = 30.;
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST(turnNotifications.empty(), ());
+
+  // A turn right after the previous one: too close for the first notification, and closer than the warning.
+  turns = {{{6 /* idx */, CarDirection::TurnRight}, 70.}};
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST(turnNotifications.empty(), ());
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST_EQUAL(turnNotifications, vector<string>{"In 50 meters. Make a right turn."}, ());
+
+  // Closer than the shortest distance to say: the plain notification.
+  turns = {{{7 /* idx */, CarDirection::TurnRight}, 15.}};
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  notificationManager.GenerateTurnNotifications(turns, turnNotifications);
+  TEST_EQUAL(turnNotifications, vector<string>{"Make a right turn."}, ());
+}
+
 // Test case:
 // - Two turns;
 // - They are close to each other;

@@ -43,6 +43,8 @@ public:
   std::string GetLocale() const { return m_getTtsText.GetLocale(); }
   void SetLengthUnits(measurement_utils::Units units);
   void SetSpeedMetersPerSecond(double speed);
+  /// Maps&Fly: see RoutingSettings::m_turnWarningSeconds.
+  void SetTurnWarning(double seconds, double minM, double maxM);
   void SetLocale(std::string const & locale) { m_getTtsText.SetLocale(locale); }
   measurement_utils::Units GetLengthUnits() const { return m_settings.GetLengthUnits(); }
   void SetLocaleWithJsonForTesting(std::string const & json, std::string const & locale);
@@ -79,6 +81,9 @@ public:
   CarDirection GetSecondTurnNotification() const { return m_secondTurnNotification; }
 
 private:
+  /// Maps&Fly: the distance of the turn warning to say now, or 0 for none.
+  uint32_t ComputeTurnWarningM() const;
+
   std::string GenerateTurnText(uint32_t distanceUnits, uint8_t exitNum, bool useThenInsteadOfDistance,
                                TurnItem const & turn, RouteSegment::RoadNameInfo const & nextStreetInfo) const;
 
@@ -100,6 +105,10 @@ private:
   double m_speedMetersPerSecond;
 
   Settings m_settings;
+
+  double m_turnWarningSeconds = 0;
+  double m_minTurnWarningM = 0;
+  double m_maxTurnWarningM = 0;
 
   /// Progress for the nearest turn: Nothing before the advance instruction, First after it is
   /// emitted or skipped, Second after the immediate instruction. Reset when the nearest turn changes.

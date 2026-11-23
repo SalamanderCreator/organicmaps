@@ -850,7 +850,9 @@ UNIT_CLASS_TEST(TrackVoiceTest, OffTrackRebuildDoesNotRestoreStaleTurns)
   {
     FollowingInfo info;
     m_session->GetRouteFollowingInfo(info);
-    TEST_EQUAL(info.m_pedestrianTurn, turns::PedestrianDirection::None, ());
+    // Maps&Fly shows the next turn from any distance: the left turn of the track, about 400 m ahead.
+    TEST_EQUAL(info.m_pedestrianTurn, turns::PedestrianDirection::TurnLeft, ());
+    TEST_GREATER(info.m_distToTurn.GetDistance(), 350, (info.m_distToTurn));
     TEST_EQUAL(m_session->GetRoute()->GetCurrentIter().m_ind, 0, ("Start at the new approach"));
   });
   for (int i = 0; i < 3; ++i)

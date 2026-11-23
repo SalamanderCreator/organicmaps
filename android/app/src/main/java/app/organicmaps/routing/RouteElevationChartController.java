@@ -79,6 +79,15 @@ public class RouteElevationChartController
       mChart.highlightValue(null, false);
   }
 
+  /** Maps&amp;Fly: marks the current position, in meters from the route start, instead of a selected point. */
+  public void setMyPosition(double distanceMeters)
+  {
+    if (mChart == null || mData == null)
+      return;
+    mChart.setTouchEnabled(false);
+    mChart.highlightValue((float) distanceMeters, 0, false);
+  }
+
   public void setData(@Nullable RouteAltitudeData data)
   {
     mData = data;
