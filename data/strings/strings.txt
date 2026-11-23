@@ -46094,6 +46094,18 @@ tags = android-app
 en = Nothing left to follow: this is the track end
 de = Hier endet der Track, nichts mehr zu folgen
 
+[track_follow_navigate_end]
+comment = Dialog option: navigate by road to the track end, then follow the whole track backwards
+tags = android-app
+en = Navigate to the track end
+de = Zum Trackende navigieren
+
+[track_follow_reverse]
+comment = Checkbox in the follow track dialog: follow the track backwards, from its end to its start
+tags = android-app
+en = Track backwards
+de = Track rückwärts
+
 [track_follow_direct]
 comment = Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads
 tags = android-app

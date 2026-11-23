@@ -964,6 +964,10 @@
     <string name="track_follow_no_location">Warte auf deinen Standort…</string>
     <!-- Toast when the chosen point is the end of the track -->
     <string name="track_follow_nothing_left">Hier endet der Track, nichts mehr zu folgen</string>
+    <!-- Dialog option: navigate by road to the track end, then follow the whole track backwards -->
+    <string name="track_follow_navigate_end">Zum Trackende navigieren</string>
+    <!-- Checkbox in the follow track dialog: follow the track backwards, from its end to its start -->
+    <string name="track_follow_reverse">Track rückwärts</string>
     <!-- Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads -->
     <string name="track_follow_direct">Direkt folgen (Luftlinie zum nächstgelegenen Trackpunkt)</string>
     <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->

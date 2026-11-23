@@ -8,6 +8,7 @@
 #include "geometry/mercator.hpp"
 
 #include <cmath>
+#include <memory>
 #include <optional>
 
 // Maps&Fly: follow a saved track like a route. All calls come from the UI thread.
@@ -71,17 +72,24 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGet
 }
 
 JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeStart(JNIEnv * env, jclass, jlong trackId,
-                                                                                   jdouble distFromBegM)
+                                                                                   jdouble distFromBegM,
+                                                                                   jboolean reverse, jboolean liveEntry)
 {
-  auto const track = GetJoinedTrack(trackId);
+  auto track = GetJoinedTrack(trackId);
   if (!track)
     return nullptr;
-  auto remainder = track_following::MakeRemainder(*track, track_following::AtDistance(*track, distFromBegM));
+  auto remainder = track_following::MakeRemainder(*track, track_following::AtDistance(*track, distFromBegM), reverse);
   if (!remainder)
     return nullptr;
   auto const end = remainder->m_points.back();
-  frm()->GetRoutingManager().SetFollowedTrack(std::move(remainder));
-  return ToJava(env, {track->m_points.size() - 1, end, track->m_distFromBegM.back()}, 0);
+  auto & routingManager = frm()->GetRoutingManager();
+  routingManager.SetFollowedTrack(std::move(remainder));
+  size_t const endIndex = reverse ? 0 : track->m_points.size() - 1;
+  track_following::TrackPosition const endPos = {endIndex, end, track->m_distFromBegM[endIndex]};
+  if (liveEntry)
+    routingManager.SetFollowedTrackLiveEntry(std::make_shared<track_following::JoinedTrack>(std::move(*track)),
+                                             reverse);
+  return ToJava(env, endPos, 0);
 }
 
 JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_routing_TrackFollowing_nativeGetSection(JNIEnv * env, jclass,

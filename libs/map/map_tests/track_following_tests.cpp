@@ -109,6 +109,34 @@ UNIT_TEST(TrackFollowing_MakeRemainder)
   TEST(!MakeRemainder(track, FindClosest(track, mercator::FromLatLon(0, 1))), ());
 }
 
+UNIT_TEST(TrackFollowing_MakeReverseRemainder)
+{
+  JoinedTrack const track(MakeGeometry());
+  double const section = Meters(0, 0.001);
+
+  // From the end back to the start, keeping the gap as a straight section.
+  auto const whole = MakeRemainder(track, AtDistance(track, 2 * section), true /* reverse */);
+  TEST(whole, ());
+  TEST_EQUAL(whole->m_points.size(), 4, ());
+  TEST_EQUAL(whole->m_points.front(), Pt(0.003, 500), ());
+  TEST_EQUAL(whole->m_points.back(), Pt(0, 100), ());
+
+  // From the middle of the second line: the entry, then the start of that line and the first line backwards.
+  auto const half = MakeRemainder(track, AtDistance(track, 1.5 * section), true /* reverse */);
+  TEST(half, ());
+  TEST_EQUAL(half->m_points.size(), 4, ());
+  TEST_EQUAL(half->m_points.front().GetAltitude(), 400, ());
+  TEST_EQUAL(half->m_points[1], Pt(0.002, 300), ());
+
+  // From the gap: the end of the first line, then its start.
+  auto const gap = MakeRemainder(track, AtDistance(track, section), true /* reverse */);
+  TEST(gap, ());
+  TEST_EQUAL(gap->m_points.size(), 2, ());
+  TEST_EQUAL(gap->m_points.back(), Pt(0, 100), ());
+
+  TEST(!MakeRemainder(track, AtDistance(track, 0), true /* reverse */), ());
+}
+
 UNIT_TEST(TrackFollowing_MissingAltitude)
 {
   kml::MultiGeometry geometry;
