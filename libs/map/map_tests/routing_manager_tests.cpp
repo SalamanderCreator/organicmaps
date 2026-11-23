@@ -295,6 +295,57 @@ kml::TrackId SaveRouteGeometry(RoutingManager & manager, BookmarkManager & bookm
 }
 }  // namespace
 
+UNIT_TEST(RoutingManager_RoutePathGradesAndWayStats)
+{
+  TestFramework framework;
+  auto & manager = framework.GetRoutingManager();
+  TEST(!manager.GetRoutePathGradeDistances(), ());
+  TEST(!manager.GetRouteWayStats(), ());
+
+  manager.SetRouter(routing::RouterType::Ruler);
+  manager.Init(std::make_shared<routing::NumMwmIds>());
+
+  using Road = routing::RoutingOptions::Road;
+  // Segment lengths 100, 50, 30 and 20 m with these road types.
+  std::pair<double, routing::RoutingOptions::RoadType> const parts[] = {
+      {100, 0}, {50, Road::PathDifficult}, {30, Road::PathExpert | Road::PathDifficult}, {20, Road::Paved}};
+  routing::Segment const fake(routing::kFakeNumMwmId, 0, 0, false);
+  std::vector<routing::RouteSegment> segments;
+  double distance = 0;
+  for (size_t i = 0; i < std::size(parts); ++i)
+  {
+    distance += parts[i].first;
+    auto const direction = i + 1 == std::size(parts) ? routing::turns::CarDirection::ReachedYourDestination
+                                                     : routing::turns::CarDirection::None;
+    geometry::PointWithAltitude const point({mercator::FromLatLon(0, distance / 111000)}, 0);
+    segments.emplace_back(fake, routing::turns::TurnItem(i + 1, direction), point,
+                          routing::RouteSegment::RoadNameInfo{});
+    segments.back().SetDistancesAndTime(distance, distance, distance);
+    segments.back().SetRoadTypes(routing::RoutingOptions(parts[i].second));
+  }
+  geometry::PointWithAltitude const start({mercator::FromLatLon(0, 0)}, 0);
+  routing::Route route;
+  route.SetRouteSegments(std::move(segments));
+  route.SetSubroutes(
+      std::vector<routing::Route::SubrouteAttrs>{{start, route.GetRouteSegments().back().GetJunction(), 0, 4}});
+  routing::RoutesResult result;
+  result.MakeFrom("ruler", std::move(route));
+  manager.RoutingSession().AssignRouteForTesting(routing::Route(result.GetActive()),
+                                                 routing::RouterResultCode::NoError);
+
+  auto const grades = manager.GetRoutePathGradeDistances();
+  TEST(grades, ());
+  TEST_ALMOST_EQUAL_ABS(grades->m_normalM, 120.0, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(grades->m_difficultM, 50.0, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(grades->m_expertM, 30.0, 1e-6, ());
+
+  // Fake segments have no features: everything is counted, as other way and unknown surface.
+  auto const stats = manager.GetRouteWayStats();
+  TEST(stats, ());
+  TEST_ALMOST_EQUAL_ABS(stats->m_wayTypeM[static_cast<size_t>(RoutingManager::RouteWayType::Other)], 200.0, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(stats->m_surfaceM[static_cast<size_t>(RoutingManager::RouteSurface::Unknown)], 200.0, 1e-6, ());
+}
+
 UNIT_TEST(RoutingManager_ReverseRoutePointsRequiresBothEndpoints)
 {
   TestFramework framework;

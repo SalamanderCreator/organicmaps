@@ -1348,6 +1348,19 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRoutePathGrad
   return result;
 }
 
+// Maps&Fly: route length in meters per RouteWayType followed by RouteSurface, or null without a route.
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRouteWayStats(JNIEnv * env, jclass)
+{
+  auto const stats = frm()->GetRoutingManager().GetRouteWayStats();
+  if (!stats)
+    return nullptr;
+  std::vector<jdouble> values(stats->m_wayTypeM.begin(), stats->m_wayTypeM.end());
+  values.insert(values.end(), stats->m_surfaceM.begin(), stats->m_surfaceM.end());
+  jdoubleArray result = env->NewDoubleArray(static_cast<jsize>(values.size()));
+  env->SetDoubleArrayRegion(result, 0, static_cast<jsize>(values.size()), values.data());
+  return result;
+}
+
 JNIEXPORT jobject Java_app_organicmaps_sdk_Framework_nativeGetRouteAltitudeData(JNIEnv * env, jclass)
 {
   ElevationInfo ei;

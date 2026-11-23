@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import app.organicmaps.MwmActivity;
@@ -44,6 +45,8 @@ import app.organicmaps.util.Utils;
 import app.organicmaps.widget.RoutingProgressButton;
 import app.organicmaps.widget.recycler.DotDividerItemDecoration;
 import app.organicmaps.widget.recycler.MultilineLayoutManager;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -109,6 +112,15 @@ final class RoutingBottomMenuController
   private Runnable mVisibilityChangedCallback;
   @NonNull
   private StartState mStartState = StartState.DISABLED;
+
+  // Order of RoutingManager::RouteWayType and RouteSurface.
+  private static final int[] WAY_TYPE_NAMES = {
+      R.string.route_way_road,     R.string.route_way_minor_road, R.string.route_way_track,
+      R.string.route_way_cycleway, R.string.route_way_footway,    R.string.route_way_path,
+      R.string.route_way_steps,    R.string.route_way_ferry,      R.string.route_way_other};
+  private static final int[] SURFACE_NAMES = {R.string.route_surface_paved_good, R.string.route_surface_paved_bad,
+                                              R.string.route_surface_unpaved_good, R.string.route_surface_unpaved_bad,
+                                              R.string.route_surface_unknown};
 
   @NonNull
   static RoutingBottomMenuController newInstance(@NonNull Activity activity, @NonNull View frame,
@@ -475,8 +487,41 @@ final class RoutingBottomMenuController
       text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.base_red)), start, text.length(),
                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
+    appendWayStats(text);
     mPathGrades.setText(text);
     UiUtils.show(mPathGrades);
+  }
+
+  // Maps&Fly: way types and surfaces of the route like Komoot, longest first.
+  private void appendWayStats(@NonNull SpannableStringBuilder text)
+  {
+    final double[] stats = Framework.nativeGetRouteWayStats();
+    if (stats == null || stats.length != WAY_TYPE_NAMES.length + SURFACE_NAMES.length)
+      return;
+    appendShares(text, R.string.route_way_types, stats, 0, WAY_TYPE_NAMES);
+    appendShares(text, R.string.route_surfaces, stats, WAY_TYPE_NAMES.length, SURFACE_NAMES);
+  }
+
+  private void appendShares(@NonNull SpannableStringBuilder text, @StringRes int title, @NonNull double[] values,
+                            int offset, @NonNull int[] names)
+  {
+    final List<Integer> order = new ArrayList<>();
+    for (int i = 0; i < names.length; ++i)
+      if (values[offset + i] >= 1)
+        order.add(i);
+    if (order.isEmpty())
+      return;
+    Collections.sort(order, (a, b) -> Double.compare(values[offset + b], values[offset + a]));
+    text.append("\n").append(mContext.getString(title));
+    boolean first = true;
+    for (int i : order)
+    {
+      text.append(first ? " " : " · ")
+          .append(mContext.getString(names[i]))
+          .append(" ")
+          .append(StringUtils.nativeFormatDistance(values[offset + i]).toString(mContext));
+      first = false;
+    }
   }
 
   private void showRoutingDetails()

@@ -269,6 +269,14 @@ public class Framework
   @Nullable
   public static native double[] nativeGetRoutePathGradeDistances();
 
+  /**
+   * Maps&Fly: route length in meters per way type (road, minor road, track, cycleway, footway, path,
+   * steps, ferry, other) followed by surface (paved good/bad, unpaved good/bad, unknown).
+   * @return null without a route.
+   */
+  @Nullable
+  public static native double[] nativeGetRouteWayStats();
+
   public static native void nativeRouteSetElevationActivePoint(double distanceMeters);
 
   public static native void nativeRouteRemoveElevationActivePoint();

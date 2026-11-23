@@ -45842,6 +45842,108 @@ tags = android-app
 en = The route uses T3 paths that you avoid, e.g. because of a stop.
 de = Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.
 
+[avoid_paved]
+comment = Maps&Fly routing option for walking and cycling: prefer natural ways, take asphalt only when the natural way is more than twice as long (like Komoot "nice" instead of "fast")
+tags = android-app
+en = Prefer natural ways (less asphalt)
+de = Naturnahe Wege bevorzugen (weniger Asphalt)
+
+[route_way_types]
+comment = Maps&Fly route panel: label before the route length per way type
+tags = android-app
+en = Way types:
+de = Wegtypen:
+
+[route_surfaces]
+comment = Maps&Fly route panel: label before the route length per surface
+tags = android-app
+en = Surfaces:
+de = Oberflächen:
+
+[route_way_road]
+comment = Maps&Fly route panel way type: main roads (primary, secondary, tertiary and larger)
+tags = android-app
+en = Road
+de = Straße
+
+[route_way_minor_road]
+comment = Maps&Fly route panel way type: residential, service and unclassified roads
+tags = android-app
+en = Minor road
+de = Nebenstraße
+
+[route_way_track]
+comment = Maps&Fly route panel way type: agricultural or forest track (highway=track)
+tags = android-app
+en = Track
+de = Wirtschaftsweg
+
+[route_way_cycleway]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Cycleway
+de = Radweg
+
+[route_way_footway]
+comment = Maps&Fly route panel way type: footway or pedestrian street
+tags = android-app
+en = Footway
+de = Fußweg
+
+[route_way_path]
+comment = Maps&Fly route panel way type: hiking path or trail
+tags = android-app
+en = Path
+de = Pfad
+
+[route_way_steps]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Steps
+de = Treppe
+
+[route_way_ferry]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Ferry
+de = Fähre
+
+[route_way_other]
+comment = Maps&Fly route panel way type: anything else
+tags = android-app
+en = Other
+de = Sonstiges
+
+[route_surface_paved_good]
+comment = Maps&Fly route panel surface: asphalt, concrete, good paving
+tags = android-app
+en = Asphalt
+de = Asphalt
+
+[route_surface_paved_bad]
+comment = Maps&Fly route panel surface: cobblestones or rough paving
+tags = android-app
+en = Paving stones
+de = Pflaster
+
+[route_surface_unpaved_good]
+comment = Maps&Fly route panel surface: compacted, fine gravel
+tags = android-app
+en = Gravel
+de = Schotter
+
+[route_surface_unpaved_bad]
+comment = Maps&Fly route panel surface: dirt, ground, rock, sand
+tags = android-app
+en = Natural ground
+de = Naturboden
+
+[route_surface_unknown]
+comment = Maps&Fly route panel surface: not mapped
+tags = android-app
+en = Unknown
+de = Unbekannt
+
 [routing_save_route_error]
 comment = Toast shown when saving a planned route as a bookmark track fails
 tags = android-app,apple-maps

@@ -15,7 +15,7 @@ enum class RouterType;
 class RoutingOptions
 {
 public:
-  enum Road : uint8_t
+  enum Road : uint16_t
   {
     Usual = 1u << 0,
     Toll = 1u << 1,
@@ -27,16 +27,21 @@ public:
     // Difficult is about SAC T3, Expert is T4-T6. They are avoided softly, see kSoftAvoidOptions.
     PathDifficult = 1u << 6,
     PathExpert = 1u << 7,
+    // Maps&Fly: mapped paved surfaces and, without a mapped surface, roads other than tracks and
+    // paths. Avoiding it softly prefers natural ways ("schön" instead of "schnell").
+    Paved = 1u << 8,
 
-    Max = (1u << 7) + 1
+    Max = (1u << 8) + 1
   };
 
   using RoadType = std::underlying_type_t<Road>;
 
   /// Avoided roads of these types stay routable with a weight penalty, so a stop on such a path
   /// can still be reached and the route reports it instead of failing.
-  static RoadType constexpr kSoftAvoidOptions = PathDifficult | PathExpert;
-  static double constexpr kSoftAvoidWeightFactor = 10.0;
+  static RoadType constexpr kSoftAvoidOptions = PathDifficult | PathExpert | Paved;
+
+  /// Weight factor of a road with the given avoided soft options, 1 without any.
+  static double GetSoftAvoidWeightFactor(RoadType avoidedOnRoad);
 
   RoutingOptions() = default;
   explicit RoutingOptions(RoadType mask) : m_options(mask) {}
@@ -64,6 +69,8 @@ class RoutingOptionsClassifier
 {
 public:
   std::optional<RoutingOptions::Road> Get(uint32_t type) const;
+  /// True for the surface types (psurface-*) the generator adds for a mapped surface.
+  static bool IsSurface(uint32_t type);
   static RoutingOptionsClassifier const & Instance(VehicleType vehicleType);
 
 private:

@@ -237,6 +237,28 @@ UNIT_CLASS_TEST(SurfaceRoutingFixture, BicycleDirtyMatchesMappedUnpavedSurfaces)
   }
 }
 
+UNIT_CLASS_TEST(SurfaceRoutingFixture, PavedMatchesSurfacesAndUntaggedRoadClasses)
+{
+  // Paved is avoided softly, so every road stays usable.
+  RoutingOptions::SaveToSettings(VehicleType::Pedestrian, RoutingOptions(RoutingOptions::Paved));
+  auto router = Router(VehicleType::Pedestrian);
+  auto graph = router->MakeSingleMwmWorldGraph();
+  std::pair<char const *, bool> const cases[] = {{"Paved track", true},
+                                                 {"Unknown track", false},
+                                                 {"Generic road", false},
+                                                 {"Paved road", true},
+                                                 {"Unpaved road", false},
+                                                 {"Unpaved cycleway", false},
+                                                 {"Trail without surface", false},
+                                                 {"Rough paved track", true}};
+  for (auto const & [name, paved] : cases)
+  {
+    auto const segment = NamedSegment(name);
+    TEST_EQUAL(graph->GetRoutingOptions(segment).Has(RoutingOptions::Paved), paved, (name));
+    TEST(graph->IsRoutingOptionsGood(segment), (name));
+  }
+}
+
 UNIT_CLASS_TEST(SurfaceRoutingFixture, CarDirtyMatchesRoadClassesAndSurfaces)
 {
   RoutingOptions::SaveToSettings(VehicleType::Car, RoutingOptions(RoutingOptions::Dirty));
