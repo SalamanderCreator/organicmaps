@@ -87,6 +87,7 @@ public class MapButtonsController extends Fragment
     showButton(enable, MapButtons.trackRecordingStatus);
   };
   private final Observer<Integer> mTopButtonMarginObserver = this::updateTopButtonsMargin;
+  private final Observer<Integer> mTopBannerOffsetObserver = this::moveTopButtonsBelowBanner;
 
   @Nullable
   @Override
@@ -237,6 +238,16 @@ public class MapButtonsController extends Fragment
   private static int dpToPx(float dp, Context context)
   {
     return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+  }
+
+  // Maps&Fly: the off-track banner covers the top of the map.
+  private void moveTopButtonsBelowBanner(int offset)
+  {
+    if (mTrackRecordingStatusButton != null)
+      mTrackRecordingStatusButton.setTranslationY(offset);
+    final View topButtons = mFrame.findViewById(R.id.map_buttons_top);
+    if (topButtons != null)
+      topButtons.setTranslationY(offset);
   }
 
   private void updateTopButtonsMargin(int margin)
@@ -480,6 +491,7 @@ public class MapButtonsController extends Fragment
     mMapButtonsViewModel.getSearchOption().observe(viewLifecycleOwner, mSearchOptionObserver);
     mMapButtonsViewModel.getTrackRecorderState().observe(viewLifecycleOwner, mTrackRecorderObserver);
     mMapButtonsViewModel.getTopButtonsMarginTop().observe(viewLifecycleOwner, mTopButtonMarginObserver);
+    mMapButtonsViewModel.getTopBannerOffset().observe(viewLifecycleOwner, mTopBannerOffsetObserver);
   }
 
   @Override

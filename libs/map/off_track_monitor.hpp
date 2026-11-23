@@ -41,9 +41,12 @@ public:
   State GetState() const { return m_state; }
   /// Distance from the last fix to the track, -1 before the first fix.
   double GetDistanceMeters() const { return m_distanceMeters; }
+  /// The track point closest to the last fix, in mercator.
+  m2::PointD const & GetClosestPoint() const { return m_closestPoint; }
 
 private:
-  double DistanceToTrack(m2::PointD const & point) const;
+  /// Also sets m_closestPoint.
+  double DistanceToTrack(m2::PointD const & point);
 
   std::vector<Line> m_lines;
   double m_thresholdMeters;
@@ -53,6 +56,7 @@ private:
   bool m_reached = false;
   double m_candidateSince = 0;
   double m_distanceMeters = -1;
+  m2::PointD m_closestPoint;
 };
 
 std::string DebugPrint(OffTrackMonitor::State state);

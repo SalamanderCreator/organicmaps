@@ -35,15 +35,16 @@ struct TrackPosition
 };
 
 /// @param track must have at least one point.
-TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point);
+/// @param reverse prefer, among points (almost) as close, the one with the most track left backwards.
+TrackPosition FindClosest(JoinedTrack const & track, m2::PointD const & point, bool reverse = false);
 
 /// @return the position at the given distance from the start, clamped to the track ends.
 TrackPosition AtDistance(JoinedTrack const & track, double distFromBegM);
 
-/// @return the track from |entry| to its end, starting with the entry point itself, or nullptr if the entry is
-/// (almost) the track end.
-std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track,
-                                                                 TrackPosition const & entry);
+/// @return the track from |entry| to its end, or to its start with |reverse|, starting with the entry point
+/// itself, or nullptr if the entry is (almost) that end.
+std::shared_ptr<routing::TrackFollowingData const> MakeRemainder(JoinedTrack const & track, TrackPosition const & entry,
+                                                                 bool reverse = false);
 
 /// Ascent and descent of |profile| walking from one distance to the other, in either direction, with the altitudes
 /// at both ends interpolated. Distances beyond the profile are clamped to it.

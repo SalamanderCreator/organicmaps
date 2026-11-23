@@ -958,8 +958,6 @@
     <string name="track_recording_gps_accuracy">GPS accuracy: ±%s</string>
     <!-- Dialog title when the user starts to follow a track but is not on it. %s is the straight-line distance to the closest track point -->
     <string name="track_follow_distance_title">The closest track point is %s away (straight line)</string>
-    <!-- Dialog option: navigate by road to the closest track point, then follow the track -->
-    <string name="track_follow_navigate_closest">Navigate to the closest track point</string>
     <!-- Dialog option: navigate by road to the point selected on the track, then follow the track. %s is its distance from the track start -->
     <string name="track_follow_navigate_selected">Navigate to the selected point (%s along the track)</string>
     <!-- Dialog option: navigate by road to the track start, then follow the whole track -->
@@ -968,6 +966,10 @@
     <string name="track_follow_no_location">Waiting for your location…</string>
     <!-- Toast when the chosen point is the end of the track -->
     <string name="track_follow_nothing_left">Nothing left to follow: this is the track end</string>
+    <!-- Dialog option: navigate by road to the track end, then follow the whole track backwards -->
+    <string name="track_follow_navigate_end">Navigate to the track end</string>
+    <!-- Checkbox in the follow track dialog: follow the track backwards, from its end to its start -->
+    <string name="track_follow_reverse">Track backwards</string>
     <!-- Dialog option: follow the track at once from its closest point, with a straight line to it instead of a route on the roads -->
     <string name="track_follow_direct">Follow directly (straight line to the closest track point)</string>
     <!-- Navigation panel: ascent (first %s) and descent (second %s) left from the current position to the destination, e.g. 230 m -->
