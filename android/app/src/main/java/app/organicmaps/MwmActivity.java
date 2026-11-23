@@ -694,6 +694,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   {
     mMapController = new MapController(findViewById(R.id.map), MwmApplication.from(this).getLocationHelper(), this,
                                        this::reportUnsupported, isLaunchByDeeplink);
+    // Maps&Fly: the compass is a map button (see MapButtonsController).
+    mMapController.disableCompassWidget();
     getLifecycle().addObserver(mMapController);
 
     initNavigationButtons();
@@ -891,8 +893,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     case myPosition ->
     {
       Logger.i(LOCATION_TAG, "The location button pressed");
-      // Calls onMyPositionModeChanged(mode + 1).
-      LocationState.nativeSwitchToNextMode();
+      // Maps&Fly: centers and follows; the north arrow turns the map.
+      Framework.nativeCenterOnMyPosition();
     }
     case toggleMapLayer -> toggleMapLayerBottomSheet();
     case bookmarks -> showBookmarks();
@@ -2246,6 +2248,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
     {
       ArrayList<MenuBottomSheetItem> items = new ArrayList<>();
       // Maps&Fly hides "Add place": the OpenStreetMap editor is not offered.
+      // Bookmarks moved here from the map buttons.
+      items.add(new MenuBottomSheetItem(R.string.bookmarks_and_tracks, R.drawable.ic_bookmarks_and_tracks,
+                                        this::showBookmarks));
       items.add(new MenuBottomSheetItem(R.string.download_maps, R.drawable.ic_download, getDownloadMapsCounter(),
                                         this::onDownloadMapsOptionSelected));
       mDonatesUrl = Utils.getDonateUrl(getApplicationContext());

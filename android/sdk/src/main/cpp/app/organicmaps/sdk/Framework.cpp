@@ -1650,6 +1650,43 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsContourLinesEnable
   return static_cast<jboolean>(Framework::LoadContourLinesEnabled());
 }
 
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeCenterOnMyPosition(JNIEnv *, jclass)
+{
+  frm()->CenterOnMyPosition();
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeToggleNorthUp(JNIEnv *, jclass)
+{
+  frm()->ToggleNorthUp();
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetNorthLocked(JNIEnv *, jclass, jboolean locked)
+{
+  frm()->SetNorthLocked(static_cast<bool>(locked));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsNorthLocked(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(Framework::LoadNorthLocked());
+}
+
+// The viewport listener runs on the UI thread.
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetMapAzimuthListener(JNIEnv *, jclass, jobject listener)
+{
+  if (listener == nullptr)
+  {
+    frm()->SetViewportListener(nullptr);
+    return;
+  }
+  auto const ref = jni::make_global_ref(listener);
+  frm()->SetViewportListener([ref](ScreenBase const & screen)
+  {
+    JNIEnv * env = jni::GetEnv();
+    jmethodID const method = jni::GetMethodID(env, *ref, "onMapAzimuthChanged", "(D)V");
+    env->CallVoidMethod(*ref, method, static_cast<jdouble>(math::RadToDeg(screen.GetAngle())));
+  });
+}
+
 JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPreferred(JNIEnv *, jclass)
 {
   return static_cast<jboolean>(Track::IsTerrainElevationPreferred());

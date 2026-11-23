@@ -46214,6 +46214,30 @@ tags = android-app
 en = Long press Terrain, Satellite or Rain radar for its settings
 de = Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen
 
+[compass_button]
+comment = Map button: content description of the north arrow
+tags = android-app
+en = North arrow
+de = Nordpfeil
+
+[compass_north_locked]
+comment = Toast after a long press on the north arrow: the map stays north up and cannot be turned
+tags = android-app
+en = North up locked
+de = Nordausrichtung festgestellt
+
+[compass_north_unlocked]
+comment = Toast after a long press on the locked north arrow
+tags = android-app
+en = North up unlocked
+de = Nordausrichtung gelöst
+
+[compass_north_locked_hint]
+comment = Toast on a tap on the locked north arrow
+tags = android-app
+en = North up is locked. Long press to unlock.
+de = Nordausrichtung ist festgestellt. Zum Lösen lange drücken.
+
 [rain_radar_status]
 comment = Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed
 tags = android-app

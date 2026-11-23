@@ -70,6 +70,7 @@ public final class Map
 
   private int mCurrentCompassOffsetX;
   private int mCurrentCompassOffsetY;
+  private boolean mCompassWidgetEnabled = true;
   private int mBottomWidgetOffsetX;
   private int mBottomWidgetOffsetY;
 
@@ -114,6 +115,8 @@ public final class Map
    */
   public void updateCompassOffset(final Context context, int offsetX, int offsetY, boolean forceRedraw)
   {
+    if (!mCompassWidgetEnabled)
+      return;
     final int x = offsetX < 0 ? mCurrentCompassOffsetX : offsetX;
     final int y = offsetY < 0 ? mCurrentCompassOffsetY : offsetY;
     final int navPadding = Utils.dimen(context, R.dimen.nav_frame_padding);
@@ -124,6 +127,12 @@ public final class Map
       nativeApplyWidgets();
     mCurrentCompassOffsetX = x;
     mCurrentCompassOffsetY = y;
+  }
+
+  /** Leaves the compass out of the rendered widgets, for apps with their own compass button. */
+  public void disableCompassWidget()
+  {
+    mCompassWidgetEnabled = false;
   }
 
   /**

@@ -220,6 +220,21 @@ public class Framework
   // Maps&Fly: the contour lines of the terrain layer, persisted (the hillshading stays).
   public static native void nativeSetContourLinesEnabled(boolean enabled);
   public static native boolean nativeIsContourLinesEnabled();
+
+  // Maps&Fly map buttons: the position button centers and follows, the compass button turns between north up
+  // and heading up, the north lock keeps north up (also in routing) and blocks turning the map by hand.
+  public static native void nativeCenterOnMyPosition();
+  public static native void nativeToggleNorthUp();
+  public static native void nativeSetNorthLocked(boolean locked);
+  public static native boolean nativeIsNorthLocked();
+
+  public interface MapAzimuthListener
+  {
+    /** The map rotation in degrees, the clockwise View rotation of a north arrow; called on the UI thread. */
+    void onMapAzimuthChanged(double azimuthDeg);
+  }
+
+  public static native void nativeSetMapAzimuthListener(@Nullable MapAzimuthListener listener);
   public static native ParsedSearchRequest nativeGetParsedSearchRequest();
   public static native @Nullable String nativeGetParsedAppName();
   public static native @Nullable String nativeGetParsedOAuth2Code();
