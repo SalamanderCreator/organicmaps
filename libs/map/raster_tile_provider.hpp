@@ -8,6 +8,7 @@
 
 #include "geometry/rect2d.hpp"
 
+#include <atomic>
 #include <functional>
 #include <list>
 #include <mutex>
@@ -80,6 +81,16 @@ public:
   // Maps&Fly: switches the source of a m_cacheKeyedByUrl provider (thread-safe). Requests started
   // before keep their own source; the caller restarts the layer to drop their images.
   void SetSource(std::string urlTemplate, int maxZoom, float alpha, bool dropNeutralPixels);
+
+  // Maps&Fly: the downloads and cache reads since the last SetSource, for the in-app diagnosis.
+  struct Stats
+  {
+    uint32_t m_loaded = 0;
+    uint32_t m_failed = 0;
+    // HTTP code of the last failure, -1 transport error, -2 not a decodable image, 0 none.
+    int m_lastError = 0;
+  };
+  Stats GetStats() const { return {m_statLoaded.load(), m_statFailed.load(), m_statLastError.load()}; }
 
   // Applies m_alpha and m_dropNeutralPixels to a tightly packed RGBA buffer. Public for tests.
   static void PostProcess(std::vector<uint8_t> & rgba, float alpha, bool dropNeutralPixels);
@@ -173,4 +184,8 @@ private:
   std::unordered_map<std::string, CacheEntry> m_cacheIndex;
 
   uint64_t m_cacheBytes = 0;
+
+  std::atomic<uint32_t> m_statLoaded{0};
+  std::atomic<uint32_t> m_statFailed{0};
+  std::atomic<int> m_statLastError{0};
 };

@@ -9,6 +9,7 @@
 #include "map/place_page_info.hpp"
 #include "map/power_management/power_management_schemas.hpp"
 #include "map/power_management/power_manager.hpp"
+#include "map/raster_tile_provider.hpp"
 #include "map/routing_manager.hpp"
 #include "map/routing_mark.hpp"
 #include "map/search_api.hpp"
@@ -87,8 +88,6 @@ class Loader;
 /// Uncomment line to make fixed position settings and
 /// build version for screenshots.
 // #define FIXED_LOCATION
-
-class RasterTileProvider;
 
 struct FrameworkParams
 {
@@ -598,6 +597,9 @@ public:
     double m_strength;
   };
   static TerrainShading LoadTerrainShading();
+  /// Maps&Fly: the dynamic contour lines of the terrain layer, persisted (on by default).
+  void SetContourLinesEnabled(bool enabled);
+  static bool LoadContourLinesEnabled();
   void SetVisibleViewport(m2::RectD const & rect);
 
   void ShowRect(m2::RectD const & rect, bool animation = true, bool useVisibleViewport = false);
@@ -794,6 +796,7 @@ public:
   // url takes {z}/{x}/{y} or {bbox} (see RasterTileProvider::Params); tiles deeper than maxZoom
   // are cut from the maxZoom tile. Every call restarts the layer, e.g. for the next radar frame.
   void SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels);
+  RasterTileProvider::Stats GetTileOverlayStats() const;
 
   void SetLargeFontsSize(bool isLargeSize);
   // Multiplied on top of the SetLargeFontsSize (Large Fonts) factor.

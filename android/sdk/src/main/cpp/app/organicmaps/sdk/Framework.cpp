@@ -1630,6 +1630,26 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetTerrainShadin
   return result;
 }
 
+JNIEXPORT jintArray Java_app_organicmaps_sdk_Framework_nativeGetTileOverlayStats(JNIEnv * env, jclass)
+{
+  auto const stats = frm()->GetTileOverlayStats();
+  jint const values[] = {static_cast<jint>(stats.m_loaded), static_cast<jint>(stats.m_failed),
+                         static_cast<jint>(stats.m_lastError)};
+  jintArray result = env->NewIntArray(3);
+  env->SetIntArrayRegion(result, 0, 3, values);
+  return result;
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetContourLinesEnabled(JNIEnv *, jclass, jboolean enabled)
+{
+  frm()->SetContourLinesEnabled(static_cast<bool>(enabled));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsContourLinesEnabled(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(Framework::LoadContourLinesEnabled());
+}
+
 JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPreferred(JNIEnv *, jclass)
 {
   return static_cast<jboolean>(Track::IsTerrainElevationPreferred());

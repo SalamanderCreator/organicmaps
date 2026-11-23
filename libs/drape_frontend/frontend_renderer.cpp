@@ -916,6 +916,7 @@ void FrontendRenderer::AcceptMessage(ref_ptr<Message> message)
   case Message::Type::SetSimplifiedTrafficColors:
   case Message::Type::UpdateMetalines:
   case Message::Type::EnableIsolines:
+  case Message::Type::SetContourLines:
   {
     m_forceUpdateScene = true;
     break;

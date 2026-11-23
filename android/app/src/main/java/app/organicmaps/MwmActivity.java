@@ -71,6 +71,7 @@ import app.organicmaps.location.OffTrackService;
 import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.MapButtonsController;
+import app.organicmaps.maplayer.LayerSettingsPanel;
 import app.organicmaps.maplayer.MapButtonsViewModel;
 import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
@@ -189,6 +190,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private MapButtonsViewModel mMapButtonsViewModel;
   @Nullable
   private RainRadarPanel mRainRadarPanel;
+  @Nullable
+  private LayerSettingsPanel mLayerSettingsPanel;
   private MapButtonsController.LayoutMode mPreviousMapLayoutMode;
 
   @Nullable
@@ -572,6 +575,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
       offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
     mRainRadarPanel = new RainRadarPanel(findViewById(R.id.rain_radar_panel), this);
+    mLayerSettingsPanel = new LayerSettingsPanel(findViewById(R.id.layer_settings_panel), () -> {
+      final MapButtonsController buttons =
+          (MapButtonsController) getSupportFragmentManager().findFragmentById(R.id.map_buttons);
+      if (buttons != null)
+        buttons.updateLayerButton();
+    });
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
     mMapButtonsViewModel.getLayoutMode().observe(this, this::initNavigationButtons);
@@ -1173,6 +1182,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
   public boolean handleBackPress()
   {
     final RoutingController routingController = RoutingController.get();
+    if (mLayerSettingsPanel != null && mLayerSettingsPanel.isShowing())
+    {
+      mLayerSettingsPanel.hide();
+      return true;
+    }
     return (closeBottomSheet(MAIN_MENU_ID) || closeBottomSheet(LAYERS_MENU_ID) || collapseNavMenu() || closePlacePage()
             || closePositionChooser() || closeSearchFragment() || routingController.resetToPlanningStateIfNavigating()
             || routingController.cancel());
@@ -1303,8 +1317,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     final View navBottomSheetNavBar = findViewById(R.id.nav_bottom_sheet_nav_bar);
     if (navBottomSheetLineFrame != null)
       offsetY = Math.max(offsetY, navBottomSheetLineFrame.getHeight() + navBottomSheetNavBar.getHeight());
-    if (mRainRadarPanel != null)
-      mRainRadarPanel.getView().setTranslationY(-offsetY);
+    findViewById(R.id.map_bottom_panels).setTranslationY(-offsetY);
     if (mDisplayManager.isDeviceDisplayUsed())
     {
       mMapController.updateBottomWidgetsOffset(offsetX, offsetY);
@@ -2125,6 +2138,13 @@ public class MwmActivity extends BaseMwmFragmentActivity
     TrackRecordingService.startForegroundService(getApplicationContext());
     Utils.showBatteryOptimizationWarningIfNeeded(this);
     return true;
+  }
+
+  /** Maps&Fly: the layer settings opened by a long press in the layers menu. */
+  @Nullable
+  public LayerSettingsPanel getLayerSettingsPanel()
+  {
+    return mLayerSettingsPanel;
   }
 
   /** Maps&Fly: the off-track banner covers the top of the map; the turn hints and the top buttons move below it. */

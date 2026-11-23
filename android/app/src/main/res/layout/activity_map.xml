@@ -67,59 +67,78 @@
       tools:text="Trackabweichung: 60 m"
       tools:visibility="visible" />
 
-    <!-- Maps&Fly: rain radar time slider, shown while the radar layer is on. Moved above the
-         bottom buttons in MwmActivity.updateBottomWidgetsOffset. -->
-    <com.google.android.material.card.MaterialCardView
-      android:id="@+id/rain_radar_panel"
+    <!-- Maps&Fly: the layer settings (long press in the layers menu) and the rain radar time
+         slider. Moved above the bottom buttons in MwmActivity.updateBottomWidgetsOffset. -->
+    <LinearLayout
+      android:id="@+id/map_bottom_panels"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
-      android:layout_marginHorizontal="@dimen/margin_base"
-      android:layout_marginBottom="@dimen/margin_half"
-      app:cardBackgroundColor="?attr/cardBackground"
-      app:cardCornerRadius="@dimen/margin_half"
-      app:cardElevation="4dp"
-      android:visibility="gone"
-      tools:visibility="visible">
-      <LinearLayout
+      android:orientation="vertical">
+      <include
+        android:id="@+id/layer_settings_panel"
+        layout="@layout/layer_settings_panel"
+        android:visibility="gone" />
+      <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rain_radar_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/margin_half_plus"
-        android:paddingTop="@dimen/margin_half">
+        android:layout_marginHorizontal="@dimen/margin_base"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:cardBackgroundColor="?attr/cardBackground"
+        app:cardCornerRadius="@dimen/margin_half"
+        app:cardElevation="4dp"
+        android:visibility="gone"
+        tools:visibility="visible">
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
-          <TextView
-            android:id="@+id/rain_radar_time"
-            android:layout_width="0dp"
+          android:orientation="vertical"
+          android:paddingHorizontal="@dimen/margin_half_plus"
+          android:paddingTop="@dimen/margin_half">
+          <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="@style/MwmTextAppearance.Body2"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
-            tools:text="18:35 · vor 10 min" />
-          <TextView
-            android:id="@+id/rain_radar_credit"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+              android:id="@+id/rain_radar_time"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:textAppearance="@style/MwmTextAppearance.Body2"
+              android:textColor="?android:attr/textColorPrimary"
+              android:textStyle="bold"
+              tools:text="18:35 · vor 10 min" />
+            <TextView
+              android:id="@+id/rain_radar_credit"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="@dimen/margin_half"
+              android:textAppearance="@style/MwmTextAppearance.Body4"
+              android:textColor="?android:attr/textColorSecondary"
+              tools:text="Radar: Deutscher Wetterdienst" />
+          </LinearLayout>
+          <com.google.android.material.slider.Slider
+            android:id="@+id/rain_radar_slider"
+            style="@style/MwmWidget.Slider"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_half"
+            android:stepSize="1"
+            android:valueFrom="0"
+            android:valueTo="1"
+            app:labelBehavior="gone" />
+          <!-- Downloads of the shown frame, to tell "no rain" from "no data". -->
+          <TextView
+            android:id="@+id/rain_radar_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_half"
             android:textAppearance="@style/MwmTextAppearance.Body4"
             android:textColor="?android:attr/textColorSecondary"
-            tools:text="Radar: Deutscher Wetterdienst" />
+            tools:text="12 Kacheln geladen, 0 Fehler" />
         </LinearLayout>
-        <com.google.android.material.slider.Slider
-          android:id="@+id/rain_radar_slider"
-          style="@style/MwmWidget.Slider"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:stepSize="1"
-          android:valueFrom="0"
-          android:valueTo="1"
-          app:labelBehavior="gone" />
-      </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+      </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
   </RelativeLayout>
   <androidx.fragment.app.FragmentContainerView
     android:id="@+id/search_container_fragment"

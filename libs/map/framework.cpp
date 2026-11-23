@@ -103,6 +103,7 @@ uint32_t constexpr kDefaultBgTilesAreaOpacityPct = 50;
 std::string_view constexpr kTerrainLightAzimuthKey = "TerrainLightAzimuth";
 std::string_view constexpr kTerrainLightAltitudeKey = "TerrainLightAltitude";
 std::string_view constexpr kTerrainShadeStrengthKey = "TerrainShadeStrength";
+std::string_view constexpr kContourLinesEnabledKey = "ContourLinesEnabled";
 double constexpr kTerrainLightMinAltitudeDeg = 10;
 double constexpr kTerrainLightMaxAltitudeDeg = 80;
 double constexpr kTerrainShadeMaxStrength = 3;  // half-transparent area fills by default in Satellite mode
@@ -1340,6 +1341,19 @@ void Framework::SetTerrainShading(double azimuthDeg, double altitudeDeg, double 
   SetTerrainLight(azimuthDeg, altitudeDeg, gpu::kDefaultTerrainShadowGamma, strength);
 }
 
+void Framework::SetContourLinesEnabled(bool enabled)
+{
+  settings::Set(kContourLinesEnabledKey, enabled);
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->SetContourLinesEnabled(enabled);
+}
+
+bool Framework::LoadContourLinesEnabled()
+{
+  bool enabled;
+  return !settings::Get(kContourLinesEnabledKey, enabled) || enabled;
+}
+
 Framework::TerrainShading Framework::LoadTerrainShading()
 {
   TerrainShading s{gpu::kDefaultTerrainLightAzimuthDeg, gpu::kDefaultTerrainLightAltitudeDeg, 1.0};
@@ -2108,6 +2122,8 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
                                  m_terrainLight->m_shadowGamma, m_terrainLight->m_strength);
   if (m_overlayTilesActive)
     m_drapeEngine->SetTileOverlay(true);
+  if (!LoadContourLinesEnabled())
+    m_drapeEngine->SetContourLinesEnabled(false);
 
   InvalidateUserMarks();
 
@@ -3063,6 +3079,11 @@ void Framework::CreateBackgroundTilesProvider(std::string const & url, uint32_t 
       m_drapeEngine->SetTileBackgroundData(tileKey, imageUid, rect, mode);
     }
   });
+}
+
+RasterTileProvider::Stats Framework::GetTileOverlayStats() const
+{
+  return m_overlayTileProvider ? m_overlayTileProvider->GetStats() : RasterTileProvider::Stats{};
 }
 
 void Framework::SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels)

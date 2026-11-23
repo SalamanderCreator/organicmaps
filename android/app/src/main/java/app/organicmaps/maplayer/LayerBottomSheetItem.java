@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.annotation.AttrRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import app.organicmaps.R;
 import app.organicmaps.adapter.OnItemClickListener;
@@ -21,6 +22,8 @@ public class LayerBottomSheetItem
   private final Mode mMode;
   @NonNull
   private final OnItemClickListener<LayerBottomSheetItem> mItemClickListener;
+  @Nullable
+  private OnItemClickListener<LayerBottomSheetItem> mLongClickListener;
 
   LayerBottomSheetItem(@DrawableRes int drawableResId, @StringRes int titleResId, @NonNull Mode mode,
                        @NonNull OnItemClickListener<LayerBottomSheetItem> itemClickListener)
@@ -29,6 +32,17 @@ public class LayerBottomSheetItem
     mTitleResId = titleResId;
     mMode = mode;
     mItemClickListener = itemClickListener;
+  }
+
+  @Nullable
+  OnItemClickListener<LayerBottomSheetItem> getLongClickListener()
+  {
+    return mLongClickListener;
+  }
+
+  void setLongClickListener(@Nullable OnItemClickListener<LayerBottomSheetItem> listener)
+  {
+    mLongClickListener = listener;
   }
 
   public static LayerBottomSheetItem create(@NonNull Context mContext, Mode mode,

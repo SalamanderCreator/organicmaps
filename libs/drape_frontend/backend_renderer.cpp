@@ -569,6 +569,15 @@ void BackendRenderer::AcceptMessage(ref_ptr<Message> message)
     break;
   }
 
+  case Message::Type::SetContourLines:
+  {
+    ref_ptr<SetContourLinesMessage> msg = message;
+    m_readManager->SetContourLinesEnabled(msg->IsEnabled());
+    m_commutator->PostMessage(ThreadsCommutator::RenderThread, make_unique_dp<SetContourLinesMessage>(msg->IsEnabled()),
+                              MessagePriority::Normal);
+    break;
+  }
+
   case Message::Type::EnableIsolines:
   {
     ref_ptr<EnableIsolinesMessage> msg = message;

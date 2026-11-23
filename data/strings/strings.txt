@@ -46076,29 +46076,17 @@ tags = android-app
 en = Rain radar
 de = Regenradar
 
-[rain_radar_source_title]
-comment = Settings: which rain radar service is shown
-tags = android-app
-en = Rain radar source
-de = Regenradar-Quelle
-
 [rain_radar_source_dwd]
-comment = Settings: rain radar source option, the German weather service
+comment = Rain radar settings: what the German weather service source covers
 tags = android-app
-en = DWD (Germany, with 2 h forecast)
-de = DWD (Deutschland, mit 2 h Vorhersage)
+en = Germany and border regions, 2 h back and 2 h forecast
+de = Deutschland und Grenzgebiete, 2 h zurück und 2 h Vorhersage
 
 [rain_radar_source_rainviewer]
-comment = Settings: rain radar source option, the worldwide RainViewer service
+comment = Rain radar settings: what the RainViewer source covers
 tags = android-app
-en = RainViewer (worldwide, last 2 h)
-de = RainViewer (weltweit, letzte 2 h)
-
-[rain_radar_opacity_title]
-comment = Settings: opacity of the rain radar layer in percent
-tags = android-app
-en = Rain radar opacity (%)
-de = Deckkraft Regenradar (%)
+en = Worldwide, last 2 h, no forecast, coarse
+de = Weltweit, letzte 2 h, keine Vorhersage, grob
 
 [rain_radar_loading]
 comment = Rain radar panel on the map: the radar times are being loaded
@@ -46208,11 +46196,59 @@ tags = android-app
 en = From the north-west (default)
 de = Von Nordwesten (Standard)
 
-[pref_bg_tiles_presets]
-comment = Satellite settings: button that opens a list of ready-made tile sources
+[layer_opacity]
+comment = Layer settings: opacity of a map layer in percent
 tags = android-app
-en = Choose a source…
-de = Quelle auswählen…
+en = Opacity
+de = Deckkraft
+
+[contour_lines_title]
+comment = Terrain layer settings: switch for the contour lines (the relief shading stays)
+tags = android-app
+en = Contour lines
+de = Höhenlinien
+
+[layers_long_press_hint]
+comment = Map layers menu: hint below the layer buttons
+tags = android-app
+en = Long press Terrain, Satellite or Rain radar for its settings
+de = Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen
+
+[rain_radar_status]
+comment = Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed
+tags = android-app
+en = %1$d tiles loaded, %2$d failed
+de = %1$d Kacheln geladen, %2$d Fehler
+
+[rain_radar_error_network]
+comment = Rain radar panel: the last tile failed for lack of a connection
+tags = android-app
+en = no connection
+de = keine Verbindung
+
+[rain_radar_error_image]
+comment = Rain radar panel: the server answered with something that is not an image
+tags = android-app
+en = no image from the server
+de = kein Bild vom Server
+
+[prefs_group_map]
+comment = Settings group: map display
+tags = android-app
+en = Map and display
+de = Karte und Anzeige
+
+[prefs_group_tracks]
+comment = Settings group: track recording, off-track alarm and elevations
+tags = android-app
+en = Tracks and elevations
+de = Tracks und Höhen
+
+[prefs_group_device]
+comment = Settings group: downloads, storage, battery and screen
+tags = android-app
+en = Device and data
+de = Gerät und Daten
 
 [track_debug_nothing_to_share]
 comment = Toast when there is no raw track data file to share

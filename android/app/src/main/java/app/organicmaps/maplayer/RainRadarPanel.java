@@ -1,11 +1,15 @@
 package app.organicmaps.maplayer;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import app.organicmaps.R;
+import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.util.UiUtils;
 import com.google.android.material.slider.Slider;
@@ -24,6 +28,18 @@ public class RainRadarPanel
   @NonNull
   private final Slider mSlider;
   @NonNull
+  private final TextView mStatus;
+  private final Handler mHandler = new Handler(Looper.getMainLooper());
+  private final Runnable mStatusUpdater = new Runnable() {
+    @Override
+    public void run()
+    {
+      showStatus();
+      if (UiUtils.isVisible(mPanel))
+        mHandler.postDelayed(this, 1000);
+    }
+  };
+  @NonNull
   private RainRadar.State mState;
 
   public RainRadarPanel(@NonNull View panel, @NonNull LifecycleOwner owner)
@@ -32,6 +48,7 @@ public class RainRadarPanel
     mTime = panel.findViewById(R.id.rain_radar_time);
     mCredit = panel.findViewById(R.id.rain_radar_credit);
     mSlider = panel.findViewById(R.id.rain_radar_slider);
+    mStatus = panel.findViewById(R.id.rain_radar_status);
     mState = RainRadar.getState().getValue();
 
     // The label follows the finger; the frame is loaded on release, every frame costs downloads.
@@ -64,8 +81,10 @@ public class RainRadarPanel
   {
     mState = state;
     UiUtils.showIf(state.mEnabled, mPanel);
+    mHandler.removeCallbacks(mStatusUpdater);
     if (!state.mEnabled)
       return;
+    mStatusUpdater.run();
 
     mCredit.setText(RainRadar.SOURCE_RAINVIEWER.equals(state.mSource) ? R.string.rain_radar_credit_rainviewer
                                                                        : R.string.rain_radar_credit_dwd);
@@ -90,6 +109,29 @@ public class RainRadarPanel
       mSlider.setValue(state.mIndex);
     }
     showTime(state.mIndex);
+  }
+
+  private void showStatus()
+  {
+    if (mState.mIndex < 0)
+    {
+      mStatus.setText("");
+      return;
+    }
+    final int[] stats = Framework.nativeGetTileOverlayStats();
+    final Context context = mPanel.getContext();
+    String text = context.getString(R.string.rain_radar_status, stats[0], stats[1]);
+    if (stats[1] > 0)
+    {
+      final String error = switch (stats[2])
+      {
+        case -1 -> context.getString(R.string.rain_radar_error_network);
+        case -2 -> context.getString(R.string.rain_radar_error_image);
+        default -> "HTTP " + stats[2];
+      };
+      text += " (" + error + ")";
+    }
+    mStatus.setText(text);
   }
 
   private void showTime(int index)

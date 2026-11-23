@@ -42,8 +42,18 @@
     android:id="@+id/recycler"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_base"
     android:minHeight="@dimen/toggle_map_layer_frame_height"
     android:paddingStart="@dimen/margin_half_plus_eight"
     android:paddingEnd="@dimen/margin_half_plus_eight" />
+
+  <!-- Maps&Fly: the layer settings open with a long press. -->
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_base"
+    android:layout_marginBottom="@dimen/margin_base"
+    android:gravity="center"
+    android:text="@string/layers_long_press_hint"
+    android:textAppearance="@style/MwmTextAppearance.Body4"
+    android:textColor="?android:attr/textColorSecondary" />
 </LinearLayout>

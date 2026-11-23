@@ -888,6 +888,12 @@ void DrapeEngine::HideRouteTransit()
                                   MessagePriority::Normal);
 }
 
+void DrapeEngine::SetContourLinesEnabled(bool enable)
+{
+  m_threadCommutator->PostMessage(ThreadsCommutator::ResourceUploadThread,
+                                  make_unique_dp<SetContourLinesMessage>(enable), MessagePriority::Normal);
+}
+
 void DrapeEngine::EnableIsolines(bool enable)
 {
   m_threadCommutator->PostMessage(ThreadsCommutator::ResourceUploadThread,

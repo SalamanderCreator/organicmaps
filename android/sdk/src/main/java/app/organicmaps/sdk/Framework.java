@@ -212,6 +212,14 @@ public class Framework
   @NonNull
   @Size(3)
   public static native double[] nativeGetTerrainShading();
+  // Maps&Fly: the overlay layer downloads since its last source change: loaded, failed, last error
+  // (HTTP code, -1 transport error, -2 not an image).
+  @NonNull
+  @Size(3)
+  public static native int[] nativeGetTileOverlayStats();
+  // Maps&Fly: the contour lines of the terrain layer, persisted (the hillshading stays).
+  public static native void nativeSetContourLinesEnabled(boolean enabled);
+  public static native boolean nativeIsContourLinesEnabled();
   public static native ParsedSearchRequest nativeGetParsedSearchRequest();
   public static native @Nullable String nativeGetParsedAppName();
   public static native @Nullable String nativeGetParsedOAuth2Code();

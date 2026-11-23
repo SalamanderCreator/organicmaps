@@ -50,7 +50,7 @@ public final class RainRadar
 
   private static final long STEP_DWD_MS = TimeUnit.MINUTES.toMillis(5);
   // The newest DWD scan is usually published a few minutes after its time.
-  private static final long DWD_DELAY_MS = TimeUnit.MINUTES.toMillis(5);
+  private static final long DWD_DELAY_MS = TimeUnit.MINUTES.toMillis(10);
   private static final long DWD_RANGE_MS = TimeUnit.HOURS.toMillis(2);
   private static final String DWD_URL = "https://maps.dwd.de/geoserver/dwd/wms?service=WMS&version=1.3.0"
                                       + "&request=GetMap&layers=dwd:Niederschlagsradar&styles=&format=image/png"
@@ -168,12 +168,24 @@ public final class RainRadar
       reload(context);
   }
 
-  /** Applies a changed source or opacity from the settings. */
   @MainThread
-  public static void onSettingsChanged(@NonNull Context context)
+  public static void setSource(@NonNull Context context, @NonNull String source)
   {
+    if (source.equals(getSource(context)))
+      return;
+    prefs(context).edit().putString(PREF_SOURCE, source).apply();
     if (isEnabled(context))
       reload(context);
+  }
+
+  /** Re-shows the current frame with the new opacity (from the disk cache, no new list). */
+  @MainThread
+  public static void setOpacity(@NonNull Context context, int opacityPct)
+  {
+    prefs(context).edit().putInt(PREF_OPACITY, opacityPct).apply();
+    final State state = sState.getValue();
+    if (state != null && state.mEnabled && state.mIndex >= 0)
+      show(context, state.mSource, state.mFrames.get(state.mIndex));
   }
 
   @MainThread

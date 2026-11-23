@@ -109,6 +109,7 @@ public:
     NotifyRenderThread,
     NotifyGraphicsReady,
     EnableIsolines,
+    SetContourLines,
     OnEnterBackground,
     Arrow3dRecache,
     VisualScaleChanged,

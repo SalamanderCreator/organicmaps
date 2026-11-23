@@ -256,6 +256,8 @@ public:
   void HideRouteTransit();
 
   void EnableIsolines(bool enable);
+  // Maps&Fly: hides the dynamic contour lines, the hillshading stays.
+  void SetContourLinesEnabled(bool enable);
 
   void SetFontScaleFactor(double scaleFactor);
 

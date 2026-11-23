@@ -12,7 +12,6 @@ import app.organicmaps.R
 import app.organicmaps.base.BaseMwmFragment
 import app.organicmaps.sdk.Framework
 import app.organicmaps.util.WindowInsetUtils.ScrollableContentInsetsListener
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -76,7 +75,6 @@ class BgTilesSettingsFragment : BaseMwmFragment() {
             refreshValidation()
         }
         urlField.doAfterTextChanged { refreshValidation() }
-        view.findViewById<View>(R.id.bg_tiles_presets).setOnClickListener { showPresets() }
         cacheSizeSlider.bindValueLabel(cacheSizeLabel)
         opacitySlider.bindValueLabel(opacityLabel)
 
@@ -103,28 +101,10 @@ class BgTilesSettingsFragment : BaseMwmFragment() {
         opacitySlider.isEnabled = enabled
     }
 
-    // Maps&Fly B3: free imagery for private use; the credits are listed in the plan (B3).
-    private fun showPresets() {
-        val names = PRESETS.map { it.first }.toTypedArray()
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.pref_bg_tiles_presets)
-            .setItems(names) { _, which ->
-                urlField.setText(PRESETS[which].second)
-                enabledSwitch.isChecked = true
-            }.show()
-    }
-
     private fun refreshValidation() {
         urlInputLayout.error = if (isConfigValid) null else getString(R.string.pref_bg_tiles_url_error)
     }
 }
-
-private val PRESETS = listOf(
-    "Esri World Imagery" to
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    "Sentinel-2 cloudless 2020 (EOX, 10 m)" to
-        "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg",
-)
 
 private fun Slider.bindValueLabel(label: TextView) {
     addOnChangeListener { _, value, _ ->

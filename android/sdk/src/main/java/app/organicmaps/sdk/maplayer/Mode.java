@@ -112,10 +112,12 @@ public enum Mode
     @Override
     public void setEnabled(@NonNull Context context, boolean isEnabled)
     {
-      // Keep the configured URL / cache size / area opacity; only flip the on/off flag. With an empty
-      // URL the core stays inactive, so the UI layer opens the Satellite Imagery settings instead of
-      // calling this (see ToggleMapLayerFragment).
-      Framework.nativeSetBackgroundTilesEnabled(isEnabled);
+      // Keep the configured URL / cache size / area opacity; only flip the on/off flag.
+      // Maps&Fly: without a configured URL the first ready-made source is used.
+      if (isEnabled && Framework.nativeGetBackgroundTilesUrl().isEmpty())
+        SatelliteSource.ESRI.apply(true);
+      else
+        Framework.nativeSetBackgroundTilesEnabled(isEnabled);
     }
   },
 

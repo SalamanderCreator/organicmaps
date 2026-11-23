@@ -1195,6 +1195,20 @@ private:
   bool const m_isSimplified;
 };
 
+// Maps&Fly: the dynamic contour lines on or off while the terrain layer (hillshading) stays on.
+class SetContourLinesMessage : public Message
+{
+public:
+  explicit SetContourLinesMessage(bool isEnabled) : m_isEnabled(isEnabled) {}
+
+  Type GetType() const override { return Type::SetContourLines; }
+
+  bool IsEnabled() const { return m_isEnabled; }
+
+private:
+  bool const m_isEnabled;
+};
+
 class EnableIsolinesMessage : public Message
 {
 public:

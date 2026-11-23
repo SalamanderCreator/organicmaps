@@ -179,6 +179,9 @@ void RasterTileProvider::SetSource(std::string urlTemplate, int maxZoom, float a
 {
   ASSERT(m_params.m_cacheKeyedByUrl, ());
   LogConfig(urlTemplate, m_params.m_maxCacheBytes);
+  m_statLoaded = 0;
+  m_statFailed = 0;
+  m_statLastError = 0;
   std::lock_guard lock(m_activeMutex);
   m_params.m_urlTemplate = std::move(urlTemplate);
   m_params.m_maxZoom = maxZoom;
@@ -313,6 +316,7 @@ bool RasterTileProvider::RequestTile(df::TileKey const & tileKey, dp::Background
     if (DecodeFileToRGBA(m_cacheDir + source.m_fileName, rgba, width, height))  // cache hit
     {
       TouchCacheEntry(source.m_fileName);
+      ++m_statLoaded;
       PostProcess(rgba, source.m_alpha, source.m_dropNeutralPixels);
       if (DropActive(tileKey, requestId))
         m_onReady(tileKey, mode, source.m_uid, width, height, src.m_rect, std::move(rgba));
@@ -343,6 +347,8 @@ void RasterTileProvider::StartDownload(df::TileKey const & tileKey, dp::Backgrou
     {
       if (!DropActive(tileKey, requestId))
         return;
+      ++m_statFailed;
+      m_statLastError = result.m_errorCode > 0 ? result.m_errorCode : -1;
       LOG(LWARNING, ("Failed to download", src.GetUid(), "code", result.m_errorCode));
       // An empty uid reports a failed read to the renderer.
       m_onReady(tileKey, mode, {} /* imageUid */, 0, 0, {}, {});
@@ -356,7 +362,10 @@ void RasterTileProvider::StartDownload(df::TileKey const & tileKey, dp::Backgrou
     {
       if (!DropActive(tileKey, requestId))
         return;
-      LOG(LWARNING, ("Failed to decode", src.GetUid()));
+      ++m_statFailed;
+      m_statLastError = -2;
+      // A WMS reports errors as an XML document with HTTP 200.
+      LOG(LWARNING, ("Failed to decode", src.GetUid(), body.substr(0, 300)));
       // Same terminal-failure report as the download path above.
       m_onReady(tileKey, mode, {} /* imageUid */, 0, 0, {}, {});
       return;
@@ -365,6 +374,7 @@ void RasterTileProvider::StartDownload(df::TileKey const & tileKey, dp::Backgrou
     if (WriteTileCache(m_cacheDir + source.m_fileName, body.data(), body.size()))
       AddCacheEntry(source.m_fileName, body.size());
 
+    ++m_statLoaded;
     PostProcess(rgba, source.m_alpha, source.m_dropNeutralPixels);
     // Deliver only if the request was not cancelled while it was in flight.
     if (DropActive(tileKey, requestId))
