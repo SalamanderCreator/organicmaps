@@ -1015,9 +1015,9 @@
     <!-- Banner on the map while the user is off the watched track. %s is the distance, e.g. 60 m -->
     <string name="off_track_banner">Trackabweichung: %s</string>
     <!-- Settings: switch to take the track elevation profile heights from the downloaded terrain -->
-    <string name="prefer_terrain_elevation_title">Track-Höhen aus dem Gelände</string>
+    <string name="prefer_terrain_elevation_title">Ungenaue Track-Höhen aus dem Gelände</string>
     <!-- Settings: description of the switch to take the track elevation profile heights from the downloaded terrain -->
-    <string name="prefer_terrain_elevation_description">Höhenprofile nutzen die Geländehöhen statt der oft verrauschten GPS-Höhen des Tracks. Fehlende Höhen kommen immer aus dem Gelände.</string>
+    <string name="prefer_terrain_elevation_description">Weichen die Höhen eines Tracks stark vom Gelände ab, z. B. GPS-Höhen eines Handys ohne Barometer, nutzt das Höhenprofil die Geländehöhen. Fehlende Höhen kommen immer aus dem Gelände. Flugtracks behalten ihre Höhen.</string>
     <!-- Settings: title of the off-track alarm distance -->
     <string name="off_track_threshold_title">Off-Track-Alarm: Abstand</string>
     <!-- Settings: description of the off-track alarm distance. %s is the distance, e.g. 30 m -->
