@@ -74,6 +74,16 @@ class MapButtonsViewModel : ViewModel() {
         _trackRecorderState.value = state
     }
 
+    // Maps&Fly: height of the off-track banner below the status bar, which the top buttons move below.
+    private val _topBannerOffset = MutableLiveData(0)
+    val topBannerOffset: LiveData<Int> = _topBannerOffset
+
+    fun setTopBannerOffset(offset: Int) {
+        if (_topBannerOffset.value != offset) {
+            _topBannerOffset.value = offset
+        }
+    }
+
     fun setTopHeaderHeight(height: Int) {
         // Layout listeners call this on every pass; skip redundant updates so the search sheet's
         // expanded offset is recomputed only when the height actually changes.

@@ -553,10 +553,17 @@ public class MwmActivity extends BaseMwmFragmentActivity
     });
     final TextView offTrackBanner = findViewById(R.id.off_track_banner);
     ViewCompat.setOnApplyWindowInsetsListener(offTrackBanner, BaselinePaddingInsetsListener.excludeBottom());
+    // The banner covers the top of the map: the turn hints and the top buttons move below it.
+    offTrackBanner.addOnLayoutChangeListener(
+        (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> updateOffTrackBannerOffset(v));
     OffTrackService.getBanner().observe(this, banner -> {
       UiUtils.showIf(banner != null, offTrackBanner);
       if (banner == null)
+      {
+        // A hidden banner gets no layout pass.
+        updateOffTrackBannerOffset(offTrackBanner);
         return;
+      }
       offTrackBanner.setText(banner.text);
       offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
@@ -2109,6 +2116,19 @@ public class MwmActivity extends BaseMwmFragmentActivity
     TrackRecordingService.startForegroundService(getApplicationContext());
     Utils.showBatteryOptimizationWarningIfNeeded(this);
     return true;
+  }
+
+  /** Maps&Fly: the off-track banner covers the top of the map; the turn hints and the top buttons move below it. */
+  private void updateOffTrackBannerOffset(@NonNull View banner)
+  {
+    int offset = 0;
+    if (UiUtils.isVisible(banner))
+    {
+      final WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(banner);
+      offset = banner.getHeight() - (insets == null ? 0 : insets.getInsets(WindowInsetsCompat.Type.systemBars()).top);
+    }
+    findViewById(R.id.nav_top_frame).setTranslationY(offset);
+    mMapButtonsViewModel.setTopBannerOffset(offset);
   }
 
   private void showTrackRecordingUi()
