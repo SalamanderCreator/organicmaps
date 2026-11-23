@@ -490,6 +490,8 @@ void RoutingManager::Init(std::shared_ptr<routing::NumMwmIds> ptr)
   m_numMwmTree = MakeNumMwmTree(*m_numMwmIDs, m_callbacks.m_countryInfoGetter());
 
   SetRouterImpl(GetLastUsedRouter());
+  m_routePreview = std::make_unique<route_preview::Calculator>([this](VehicleType vehicleType)
+  { return MakeIndexRouter(vehicleType, true /* loadAltitudes */); });
 }
 
 void RoutingManager::SetRouterImpl(RouterType type)
@@ -1890,4 +1892,41 @@ void RoutingManager::SetSubroutesVisibility(bool visible)
 bool RoutingManager::IsSpeedCamLimitExceeded() const
 {
   return m_routingSession.IsSpeedCamLimitExceeded();
+}
+
+std::unique_ptr<IRouter> RoutingManager::MakeIndexRouter(VehicleType vehicleType, bool loadAltitudes) const
+{
+  auto const countryFileGetter = [this](m2::PointD const & p)
+  { return m_callbacks.m_countryInfoGetter().GetRegionCountryId(p); };
+  auto const getMwmRectByName = [this](std::string const & countryId)
+  { return m_callbacks.m_countryInfoGetter().GetLimitRectForLeaf(countryId); };
+
+  return std::make_unique<IndexRouter>(vehicleType, loadAltitudes, m_callbacks.m_countryParentNameGetterFn,
+                                       countryFileGetter, getMwmRectByName, m_numMwmIDs, m_numMwmTree, m_routingSession,
+                                       m_callbacks.m_dataSourceGetter());
+}
+
+void RoutingManager::CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, RouterType type,
+                                           RoutePreviewCallback && callback)
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  CHECK(m_routePreview, ("Routing is not initialized"));
+  CHECK(type == RouterType::Pedestrian || type == RouterType::Bicycle, (type));
+
+  VehicleType const vehicleType = type == RouterType::Bicycle ? VehicleType::Bicycle : VehicleType::Pedestrian;
+  m_routePreview->Calculate({from, to}, vehicleType,
+                            [vehicleType, callback = std::move(callback)](RouteBase const * route)
+  {
+    if (route)
+      callback(route_preview::CalculateStats(*route, vehicleType));
+    else
+      callback(std::nullopt);
+  });
+}
+
+void RoutingManager::CancelRoutePreview()
+{
+  CHECK_THREAD_CHECKER(m_threadChecker, ());
+  if (m_routePreview)
+    m_routePreview->Cancel();
 }

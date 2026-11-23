@@ -123,6 +123,22 @@
         tools:background="#8000F000"
         tools:text="2.4 GB  •  Maps: 1"
         tools:visibility="visible" />
+
+      <TextView
+        android:id="@+id/tv__route_preview"
+        android:textAlignment="viewStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_quarter"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/organic_maps_emoji"
+        android:minHeight="32dp"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/MwmTextAppearance.PlacePage.Accent"
+        android:textSize="@dimen/text_size_body_3"
+        android:visibility="gone"
+        tools:text="🥾 3.2 km  ↗ 240 m  ↘ 80 m  ⏱ 1 h 15 min"
+        tools:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout

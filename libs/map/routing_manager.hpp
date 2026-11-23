@@ -2,6 +2,7 @@
 
 #include "map/bookmark_manager.hpp"
 #include "map/extrapolation/extrapolator.hpp"
+#include "map/route_preview.hpp"
 #include "map/routing_mark.hpp"
 #include "map/transit/transit_display.hpp"
 #include "map/transit/transit_reader.hpp"
@@ -295,8 +296,17 @@ public:
 
   routing::RouterType GetCurrentRouterType() const { return m_currentRouterType; }
 
+  /// Maps&Fly: calculates a pedestrian or bicycle route from |from| to |to| next to the routing session,
+  /// e.g. for a tapped place. A new request or CancelRoutePreview() drops the previous one.
+  /// The callback gets nullopt when no route was found.
+  using RoutePreviewCallback = std::function<void(std::optional<route_preview::Stats> const & stats)>;
+  void CalculateRoutePreview(m2::PointD const & from, m2::PointD const & to, routing::RouterType type,
+                             RoutePreviewCallback && callback);
+  void CancelRoutePreview();
+
 private:
   void SetRouterImpl(routing::RouterType type);
+  std::unique_ptr<routing::IRouter> MakeIndexRouter(routing::VehicleType vehicleType, bool loadAltitudes) const;
 
   struct RoadInfo
   {
@@ -397,6 +407,8 @@ private:
 
   std::shared_ptr<routing::NumMwmIds> m_numMwmIDs;
   std::shared_ptr<m4::Tree<routing::NumMwmId>> m_numMwmTree;
+
+  std::unique_ptr<route_preview::Calculator> m_routePreview;
 
   TransitReadManager * m_transitReadManager = nullptr;
 

@@ -29,6 +29,7 @@ set(SRC
   search_viewport_tests.cpp
   transliteration_test.cpp
   relation_track_tests.cpp
+  route_preview_tests.cpp
   routing_manager_tests.cpp
   terrain_provider_tests.cpp
   track_import_tests.cpp
