@@ -47,6 +47,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerHolder>
     holder.mButton.setBackgroundResource(item.getDrawable());
     holder.mButton.setActivated(isEnabled);
     holder.mListener = item::onClick;
+    holder.mLongListener = item.getLongClickListener();
   }
 
   @Override

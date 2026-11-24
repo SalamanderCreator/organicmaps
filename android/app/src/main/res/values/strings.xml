@@ -998,6 +998,12 @@
     <string name="route_surface_unpaved_bad">Natural ground</string>
     <!-- Maps&Fly route panel surface: not mapped -->
     <string name="route_surface_unknown">Unknown</string>
+    <!-- Maps&Fly: title of the menu behind the save button of a planned route -->
+    <string name="route_save_title">Save route</string>
+    <!-- Maps&Fly: save the planned route as a track in the bookmarks -->
+    <string name="route_save_as_track">Save as track</string>
+    <!-- Maps&Fly: save the planned route as a track if needed and share it as a GPX file -->
+    <string name="route_share_gpx">Share as GPX</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Could not save the route as a track</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->
@@ -1016,6 +1022,74 @@
     <string name="track_record_with_debug">Record track + debug</string>
     <!-- Settings: shares the newest raw track data file -->
     <string name="track_debug_share">Debug: share latest raw track data</string>
+    <!-- Map layers menu: toggle button for the rain radar layer -->
+    <string name="button_layer_rain_radar">Rain radar</string>
+    <!-- Rain radar settings: what the German weather service source covers -->
+    <string name="rain_radar_source_dwd">Germany and border regions, 2 h back and 2 h forecast</string>
+    <!-- Rain radar settings: what the RainViewer source covers -->
+    <string name="rain_radar_source_rainviewer">Worldwide, last 2 h, no forecast, coarse</string>
+    <!-- Rain radar panel on the map: the radar times are being loaded -->
+    <string name="rain_radar_loading">Loading rain radar…</string>
+    <!-- Rain radar panel on the map: the radar times could not be loaded -->
+    <string name="rain_radar_failed">Rain radar not available</string>
+    <!-- Rain radar panel: time of the newest radar image, %s is the clock time -->
+    <string name="rain_radar_latest">%s · newest image</string>
+    <!-- Rain radar panel: an older radar image, %1$s is the clock time, %2$d minutes before the newest -->
+    <string name="rain_radar_past">%1$s · %2$d min earlier</string>
+    <!-- Rain radar panel: a forecast image, %1$s is the clock time, %2$d minutes after the newest -->
+    <string name="rain_radar_forecast">%1$s · forecast +%2$d min</string>
+    <!-- Rain radar panel: required data credit -->
+    <string name="rain_radar_credit_dwd">Radar: Deutscher Wetterdienst</string>
+    <!-- Rain radar panel: required data credit -->
+    <string name="rain_radar_credit_rainviewer">Radar: RainViewer</string>
+    <!-- Settings: strength of the relief shading in percent, 100 is the default -->
+    <string name="hillshade_strength_title">Relief strength (%)</string>
+    <!-- Settings: the direction the relief shading light comes from -->
+    <string name="hillshade_light_title">Relief light direction</string>
+    <!-- Settings: the height of the relief shading light above the horizon in degrees, lower means longer shadows -->
+    <string name="hillshade_altitude_title">Relief sun height (°)</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_n">From the north</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_ne">From the north-east</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_e">From the east</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_se">From the south-east</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_s">From the south</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_sw">From the south-west</string>
+    <!-- Settings: relief light direction option -->
+    <string name="hillshade_light_w">From the west</string>
+    <!-- Settings: relief light direction option, the usual map look -->
+    <string name="hillshade_light_nw">From the north-west (default)</string>
+    <!-- Layer settings: opacity of a map layer in percent -->
+    <string name="layer_opacity">Opacity</string>
+    <!-- Terrain layer settings: switch for the contour lines (the relief shading stays) -->
+    <string name="contour_lines_title">Contour lines</string>
+    <!-- Map layers menu: hint below the layer buttons -->
+    <string name="layers_long_press_hint">Long press Terrain, Satellite or Rain radar for its settings</string>
+    <!-- Map button: content description of the north arrow -->
+    <string name="compass_button">North arrow</string>
+    <!-- Toast after a long press on the north arrow: the map stays north up and cannot be turned -->
+    <string name="compass_north_locked">North up locked</string>
+    <!-- Toast after a long press on the locked north arrow -->
+    <string name="compass_north_unlocked">North up unlocked</string>
+    <!-- Toast on a tap on the locked north arrow -->
+    <string name="compass_north_locked_hint">North up is locked. Long press to unlock.</string>
+    <!-- Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed -->
+    <string name="rain_radar_status">%1$d tiles loaded, %2$d failed</string>
+    <!-- Rain radar panel: the last tile failed for lack of a connection -->
+    <string name="rain_radar_error_network">no connection</string>
+    <!-- Rain radar panel: the server answered with something that is not an image -->
+    <string name="rain_radar_error_image">no image from the server</string>
+    <!-- Settings group: map display -->
+    <string name="prefs_group_map">Map and display</string>
+    <!-- Settings group: track recording, off-track alarm and elevations -->
+    <string name="prefs_group_tracks">Tracks and elevations</string>
+    <!-- Settings group: downloads, storage, battery and screen -->
+    <string name="prefs_group_device">Device and data</string>
     <!-- Toast when there is no raw track data file to share -->
     <string name="track_debug_nothing_to_share">No raw track data yet</string>
     <!-- Shown while a track is being recorded. %s is the current GPS accuracy, e.g. 8 m -->

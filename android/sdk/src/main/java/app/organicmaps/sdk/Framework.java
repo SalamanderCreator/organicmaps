@@ -203,6 +203,38 @@ public class Framework
   public static native int nativeGetBackgroundTilesCacheSizeMB();
   public static native boolean nativeIsBackgroundTilesEnabled();
   public static native int nativeGetBackgroundTilesAreaOpacity();
+  // Maps&Fly: the raster layer over the map (rain radar); an empty url switches it off. The url takes
+  // {z}/{x}/{y} or {bbox}; every call restarts the layer.
+  public static native void nativeSetTileOverlay(@NonNull String url, int maxZoom, int opacityPct,
+                                                 boolean dropNeutralPixels);
+  // Maps&Fly: hillshade light azimuth and altitude (degrees) and strength (1 = default), persisted.
+  public static native void nativeSetTerrainShading(double azimuthDeg, double altitudeDeg, double strength);
+  @NonNull
+  @Size(3)
+  public static native double[] nativeGetTerrainShading();
+  // Maps&Fly: the overlay layer downloads since its last source change: loaded, failed, last error
+  // (HTTP code, -1 transport error, -2 not an image).
+  @NonNull
+  @Size(3)
+  public static native int[] nativeGetTileOverlayStats();
+  // Maps&Fly: the contour lines of the terrain layer, persisted (the hillshading stays).
+  public static native void nativeSetContourLinesEnabled(boolean enabled);
+  public static native boolean nativeIsContourLinesEnabled();
+
+  // Maps&Fly map buttons: the position button centers and follows, the compass button turns between north up
+  // and heading up, the north lock keeps north up (also in routing) and blocks turning the map by hand.
+  public static native void nativeCenterOnMyPosition();
+  public static native void nativeToggleNorthUp();
+  public static native void nativeSetNorthLocked(boolean locked);
+  public static native boolean nativeIsNorthLocked();
+
+  public interface MapAzimuthListener
+  {
+    /** The map rotation in degrees, the clockwise View rotation of a north arrow; called on the UI thread. */
+    void onMapAzimuthChanged(double azimuthDeg);
+  }
+
+  public static native void nativeSetMapAzimuthListener(@Nullable MapAzimuthListener listener);
   public static native ParsedSearchRequest nativeGetParsedSearchRequest();
   public static native @Nullable String nativeGetParsedAppName();
   public static native @Nullable String nativeGetParsedOAuth2Code();
@@ -484,7 +516,11 @@ public class Framework
 
   public static native void nativeDidSelectProduct(String title, String link);
 
-  public static native boolean nativeSaveRoute();
+  /**
+   * Saves the built route as a track.
+   * @return the new track id, or -1 on failure.
+   */
+  public static native long nativeSaveRoute();
 
   public static native boolean nativeCanShowCrowdfundingPromo();
 

@@ -7,6 +7,7 @@
 #include "drape_frontend/user_event_stream.hpp"
 #include "drape_frontend/visual_params.hpp"
 
+#include "geometry/angles.hpp"
 #include "geometry/mercator.hpp"
 
 #include "platform/measurement_utils.hpp"
@@ -397,6 +398,74 @@ void MyPositionController::NextMode(ScreenBase const & screen)
   }
 }
 
+void MyPositionController::CenterOnPosition(ScreenBase const & screen)
+{
+  // Without a position the button starts or stops looking for it, as before.
+  if (!IsModeHasPosition())
+  {
+    NextMode(screen);
+    return;
+  }
+
+  int preferredZoomLevel = kDoNotChangeZoom;
+  if (GetZoomLevel(screen) < kZoomThreshold)
+    preferredZoomLevel = std::min(GetZoomLevel(screen, m_position, m_errorRadius), kMaxScaleZoomLevel);
+
+  if (m_mode == location::NotFollow)
+    ChangeMode(m_isInRouting || m_headingUpPreferred ? location::FollowAndRotate : location::Follow);
+  UpdateViewport(preferredZoomLevel);
+}
+
+void MyPositionController::ToggleNorthUp(ScreenBase const & screen)
+{
+  if (m_mode == location::FollowAndRotate)
+  {
+    m_headingUpPreferred = false;
+    ChangeMode(location::Follow);
+    ChangeModelView(m_position, 0.0, GetRotationPixelCenter(), kDoNotChangeZoom);
+    return;
+  }
+
+  double constexpr kNorthUpEps = 0.01;
+  double const angle = ang::AngleIn2PI(screen.GetAngle());
+  bool const isNorthUp = angle < kNorthUpEps || angle > 2.0 * math::pi - kNorthUpEps;
+  // A map turned by hand goes back to north up first.
+  if (m_northLocked || !isNorthUp || !IsModeHasPosition())
+  {
+    m_headingUpPreferred = false;
+    ChangeModelView(0.0);
+    return;
+  }
+
+  m_headingUpPreferred = true;
+  ChangeMode(location::FollowAndRotate);
+  UpdateViewport(kDoNotChangeZoom);
+}
+
+void MyPositionController::SetNorthLocked(bool locked)
+{
+  if (m_northLocked == locked)
+    return;
+  m_northLocked = locked;
+  if (locked)
+  {
+    if (m_mode == location::FollowAndRotate)
+    {
+      ChangeMode(location::Follow);
+      ChangeModelView(m_position, 0.0, GetRotationPixelCenter(), kDoNotChangeZoom);
+    }
+    else
+    {
+      ChangeModelView(0.0);
+    }
+  }
+  else if (m_isInRouting && m_mode == location::Follow)
+  {
+    ChangeMode(location::FollowAndRotate);
+    UpdateViewport(kDoNotChangeZoom);
+  }
+}
+
 void MyPositionController::OnLocationUpdate(location::GpsInfo const & info, bool isNavigable, ScreenBase const & screen)
 {
   m2::PointD const oldPos = GetDrawablePosition();
@@ -626,6 +695,9 @@ void MyPositionController::SetDirection(double bearing)
 
 void MyPositionController::ChangeMode(location::EMyPositionMode newMode)
 {
+  if (m_northLocked && newMode == location::FollowAndRotate)
+    newMode = location::Follow;
+
   if (m_isInRouting && (m_mode != newMode) && (newMode == location::FollowAndRotate))
     ResetBlockAutoZoomTimer();
 
@@ -846,8 +918,9 @@ void MyPositionController::ActivateRouting(int zoomLevel, bool enableAutoZoom, b
     m_enableAutoZoomInRouting = enableAutoZoom;
 
     ChangeMode(location::FollowAndRotate);
-    ChangeModelView(m_position, m_isDirectionAssigned ? m_drawDirection : 0.0, GetRoutingRotationPixelCenter(),
-                    zoomLevel, [this](ref_ptr<Animation> anim) { UpdateViewport(kDoNotChangeZoom); });
+    bool const rotate = m_mode == location::FollowAndRotate && m_isDirectionAssigned;
+    ChangeModelView(m_position, rotate ? m_drawDirection : 0.0, GetRoutingRotationPixelCenter(), zoomLevel,
+                    [this](ref_ptr<Animation> anim) { UpdateViewport(kDoNotChangeZoom); });
     ResetRoutingNotFollowTimer();
   }
 }

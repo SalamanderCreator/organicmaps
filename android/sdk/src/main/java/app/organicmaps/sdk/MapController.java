@@ -63,6 +63,12 @@ public class MapController implements DefaultLifecycleObserver
     return Map.isEngineCreated() && mMap.isContextCreated();
   }
 
+  /** Leaves the compass out of the rendered widgets, call before the surface is created. */
+  public void disableCompassWidget()
+  {
+    mMap.disableCompassWidget();
+  }
+
   /**
    * Moves the compass away from overlays and window insets.
    *

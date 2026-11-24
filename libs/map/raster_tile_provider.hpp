@@ -8,6 +8,7 @@
 
 #include "geometry/rect2d.hpp"
 
+#include <atomic>
 #include <functional>
 #include <list>
 #include <mutex>
@@ -22,7 +23,8 @@ class RasterTileProvider
 public:
   struct Params
   {
-    // URL template that must contain the {z}, {x}, {y} placeholders.
+    // URL template that must contain the {z}, {x}, {y} placeholders, or {bbox} (the tile's
+    // EPSG:3857 metres "minX,minY,maxX,maxY", for WMS GetMap sources).
     std::string m_urlTemplate;
     // Sub-directory under Platform::WritableDir() used for the on-disk tile cache.
     std::string m_cacheSubdir = "bg_tiles";
@@ -39,6 +41,14 @@ public:
     double m_maxLon = 180.0;
     // Upper bound on the on-disk tile cache. Once exceeded, least-recently-used tiles are evicted.
     uint64_t m_maxCacheBytes = 100ull * 1024 * 1024;  // 100 MB
+    // Maps&Fly: keys the cache files and image uids by the URL, so switching between sources (radar
+    // time frames) keeps the cached tiles of each instead of clearing the cache.
+    bool m_cacheKeyedByUrl = false;
+    // Maps&Fly: multiplies the decoded alpha (the layer opacity).
+    float m_alpha = 1.0f;
+    // Maps&Fly: makes grey and magenta pixels transparent (the DWD radar "no echo" area and
+    // coverage border, which the WMS draws even with TRANSPARENT=TRUE).
+    bool m_dropNeutralPixels = false;
   };
 
   // Delivers decoded RGBA8 pixels for an OM tile. Invoked on a background thread.
@@ -68,6 +78,26 @@ public:
   // changes the on-disk cache is cleared, since cached z/x/y now map to a different source.
   void Reconfigure(std::string urlTemplate, uint64_t maxCacheBytes);
 
+  // Maps&Fly: switches the source of a m_cacheKeyedByUrl provider (thread-safe). Requests started
+  // before keep their own source; the caller restarts the layer to drop their images.
+  void SetSource(std::string urlTemplate, int maxZoom, float alpha, bool dropNeutralPixels);
+
+  // Maps&Fly: the downloads and cache reads since the last SetSource, for the in-app diagnosis.
+  struct Stats
+  {
+    uint32_t m_loaded = 0;
+    uint32_t m_failed = 0;
+    // HTTP code of the last failure, -1 transport error, -2 not a decodable image, 0 none.
+    int m_lastError = 0;
+  };
+  Stats GetStats() const { return {m_statLoaded.load(), m_statFailed.load(), m_statLastError.load()}; }
+
+  // Applies m_alpha and m_dropNeutralPixels to a tightly packed RGBA buffer. Public for tests.
+  static void PostProcess(std::vector<uint8_t> & rgba, float alpha, bool dropNeutralPixels);
+
+  // "{z}/{x}/{y}" and "{bbox}" substitution. Public for tests.
+  static std::string SubstituteUrl(std::string tmpl, int z, int x, int y);
+
   // Source web-mercator XYZ tile plus the UV sub-rect within it that the given OM tile maps to.
   struct SourceTile
   {
@@ -90,7 +120,17 @@ public:
 
 private:
   // Starts a non-blocking HTTP request; its completion handler decodes, caches and delivers the tile.
-  void StartDownload(df::TileKey const & tileKey, dp::BackgroundMode mode, std::string const & url,
+  // The per-request source settings, copied under m_activeMutex when the request starts.
+  struct RequestSource
+  {
+    std::string m_url;
+    std::string m_uid;
+    std::string m_fileName;
+    float m_alpha = 1.0f;
+    bool m_dropNeutralPixels = false;
+  };
+
+  void StartDownload(df::TileKey const & tileKey, dp::BackgroundMode mode, RequestSource const & source,
                      SourceTile const & src, uint64_t requestId);
 
   bool IsActive(df::TileKey const & tileKey, uint64_t requestId) const;
@@ -144,4 +184,8 @@ private:
   std::unordered_map<std::string, CacheEntry> m_cacheIndex;
 
   uint64_t m_cacheBytes = 0;
+
+  std::atomic<uint32_t> m_statLoaded{0};
+  std::atomic<uint32_t> m_statFailed{0};
+  std::atomic<int> m_statLastError{0};
 };

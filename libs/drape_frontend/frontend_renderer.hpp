@@ -196,6 +196,8 @@ private:
   };
   // Render part of scene
   void RenderTileBackgroundLayer(ScreenBase const & modelView);
+  void RenderTileOverlayLayer(ScreenBase const & modelView);
+  ref_ptr<TileBackgroundRenderer> GetTileRenderer(dp::BackgroundMode mode);
   void Render2dLayer(ScreenBase const & modelView);
   void PreRender3dLayer(ScreenBase const & modelView);
   void Render3dLayer(ScreenBase const & modelView);
@@ -337,6 +339,8 @@ private:
 
   drape_ptr<RouteRenderer> m_routeRenderer;
   drape_ptr<TileBackgroundRenderer> m_tileBackgroundRenderer;
+  // Maps&Fly: the overlay raster layer (rain radar) drawn over the map areas and lines.
+  drape_ptr<TileBackgroundRenderer> m_tileOverlayRenderer;
   drape_ptr<TrafficRenderer> m_trafficRenderer;
   drape_ptr<TransitSchemeRenderer> m_transitSchemeRenderer;
   drape_ptr<dp::Framebuffer> m_buildingsFramebuffer;

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.R;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.maplayer.subway.SubwayManager;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
 
@@ -111,10 +112,27 @@ public enum Mode
     @Override
     public void setEnabled(@NonNull Context context, boolean isEnabled)
     {
-      // Keep the configured URL / cache size / area opacity; only flip the on/off flag. With an empty
-      // URL the core stays inactive, so the UI layer opens the Satellite Imagery settings instead of
-      // calling this (see ToggleMapLayerFragment).
-      Framework.nativeSetBackgroundTilesEnabled(isEnabled);
+      // Keep the configured URL / cache size / area opacity; only flip the on/off flag.
+      // Maps&Fly: without a configured URL the first ready-made source is used.
+      if (isEnabled && Framework.nativeGetBackgroundTilesUrl().isEmpty())
+        SatelliteSource.ESRI.apply(true);
+      else
+        Framework.nativeSetBackgroundTilesEnabled(isEnabled);
+    }
+  },
+
+  // Maps&Fly: rain radar over the map, see RainRadar.
+  RAIN_RADAR {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return RainRadar.isEnabled(context);
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      RainRadar.setEnabled(context, isEnabled);
     }
   };
 
