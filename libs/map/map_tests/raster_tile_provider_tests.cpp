@@ -283,8 +283,10 @@ UNIT_TEST(RasterTileProvider_CancelStopsTransportAndSuppressesLateCompletion)
 
   TEST(provider.RequestTile(key, dp::BackgroundMode::Satellite), ());
   TEST(downloader.WaitForRequests(1), ());
+  TEST_EQUAL(provider.GetStats().m_pending, 1, ("A tile in flight counts as pending"));
   provider.CancelTile(key, dp::BackgroundMode::Satellite);
   TEST(downloader.WaitCancelled(0), ());
+  TEST_EQUAL(provider.GetStats().m_pending, 0, ());
 
   downloader.Complete(0, FailedDownload());
   TEST_EQUAL(ready.Count(), size_t{0}, ());

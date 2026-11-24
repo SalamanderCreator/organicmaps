@@ -176,6 +176,25 @@ UNIT_CLASS_TEST(TileBackgroundRendererTest, SecondReloadKeepsTheFrameOnScreen)
   TEST(m_pool.m_released.empty(), ("The old frame must stay on screen"));
 }
 
+// A frame change while the previous frame fades in keeps that newer frame, not the one before it.
+UNIT_CLASS_TEST(TileBackgroundRendererTest, ReloadDuringFadeKeepsTheNewerFrame)
+{
+  auto const oldFrame = LoadZ16();
+  m_reads.clear();
+  m_renderer.ReloadWithCrossFade(GetContext());
+  auto const newFrame = m_reads;
+  for (auto const & key : newFrame)
+  {
+    AssignTileImage(key, "new" + key.Coord2String());
+    BindTileImage(key, "new" + key.Coord2String());
+  }
+  TEST(m_renderer.IsFadingImage(oldFrame.front().Coord2String()), ("The old frame fades out first"));
+
+  m_renderer.ReloadWithCrossFade(GetContext());
+  TEST(!m_renderer.IsFadingImage(oldFrame.front().Coord2String()), ("The oldest frame must not come back"));
+  TEST(m_renderer.IsFadingImage("new" + newFrame.front().Coord2String()), ("The newer frame stays on screen"));
+}
+
 // The level being left keeps covering the viewport until the replacement level resolves completely.
 UNIT_CLASS_TEST(TileBackgroundRendererTest, ZoomChangeKeepsPreviousLevelUntilLoaded)
 {

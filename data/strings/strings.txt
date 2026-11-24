@@ -46337,8 +46337,8 @@ de = Regenradar nicht verfügbar
 [rain_radar_latest]
 comment = Rain radar panel: time of the newest radar image, %s is the clock time
 tags = android-app
-en = %s · newest image
-de = %s · neuestes Bild
+en = %s · now
+de = %s · aktuell
 
 [rain_radar_past]
 comment = Rain radar panel: an older radar image, %1$s is the clock time, %2$d minutes before the newest
@@ -46543,6 +46543,12 @@ comment = Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d
 tags = android-app
 en = %1$d tiles loaded, %2$d failed
 de = %1$d Kacheln geladen, %2$d Fehler
+
+[rain_radar_status_pending]
+comment = Rain radar panel: added to the download status while tiles of the shown time still load, %d is their number
+tags = android-app
+en = %d still loading
+de = %d laden noch
 
 [rain_radar_error_network]
 comment = Rain radar panel: the last tile failed for lack of a connection

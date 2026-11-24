@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.View;
@@ -47,21 +48,43 @@ public class RainRadarPanel
   @Nullable
   private String mLegendSource;
   private boolean mPlaying;
-  // Steps through the frames, a pause on the last one, then again from the first.
+  // Steps through the frames, a pause on the last one, then again from the first. A frame stays until its
+  // tiles have loaded, otherwise slow servers show only parts of the rain.
   private final Runnable mPlayer = new Runnable() {
     @Override
     public void run()
     {
       if (!mPlaying || mState.mIndex < 0)
         return;
+      final long waited = SystemClock.elapsedRealtime() - mFrameShownAt;
+      if (Framework.nativeGetTileOverlayStats()[3] > 0 && waited < PLAY_MAX_WAIT_MS)
+      {
+        mLoadingFrame = true;
+        mHandler.postDelayed(this, PLAY_POLL_MS);
+        return;
+      }
+      if (mLoadingFrame)
+      {
+        // Loaded late: show it for a full step too.
+        mLoadingFrame = false;
+        mHandler.postDelayed(this, PLAY_STEP_MS);
+        return;
+      }
       final int last = mState.mFrames.size() - 1;
       final int next = mState.mIndex >= last ? 0 : mState.mIndex + 1;
       RainRadar.selectFrame(mPanel.getContext(), next);
+      mFrameShownAt = SystemClock.elapsedRealtime();
+      // The renderer fades the frame in once loaded, so the step starts with the load.
       mHandler.postDelayed(this, next == last ? PLAY_END_PAUSE_MS : PLAY_STEP_MS);
     }
   };
   private static final long PLAY_STEP_MS = 800;
   private static final long PLAY_END_PAUSE_MS = 2000;
+  private static final long PLAY_POLL_MS = 100;
+  // Matches the renderer, which shows a frame at the latest after this time.
+  private static final long PLAY_MAX_WAIT_MS = 10000;
+  private long mFrameShownAt;
+  private boolean mLoadingFrame;
   private final Handler mHandler = new Handler(Looper.getMainLooper());
   private final Runnable mStatusUpdater = new Runnable() {
     @Override
@@ -256,6 +279,7 @@ public class RainRadarPanel
   {
     mPlaying = playing;
     mHandler.removeCallbacks(mPlayer);
+    mLoadingFrame = false;
     mPlay.setImageResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
     mPlay.setContentDescription(
         mPlay.getContext().getString(playing ? R.string.rain_radar_pause : R.string.rain_radar_play));
@@ -283,6 +307,8 @@ public class RainRadarPanel
       };
       text += " (" + error + ")";
     }
+    if (stats[3] > 0)
+      text += ", " + context.getString(R.string.rain_radar_status_pending, stats[3]);
     mStatus.setText(text);
   }
 

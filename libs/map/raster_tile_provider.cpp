@@ -175,6 +175,12 @@ void RasterTileProvider::PostProcess(std::vector<uint8_t> & rgba, float alpha, b
   }
 }
 
+RasterTileProvider::Stats RasterTileProvider::GetStats() const
+{
+  std::lock_guard lock(m_activeMutex);
+  return {m_statLoaded.load(), m_statFailed.load(), m_statLastError.load(), static_cast<uint32_t>(m_active.size())};
+}
+
 void RasterTileProvider::SetSource(std::string urlTemplate, int maxZoom, float alpha, bool dropNeutralPixels)
 {
   ASSERT(m_params.m_cacheKeyedByUrl, ());

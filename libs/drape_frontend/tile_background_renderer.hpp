@@ -15,6 +15,7 @@
 #include "geometry/rect2d.hpp"
 #include "geometry/screenbase.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <list>
 #include <optional>
@@ -56,6 +57,12 @@ public:
   void ReloadWithCrossFade(ref_ptr<dp::GraphicsContext> context);
   // True while an old frame is shown or fading out, the render loop must keep drawing.
   bool IsCrossFading() const { return !m_fadingTiles.empty(); }
+  // The frame fading out, for tests.
+  bool IsFadingImage(std::string const & uid) const
+  {
+    return std::any_of(m_fadingTiles.begin(), m_fadingTiles.end(),
+                       [&uid](auto const & tile) { return tile.second.m_imageUid == uid; });
+  }
 
   // Registered images can skip duplicate uploads, including over-zoom siblings sharing an ancestor.
   bool HasImage(std::string const & uid) const { return m_images.find(uid) != m_images.end(); }

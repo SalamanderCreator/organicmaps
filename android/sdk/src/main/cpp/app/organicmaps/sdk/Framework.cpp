@@ -1661,9 +1661,9 @@ JNIEXPORT jintArray Java_app_organicmaps_sdk_Framework_nativeGetTileOverlayStats
 {
   auto const stats = frm()->GetTileOverlayStats();
   jint const values[] = {static_cast<jint>(stats.m_loaded), static_cast<jint>(stats.m_failed),
-                         static_cast<jint>(stats.m_lastError)};
-  jintArray result = env->NewIntArray(3);
-  env->SetIntArrayRegion(result, 0, 3, values);
+                         static_cast<jint>(stats.m_lastError), static_cast<jint>(stats.m_pending)};
+  jintArray result = env->NewIntArray(std::size(values));
+  env->SetIntArrayRegion(result, 0, std::size(values), values);
   return result;
 }
 
