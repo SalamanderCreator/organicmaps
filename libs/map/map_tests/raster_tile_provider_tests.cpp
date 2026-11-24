@@ -91,6 +91,12 @@ public:
                          [this, index] { return index < m_requests.size() && m_requests[index]->m_cancelled; });
   }
 
+  std::string GetUrl(size_t index)
+  {
+    std::lock_guard lock(m_mutex);
+    return m_requests.at(index)->m_url;
+  }
+
   void Complete(size_t index, platform::HttpClient::Result result)
   {
     platform::HttpClient::CompletionHandler handler;
@@ -359,4 +365,53 @@ UNIT_TEST(RasterTileProvider_ConcurrentCompletionsDeliverEachRequestOnce)
   TEST_EQUAL(ready.Count(), kRequestCount, ());
   for (auto const & key : keys)
     TEST_EQUAL(ready.Count(key), size_t{1}, (key));
+}
+
+// Maps&Fly: WMS sources get the tile's EPSG:3857 box; plain XYZ sources keep working.
+UNIT_TEST(RasterTileProvider_SubstituteUrl)
+{
+  TEST_EQUAL(RTP::SubstituteUrl("https://t/{z}/{y}/{x}.png", 3, 4, 5), "https://t/3/5/4.png", ());
+  TEST_EQUAL(RTP::SubstituteUrl("https://w?bbox={bbox}&w=256", 1, 0, 0),
+             "https://w?bbox=-20037508.34,0.00,0.00,20037508.34&w=256", ());
+  TEST_EQUAL(RTP::SubstituteUrl("https://w?bbox={bbox}", 2, 3, 3),
+             "https://w?bbox=10018754.17,-20037508.34,20037508.34,-10018754.17", ());
+}
+
+UNIT_TEST(RasterTileProvider_PostProcess)
+{
+  // Rain blue, grey "no echo", magenta border, transparent.
+  std::vector<uint8_t> rgba = {40, 80, 220, 255, 200, 200, 205, 255, 255, 0, 255, 255, 0, 0, 0, 0};
+  auto copy = rgba;
+  RTP::PostProcess(copy, 1.0f, false);
+  TEST_EQUAL(copy, rgba, ());
+
+  RTP::PostProcess(rgba, 0.5f, true);
+  std::vector<uint8_t> const expected = {40, 80, 220, 128, 200, 200, 205, 0, 255, 0, 255, 0, 0, 0, 0, 0};
+  TEST_EQUAL(rgba, expected, ());
+}
+
+UNIT_TEST(RasterTileProvider_SetSourceSwitchesUrl)
+{
+  std::string const cacheSubdir = "raster_tile_provider_set_source_test";
+  platform::tests_support::ScopedDirCleanup cleanup(base::JoinPath(GetPlatform().WritableDir(), cacheSubdir));
+  ControlledDownloader downloader;
+  ReadyRecorder ready;
+  std::optional<RTP> providerStorage;
+  Platform::ThreadRunner runner;
+  auto params = TestParams(cacheSubdir);
+  params.m_cacheKeyedByUrl = true;
+  params.m_maxZoom = 7;
+  auto & provider = providerStorage.emplace(std::move(params), ready.GetReadyFn(), downloader.GetDownloadFn());
+  auto const key = OmTileAt(50.584312, 33.724862, 10);
+
+  TEST(provider.RequestTile(key, dp::BackgroundMode::Overlay), ());
+  TEST(downloader.WaitForRequests(1), ());
+  provider.CancelTile(key, dp::BackgroundMode::Overlay);
+
+  provider.SetSource("https://radar.test/frame2/{z}/{x}/{y}.png", 5, 0.5f, false);
+  df::TileKey const next(key, key.m_generation + 1, 0 /* userMarksGeneration */);
+  TEST(provider.RequestTile(next, dp::BackgroundMode::Overlay), ());
+  TEST(downloader.WaitForRequests(2), ());
+  TEST_EQUAL(downloader.GetUrl(0).rfind("https://tiles.test/7/", 0), 0, (downloader.GetUrl(0)));
+  TEST_EQUAL(downloader.GetUrl(1).rfind("https://radar.test/frame2/5/", 0), 0, (downloader.GetUrl(1)));
 }

@@ -10,6 +10,7 @@
 #include "map/place_page_info.hpp"
 #include "map/power_management/power_management_schemas.hpp"
 #include "map/power_management/power_manager.hpp"
+#include "map/raster_tile_provider.hpp"
 #include "map/routing_manager.hpp"
 #include "map/routing_mark.hpp"
 #include "map/search_api.hpp"
@@ -88,8 +89,6 @@ class Loader;
 /// Uncomment line to make fixed position settings and
 /// build version for screenshots.
 // #define FIXED_LOCATION
-
-class RasterTileProvider;
 
 struct FrameworkParams
 {
@@ -172,6 +171,9 @@ protected:
 
   // POC source of raster background tiles (see tileBackgroundReadFn in CreateDrapeEngine).
   std::unique_ptr<RasterTileProvider> m_rasterTileProvider;
+  // Maps&Fly: the overlay raster layer (rain radar), see SetTileOverlay.
+  std::unique_ptr<RasterTileProvider> m_overlayTileProvider;
+  bool m_overlayTilesActive = false;
 
   StorageDownloadingPolicy m_storageDownloadingPolicy;
   storage::Storage m_storage;
@@ -206,6 +208,7 @@ protected:
     double m_azimuthDeg;
     double m_altitudeDeg;
     double m_shadowGamma;
+    double m_strength = 1.0;
   };
   // The last SetTerrainLight, re-applied to a re-created drape engine.
   std::optional<TerrainLight> m_terrainLight;
@@ -430,6 +433,11 @@ public:
   void OnLocationUpdate(location::GpsInfo const & info);
   void OnCompassUpdate(location::CompassInfo const & info);
   void SwitchMyPositionNextMode();
+  /// Maps&Fly map buttons, see df::MyPositionController::CenterOnPosition().
+  void CenterOnMyPosition();
+  void ToggleNorthUp();
+  void SetNorthLocked(bool locked);
+  static bool LoadNorthLocked();
   /// Should be set before Drape initialization. Guarantees that fn is called in main thread context.
   void SetMyPositionModeListener(location::TMyPositionModeChanged && fn);
 
@@ -497,7 +505,8 @@ public:
   void SetDistanceLineEnabled(bool enabled);
   bool IsDistanceLineEnabled() const { return m_distanceOverlay.IsLineEnabled(); }
 
-  bool SaveRoute();
+  /// Saves the built route as a track and shows it. Returns kml::kInvalidTrackId on failure.
+  kml::TrackId SaveRoute();
   /// Returns the elevation profile data of the currently recorded track.
   /// To get the data on the every track recording state update, this function should be called after receiving the
   /// callback from the `SetTrackRecordingUpdateHandler`.
@@ -592,7 +601,20 @@ public:
   /// The terrain hillshade light (the desktop ALT+SHIFT hotkeys, see DrapeEngine): azimuth
   /// degrees clockwise from north towards the light, altitude degrees above the
   /// horizon, and the shadow gamma (the gentle slopes lift, 1 = linear).
-  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma);
+  void SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength = 1.0);
+  /// Maps&Fly: the persisted hillshade settings of the app (light azimuth and altitude degrees,
+  /// strength 1 = the upstream look), applied at once and on every later start.
+  void SetTerrainShading(double azimuthDeg, double altitudeDeg, double strength);
+  struct TerrainShading
+  {
+    double m_azimuthDeg;
+    double m_altitudeDeg;
+    double m_strength;
+  };
+  static TerrainShading LoadTerrainShading();
+  /// Maps&Fly: the dynamic contour lines of the terrain layer, persisted (on by default).
+  void SetContourLinesEnabled(bool enabled);
+  static bool LoadContourLinesEnabled();
   void SetVisibleViewport(m2::RectD const & rect);
 
   void ShowRect(m2::RectD const & rect, bool animation = true, bool useVisibleViewport = false);
@@ -784,6 +806,12 @@ public:
   // and all three {z}/{x}/{y} placeholders present literally (the braces must not be percent-encoded).
   // The settings UI calls this before committing and refuses to close on an enabled, malformed URL.
   static bool IsWellFormedBackgroundTilesURL(std::string const & url);
+
+  // Maps&Fly: the raster layer over the map areas (rain radar). An empty url switches it off.
+  // url takes {z}/{x}/{y} or {bbox} (see RasterTileProvider::Params); tiles deeper than maxZoom
+  // are cut from the maxZoom tile. Every call restarts the layer, e.g. for the next radar frame.
+  void SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels);
+  RasterTileProvider::Stats GetTileOverlayStats() const;
 
   void SetLargeFontsSize(bool isLargeSize);
   // Multiplied on top of the SetLargeFontsSize (Large Fonts) factor.

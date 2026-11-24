@@ -81,7 +81,8 @@ struct ALIGNMENT MapProgramParams
   float m_isOutlinePass = 1.0f;
   // The explicit padding keeps the appended vec4 16-aligned in every backend layout
   // (C++ glsl::vec4 is 4-aligned, std140/MSL float4 are 16-aligned).
-  float m_dummy1 = 0.0f;
+  // Maps&Fly: the hillshade strength, multiplies the TerrainShade alpha (1 = the upstream look).
+  float m_terrainShadeStrength = 1.0f;
   float m_dummy2 = 0.0f;
   // The terrain hillshade light of the TerrainShade program: xyz is the unit direction
   // towards the light in the mercator frame (+x east, +y north, +z up; z doubles as the

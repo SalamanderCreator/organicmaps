@@ -25,8 +25,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import app.organicmaps.MwmActivity;
 import app.organicmaps.R;
+import app.organicmaps.bookmarks.BookmarksSharingHelper;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.bookmarks.data.DistanceAndAzimut;
+import app.organicmaps.sdk.bookmarks.data.FileType;
 import app.organicmaps.sdk.routing.RouteAltitudeData;
 import app.organicmaps.sdk.routing.RouteMarkData;
 import app.organicmaps.sdk.routing.RoutingController;
@@ -41,6 +43,7 @@ import app.organicmaps.util.Utils;
 import app.organicmaps.widget.RoutingProgressButton;
 import app.organicmaps.widget.recycler.DotDividerItemDecoration;
 import app.organicmaps.widget.recycler.MultilineLayoutManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -205,7 +208,7 @@ final class RoutingBottomMenuController
             }
           });
     }
-    mSaveButton.setOnClickListener(v -> saveRoute());
+    mSaveButton.setOnClickListener(v -> showSaveMenu());
     mStart.setEnabled(false);
     mStart.setOnClickListener(v -> {
       // Ignore the event if the back and start buttons are pressed at the same time.
@@ -254,7 +257,8 @@ final class RoutingBottomMenuController
 
   void updateSaveButton()
   {
-    setSaveButtonEnabled(RoutingController.get().isBuilt() && !RoutingController.get().isRouteSaved());
+    // A saved route can still be shared as GPX.
+    setSaveButtonEnabled(RoutingController.get().isBuilt());
   }
 
   private void setSaveButtonEnabled(boolean enabled)
@@ -518,19 +522,50 @@ final class RoutingBottomMenuController
                     builder.length() - arrivalTime.length(), builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
   }
 
-  private void saveRoute()
+  // Maps&Fly: offers to save the route as a track and to share it as GPX in one place.
+  private void showSaveMenu()
   {
     if (!RoutingController.get().isBuilt())
       return;
+    final boolean saved = RoutingController.get().isRouteSaved();
+    final CharSequence[] items = saved ? new CharSequence[] {mContext.getString(R.string.route_share_gpx)}
+                                       : new CharSequence[] {mContext.getString(R.string.route_save_as_track),
+                                                             mContext.getString(R.string.route_share_gpx)};
+    new MaterialAlertDialogBuilder(mContext, R.style.MwmTheme_AlertDialog)
+        .setTitle(R.string.route_save_title)
+        .setItems(items,
+                  (dialog, which) -> {
+                    if (!saved && which == 0)
+                      saveRoute();
+                    else
+                      shareRouteAsGpx();
+                  })
+        .show();
+  }
+
+  private void shareRouteAsGpx()
+  {
+    if (!RoutingController.get().isRouteSaved() && !saveRoute())
+      return;
+    final MwmActivity activity = (MwmActivity) mContext;
+    BookmarksSharingHelper.INSTANCE.prepareTrackForSharing(
+        activity, activity.getShareLauncher(), RoutingController.get().getSavedRouteTrackId(), FileType.Gpx);
+  }
+
+  private boolean saveRoute()
+  {
+    if (!RoutingController.get().isBuilt())
+      return false;
     // Clear elevation preview marker before saving.
     mRouteElevationChartController.clearSelection();
     Framework.nativeRouteRemoveElevationActivePoint();
-    if (!Framework.nativeSaveRoute())
+    final long trackId = Framework.nativeSaveRoute();
+    if (trackId == -1)
     {
       Toast.makeText(mContext, R.string.routing_save_route_error, Toast.LENGTH_SHORT).show();
-      return;
+      return false;
     }
-    RoutingController.get().setRouteSaved();
-    setSaveButtonEnabled(false);
+    RoutingController.get().setRouteSaved(trackId);
+    return true;
   }
 }

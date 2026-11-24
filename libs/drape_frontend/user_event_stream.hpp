@@ -439,6 +439,7 @@ public:
   void SetListener(ref_ptr<Listener> listener) { m_listener = listener; }
 
   void SetKineticScrollEnabled(bool enabled);
+  void SetRotationLocked(bool locked) { m_navigator.SetRotationLocked(locked); }
 
 #ifdef DEBUG
   static char const * BEGIN_DRAG;

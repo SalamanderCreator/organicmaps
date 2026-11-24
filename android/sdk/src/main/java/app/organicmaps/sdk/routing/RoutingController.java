@@ -147,7 +147,8 @@ public class RoutingController
   @Nullable
   private TransitRouteInfo mCachedTransitRouteInfo;
 
-  private boolean mRouteSaved;
+  // Track id of the current route saved as a track, or -1.
+  private long mSavedRouteTrackId = -1;
 
   @SuppressWarnings("FieldCanBeLocal")
   private final RoutingListener mRoutingListener = new RoutingListener() {
@@ -393,7 +394,7 @@ public class RoutingController
     mContainsCachedResult = false;
     Logger.d(TAG, "build");
     mLastBuildProgress = 0;
-    mRouteSaved = false;
+    mSavedRouteTrackId = -1;
 
     setBuildState(BuildState.BUILDING);
     if (mContainer != null)
@@ -444,15 +445,20 @@ public class RoutingController
 
   public boolean isRouteSaved()
   {
-    return mRouteSaved;
+    return mSavedRouteTrackId != -1;
+  }
+
+  public long getSavedRouteTrackId()
+  {
+    return mSavedRouteTrackId;
   }
 
   /**
    * Marks the current route as saved by the host; this does not persist route points.
    */
-  public void setRouteSaved()
+  public void setRouteSaved(long trackId)
   {
-    mRouteSaved = true;
+    mSavedRouteTrackId = trackId;
   }
 
   /**

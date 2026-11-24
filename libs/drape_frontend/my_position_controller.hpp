@@ -110,6 +110,11 @@ public:
 
   void StopLocationFollow();
   void NextMode(ScreenBase const & screen);
+  // Maps&Fly map buttons: the position button only centers and follows, the compass button turns between
+  // north up and heading up, and the north lock keeps north up, also in routing.
+  void CenterOnPosition(ScreenBase const & screen);
+  void ToggleNorthUp(ScreenBase const & screen);
+  void SetNorthLocked(bool locked);
   void LoseLocation();
   location::EMyPositionMode GetCurrentMode() const { return m_mode; }
 
@@ -166,6 +171,9 @@ private:
   Hints m_hints;
 
   bool m_isInRouting = false;
+  bool m_northLocked = false;
+  // Heading up was chosen last, the position button returns to it.
+  bool m_headingUpPreferred = false;
   bool m_isArrowGluedInRouting = false;
 
   bool m_needBlockAnimation;

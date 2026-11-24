@@ -12,7 +12,7 @@ layout (binding = 0) uniform UBO
   float u_zScale;
   float u_interpolation;
   float u_isOutlinePass;
-  float u_dummy1;
+  float u_terrainShadeStrength;
   float u_dummy2;
   vec4 u_terrainLightDir;
 };
@@ -28,6 +28,6 @@ void main()
   float shadow = clamp(-v_intensity, 0.0, 1.0);
   float highlight = clamp(v_intensity, 0.0, 1.0);
   LOW_P vec4 color = vec4(vec3(step(0.0, v_intensity)), shadow * kShadowMaxAlpha + highlight * kHighlightMaxAlpha);
-  color.a *= u_opacity;
+  color.a = min(color.a * u_terrainShadeStrength, 1.0) * u_opacity;
   v_FragColor = color;
 }

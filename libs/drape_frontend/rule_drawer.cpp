@@ -423,7 +423,7 @@ void RuleDrawer::operator()(FeatureType & f)
   // dynamic ones cover only the terrain blocks: a tile straddling the coverage border
   // shows a one-tile-wide gap. Accepted: per-feature gating against the mesh rects
   // costs more than the artifact is worth, and the coverage grows block by block.
-  if (((!m_context->IsolinesEnabled() || m_drawTerrain) && m_isIsoline(types)) ||
+  if (((!m_context->IsolinesEnabled() || !m_context->ContourLinesEnabled() || m_drawTerrain) && m_isIsoline(types)) ||
       (!m_context->Is3dBuildingsEnabled() && m_isBuildingPart(types) && !m_isBuilding(types)))
     return;
 
@@ -510,7 +510,7 @@ void RuleDrawer::DrawTerrain(MapDataProvider const & model)
   auto const units = measurement_utils::GetMeasurementUnits();
   terrain::IsolinesStyle const isolinesStyle(m_mapStyle, m_zoomLevel, units);
   /// @todo Separate visibility settings for the isolines and the hillshading.
-  bool const drawIsolines = isolinesStyle.GetStep() != 0;
+  bool const drawIsolines = isolinesStyle.GetStep() != 0 && m_context->ContourLinesEnabled();
 
   // One read serves the hillshading, the isolines and the debug mesh. The rect is
   // inflated for the isolines smoothing overhang (see ClipSplinesBuilder::Release);

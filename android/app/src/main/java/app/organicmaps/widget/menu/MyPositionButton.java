@@ -24,20 +24,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MyPositionButton
 {
-  private static final int FOLLOW_SHIFT = 1;
-
   @NonNull
   private final FloatingActionButton mButton;
   private static final SparseArray<Drawable> mIcons = new SparseArray<>(); // Location mode -> Button icon
-
-  private final int mFollowPaddingShift;
 
   public MyPositionButton(@NonNull View button, @NonNull View.OnClickListener listener)
   {
     mButton = (FloatingActionButton) button;
     mButton.setOnClickListener(listener);
     mIcons.clear();
-    mFollowPaddingShift = (int) (FOLLOW_SHIFT * button.getResources().getDisplayMetrics().density);
     final int locationMode = Map.isEngineCreated() ? LocationState.getMode() : LocationState.NOT_FOLLOW_NO_POSITION;
     update(locationMode);
   }
@@ -55,8 +50,6 @@ public class MyPositionButton
       colorAttr = androidx.appcompat.R.attr.colorAccent;
       if (mode == LocationState.PENDING_POSITION)
         sizeDimen = R.dimen.map_button_size;
-      else
-        sizeDimen = R.dimen.map_button_arrow_icon_size;
     }
     Resources resources = mButton.getResources();
     Context context = mButton.getContext();
@@ -67,9 +60,9 @@ public class MyPositionButton
       {
         case LocationState.PENDING_POSITION -> R.drawable.ic_menu_location_pending;
         case LocationState.NOT_FOLLOW_NO_POSITION -> R.drawable.ic_location_off;
-        case LocationState.NOT_FOLLOW -> R.drawable.ic_not_follow;
-        case LocationState.FOLLOW -> R.drawable.ic_follow;
-        case LocationState.FOLLOW_AND_ROTATE -> R.drawable.ic_follow_and_rotate;
+        // Maps&Fly: the pin of the app icon, blue while the map follows; the north arrow shows the rotation.
+        case LocationState.NOT_FOLLOW, LocationState.FOLLOW, LocationState.FOLLOW_AND_ROTATE ->
+          R.drawable.ic_my_position_pin;
         default -> throw new IllegalArgumentException("Invalid button mode: " + mode);
       };
       image = ResourcesCompat.getDrawable(resources, drawableRes, context.getTheme());
@@ -79,7 +72,6 @@ public class MyPositionButton
     mButton.setImageDrawable(image);
     mButton.setMaxImageSize((int) resources.getDimension(sizeDimen));
     ImageViewCompat.setImageTintList(mButton, ColorStateList.valueOf(ThemeUtils.getColor(context, colorAttr)));
-    updatePadding(mode);
 
     if (mode == LocationState.PENDING_POSITION)
     {
@@ -94,14 +86,6 @@ public class MyPositionButton
     }
     else
       mButton.clearAnimation();
-  }
-
-  private void updatePadding(int mode)
-  {
-    if (mode == LocationState.FOLLOW)
-      mButton.setPadding(0, mFollowPaddingShift, mFollowPaddingShift, 0);
-    else
-      mButton.setPadding(0, 0, 0, 0);
   }
 
   public void showButton(boolean show)

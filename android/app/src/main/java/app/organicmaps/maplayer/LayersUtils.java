@@ -21,6 +21,7 @@ public class LayersUtils
     // Settings, so only offer the button once a server URL is set.
     if (!Framework.nativeGetBackgroundTilesUrl().isEmpty())
       availableLayers.add(Mode.SATELLITE);
+    availableLayers.add(Mode.RAIN_RADAR);
     return availableLayers;
   }
 }

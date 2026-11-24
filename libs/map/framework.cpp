@@ -27,6 +27,8 @@
 #include "drape_frontend/tile_key.hpp"
 #include "drape_frontend/visual_params.hpp"
 
+#include "shaders/program_params.hpp"
+
 #include "drape/drape_global.hpp"
 
 #include "descriptions/loader.hpp"
@@ -96,7 +98,16 @@ std::string_view constexpr kBgTilesUrlKey = "BgTilesUrl";                  // cu
 std::string_view constexpr kBgTilesCacheSizeMBKey = "BgTilesCacheMB";      // custom raster tiles disk cache cap
 std::string_view constexpr kBgTilesAreaOpacityKey = "BgTilesAreaOpacity";  // area-fill opacity over satellite tiles, %
 uint32_t constexpr kDefaultBgTilesCacheSizeMB = 50;
-uint32_t constexpr kDefaultBgTilesAreaOpacityPct = 50;  // half-transparent area fills by default in Satellite mode
+uint32_t constexpr kDefaultBgTilesAreaOpacityPct = 50;
+// Maps&Fly hillshade settings, see Framework::SetTerrainShading.
+std::string_view constexpr kTerrainLightAzimuthKey = "TerrainLightAzimuth";
+std::string_view constexpr kTerrainLightAltitudeKey = "TerrainLightAltitude";
+std::string_view constexpr kTerrainShadeStrengthKey = "TerrainShadeStrength";
+std::string_view constexpr kContourLinesEnabledKey = "ContourLinesEnabled";
+std::string_view constexpr kNorthLockedKey = "NorthLocked";
+double constexpr kTerrainLightMinAltitudeDeg = 10;
+double constexpr kTerrainLightMaxAltitudeDeg = 80;
+double constexpr kTerrainShadeMaxStrength = 3;  // half-transparent area fills by default in Satellite mode
 std::string_view constexpr kAllow3dKey = "Allow3d";
 std::string_view constexpr kAllow3dBuildingsKey = "Buildings3d";
 std::string_view constexpr kAllowAutoZoom = "AutoZoom";
@@ -260,6 +271,31 @@ void Framework::SwitchMyPositionNextMode()
 {
   if (m_drapeEngine != nullptr)
     m_drapeEngine->SwitchMyPositionNextMode();
+}
+
+void Framework::CenterOnMyPosition()
+{
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->CenterOnMyPosition();
+}
+
+void Framework::ToggleNorthUp()
+{
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->ToggleNorthUp();
+}
+
+void Framework::SetNorthLocked(bool locked)
+{
+  settings::Set(kNorthLockedKey, locked);
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->SetNorthLocked(locked);
+}
+
+bool Framework::LoadNorthLocked()
+{
+  bool locked = false;
+  return settings::Get(kNorthLockedKey, locked) && locked;
 }
 
 void Framework::SetMyPositionModeListener(TMyPositionModeChanged && fn)
@@ -1326,14 +1362,52 @@ m2::RectD Framework::GetCurrentViewport() const
   return m_currentModelView.ClipRect();
 }
 
-void Framework::SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma)
+void Framework::SetTerrainLight(double azimuthDeg, double altitudeDeg, double shadowGamma, double strength)
 {
   // The shading divides by both sin(altitude) and 1 - sin(altitude) (see terrain_shade.vsh.glsl).
   ASSERT(altitudeDeg > 0 && altitudeDeg < 90, (altitudeDeg));
   ASSERT_GREATER(shadowGamma, 0, ());
-  m_terrainLight = {azimuthDeg, altitudeDeg, shadowGamma};
+  m_terrainLight = {azimuthDeg, altitudeDeg, shadowGamma, strength};
   if (m_drapeEngine != nullptr)
-    m_drapeEngine->SetTerrainLight(azimuthDeg, altitudeDeg, shadowGamma);
+    m_drapeEngine->SetTerrainLight(azimuthDeg, altitudeDeg, shadowGamma, strength);
+}
+
+void Framework::SetTerrainShading(double azimuthDeg, double altitudeDeg, double strength)
+{
+  azimuthDeg = math::Clamp(azimuthDeg, 0.0, 360.0);
+  altitudeDeg = math::Clamp(altitudeDeg, kTerrainLightMinAltitudeDeg, kTerrainLightMaxAltitudeDeg);
+  strength = math::Clamp(strength, 0.0, kTerrainShadeMaxStrength);
+  settings::Set(kTerrainLightAzimuthKey, azimuthDeg);
+  settings::Set(kTerrainLightAltitudeKey, altitudeDeg);
+  settings::Set(kTerrainShadeStrengthKey, strength);
+  SetTerrainLight(azimuthDeg, altitudeDeg, gpu::kDefaultTerrainShadowGamma, strength);
+}
+
+void Framework::SetContourLinesEnabled(bool enabled)
+{
+  settings::Set(kContourLinesEnabledKey, enabled);
+  if (m_drapeEngine != nullptr)
+    m_drapeEngine->SetContourLinesEnabled(enabled);
+}
+
+bool Framework::LoadContourLinesEnabled()
+{
+  bool enabled;
+  return !settings::Get(kContourLinesEnabledKey, enabled) || enabled;
+}
+
+Framework::TerrainShading Framework::LoadTerrainShading()
+{
+  TerrainShading s{gpu::kDefaultTerrainLightAzimuthDeg, gpu::kDefaultTerrainLightAltitudeDeg, 1.0};
+  double value;
+  if (settings::Get(kTerrainLightAzimuthKey, value) && value >= 0 && value <= 360)
+    s.m_azimuthDeg = value;
+  if (settings::Get(kTerrainLightAltitudeKey, value) && value >= kTerrainLightMinAltitudeDeg &&
+      value <= kTerrainLightMaxAltitudeDeg)
+    s.m_altitudeDeg = value;
+  if (settings::Get(kTerrainShadeStrengthKey, value) && value >= 0 && value <= kTerrainShadeMaxStrength)
+    s.m_strength = value;
+  return s;
 }
 
 void Framework::SetVisibleViewport(m2::RectD const & rect)
@@ -1972,17 +2046,20 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
   if (bgTilesActive && !m_rasterTileProvider)
     CreateBackgroundTilesProvider(bgTilesUrl, GetBackgroundTilesCacheSize());
 
+  // Called on the render thread; the overlay provider is created before its layer is enabled.
   auto tileBackgroundReadFn = [this](df::TileKey const & tileKey, dp::BackgroundMode mode) -> bool
   {
-    if (m_rasterTileProvider)
-      return m_rasterTileProvider->RequestTile(tileKey, mode);
+    auto const & provider = mode == dp::BackgroundMode::Overlay ? m_overlayTileProvider : m_rasterTileProvider;
+    if (provider)
+      return provider->RequestTile(tileKey, mode);
     return false;
   };
 
   auto cancelTileBackgroundReadingFn = [this](df::TileKey const & tileKey, dp::BackgroundMode mode) -> void
   {
-    if (m_rasterTileProvider)
-      m_rasterTileProvider->CancelTile(tileKey, mode);
+    auto const & provider = mode == dp::BackgroundMode::Overlay ? m_overlayTileProvider : m_rasterTileProvider;
+    if (provider)
+      provider->CancelTile(tileKey, mode);
   };
 
   auto myPositionModeChangedFn = [this](location::EMyPositionMode mode, bool routingActive)
@@ -2078,9 +2155,19 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
   m_transitManager.SetDrapeEngine(make_ref(m_drapeEngine));
   m_isolinesManager.SetDrapeEngine(make_ref(m_drapeEngine));
   m_searchMarks.SetDrapeEngine(make_ref(m_drapeEngine));
-  if (m_terrainLight)
-    m_drapeEngine->SetTerrainLight(m_terrainLight->m_azimuthDeg, m_terrainLight->m_altitudeDeg,
-                                   m_terrainLight->m_shadowGamma);
+  if (!m_terrainLight)
+  {
+    auto const shading = LoadTerrainShading();
+    m_terrainLight = {shading.m_azimuthDeg, shading.m_altitudeDeg, gpu::kDefaultTerrainShadowGamma, shading.m_strength};
+  }
+  m_drapeEngine->SetTerrainLight(m_terrainLight->m_azimuthDeg, m_terrainLight->m_altitudeDeg,
+                                 m_terrainLight->m_shadowGamma, m_terrainLight->m_strength);
+  if (m_overlayTilesActive)
+    m_drapeEngine->SetTileOverlay(true);
+  if (!LoadContourLinesEnabled())
+    m_drapeEngine->SetContourLinesEnabled(false);
+  if (LoadNorthLocked())
+    m_drapeEngine->SetNorthLocked(true);
 
   InvalidateUserMarks();
 
@@ -2252,13 +2339,12 @@ bool Framework::IsTrackRecordingEnabled() const
   return GpsTracker::Instance().IsEnabled();
 }
 
-bool Framework::SaveRoute()
+kml::TrackId Framework::SaveRoute()
 {
   auto const trackId = m_routingManager.SaveRoute();
-  if (trackId == kml::kInvalidTrackId)
-    return false;
-  ShowTrack(trackId);
-  return true;
+  if (trackId != kml::kInvalidTrackId)
+    ShowTrack(trackId);
+  return trackId;
 }
 
 void Framework::OnUpdateGpsTrackPointsCallback(std::vector<std::pair<size_t, location::GpsInfo>> && toAdd,
@@ -3050,9 +3136,54 @@ void Framework::CreateBackgroundTilesProvider(std::string const & url, uint32_t 
       if (!imageUid.empty())
         m_drapeEngine->AddTileBackgroundImage(tileKey, imageUid, width, height, dp::TextureFormat::RGBA8, mode,
                                               std::move(rgba));
-      m_drapeEngine->SetTileBackgroundData(tileKey, imageUid, rect);
+      m_drapeEngine->SetTileBackgroundData(tileKey, imageUid, rect, mode);
     }
   });
+}
+
+RasterTileProvider::Stats Framework::GetTileOverlayStats() const
+{
+  return m_overlayTileProvider ? m_overlayTileProvider->GetStats() : RasterTileProvider::Stats{};
+}
+
+void Framework::SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels)
+{
+  m_overlayTilesActive = !url.empty();
+  if (m_overlayTilesActive)
+  {
+    float const alpha = std::min(opacityPct, 100u) / 100.0f;
+    if (m_overlayTileProvider)
+    {
+      m_overlayTileProvider->SetSource(url, maxZoom, alpha, dropNeutralPixels);
+    }
+    else
+    {
+      RasterTileProvider::Params rp;
+      rp.m_urlTemplate = url;
+      rp.m_cacheSubdir = "overlay_tiles";
+      rp.m_maxZoom = maxZoom;
+      rp.m_maxCacheBytes = 30ull * 1024 * 1024;  // a few hours of radar frames over a region
+      rp.m_cacheKeyedByUrl = true;
+      rp.m_alpha = alpha;
+      rp.m_dropNeutralPixels = dropNeutralPixels;
+      m_overlayTileProvider = std::make_unique<RasterTileProvider>(
+          std::move(rp), [this](df::TileKey const & tileKey, dp::BackgroundMode mode, std::string const & imageUid,
+                                uint32_t width, uint32_t height, m2::RectF const & rect, std::vector<uint8_t> && rgba)
+      {
+        // Invoked on a background thread, see CreateBackgroundTilesProvider.
+        if (m_drapeEngine)
+        {
+          if (!imageUid.empty())
+            m_drapeEngine->AddTileBackgroundImage(tileKey, imageUid, width, height, dp::TextureFormat::RGBA8, mode,
+                                                  std::move(rgba));
+          m_drapeEngine->SetTileBackgroundData(tileKey, imageUid, rect, mode);
+        }
+      });
+    }
+  }
+
+  if (m_drapeEngine)
+    m_drapeEngine->SetTileOverlay(m_overlayTilesActive);
 }
 
 void Framework::SetBackgroundTiles(bool enabled, std::string url, uint32_t cacheSizeMB, uint32_t areaOpacityPct)

@@ -569,6 +569,15 @@ void BackendRenderer::AcceptMessage(ref_ptr<Message> message)
     break;
   }
 
+  case Message::Type::SetContourLines:
+  {
+    ref_ptr<SetContourLinesMessage> msg = message;
+    m_readManager->SetContourLinesEnabled(msg->IsEnabled());
+    m_commutator->PostMessage(ThreadsCommutator::RenderThread, make_unique_dp<SetContourLinesMessage>(msg->IsEnabled()),
+                              MessagePriority::Normal);
+    break;
+  }
+
   case Message::Type::EnableIsolines:
   {
     ref_ptr<EnableIsolinesMessage> msg = message;
@@ -759,7 +768,7 @@ void BackendRenderer::AcceptMessage(ref_ptr<Message> message)
                                    .m_textureWidth = msg->GetWidth(),
                                    .m_textureHeight = msg->GetHeight(),
                                    .m_format = msg->GetFormat(),
-                                   .m_needMipMaps = (msg->GetMode() == dp::BackgroundMode::Satellite)};
+                                   .m_needMipMaps = (msg->GetMode() != dp::BackgroundMode::Default)};
 
     auto texturePool = m_texMng->GetTexturePool(m_context, msg->GetMode(), desc);
     ASSERT(texturePool != nullptr, ());
@@ -790,10 +799,19 @@ void BackendRenderer::AcceptMessage(ref_ptr<Message> message)
   case Message::Type::SetTileBackgroundData:
   {
     ref_ptr<SetTileBackgroundDataMessage> msg = message;
-    m_commutator->PostMessage(
-        ThreadsCommutator::RenderThread,
-        make_unique_dp<SetTileBackgroundDataMessage>(msg->GetTileKey(), msg->GetImageUid(), msg->GetRect()),
-        MessagePriority::Normal);
+    m_commutator->PostMessage(ThreadsCommutator::RenderThread,
+                              make_unique_dp<SetTileBackgroundDataMessage>(msg->GetTileKey(), msg->GetImageUid(),
+                                                                           msg->GetRect(), msg->GetMode()),
+                              MessagePriority::Normal);
+    break;
+  }
+
+  case Message::Type::SetTileOverlay:
+  {
+    // Through this thread to keep the order with the overlay image uploads above.
+    ref_ptr<SetTileOverlayMessage> msg = message;
+    m_commutator->PostMessage(ThreadsCommutator::RenderThread, make_unique_dp<SetTileOverlayMessage>(msg->IsEnabled()),
+                              MessagePriority::Normal);
     break;
   }
 

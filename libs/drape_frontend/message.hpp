@@ -109,12 +109,14 @@ public:
     NotifyRenderThread,
     NotifyGraphicsReady,
     EnableIsolines,
+    SetContourLines,
     OnEnterBackground,
     Arrow3dRecache,
     VisualScaleChanged,
     AddTileBackgroundImage,
     SetTileBackgroundData,
     SetTileBackgroundMode,
+    SetTileOverlay,
     ScenarioViewport,
     AssignTileBackgroundImage
   };
