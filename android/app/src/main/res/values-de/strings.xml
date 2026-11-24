@@ -938,6 +938,12 @@
     <string name="change_stop_along_route">Stopp ändern</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Die maximale Anzahl an Stopps wurde erreicht</string>
+    <!-- Maps&Fly map layer: distance circles and/or a straight line from the selected place to the own position -->
+    <string name="button_layer_distance">Abstand</string>
+    <!-- Maps&Fly distance layer settings: circles of 500 m, 1 km and 2 km around the own position and the selected place -->
+    <string name="distance_layer_circles">Kreise 500 m, 1 km, 2 km</string>
+    <!-- Maps&Fly distance layer settings: dashed line from the selected place to the own position with the straight-line distance -->
+    <string name="distance_layer_line">Luftlinie zum gewählten Punkt</string>
     <!-- Maps&Fly routing option: avoid paths graded SAC T3 (or with bad trail visibility) unless needed -->
     <string name="avoid_path_difficult">T3-Wege meiden (SAC)</string>
     <!-- Maps&Fly routing option: avoid paths graded SAC T4-T6 (or hardly visible) unless needed -->
@@ -1075,7 +1081,7 @@
     <!-- Terrain layer settings: switch for the contour lines (the relief shading stays) -->
     <string name="contour_lines_title">Höhenlinien</string>
     <!-- Map layers menu: hint below the layer buttons -->
-    <string name="layers_long_press_hint">Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen</string>
+    <string name="layers_long_press_hint">Langes Drücken auf Gelände, Abstand, Satellit oder Regenradar öffnet weitere Optionen</string>
     <!-- Rain radar panel: button that plays the radar frames as an animation -->
     <string name="rain_radar_play">Abspielen</string>
     <!-- Rain radar panel: button that stops the radar animation -->

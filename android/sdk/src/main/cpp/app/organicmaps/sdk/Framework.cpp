@@ -1719,6 +1719,26 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPr
   return static_cast<jboolean>(Track::IsTerrainElevationPreferred());
 }
 
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetDistanceCirclesEnabled(JNIEnv *, jclass, jboolean enabled)
+{
+  frm()->SetDistanceCirclesEnabled(static_cast<bool>(enabled));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeAreDistanceCirclesEnabled(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(frm()->AreDistanceCirclesEnabled());
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetDistanceLineEnabled(JNIEnv *, jclass, jboolean enabled)
+{
+  frm()->SetDistanceLineEnabled(static_cast<bool>(enabled));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsDistanceLineEnabled(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(frm()->IsDistanceLineEnabled());
+}
+
 JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetOutdoorsLayerEnabled(JNIEnv * env, jclass, jboolean enabled)
 {
   Framework::SaveOutdoorsEnabled(enabled);

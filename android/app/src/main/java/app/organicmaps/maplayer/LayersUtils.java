@@ -14,6 +14,7 @@ public class LayersUtils
     availableLayers.add(Mode.ISOLINES);
     availableLayers.add(Mode.HIKING);
     availableLayers.add(Mode.CYCLING);
+    availableLayers.add(Mode.DISTANCE);
     // Maps&Fly hides the subway layer; traffic is not offered upstream either.
     // The Satellite toggle is a quick on/off for an already-configured source; configuration lives in
     // Settings, so only offer the button once a server URL is set.

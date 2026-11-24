@@ -102,6 +102,22 @@ public enum Mode
     }
   },
 
+  // Maps&Fly: 500 m, 1 km and 2 km circles and/or a dashed line with the straight-line distance, around
+  // the own position and the selected place. A long press in the layers menu chooses the parts.
+  DISTANCE {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return DistanceLayer.isEnabled();
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      DistanceLayer.setEnabled(context, isEnabled);
+    }
+  },
+
   SATELLITE {
     @Override
     public boolean isEnabled(@NonNull Context context)

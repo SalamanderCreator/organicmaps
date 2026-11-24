@@ -4,6 +4,7 @@
 #include "drape_frontend/gui/gui_text.hpp"
 #include "drape_frontend/line_shape.hpp"
 #include "drape_frontend/shape_view_params.hpp"
+#include "drape_frontend/visual_params.hpp"
 
 #include "drape/batcher.hpp"
 
@@ -15,13 +16,16 @@ namespace
 {
 void BuildText(ref_ptr<dp::GraphicsContext> context, std::string const & str, dp::FontDecl const & font,
                m2::PointD const & position, m2::PointD const & center, ref_ptr<dp::TextureManager> textures,
-               dp::Batcher & batcher)
+               dp::Batcher & batcher, glsl::vec2 const & pixelOffset = glsl::vec2(0.0f, 0.0f))
 {
   gui::StaticLabel::LabelResult result;
   gui::StaticLabel::CacheStaticText(str, "\n", dp::LeftTop, font, textures, result);
   glsl::vec2 const pt = glsl::ToVec2(df::MapShape::ConvertToLocal(position, center, df::kShapeCoordScalar));
   for (gui::StaticLabel::Vertex & v : result.m_buffer)
+  {
     v.m_position = glsl::vec3(pt, 0.0f);
+    v.m_normal += pixelOffset;
+  }
 
   dp::AttributeProvider provider(1 /* streamCount */, static_cast<uint32_t>(result.m_buffer.size()));
   provider.InitStream(0 /* streamIndex */, gui::StaticLabel::Vertex::GetBindingInfo(),
@@ -78,6 +82,14 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
         lvp.m_color = data.m_color;
         lvp.m_width = data.m_width;
         lvp.m_join = dp::RoundJoin;
+        if (!data.m_pattern.empty())
+        {
+          double const visualScale = VisualParams::Instance().GetVisualScale();
+          for (double const d : data.m_pattern)
+            lvp.m_pattern.push_back(dp::PatternFloat2Pixel(d * visualScale));
+          lvp.m_baseGtoPScale = data.m_baseGtoPScale;
+          lvp.m_cap = dp::ButtCap;
+        }
         LineShape(spline, lvp).Draw(context, make_ref(&batcher), textures);
       }
 
@@ -95,6 +107,16 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
           ColoredSymbolShape(m2::PointD(pt), cvp, TileKey(), 0 /* textIndex */, false /* need overlay */)
               .Draw(context, make_ref(&batcher), textures);
         }
+      }
+
+      if (!data.m_label.empty() && !data.m_points.empty())
+      {
+        // A halo keeps the label readable on colored map features, and a gap keeps it off the point symbol.
+        float const vs = static_cast<float>(VisualParams::Instance().GetVisualScale());
+        dp::FontDecl const font(data.m_color, kFontSize,
+                                data.m_labelHalo ? dp::Color::White() : dp::Color::Transparent());
+        BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
+                  glsl::vec2(14.0f * vs, 4.0f * vs));
       }
 
       if (data.m_markPoints || data.m_showId)

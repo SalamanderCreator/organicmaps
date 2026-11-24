@@ -432,6 +432,12 @@ public class Framework
 
   public static native boolean nativeIsTerrainElevationPreferred();
 
+  // Maps&Fly: distance circles and the dashed distance line to the selected place.
+  public static native void nativeSetDistanceCirclesEnabled(boolean enabled);
+  public static native boolean nativeAreDistanceCirclesEnabled();
+  public static native void nativeSetDistanceLineEnabled(boolean enabled);
+  public static native boolean nativeIsDistanceLineEnabled();
+
   public static native void nativeSetOutdoorsLayerEnabled(boolean enabled);
   public static native boolean nativeIsOutdoorsLayerEnabled();
 

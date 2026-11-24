@@ -2,11 +2,13 @@ package app.organicmaps.maplayer;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import app.organicmaps.R;
 import app.organicmaps.sdk.Framework;
+import app.organicmaps.sdk.maplayer.DistanceLayer;
 import app.organicmaps.sdk.maplayer.Mode;
 import app.organicmaps.sdk.maplayer.SatelliteSource;
 import app.organicmaps.sdk.maplayer.radar.RainRadar;
@@ -37,13 +39,15 @@ public class LayerSettingsPanel
   @NonNull
   private final View mTerrain;
   @NonNull
+  private final View mDistance;
+  @NonNull
   private final Runnable mOnLayerChanged;
   // Set while the controls are filled in, so their listeners do not apply the values back.
   private boolean mBinding;
 
   public static boolean hasSettings(@NonNull Mode mode)
   {
-    return mode == Mode.RAIN_RADAR || mode == Mode.SATELLITE || mode == Mode.ISOLINES;
+    return mode == Mode.RAIN_RADAR || mode == Mode.SATELLITE || mode == Mode.ISOLINES || mode == Mode.DISTANCE;
   }
 
   /** @param onLayerChanged called when a setting switched a layer on, to refresh the layers button. */
@@ -56,10 +60,12 @@ public class LayerSettingsPanel
     mRadar = panel.findViewById(R.id.layer_settings_radar);
     mSatellite = panel.findViewById(R.id.layer_settings_satellite);
     mTerrain = panel.findViewById(R.id.layer_settings_terrain);
+    mDistance = panel.findViewById(R.id.layer_settings_distance);
     panel.findViewById(R.id.layer_settings_close).setOnClickListener(v -> hide());
     initRadar();
     initSatellite();
     initTerrain();
+    initDistance();
   }
 
   public void show(@NonNull Mode mode)
@@ -68,6 +74,7 @@ public class LayerSettingsPanel
     UiUtils.showIf(mode == Mode.RAIN_RADAR, mRadar);
     UiUtils.showIf(mode == Mode.SATELLITE, mSatellite);
     UiUtils.showIf(mode == Mode.ISOLINES, mTerrain);
+    UiUtils.showIf(mode == Mode.DISTANCE, mDistance);
     switch (mode)
     {
     case RAIN_RADAR ->
@@ -85,7 +92,14 @@ public class LayerSettingsPanel
       mTitle.setText(R.string.button_layer_terrain);
       bindTerrain();
     }
-    default -> {}
+    case DISTANCE ->
+    {
+      mTitle.setText(R.string.button_layer_distance);
+      bindDistance();
+    }
+    default ->
+    {
+    }
     }
     mBinding = false;
     UiUtils.show(mPanel);
@@ -167,7 +181,7 @@ public class LayerSettingsPanel
     else if (current == SatelliteSource.ESRI || Framework.nativeGetBackgroundTilesUrl().isEmpty())
       source.check(R.id.satellite_source_esri);
     else
-      source.clearChecked();  // a custom URL from the settings
+      source.clearChecked(); // a custom URL from the settings
     setSlider(mPanel.findViewById(R.id.satellite_area_opacity), Framework.nativeGetBackgroundTilesAreaOpacity());
   }
 
@@ -191,7 +205,8 @@ public class LayerSettingsPanel
     altitude.addOnChangeListener((s, value, fromUser) -> altitudeValue.setText((int) value + "°"));
 
     // The relief light is a per-frame value: apply while dragging.
-    final Slider.OnChangeListener apply = (s, value, fromUser) -> {
+    final Slider.OnChangeListener apply = (s, value, fromUser) ->
+    {
       if (!fromUser)
         return;
       Framework.nativeSetTerrainShading(light.getValue() * 45, altitude.getValue(), strength.getValue() / 100.0);
@@ -210,6 +225,35 @@ public class LayerSettingsPanel
     setSlider(mPanel.findViewById(R.id.terrain_strength), (int) Math.round(shading[2] * 100));
     setSlider(mPanel.findViewById(R.id.terrain_light), (int) (Math.round(shading[0] / 45.0) % 8));
     setSlider(mPanel.findViewById(R.id.terrain_altitude), (int) Math.round(shading[1]));
+  }
+
+  private void initDistance()
+  {
+    final SwitchCompat circles = mPanel.findViewById(R.id.distance_circles);
+    final SwitchCompat line = mPanel.findViewById(R.id.distance_line);
+    final CompoundButton.OnCheckedChangeListener listener = (button, isChecked) ->
+    {
+      if (mBinding)
+        return;
+      // At least one part stays on: switching off the last one keeps it.
+      if (!circles.isChecked() && !line.isChecked())
+      {
+        mBinding = true;
+        button.setChecked(true);
+        mBinding = false;
+        return;
+      }
+      DistanceLayer.setParts(mContext, circles.isChecked(), line.isChecked());
+      mOnLayerChanged.run();
+    };
+    circles.setOnCheckedChangeListener(listener);
+    line.setOnCheckedChangeListener(listener);
+  }
+
+  private void bindDistance()
+  {
+    ((SwitchCompat) mPanel.findViewById(R.id.distance_circles)).setChecked(DistanceLayer.hasCircles(mContext));
+    ((SwitchCompat) mPanel.findViewById(R.id.distance_line)).setChecked(DistanceLayer.hasLine(mContext));
   }
 
   /** Changing a setting of a switched off layer shows it, otherwise nothing would change. */

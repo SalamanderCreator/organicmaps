@@ -12,6 +12,8 @@ set(SRC
   bookmark_manager.cpp
   bookmark_manager.hpp
   bookmarks_search_params.hpp
+  distance_overlay.cpp
+  distance_overlay.hpp
   elevation_info.cpp
   elevation_info.hpp
   everywhere_search_params.hpp
