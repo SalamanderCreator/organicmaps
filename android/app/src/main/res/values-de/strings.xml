@@ -1004,6 +1004,10 @@
     <string name="contour_lines_title">Höhenlinien</string>
     <!-- Map layers menu: hint below the layer buttons -->
     <string name="layers_long_press_hint">Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen</string>
+    <!-- Rain radar panel: button that plays the radar frames as an animation -->
+    <string name="rain_radar_play">Abspielen</string>
+    <!-- Rain radar panel: button that stops the radar animation -->
+    <string name="rain_radar_pause">Anhalten</string>
     <!-- Map button: content description of the north arrow -->
     <string name="compass_button">Nordpfeil</string>
     <!-- Toast after a long press on the north arrow: the map stays north up and cannot be turned -->
