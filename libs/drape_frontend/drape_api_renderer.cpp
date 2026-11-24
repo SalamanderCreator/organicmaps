@@ -62,6 +62,12 @@ void DrapeApiRenderer::Render(ref_ptr<dp::GraphicsContext> context, ref_ptr<gpu:
         gpu::GuiProgramParams params;
         frameValues.SetTo(params);
         params.m_modelView = glsl::make_mat4(mv.m_data);
+        // The outline pass first draws the (white) halo behind the glyphs, like map labels.
+        params.m_contrastGamma = glsl::vec2(glyphParams.m_outlineContrast, glyphParams.m_outlineGamma);
+        params.m_isOutlinePass = 1.0f;
+        mng->GetParamsSetter()->Apply(context, program, params);
+        bucket.second->Render(context, bucket.first.GetDrawAsLine());
+
         params.m_contrastGamma = glsl::vec2(glyphParams.m_guiContrast, glyphParams.m_guiGamma);
         params.m_isOutlinePass = 0.0f;
         mng->GetParamsSetter()->Apply(context, program, params);
