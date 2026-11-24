@@ -163,6 +163,28 @@
         app:labelBehavior="gone" />
     </LinearLayout>
 
+    <!-- Maps&Fly: parts of the distance layer, any combination but at least one. -->
+    <LinearLayout
+      android:id="@+id/layer_settings_distance"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:visibility="gone">
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/distance_circles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/distance_layer_circles"
+        android:textAppearance="@style/MwmTextAppearance.Body3" />
+      <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/distance_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_quarter"
+        android:text="@string/distance_layer_line"
+        android:textAppearance="@style/MwmTextAppearance.Body3" />
+    </LinearLayout>
+
     <LinearLayout
       android:id="@+id/layer_settings_terrain"
       android:layout_width="match_parent"

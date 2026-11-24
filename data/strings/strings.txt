@@ -45794,17 +45794,23 @@ vi = Đã đạt đến số điểm dừng tối đa
 zh-Hans = 已达到最大途经点数量
 zh-Hant = 已達到最大途經點數量
 
-[button_layer_distance_circles]
-comment = Maps&Fly map layer: circles of 500 m, 1 km and 2 km around the own position and the selected place
+[button_layer_distance]
+comment = Maps&Fly map layer: distance circles and/or a straight line from the selected place to the own position
 tags = android-app
-en = Distance circles
-de = Abstandskreise
+en = Distance
+de = Abstand
 
-[button_layer_distance_line]
-comment = Maps&Fly map layer: dashed line from the selected place to the own position with the straight-line distance
+[distance_layer_circles]
+comment = Maps&Fly distance layer settings: circles of 500 m, 1 km and 2 km around the own position and the selected place
 tags = android-app
-en = Distance line
-de = Luftlinie
+en = Circles 500 m, 1 km, 2 km
+de = Kreise 500 m, 1 km, 2 km
+
+[distance_layer_line]
+comment = Maps&Fly distance layer settings: dashed line from the selected place to the own position with the straight-line distance
+tags = android-app
+en = Straight line to the selected place
+de = Luftlinie zum gewählten Punkt
 
 [route_save_title]
 comment = Maps&Fly: title of the menu behind the save button of a planned route
@@ -46241,8 +46247,8 @@ de = Höhenlinien
 [layers_long_press_hint]
 comment = Map layers menu: hint below the layer buttons
 tags = android-app
-en = Long press Terrain, Satellite or Rain radar for its settings
-de = Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen
+en = Long press Terrain, Distance, Satellite or Rain radar for more options
+de = Langes Drücken auf Gelände, Abstand, Satellit oder Regenradar öffnet weitere Optionen
 
 [compass_button]
 comment = Map button: content description of the north arrow
