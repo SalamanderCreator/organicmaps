@@ -810,7 +810,7 @@ void BackendRenderer::AcceptMessage(ref_ptr<Message> message)
   {
     // Through this thread to keep the order with the overlay image uploads above.
     ref_ptr<SetTileOverlayMessage> msg = message;
-    m_commutator->PostMessage(ThreadsCommutator::RenderThread, make_unique_dp<SetTileOverlayMessage>(msg->IsEnabled()),
+    m_commutator->PostMessage(ThreadsCommutator::RenderThread, make_unique_dp<SetTileOverlayMessage>(msg->IsEnabled(), msg->IsReload()),
                               MessagePriority::Normal);
     break;
   }

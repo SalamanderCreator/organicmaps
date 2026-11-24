@@ -1092,10 +1092,10 @@ void DrapeEngine::SetTileBackgroundData(df::TileKey const & tileKey, std::string
                                   MessagePriority::Normal);
 }
 
-void DrapeEngine::SetTileOverlay(bool enabled)
+void DrapeEngine::SetTileOverlay(bool enabled, bool reload)
 {
   m_threadCommutator->PostMessage(ThreadsCommutator::ResourceUploadThread,
-                                  make_unique_dp<SetTileOverlayMessage>(enabled), MessagePriority::Normal);
+                                  make_unique_dp<SetTileOverlayMessage>(enabled, reload), MessagePriority::Normal);
 }
 
 void DrapeEngine::SetTileBackgroundMode(dp::BackgroundMode mode, float satelliteAreaOpacity /* = 0.5f */)

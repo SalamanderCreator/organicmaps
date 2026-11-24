@@ -254,6 +254,7 @@ void GLProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<
   Parameter::CheckApply(guard, "u_modelView", params.m_modelView);
   Parameter::CheckApply(guard, "u_projection", params.m_projection);
   Parameter::CheckApply(guard, "u_pivotTransform", params.m_pivotTransform);
+  Parameter::CheckApply(guard, "u_opacity", params.m_opacity);
 }
 
 void GLProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::GpuProgram> program,

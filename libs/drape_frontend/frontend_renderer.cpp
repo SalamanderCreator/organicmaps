@@ -1117,6 +1117,12 @@ void FrontendRenderer::AcceptMessage(ref_ptr<Message> message)
   case Message::Type::SetTileOverlay:
   {
     ref_ptr<SetTileOverlayMessage> msg = message;
+    if (msg->IsReload() && m_tileOverlayRenderer->GetBackgroundMode() == dp::BackgroundMode::Overlay)
+    {
+      // Only the overlay changes: no map invalidation, the old frame stays until the new one is loaded.
+      m_tileOverlayRenderer->ReloadWithCrossFade(m_context);
+      break;
+    }
     // Default first: re-enabling the same mode would keep the images of the previous source.
     m_tileOverlayRenderer->SetBackgroundMode(m_context, dp::BackgroundMode::Default);
     if (msg->IsEnabled())
@@ -1945,6 +1951,7 @@ void FrontendRenderer::RenderFrame()
   isActiveFrame |= needUpdateDynamicTextures;
   isActiveFrame |= m_userEventStream.IsWaitingForActionCompletion();
   isActiveFrame |= InterpolationHolder::Instance().IsActive();
+  isActiveFrame |= m_tileOverlayRenderer->IsCrossFading();
 
   bool isActiveFrameForScene = isActiveFrame || m_frameData.m_forceFullRedrawNextFrame;
   if (AnimationSystem::Instance().HasAnimations())

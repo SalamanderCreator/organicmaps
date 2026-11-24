@@ -295,8 +295,9 @@ public:
                               dp::TextureFormat format, dp::BackgroundMode mode, std::vector<uint8_t> && bytes);
   void SetTileBackgroundData(df::TileKey const & tileKey, std::string const & imageUid, m2::RectF const & rect,
                              dp::BackgroundMode mode);
-  // Maps&Fly: (re)starts or stops the overlay raster layer (dp::BackgroundMode::Overlay).
-  void SetTileOverlay(bool enabled);
+  // Maps&Fly: (re)starts or stops the overlay raster layer (dp::BackgroundMode::Overlay). With |reload| the
+  // shown layer got a new source (the next radar frame): the old tiles cross-fade to the new ones.
+  void SetTileOverlay(bool enabled, bool reload = false);
   void SetTileBackgroundMode(dp::BackgroundMode mode, float satelliteAreaOpacity = 0.5f);
 
   dp::ApiVersion GetApiVersion() const { return m_frontend->GetApiVersion(); }

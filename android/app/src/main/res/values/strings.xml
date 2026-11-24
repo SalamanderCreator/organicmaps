@@ -1072,6 +1072,28 @@
     <string name="contour_lines_title">Contour lines</string>
     <!-- Map layers menu: hint below the layer buttons -->
     <string name="layers_long_press_hint">Long press Terrain, Satellite or Rain radar for its settings</string>
+    <!-- Rain radar panel: button that plays the radar frames as an animation -->
+    <string name="rain_radar_play">Play</string>
+    <!-- Rain radar panel: button that stops the radar animation -->
+    <string name="rain_radar_pause">Pause</string>
+    <!-- Rain radar panel: button that shows the colour scale -->
+    <string name="rain_radar_legend">Legend</string>
+    <!-- Rain radar legend: title of the rain colour scale -->
+    <string name="rain_radar_legend_rain">Rain</string>
+    <!-- Rain radar legend: title of the snow colour scale -->
+    <string name="rain_radar_legend_snow">Snow</string>
+    <!-- Rain radar legend: title of the precipitation colour scale, the labels are in millimetres per hour -->
+    <string name="rain_radar_legend_precipitation">Precipitation (mm/h)</string>
+    <!-- Rain radar legend: low end of the rain scale -->
+    <string name="rain_radar_legend_light">light</string>
+    <!-- Rain radar legend: high end of the rain scale -->
+    <string name="rain_radar_legend_heavy_hail">heavy (hail)</string>
+    <!-- Rain radar legend: low end of the snow scale -->
+    <string name="rain_radar_legend_little">little</string>
+    <!-- Rain radar legend: high end of the snow scale -->
+    <string name="rain_radar_legend_much">a lot</string>
+    <!-- Rain radar legend: the colour scale could not be downloaded -->
+    <string name="rain_radar_legend_unavailable">Legend not available</string>
     <!-- Map button: content description of the north arrow -->
     <string name="compass_button">North arrow</string>
     <!-- Toast after a long press on the north arrow: the map stays north up and cannot be turned -->

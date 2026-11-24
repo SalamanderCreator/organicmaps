@@ -1604,14 +1604,17 @@ private:
 class SetTileOverlayMessage : public Message
 {
 public:
-  explicit SetTileOverlayMessage(bool enabled) : m_enabled(enabled) {}
+  // |reload|: the same layer from a new source, see TileBackgroundRenderer::ReloadWithCrossFade().
+  SetTileOverlayMessage(bool enabled, bool reload) : m_enabled(enabled), m_reload(reload) {}
 
   Type GetType() const override { return Type::SetTileOverlay; }
 
   bool IsEnabled() const { return m_enabled; }
+  bool IsReload() const { return m_reload; }
 
 private:
   bool m_enabled;
+  bool m_reload;
 };
 
 class SetTileBackgroundModeMessage : public Message
