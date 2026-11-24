@@ -1356,6 +1356,7 @@ JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRouteWayStats
     return nullptr;
   std::vector<jdouble> values(stats->m_wayTypeM.begin(), stats->m_wayTypeM.end());
   values.insert(values.end(), stats->m_surfaceM.begin(), stats->m_surfaceM.end());
+  values.push_back(stats->m_naturalM);
   jdoubleArray result = env->NewDoubleArray(static_cast<jsize>(values.size()));
   env->SetDoubleArrayRegion(result, 0, static_cast<jsize>(values.size()), values.data());
   return result;

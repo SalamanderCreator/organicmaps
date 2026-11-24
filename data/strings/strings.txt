@@ -45848,6 +45848,30 @@ tags = android-app
 en = also T4+
 de = auch T4+
 
+[route_natural_share]
+comment = Maps&Fly route panel: share of unpaved ways, e.g. "62 % natural"
+tags = android-app
+en = %@ natural
+de = %@ naturnah
+
+[route_stats_details]
+comment = Maps&Fly route panel: accessibility label of the info button that shows way types and surfaces
+tags = android-app
+en = Way types and surfaces
+de = Wegtypen und Oberflächen
+
+[route_preference_natural]
+comment = Maps&Fly route planning: way preference when natural ways are preferred
+tags = android-app
+en = Preferred: natural
+de = Bevorzugt: naturnah
+
+[route_preference_fast]
+comment = Maps&Fly route planning: way preference when natural ways are not preferred
+tags = android-app
+en = Preferred: fast
+de = Bevorzugt: schnell
+
 [route_path_grade_expert_warning]
 comment = Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided
 tags = android-app
@@ -45867,16 +45891,16 @@ en = Prefer natural ways (less asphalt)
 de = Naturnahe Wege bevorzugen (weniger Asphalt)
 
 [route_way_types]
-comment = Maps&Fly route panel: label before the route length per way type
+comment = Maps&Fly route panel: heading of the route length per way type
 tags = android-app
-en = Way types:
-de = Wegtypen:
+en = Way types
+de = Wegtypen
 
 [route_surfaces]
-comment = Maps&Fly route panel: label before the route length per surface
+comment = Maps&Fly route panel: heading of the route length per surface
 tags = android-app
-en = Surfaces:
-de = Oberflächen:
+en = Surfaces
+de = Oberflächen
 
 [route_way_road]
 comment = Maps&Fly route panel way type: main roads (primary, secondary, tertiary and larger)

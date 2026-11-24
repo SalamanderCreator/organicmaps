@@ -45,6 +45,7 @@ import app.organicmaps.util.Utils;
 import app.organicmaps.widget.RoutingProgressButton;
 import app.organicmaps.widget.recycler.DotDividerItemDecoration;
 import app.organicmaps.widget.recycler.MultilineLayoutManager;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -101,6 +102,11 @@ final class RoutingBottomMenuController
   private final View mSaveButton;
   @NonNull
   private final TextView mPathGrades;
+  @NonNull
+  private final View mSurfaceSummary;
+  @NonNull
+  private final View mSurfaceDetails;
+  private boolean mSurfaceDetailsShown;
   @Nullable
   private final View mManageRoutePanel;
   @Nullable
@@ -118,9 +124,16 @@ final class RoutingBottomMenuController
       R.string.route_way_road,     R.string.route_way_minor_road, R.string.route_way_track,
       R.string.route_way_cycleway, R.string.route_way_footway,    R.string.route_way_path,
       R.string.route_way_steps,    R.string.route_way_ferry,      R.string.route_way_other};
+  private static final int[] WAY_TYPE_COLORS = {
+      R.color.route_way_road,     R.color.route_way_minor_road, R.color.route_way_track,
+      R.color.route_way_cycleway, R.color.route_way_footway,    R.color.route_way_path,
+      R.color.route_way_steps,    R.color.route_way_ferry,      R.color.route_stats_unknown};
   private static final int[] SURFACE_NAMES = {R.string.route_surface_paved_good, R.string.route_surface_paved_bad,
                                               R.string.route_surface_unpaved_good, R.string.route_surface_unpaved_bad,
                                               R.string.route_surface_unknown};
+  private static final int[] SURFACE_COLORS = {R.color.route_paved, R.color.route_surface_paved_bad,
+                                               R.color.route_natural, R.color.route_surface_unpaved_bad,
+                                               R.color.route_stats_unknown};
 
   @NonNull
   static RoutingBottomMenuController newInstance(@NonNull Activity activity, @NonNull View frame,
@@ -190,6 +203,13 @@ final class RoutingBottomMenuController
     mArrival = arrival;
     mSaveButton = saveButton;
     mPathGrades = altitudeChartFrame.findViewById(R.id.route_path_grades);
+    mSurfaceSummary = altitudeChartFrame.findViewById(R.id.route_surface_summary);
+    mSurfaceDetails = altitudeChartFrame.findViewById(R.id.route_surface_details);
+    mSurfaceSummary.setOnClickListener(v -> {
+      mSurfaceDetailsShown = !mSurfaceDetailsShown;
+      UiUtils.showIf(mSurfaceDetailsShown, mSurfaceDetails);
+      notifyVisibilityChanged();
+    });
     mListener = listener;
     int dividerRes = ThemeUtils.getResource(mContext, R.attr.transitStepDivider);
     Drawable dividerDrawable = ContextCompat.getDrawable(mContext, dividerRes);
@@ -291,7 +311,7 @@ final class RoutingBottomMenuController
   void hideAltitudeChartAndRoutingDetails()
   {
     UiUtils.hide(mAltitudeChart, mTimeVehicle, mTimeElevationLine, mTransitTime, mTimeRuler, mTransitRecyclerView,
-                 mPathGrades);
+                 mPathGrades, mSurfaceSummary, mSurfaceDetails);
     notifyVisibilityChanged();
   }
 
@@ -457,7 +477,7 @@ final class RoutingBottomMenuController
     final double[] grades = Framework.nativeGetRoutePathGradeDistances();
     if (grades == null || (router != Router.Pedestrian && router != Router.Bicycle))
     {
-      UiUtils.hide(mPathGrades);
+      UiUtils.hide(mPathGrades, mSurfaceSummary, mSurfaceDetails);
       return;
     }
 
@@ -487,41 +507,75 @@ final class RoutingBottomMenuController
       text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.base_red)), start, text.length(),
                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-    appendWayStats(text);
     mPathGrades.setText(text);
     UiUtils.show(mPathGrades);
+    showWayStats();
   }
 
-  // Maps&Fly: way types and surfaces of the route like Komoot, longest first.
-  private void appendWayStats(@NonNull SpannableStringBuilder text)
+  // Maps&Fly: natural vs. paved share as a bar; the info button expands way types and surfaces like Komoot.
+  private void showWayStats()
   {
     final double[] stats = Framework.nativeGetRouteWayStats();
-    if (stats == null || stats.length != WAY_TYPE_NAMES.length + SURFACE_NAMES.length)
+    final int surfaceOffset = WAY_TYPE_NAMES.length;
+    final int naturalIndex = surfaceOffset + SURFACE_NAMES.length;
+    double total = 0;
+    if (stats != null && stats.length == naturalIndex + 1)
+      for (int i = 0; i < surfaceOffset; ++i)
+        total += stats[i];
+    if (total < 1)
+    {
+      UiUtils.hide(mSurfaceSummary, mSurfaceDetails);
       return;
-    appendShares(text, R.string.route_way_types, stats, 0, WAY_TYPE_NAMES);
-    appendShares(text, R.string.route_surfaces, stats, WAY_TYPE_NAMES.length, SURFACE_NAMES);
+    }
+
+    final double natural = Math.min(stats[naturalIndex], total);
+    final StackedBarView bar = mSurfaceSummary.findViewById(R.id.route_surface_bar);
+    bar.setParts(new double[] {natural, total - natural},
+                 new int[] {ContextCompat.getColor(mContext, R.color.route_natural),
+                            ContextCompat.getColor(mContext, R.color.route_paved)});
+    final TextView share = mSurfaceSummary.findViewById(R.id.route_surface_share);
+    share.setText(
+        mContext.getString(R.string.route_natural_share, NumberFormat.getPercentInstance().format(natural / total)));
+
+    showShares(R.id.route_way_types_bar, R.id.route_way_types_list, stats, 0, WAY_TYPE_NAMES, WAY_TYPE_COLORS);
+    showShares(R.id.route_surfaces_bar, R.id.route_surfaces_list, stats, surfaceOffset, SURFACE_NAMES, SURFACE_COLORS);
+    UiUtils.show(mSurfaceSummary);
+    UiUtils.showIf(mSurfaceDetailsShown, mSurfaceDetails);
   }
 
-  private void appendShares(@NonNull SpannableStringBuilder text, @StringRes int title, @NonNull double[] values,
-                            int offset, @NonNull int[] names)
+  // Longest first, as a bar and a compact legend "■ Name 1,2 km".
+  private void showShares(@IdRes int barId, @IdRes int listId, @NonNull double[] values, int offset,
+                          @NonNull int[] names, @NonNull int[] colors)
   {
     final List<Integer> order = new ArrayList<>();
     for (int i = 0; i < names.length; ++i)
       if (values[offset + i] >= 1)
         order.add(i);
-    if (order.isEmpty())
-      return;
     Collections.sort(order, (a, b) -> Double.compare(values[offset + b], values[offset + a]));
-    text.append("\n").append(mContext.getString(title));
-    boolean first = true;
-    for (int i : order)
+
+    final double[] parts = new double[order.size()];
+    final int[] partColors = new int[order.size()];
+    final SpannableStringBuilder legend = new SpannableStringBuilder();
+    for (int k = 0; k < order.size(); ++k)
     {
-      text.append(first ? " " : " · ")
+      final int i = order.get(k);
+      parts[k] = values[offset + i];
+      partColors[k] = ContextCompat.getColor(mContext, colors[i]);
+      if (k > 0)
+        legend.append("   ");
+      final int start = legend.length();
+      legend.append("■");
+      legend.setSpan(new ForegroundColorSpan(partColors[k]), start, legend.length(),
+                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      legend.append("\u00A0")
           .append(mContext.getString(names[i]))
-          .append(" ")
-          .append(StringUtils.nativeFormatDistance(values[offset + i]).toString(mContext));
-      first = false;
+          .append("\u00A0")
+          .append(StringUtils.nativeFormatDistance(parts[k]).toString(mContext));
     }
+    final StackedBarView bar = mSurfaceDetails.findViewById(barId);
+    bar.setParts(parts, partColors);
+    final TextView list = mSurfaceDetails.findViewById(listId);
+    list.setText(legend);
   }
 
   private void showRoutingDetails()

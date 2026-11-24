@@ -332,6 +332,8 @@ public:
   {
     std::array<double, static_cast<size_t>(RouteWayType::Count)> m_wayTypeM{};
     std::array<double, static_cast<size_t>(RouteSurface::Count)> m_surfaceM{};
+    // Unpaved, or untagged on a track or path: the "nature" share of the route.
+    double m_naturalM = 0;
   };
   /// Reads the features of the route; returns nullopt without a valid route.
   std::optional<RouteWayStats> GetRouteWayStats() const;

@@ -344,6 +344,8 @@ UNIT_TEST(RoutingManager_RoutePathGradesAndWayStats)
   TEST(stats, ());
   TEST_ALMOST_EQUAL_ABS(stats->m_wayTypeM[static_cast<size_t>(RoutingManager::RouteWayType::Other)], 200.0, 1e-6, ());
   TEST_ALMOST_EQUAL_ABS(stats->m_surfaceM[static_cast<size_t>(RoutingManager::RouteSurface::Unknown)], 200.0, 1e-6, ());
+  // Fake segments of unknown ways are not counted as natural.
+  TEST_ALMOST_EQUAL_ABS(stats->m_naturalM, 0.0, 1e-6, ());
 }
 
 UNIT_TEST(RoutingManager_ReverseRoutePointsRequiresBothEndpoints)

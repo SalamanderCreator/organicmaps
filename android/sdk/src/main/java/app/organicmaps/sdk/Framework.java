@@ -271,7 +271,8 @@ public class Framework
 
   /**
    * Maps&Fly: route length in meters per way type (road, minor road, track, cycleway, footway, path,
-   * steps, ferry, other) followed by surface (paved good/bad, unpaved good/bad, unknown).
+   * steps, ferry, other), then per surface (paved good/bad, unpaved good/bad, unknown), then the
+   * natural part (unpaved, or untagged track/path).
    * @return null without a route.
    */
   @Nullable

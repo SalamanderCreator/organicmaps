@@ -1747,6 +1747,19 @@ private:
 };
 }  // namespace
 
+namespace
+{
+bool IsNatural(RoutingManager::RouteWayType wayType, RoutingManager::RouteSurface surface)
+{
+  using Surface = RoutingManager::RouteSurface;
+  using WayType = RoutingManager::RouteWayType;
+  if (surface == Surface::UnpavedGood || surface == Surface::UnpavedBad)
+    return true;
+  // Matches the paved default of the routing options for untagged ways.
+  return surface == Surface::Unknown && (wayType == WayType::Track || wayType == WayType::Path);
+}
+}  // namespace
+
 std::optional<RoutingManager::RouteWayStats> RoutingManager::GetRouteWayStats() const
 {
   auto const * route = m_routingSession.GetRoute();
@@ -1798,6 +1811,8 @@ std::optional<RoutingManager::RouteWayStats> RoutingManager::GetRouteWayStats() 
     }
     stats.m_wayTypeM[static_cast<size_t>(kind.first)] += length;
     stats.m_surfaceM[static_cast<size_t>(kind.second)] += length;
+    if (IsNatural(kind.first, kind.second))
+      stats.m_naturalM += length;
   }
   return stats;
 }
