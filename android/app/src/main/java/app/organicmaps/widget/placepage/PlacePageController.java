@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import app.organicmaps.MwmActivity;
 import app.organicmaps.R;
 import app.organicmaps.api.Const;
+import app.organicmaps.bookmarks.BookmarksSharingHelper;
 import app.organicmaps.bookmarks.ChooseBookmarkCategoryFragment;
 import app.organicmaps.intent.Factory;
 import app.organicmaps.location.OffTrackService;
@@ -36,6 +37,7 @@ import app.organicmaps.sdk.ChoosePositionMode;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.bookmarks.data.Bookmark;
 import app.organicmaps.sdk.bookmarks.data.BookmarkManager;
+import app.organicmaps.sdk.bookmarks.data.FileType;
 import app.organicmaps.sdk.bookmarks.data.MapObject;
 import app.organicmaps.sdk.bookmarks.data.RoadWarningMarkType;
 import app.organicmaps.sdk.bookmarks.data.Track;
@@ -523,6 +525,7 @@ public class PlacePageController
     }
     case TRACK_RECORDING_SAVE -> mPlacePageListener.onTrackRecordingSaved();
     case TRACK_RECORDING_DELETE -> mPlacePageListener.onTrackRecordingCancelled();
+    case TRACK_SHARE_GPX -> onTrackShareGpxClicked();
     case BACK -> onBackBtnClicked();
     case ROUTE_FROM -> onRouteFromBtnClicked();
     case ROUTE_TO -> onRouteToBtnClicked();
@@ -547,6 +550,14 @@ public class PlacePageController
       Framework.nativeDeleteBookmarkFromMapObject();
     else
       BookmarkManager.INSTANCE.addNewBookmark(mMapObject.getLat(), mMapObject.getLon());
+  }
+
+  // Maps&Fly: exports the track as a GPX file to the share sheet, e.g. to save it in Files.
+  private void onTrackShareGpxClicked()
+  {
+    if (mMapObject instanceof Track track && requireActivity() instanceof MwmActivity activity)
+      BookmarksSharingHelper.INSTANCE.prepareTrackForSharing(activity, activity.getShareLauncher(), track.getTrackId(),
+                                                             FileType.Gpx);
   }
 
   private void onTrackRemoveClicked()
@@ -761,6 +772,9 @@ public class PlacePageController
             buttons.add(mapObject.isBookmark() ? PlacePageButtons.ButtonType.BOOKMARK_DELETE
                                                : PlacePageButtons.ButtonType.BOOKMARK_SAVE);
         }
+        // Maps&Fly: last, so it lands in the "More" menu.
+        if (mapObject.isTrack() && !mapObject.isTrackRecording())
+          buttons.add(PlacePageButtons.ButtonType.TRACK_SHARE_GPX);
       }
     }
     mViewModel.setCurrentButtons(buttons);
