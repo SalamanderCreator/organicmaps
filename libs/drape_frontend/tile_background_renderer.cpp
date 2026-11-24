@@ -13,8 +13,9 @@ namespace
 // Max number of refcount==0 images kept alive in the LRU before their texture slots are recycled.
 constexpr size_t kMaxUnreferencedImages = 16;
 
-// Rain radar frames: the old frame waits this long at most for the new one, then fades out.
-constexpr auto kMaxFrameLoadTime = std::chrono::seconds(3);
+// Rain radar frames: the old frame waits this long at most for the new one, then fades out. Slow radar
+// servers need several seconds, and a frame shown half loaded leaves holes with hard edges.
+constexpr auto kMaxFrameLoadTime = std::chrono::seconds(10);
 constexpr float kCrossFadeTime = 0.4f;
 
 // Background coordinates use the true zoom, so their rects must not be clipped to the vector data zoom.
@@ -324,7 +325,10 @@ void TileBackgroundRenderer::ReloadWithCrossFade(ref_ptr<dp::GraphicsContext> co
   }
   m_tileRequests.clear();
 
-  // While the previous frame still loads, its old frame stays the one that fades out.
+  // While the previous frame still loads, its old frame stays the one that fades out. Once it fades in,
+  // it is on screen: it fades out next, so playback does not jump back to the older frame.
+  if (m_fadeStartTime)
+    ReleaseFadingTiles(context);
   bool const keepOldFrame = !m_fadingTiles.empty();
   for (auto & [tileKey, binding] : m_tiles)
     if (!keepOldFrame && tileKey.m_zoomLevel == m_lastCurrentZoomLevel)

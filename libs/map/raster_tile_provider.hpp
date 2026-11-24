@@ -89,8 +89,10 @@ public:
     uint32_t m_failed = 0;
     // HTTP code of the last failure, -1 transport error, -2 not a decodable image, 0 none.
     int m_lastError = 0;
+    // Tiles still being read or downloaded.
+    uint32_t m_pending = 0;
   };
-  Stats GetStats() const { return {m_statLoaded.load(), m_statFailed.load(), m_statLastError.load()}; }
+  Stats GetStats() const;
 
   // Applies m_alpha and m_dropNeutralPixels to a tightly packed RGBA buffer. Public for tests.
   static void PostProcess(std::vector<uint8_t> & rgba, float alpha, bool dropNeutralPixels);
