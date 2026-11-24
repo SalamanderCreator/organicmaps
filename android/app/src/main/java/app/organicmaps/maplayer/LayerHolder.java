@@ -21,6 +21,9 @@ class LayerHolder extends RecyclerView.ViewHolder
   LayerBottomSheetItem mItem;
   @Nullable
   OnItemClickListener<LayerBottomSheetItem> mListener;
+  // Maps&Fly: opens the layer settings.
+  @Nullable
+  OnItemClickListener<LayerBottomSheetItem> mLongListener;
 
   LayerHolder(@NonNull View root)
   {
@@ -29,6 +32,12 @@ class LayerHolder extends RecyclerView.ViewHolder
     mNewMarker = root.findViewById(R.id.marker);
     mButton = root.findViewById(R.id.btn);
     mButton.setOnClickListener(this::onItemClicked);
+    mButton.setOnLongClickListener(v -> {
+      if (mLongListener == null || mItem == null)
+        return false;
+      mLongListener.onItemClick(v, mItem);
+      return true;
+    });
   }
 
   public void onItemClicked(@NonNull View v)

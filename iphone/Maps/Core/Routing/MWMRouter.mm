@@ -107,7 +107,7 @@ using namespace routing;
 
 + (BOOL)saveRouteAsTrack
 {
-  return GetFramework().SaveRoute();
+  return GetFramework().SaveRoute() != kml::kInvalidTrackId;
 }
 
 + (void)startRouting

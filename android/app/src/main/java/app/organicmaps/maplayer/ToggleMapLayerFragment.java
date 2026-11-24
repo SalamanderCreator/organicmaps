@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import app.organicmaps.MwmActivity;
 import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
 import app.organicmaps.sdk.maplayer.Mode;
@@ -62,7 +63,10 @@ public class ToggleMapLayerFragment extends Fragment
     List<LayerBottomSheetItem> items = new ArrayList<>();
     for (Mode layer : availableLayers)
     {
-      items.add(LayerBottomSheetItem.create(requireContext(), layer, this::onItemClick));
+      final LayerBottomSheetItem item = LayerBottomSheetItem.create(requireContext(), layer, this::onItemClick);
+      if (LayerSettingsPanel.hasSettings(layer))
+        item.setLongClickListener(this::onItemLongClick);
+      items.add(item);
     }
     return items;
   }
@@ -80,6 +84,16 @@ public class ToggleMapLayerFragment extends Fragment
     mMapButtonsController.updateLayerButton();
     if (MwmApplication.from(context).getIsolinesManager().shouldShowNotification())
       Utils.showSnackbar(context, v.getRootView(), R.string.isolines_toast_zooms_1_10);
+  }
+
+  // Maps&Fly: the layer settings sit at the bottom of the map, so the map stays visible.
+  private void onItemLongClick(@NonNull View v, @NonNull LayerBottomSheetItem item)
+  {
+    final LayerSettingsPanel panel =
+        requireActivity() instanceof MwmActivity activity ? activity.getLayerSettingsPanel() : null;
+    closeLayerBottomSheet();
+    if (panel != null)
+      panel.show(item.getMode());
   }
 
   private void closeLayerBottomSheet()

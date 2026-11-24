@@ -57,6 +57,7 @@ public:
 
   void SetTrafficEnabled(bool trafficEnabled);
   void SetIsolinesEnabled(bool isolinesEnabled);
+  void SetContourLinesEnabled(bool enabled);
   void SetBackgroundMode(dp::BackgroundMode mode, float areaOpacity);
 
   void SetCustomFeatures(CustomFeatures && ids);
@@ -88,6 +89,7 @@ private:
   bool m_allow3dBuildings;
   bool m_trafficEnabled;
   bool m_isolinesEnabled;
+  bool m_contourLinesEnabled = true;
   bool m_modeChanged;
   int8_t m_mapLangIndex;
   dp::BackgroundMode m_backgroundMode = dp::BackgroundMode::Default;

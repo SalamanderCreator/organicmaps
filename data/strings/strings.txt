@@ -45860,6 +45860,24 @@ tags = android-app
 en = The route uses T3 paths that you avoid, e.g. because of a stop.
 de = Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.
 
+[route_save_title]
+comment = Maps&Fly: title of the menu behind the save button of a planned route
+tags = android-app
+en = Save route
+de = Route speichern
+
+[route_save_as_track]
+comment = Maps&Fly: save the planned route as a track in the bookmarks
+tags = android-app
+en = Save as track
+de = Als Track speichern
+
+[route_share_gpx]
+comment = Maps&Fly: save the planned route as a track if needed and share it as a GPX file
+tags = android-app
+en = Share as GPX
+de = Als GPX teilen
+
 [routing_save_route_error]
 comment = Toast shown when saving a planned route as a bookmark track fails
 tags = android-app,apple-maps
@@ -46135,6 +46153,210 @@ comment = Settings: shares the newest raw track data file
 tags = android-app
 en = Debug: share latest raw track data
 de = Debug: letzte Track-Rohdaten teilen
+
+[button_layer_rain_radar]
+comment = Map layers menu: toggle button for the rain radar layer
+tags = android-app
+en = Rain radar
+de = Regenradar
+
+[rain_radar_source_dwd]
+comment = Rain radar settings: what the German weather service source covers
+tags = android-app
+en = Germany and border regions, 2 h back and 2 h forecast
+de = Deutschland und Grenzgebiete, 2 h zurück und 2 h Vorhersage
+
+[rain_radar_source_rainviewer]
+comment = Rain radar settings: what the RainViewer source covers
+tags = android-app
+en = Worldwide, last 2 h, no forecast, coarse
+de = Weltweit, letzte 2 h, keine Vorhersage, grob
+
+[rain_radar_loading]
+comment = Rain radar panel on the map: the radar times are being loaded
+tags = android-app
+en = Loading rain radar…
+de = Regenradar wird geladen…
+
+[rain_radar_failed]
+comment = Rain radar panel on the map: the radar times could not be loaded
+tags = android-app
+en = Rain radar not available
+de = Regenradar nicht verfügbar
+
+[rain_radar_latest]
+comment = Rain radar panel: time of the newest radar image, %s is the clock time
+tags = android-app
+en = %s · newest image
+de = %s · neuestes Bild
+
+[rain_radar_past]
+comment = Rain radar panel: an older radar image, %1$s is the clock time, %2$d minutes before the newest
+tags = android-app
+en = %1$s · %2$d min earlier
+de = %1$s · %2$d min früher
+
+[rain_radar_forecast]
+comment = Rain radar panel: a forecast image, %1$s is the clock time, %2$d minutes after the newest
+tags = android-app
+en = %1$s · forecast +%2$d min
+de = %1$s · Vorhersage +%2$d min
+
+[rain_radar_credit_dwd]
+comment = Rain radar panel: required data credit
+tags = android-app
+en = Radar: Deutscher Wetterdienst
+de = Radar: Deutscher Wetterdienst
+
+[rain_radar_credit_rainviewer]
+comment = Rain radar panel: required data credit
+tags = android-app
+en = Radar: RainViewer
+de = Radar: RainViewer
+
+[hillshade_strength_title]
+comment = Settings: strength of the relief shading in percent, 100 is the default
+tags = android-app
+en = Relief strength (%)
+de = Relief-Stärke (%)
+
+[hillshade_light_title]
+comment = Settings: the direction the relief shading light comes from
+tags = android-app
+en = Relief light direction
+de = Relief-Lichtrichtung
+
+[hillshade_altitude_title]
+comment = Settings: the height of the relief shading light above the horizon in degrees, lower means longer shadows
+tags = android-app
+en = Relief sun height (°)
+de = Relief-Sonnenhöhe (°)
+
+[hillshade_light_n]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the north
+de = Von Norden
+
+[hillshade_light_ne]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the north-east
+de = Von Nordosten
+
+[hillshade_light_e]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the east
+de = Von Osten
+
+[hillshade_light_se]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the south-east
+de = Von Südosten
+
+[hillshade_light_s]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the south
+de = Von Süden
+
+[hillshade_light_sw]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the south-west
+de = Von Südwesten
+
+[hillshade_light_w]
+comment = Settings: relief light direction option
+tags = android-app
+en = From the west
+de = Von Westen
+
+[hillshade_light_nw]
+comment = Settings: relief light direction option, the usual map look
+tags = android-app
+en = From the north-west (default)
+de = Von Nordwesten (Standard)
+
+[layer_opacity]
+comment = Layer settings: opacity of a map layer in percent
+tags = android-app
+en = Opacity
+de = Deckkraft
+
+[contour_lines_title]
+comment = Terrain layer settings: switch for the contour lines (the relief shading stays)
+tags = android-app
+en = Contour lines
+de = Höhenlinien
+
+[layers_long_press_hint]
+comment = Map layers menu: hint below the layer buttons
+tags = android-app
+en = Long press Terrain, Satellite or Rain radar for its settings
+de = Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen
+
+[compass_button]
+comment = Map button: content description of the north arrow
+tags = android-app
+en = North arrow
+de = Nordpfeil
+
+[compass_north_locked]
+comment = Toast after a long press on the north arrow: the map stays north up and cannot be turned
+tags = android-app
+en = North up locked
+de = Nordausrichtung festgestellt
+
+[compass_north_unlocked]
+comment = Toast after a long press on the locked north arrow
+tags = android-app
+en = North up unlocked
+de = Nordausrichtung gelöst
+
+[compass_north_locked_hint]
+comment = Toast on a tap on the locked north arrow
+tags = android-app
+en = North up is locked. Long press to unlock.
+de = Nordausrichtung ist festgestellt. Zum Lösen lange drücken.
+
+[rain_radar_status]
+comment = Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed
+tags = android-app
+en = %1$d tiles loaded, %2$d failed
+de = %1$d Kacheln geladen, %2$d Fehler
+
+[rain_radar_error_network]
+comment = Rain radar panel: the last tile failed for lack of a connection
+tags = android-app
+en = no connection
+de = keine Verbindung
+
+[rain_radar_error_image]
+comment = Rain radar panel: the server answered with something that is not an image
+tags = android-app
+en = no image from the server
+de = kein Bild vom Server
+
+[prefs_group_map]
+comment = Settings group: map display
+tags = android-app
+en = Map and display
+de = Karte und Anzeige
+
+[prefs_group_tracks]
+comment = Settings group: track recording, off-track alarm and elevations
+tags = android-app
+en = Tracks and elevations
+de = Tracks und Höhen
+
+[prefs_group_device]
+comment = Settings group: downloads, storage, battery and screen
+tags = android-app
+en = Device and data
+de = Gerät und Daten
 
 [track_debug_nothing_to_share]
 comment = Toast when there is no raw track data file to share

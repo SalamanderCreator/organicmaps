@@ -279,7 +279,7 @@ public class SettingsPrefsFragment extends BaseXmlSettingsFragment implements La
       return;
 
     if (!SharedPropertiesUtils.shouldShowEmulateBadStorageSetting())
-      removePreference(getString(R.string.pref_settings_general), pref);
+      removePreference(getString(R.string.pref_settings_device), pref);
     else
       pref.setVisible(true);
   }

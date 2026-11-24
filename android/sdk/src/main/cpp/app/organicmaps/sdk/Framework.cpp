@@ -1186,9 +1186,10 @@ JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSelectTrackCandidate(JNI
   frm()->SelectTrackCandidate(c.m_trackId, c.m_relationId);
 }
 
-JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeSaveRoute(JNIEnv *, jclass)
+JNIEXPORT jlong Java_app_organicmaps_sdk_Framework_nativeSaveRoute(JNIEnv *, jclass)
 {
-  return frm()->SaveRoute();
+  auto const trackId = frm()->SaveRoute();
+  return trackId == kml::kInvalidTrackId ? -1 : static_cast<jlong>(trackId);
 }
 
 JNIEXPORT jstring Java_app_organicmaps_sdk_Framework_nativeGetBookmarkDir(JNIEnv * env, jclass)
@@ -1618,6 +1619,85 @@ JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsIsolinesLayerEnabl
 JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetPreferTerrainElevation(JNIEnv *, jclass, jboolean prefer)
 {
   Framework::SetPreferTerrainElevation(static_cast<bool>(prefer));
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetTileOverlay(JNIEnv * env, jclass, jstring url, jint maxZoom,
+                                                                       jint opacityPct, jboolean dropNeutralPixels)
+{
+  frm()->SetTileOverlay(jni::ToNativeString(env, url), static_cast<int>(maxZoom), static_cast<uint32_t>(opacityPct),
+                        static_cast<bool>(dropNeutralPixels));
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetTerrainShading(JNIEnv *, jclass, jdouble azimuthDeg,
+                                                                          jdouble altitudeDeg, jdouble strength)
+{
+  frm()->SetTerrainShading(azimuthDeg, altitudeDeg, strength);
+}
+
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetTerrainShading(JNIEnv * env, jclass)
+{
+  auto const s = Framework::LoadTerrainShading();
+  jdouble const values[] = {s.m_azimuthDeg, s.m_altitudeDeg, s.m_strength};
+  jdoubleArray result = env->NewDoubleArray(3);
+  env->SetDoubleArrayRegion(result, 0, 3, values);
+  return result;
+}
+
+JNIEXPORT jintArray Java_app_organicmaps_sdk_Framework_nativeGetTileOverlayStats(JNIEnv * env, jclass)
+{
+  auto const stats = frm()->GetTileOverlayStats();
+  jint const values[] = {static_cast<jint>(stats.m_loaded), static_cast<jint>(stats.m_failed),
+                         static_cast<jint>(stats.m_lastError)};
+  jintArray result = env->NewIntArray(3);
+  env->SetIntArrayRegion(result, 0, 3, values);
+  return result;
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetContourLinesEnabled(JNIEnv *, jclass, jboolean enabled)
+{
+  frm()->SetContourLinesEnabled(static_cast<bool>(enabled));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsContourLinesEnabled(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(Framework::LoadContourLinesEnabled());
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeCenterOnMyPosition(JNIEnv *, jclass)
+{
+  frm()->CenterOnMyPosition();
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeToggleNorthUp(JNIEnv *, jclass)
+{
+  frm()->ToggleNorthUp();
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetNorthLocked(JNIEnv *, jclass, jboolean locked)
+{
+  frm()->SetNorthLocked(static_cast<bool>(locked));
+}
+
+JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsNorthLocked(JNIEnv *, jclass)
+{
+  return static_cast<jboolean>(Framework::LoadNorthLocked());
+}
+
+// The viewport listener runs on the UI thread.
+JNIEXPORT void Java_app_organicmaps_sdk_Framework_nativeSetMapAzimuthListener(JNIEnv *, jclass, jobject listener)
+{
+  if (listener == nullptr)
+  {
+    frm()->SetViewportListener(nullptr);
+    return;
+  }
+  auto const ref = jni::make_global_ref(listener);
+  frm()->SetViewportListener([ref](ScreenBase const & screen)
+  {
+    JNIEnv * env = jni::GetEnv();
+    jmethodID const method = jni::GetMethodID(env, *ref, "onMapAzimuthChanged", "(D)V");
+    env->CallVoidMethod(*ref, method, static_cast<jdouble>(math::RadToDeg(screen.GetAngle())));
+  });
 }
 
 JNIEXPORT jboolean Java_app_organicmaps_sdk_Framework_nativeIsTerrainElevationPreferred(JNIEnv *, jclass)
