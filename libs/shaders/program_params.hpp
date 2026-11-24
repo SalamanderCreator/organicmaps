@@ -249,6 +249,8 @@ struct ALIGNMENT TileBackgroundProgramParams
   glsl::mat4 m_modelView;
   glsl::mat4 m_projection;
   glsl::mat4 m_pivotTransform;
+  // Fades a raster overlay frame in and out.
+  float m_opacity = 1.0f;
 
   BIND_PROGRAMS(TileBackgroundProgramParams, Program::TileBackground, Program::TileBackgroundArray)
   IS_STORAGE_BUFFER_BOUND()

@@ -13,6 +13,10 @@ namespace
 // Max number of refcount==0 images kept alive in the LRU before their texture slots are recycled.
 constexpr size_t kMaxUnreferencedImages = 16;
 
+// Rain radar frames: the old frame waits this long at most for the new one, then fades out.
+constexpr auto kMaxFrameLoadTime = std::chrono::seconds(3);
+constexpr float kCrossFadeTime = 0.4f;
+
 // Background coordinates use the true zoom, so their rects must not be clipped to the vector data zoom.
 constexpr bool kClipByDataMaxZoom = false;
 
@@ -101,6 +105,17 @@ void TileBackgroundRenderer::OnUpdateViewport(ref_ptr<dp::GraphicsContext> conte
       ReleaseImageRef(context, it->second.m_imageUid);
     it = m_tileRequests.erase(it);
     m_cancelTileBackgroundReadingFn(tileKey, m_currentMode);
+  }
+
+  for (auto it = m_fadingTiles.begin(); it != m_fadingTiles.end();)
+  {
+    if (IsInCoverage(it->first, coverage, currentZoomLevel))
+    {
+      ++it;
+      continue;
+    }
+    ReleaseImageRef(context, it->second.m_imageUid);
+    it = m_fadingTiles.erase(it);
   }
 
   // Keep current bindings and the overlapping fallback; release everything else.
@@ -280,7 +295,11 @@ void TileBackgroundRenderer::SetTileBackgroundData(ref_ptr<dp::GraphicsContext> 
     return;  // Completion of a cancelled/replaced request.
   ASSERT_EQUAL(requestIt->second.m_imageUid, imageUid, (tileKey));
   if (imageUid.empty())
+  {
+    requestIt->second.m_failed = true;
+    StartCrossFadeIfReady();
     return;
+  }
   m_tileRequests.erase(requestIt);
 
   ASSERT(IsInCoverage(tileKey, m_lastCoverage, m_lastCurrentZoomLevel), (tileKey));
@@ -289,6 +308,54 @@ void TileBackgroundRenderer::SetTileBackgroundData(ref_ptr<dp::GraphicsContext> 
   VERIFY(m_tiles.emplace(coordKey, TileBinding{imageUid, rect}).second, (tileKey));
 
   RetireFallbackIfReady(context);
+  StartCrossFadeIfReady();
+}
+
+void TileBackgroundRenderer::ReloadWithCrossFade(ref_ptr<dp::GraphicsContext> context)
+{
+  if (m_currentMode == dp::BackgroundMode::Default || context == nullptr)
+    return;
+
+  for (auto const & [tileKey, request] : m_tileRequests)
+  {
+    if (!request.m_imageUid.empty())
+      ReleaseImageRef(context, request.m_imageUid);
+    m_cancelTileBackgroundReadingFn(TileKey(tileKey, request.m_generation, 0 /* userMarksGeneration */), m_currentMode);
+  }
+  m_tileRequests.clear();
+
+  // While the previous frame still loads, its old frame stays the one that fades out.
+  bool const keepOldFrame = !m_fadingTiles.empty();
+  for (auto & [tileKey, binding] : m_tiles)
+    if (!keepOldFrame && tileKey.m_zoomLevel == m_lastCurrentZoomLevel)
+      m_fadingTiles.emplace(tileKey, std::move(binding));
+    else
+      ReleaseImageRef(context, binding.m_imageUid);
+  m_tiles.clear();
+  m_fallbackZoomLevel = TileKey::kNoZoom;
+  m_reloadTime = Clock::now();
+  m_fadeStartTime.reset();
+
+  OnUpdateViewport(context, m_lastCoverage, m_lastCurrentZoomLevel);
+  StartCrossFadeIfReady();
+}
+
+void TileBackgroundRenderer::StartCrossFadeIfReady()
+{
+  if (m_fadingTiles.empty() || m_fadeStartTime)
+    return;
+  for (auto const & [tileKey, request] : m_tileRequests)
+    if (!request.m_failed)
+      return;
+  m_fadeStartTime = Clock::now();
+}
+
+void TileBackgroundRenderer::ReleaseFadingTiles(ref_ptr<dp::GraphicsContext> context)
+{
+  for (auto const & [tileKey, binding] : m_fadingTiles)
+    ReleaseImageRef(context, binding.m_imageUid);
+  m_fadingTiles.clear();
+  m_fadeStartTime.reset();
 }
 
 void TileBackgroundRenderer::AcquireImageRef(std::string const & uid)
@@ -344,24 +411,71 @@ void TileBackgroundRenderer::Render(ref_ptr<dp::GraphicsContext> context, ref_pt
   math::Matrix<float, 4, 4> const mv = screen.GetModelView(pivot, 1.0f);
   m_programParams.m_modelView = glsl::make_mat4(mv.m_data);
 
-  // Sort tiles by texture pointer to minimize texture switches.
-  m_sortedTiles.clear();
-  m_sortedTiles.reserve(m_tiles.size());
-  for (auto const & [tileKey, binding] : m_tiles)
+  auto const addTiles = [&](std::unordered_map<TileKey, TileBinding> const & tiles, auto const & filter)
   {
-    if (!screen.ClipRect().IsIntersect(tileKey.GetGlobalRect(kClipByDataMaxZoom)))
-      continue;
-    auto imgIt = m_images.find(binding.m_imageUid);
-    if (imgIt == m_images.end())
-      continue;
+    m_sortedTiles.clear();
+    m_sortedTiles.reserve(tiles.size());
+    for (auto const & [tileKey, binding] : tiles)
+    {
+      if (!filter(tileKey) || !screen.ClipRect().IsIntersect(tileKey.GetGlobalRect(kClipByDataMaxZoom)))
+        continue;
+      auto imgIt = m_images.find(binding.m_imageUid);
+      if (imgIt == m_images.end())
+        continue;
 
-    m_tileRects.clear();
-    GetTileRects(tileKey, binding.m_rect, m_tileRects);
-    for (auto const & rect : m_tileRects)
-      m_sortedTiles.push_back({rect.m_tileKey, &imgIt->second, rect.m_textureRect});
+      m_tileRects.clear();
+      GetTileRects(tileKey, binding.m_rect, m_tileRects);
+      for (auto const & rect : m_tileRects)
+        m_sortedTiles.push_back({rect.m_tileKey, &imgIt->second, rect.m_textureRect});
+    }
+  };
+  auto const all = [](TileKey const &) { return true; };
+
+  float fade = 0.0f;
+  if (!m_fadingTiles.empty())
+  {
+    // Show the new frame even when some of its tiles do not come.
+    auto const now = Clock::now();
+    if (!m_fadeStartTime && now - m_reloadTime > kMaxFrameLoadTime)
+      m_fadeStartTime = now;
+    if (m_fadeStartTime)
+      fade = std::min(std::chrono::duration<float>(now - *m_fadeStartTime).count() / kCrossFadeTime, 1.0f);
+    if (fade >= 1.0f)
+      ReleaseFadingTiles(context);
   }
+
+  if (m_fadingTiles.empty())
+  {
+    m_programParams.m_opacity = 1.0f;
+    addTiles(m_tiles, all);
+    DrawTiles(context, mng, pivot);
+    return;
+  }
+
+  auto const hasOldTile = [this](TileKey const & key) { return m_fadingTiles.contains(key); };
+  m_programParams.m_opacity = 1.0f - fade;
+  addTiles(m_fadingTiles, all);
+  DrawTiles(context, mng, pivot);
+
+  m_programParams.m_opacity = 1.0f;
+  addTiles(m_tiles, [&](TileKey const & key) { return !hasOldTile(key); });
+  DrawTiles(context, mng, pivot);
+
+  if (fade > 0.0f)
+  {
+    m_programParams.m_opacity = fade;
+    addTiles(m_tiles, hasOldTile);
+    DrawTiles(context, mng, pivot);
+  }
+}
+
+void TileBackgroundRenderer::DrawTiles(ref_ptr<dp::GraphicsContext> context, ref_ptr<gpu::ProgramManager> mng,
+                                       m2::PointD const & pivot)
+{
   if (m_sortedTiles.empty())
     return;
+
+  // Sort tiles by texture pointer to minimize texture switches.
 
   std::sort(m_sortedTiles.begin(), m_sortedTiles.end(), [](DrawEntry const & lhs, DrawEntry const & rhs)
   {
@@ -442,6 +556,8 @@ void TileBackgroundRenderer::ClearContextDependentResources(ref_ptr<dp::Graphics
   m_images.clear();
   m_unreferencedLRU.clear();
   m_tiles.clear();
+  m_fadingTiles.clear();
+  m_fadeStartTime.reset();
   m_fallbackZoomLevel = TileKey::kNoZoom;
 }
 
