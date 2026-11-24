@@ -1041,7 +1041,7 @@
     <!-- Rain radar panel on the map: the radar times could not be loaded -->
     <string name="rain_radar_failed">Rain radar not available</string>
     <!-- Rain radar panel: time of the newest radar image, %s is the clock time -->
-    <string name="rain_radar_latest">%s · newest image</string>
+    <string name="rain_radar_latest">%s · now</string>
     <!-- Rain radar panel: an older radar image, %1$s is the clock time, %2$d minutes before the newest -->
     <string name="rain_radar_past">%1$s · %2$d min earlier</string>
     <!-- Rain radar panel: a forecast image, %1$s is the clock time, %2$d minutes after the newest -->
@@ -1110,6 +1110,8 @@
     <string name="compass_north_locked_hint">North up is locked. Long press to unlock.</string>
     <!-- Rain radar panel: downloads of the shown time, %1$d tiles loaded, %2$d tiles failed -->
     <string name="rain_radar_status">%1$d tiles loaded, %2$d failed</string>
+    <!-- Rain radar panel: added to the download status while tiles of the shown time still load, %d is their number -->
+    <string name="rain_radar_status_pending">%d still loading</string>
     <!-- Rain radar panel: the last tile failed for lack of a connection -->
     <string name="rain_radar_error_network">no connection</string>
     <!-- Rain radar panel: the server answered with something that is not an image -->
