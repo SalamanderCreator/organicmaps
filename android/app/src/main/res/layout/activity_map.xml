@@ -119,6 +119,15 @@
               android:textColor="?android:attr/textColorSecondary"
               tools:text="Radar: Deutscher Wetterdienst" />
             <ImageButton
+              android:id="@+id/rain_radar_legend_button"
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:layout_marginStart="@dimen/margin_quarter"
+              android:background="?attr/selectableItemBackgroundBorderless"
+              android:contentDescription="@string/rain_radar_legend"
+              android:src="@drawable/ic_info_outline"
+              app:tint="?iconTint" />
+            <ImageButton
               android:id="@+id/rain_radar_play"
               android:layout_width="32dp"
               android:layout_height="32dp"
@@ -155,6 +164,15 @@
             android:textAppearance="@style/MwmTextAppearance.Body4"
             android:textColor="?android:attr/textColorSecondary"
             tools:text="12 Kacheln geladen, 0 Fehler" />
+          <!-- Filled by RainRadarPanel for the shown source. -->
+          <LinearLayout
+            android:id="@+id/rain_radar_legend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_half"
+            android:visibility="gone"
+            tools:visibility="visible" />
         </LinearLayout>
       </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
