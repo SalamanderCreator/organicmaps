@@ -500,7 +500,11 @@ public class Framework
 
   public static native void nativeDidSelectProduct(String title, String link);
 
-  public static native boolean nativeSaveRoute();
+  /**
+   * Saves the built route as a track.
+   * @return the new track id, or -1 on failure.
+   */
+  public static native long nativeSaveRoute();
 
   public static native boolean nativeCanShowCrowdfundingPromo();
 

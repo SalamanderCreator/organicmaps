@@ -496,7 +496,8 @@ public:
   bool SaveTrackRecordingWithName(std::string const & name);
   bool IsTrackRecordingEnabled() const;
 
-  bool SaveRoute();
+  /// Saves the built route as a track and shows it. Returns kml::kInvalidTrackId on failure.
+  kml::TrackId SaveRoute();
   /// Returns the elevation profile data of the currently recorded track.
   /// To get the data on the every track recording state update, this function should be called after receiving the
   /// callback from the `SetTrackRecordingUpdateHandler`.

@@ -1502,6 +1502,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
     closePlacePage();
   }
 
+  @NonNull
+  public ActivityResultLauncher<SharingUtils.SharingIntent> getShareLauncher()
+  {
+    return mShareLauncher;
+  }
+
   @Override
   public void onStopPointLimitReached()
   {

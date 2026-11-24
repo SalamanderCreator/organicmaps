@@ -938,6 +938,12 @@
     <string name="change_stop_along_route">Stopp ändern</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Die maximale Anzahl an Stopps wurde erreicht</string>
+    <!-- Maps&Fly: title of the menu behind the save button of a planned route -->
+    <string name="route_save_title">Route speichern</string>
+    <!-- Maps&Fly: save the planned route as a track in the bookmarks -->
+    <string name="route_save_as_track">Als Track speichern</string>
+    <!-- Maps&Fly: save the planned route as a track if needed and share it as a GPX file -->
+    <string name="route_share_gpx">Als GPX teilen</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Die Route konnte nicht als Track gespeichert werden</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->

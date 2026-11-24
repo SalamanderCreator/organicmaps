@@ -45794,6 +45794,24 @@ vi = Đã đạt đến số điểm dừng tối đa
 zh-Hans = 已达到最大途经点数量
 zh-Hant = 已達到最大途經點數量
 
+[route_save_title]
+comment = Maps&Fly: title of the menu behind the save button of a planned route
+tags = android-app
+en = Save route
+de = Route speichern
+
+[route_save_as_track]
+comment = Maps&Fly: save the planned route as a track in the bookmarks
+tags = android-app
+en = Save as track
+de = Als Track speichern
+
+[route_share_gpx]
+comment = Maps&Fly: save the planned route as a track if needed and share it as a GPX file
+tags = android-app
+en = Share as GPX
+de = Als GPX teilen
+
 [routing_save_route_error]
 comment = Toast shown when saving a planned route as a bookmark track fails
 tags = android-app,apple-maps
