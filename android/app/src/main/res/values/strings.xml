@@ -934,10 +934,12 @@
     <string name="change_stop_along_route">Change stop</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Maximum number of stops reached</string>
-    <!-- Maps&Fly map layer: circles of 500 m, 1 km and 2 km around the own position and the selected place -->
-    <string name="button_layer_distance_circles">Distance circles</string>
-    <!-- Maps&Fly map layer: dashed line from the selected place to the own position with the straight-line distance -->
-    <string name="button_layer_distance_line">Distance line</string>
+    <!-- Maps&Fly map layer: distance circles and/or a straight line from the selected place to the own position -->
+    <string name="button_layer_distance">Distance</string>
+    <!-- Maps&Fly distance layer settings: circles of 500 m, 1 km and 2 km around the own position and the selected place -->
+    <string name="distance_layer_circles">Circles 500 m, 1 km, 2 km</string>
+    <!-- Maps&Fly distance layer settings: dashed line from the selected place to the own position with the straight-line distance -->
+    <string name="distance_layer_line">Straight line to the selected place</string>
     <!-- Maps&Fly: title of the menu behind the save button of a planned route -->
     <string name="route_save_title">Save route</string>
     <!-- Maps&Fly: save the planned route as a track in the bookmarks -->
@@ -1009,7 +1011,7 @@
     <!-- Terrain layer settings: switch for the contour lines (the relief shading stays) -->
     <string name="contour_lines_title">Contour lines</string>
     <!-- Map layers menu: hint below the layer buttons -->
-    <string name="layers_long_press_hint">Long press Terrain, Satellite or Rain radar for its settings</string>
+    <string name="layers_long_press_hint">Long press Terrain, Distance, Satellite or Rain radar for more options</string>
     <!-- Map button: content description of the north arrow -->
     <string name="compass_button">North arrow</string>
     <!-- Toast after a long press on the north arrow: the map stays north up and cannot be turned -->
