@@ -960,6 +960,8 @@
     <string name="route_preference_natural">Preferred: natural</string>
     <!-- Maps&Fly route planning: way preference when natural ways are not preferred -->
     <string name="route_preference_fast">Preferred: fast</string>
+    <!-- Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3" -->
+    <string name="route_path_grade_max">max. %s</string>
     <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
     <string name="route_path_grade_expert_warning">The route uses T4–T6 paths that you avoid, e.g. because of a stop.</string>
     <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->

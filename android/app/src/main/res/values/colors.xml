@@ -149,4 +149,8 @@
   <color name="route_way_path">#FF8C6239</color>
   <color name="route_way_steps">#FF9C7B6B</color>
   <color name="route_way_ferry">#FF4FA3B8</color>
+  <!-- Maps&Fly: SAC path grades of a route, after the trail markings (T3 white-red-white, T4+ white-blue-white). -->
+  <color name="route_grade_normal">#FF9CB37A</color>
+  <color name="route_grade_difficult">#FFD9534F</color>
+  <color name="route_grade_expert">#FF3F6FB5</color>
 </resources>

@@ -79,15 +79,63 @@
           tools:visibility="visible" />
       </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <!-- Maps&Fly: route length by SAC path grade and a warning for avoided grades. -->
+      <!-- Maps&Fly: SAC path grades of the route as a bar; the info button shows the lengths. -->
+      <LinearLayout
+        android:id="@+id/route_grade_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_half"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <app.organicmaps.routing.StackedBarView
+          android:id="@+id/route_grade_bar"
+          android:layout_width="0dp"
+          android:layout_height="10dp"
+          android:layout_weight="1" />
+
+        <TextView
+          android:id="@+id/route_grade_max"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/margin_half"
+          android:textAppearance="@style/MwmTextAppearance.Body3"
+          tools:text="max. T3" />
+
+        <ImageView
+          android:id="@+id/route_grade_info"
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_marginStart="@dimen/margin_quarter"
+          android:contentDescription="@string/route_path_grades"
+          android:padding="4dp"
+          app:srcCompat="@drawable/ic_route_info"
+          app:tint="?iconTint" />
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/route_grade_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_half"
+        android:textAppearance="@style/MwmTextAppearance.Body3"
+        android:visibility="gone"
+        tools:text="■ bis T2 8,2 km   ■ T3 1,1 km   ■ T4–T6 0,3 km"
+        tools:visibility="visible" />
+
+      <!-- Maps&Fly: warning when the route uses an avoided SAC grade, e.g. because of a stop. -->
       <TextView
         android:id="@+id/route_path_grades"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_half"
         android:textAppearance="@style/MwmTextAppearance.Body3"
+        android:textColor="@color/base_red"
         android:visibility="gone"
-        tools:text="Schwierigkeit: bis T2 8,2 km · T3 1,1 km · T4–T6 0,3 km"
+        tools:text="Die Route führt über T3-Wege, die du meidest."
         tools:visibility="visible" />
 
       <!-- Maps&Fly: natural vs. paved share of the route; the info button expands way types and surfaces. -->

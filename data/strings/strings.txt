@@ -45872,6 +45872,12 @@ tags = android-app
 en = Preferred: fast
 de = Bevorzugt: schnell
 
+[route_path_grade_max]
+comment = Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3"
+tags = android-app
+en = max. %@
+de = max. %@
+
 [route_path_grade_expert_warning]
 comment = Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided
 tags = android-app
