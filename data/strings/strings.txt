@@ -46214,6 +46214,18 @@ tags = android-app
 en = Long press Terrain, Satellite or Rain radar for its settings
 de = Lange auf Gelände, Satellit oder Regenradar drücken für die Einstellungen
 
+[rain_radar_play]
+comment = Rain radar panel: button that plays the radar frames as an animation
+tags = android-app
+en = Play
+de = Abspielen
+
+[rain_radar_pause]
+comment = Rain radar panel: button that stops the radar animation
+tags = android-app
+en = Pause
+de = Anhalten
+
 [compass_button]
 comment = Map button: content description of the north arrow
 tags = android-app

@@ -119,6 +119,15 @@
               android:textColor="?android:attr/textColorSecondary"
               tools:text="Radar: Deutscher Wetterdienst" />
             <ImageButton
+              android:id="@+id/rain_radar_play"
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:layout_marginStart="@dimen/margin_quarter"
+              android:background="?attr/selectableItemBackgroundBorderless"
+              android:contentDescription="@string/rain_radar_play"
+              android:src="@drawable/ic_play"
+              app:tint="?iconTint" />
+            <ImageButton
               android:id="@+id/rain_radar_close"
               android:layout_width="32dp"
               android:layout_height="32dp"

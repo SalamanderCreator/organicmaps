@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -29,6 +30,24 @@ public class RainRadarPanel
   private final Slider mSlider;
   @NonNull
   private final TextView mStatus;
+  @NonNull
+  private final ImageButton mPlay;
+  private boolean mPlaying;
+  // Steps through the frames, a pause on the last one, then again from the first.
+  private final Runnable mPlayer = new Runnable() {
+    @Override
+    public void run()
+    {
+      if (!mPlaying || mState.mIndex < 0)
+        return;
+      final int last = mState.mFrames.size() - 1;
+      final int next = mState.mIndex >= last ? 0 : mState.mIndex + 1;
+      RainRadar.selectFrame(mPanel.getContext(), next);
+      mHandler.postDelayed(this, next == last ? PLAY_END_PAUSE_MS : PLAY_STEP_MS);
+    }
+  };
+  private static final long PLAY_STEP_MS = 800;
+  private static final long PLAY_END_PAUSE_MS = 2000;
   private final Handler mHandler = new Handler(Looper.getMainLooper());
   private final Runnable mStatusUpdater = new Runnable() {
     @Override
@@ -49,8 +68,11 @@ public class RainRadarPanel
     mCredit = panel.findViewById(R.id.rain_radar_credit);
     mSlider = panel.findViewById(R.id.rain_radar_slider);
     mStatus = panel.findViewById(R.id.rain_radar_status);
+    mPlay = panel.findViewById(R.id.rain_radar_play);
+    mPlay.setOnClickListener(v -> setPlaying(!mPlaying));
     mState = RainRadar.getState().getValue();
     panel.findViewById(R.id.rain_radar_close).setOnClickListener(v -> {
+      setPlaying(false);
       RainRadar.setEnabled(v.getContext(), false);
       onClosed.run();
     });
@@ -63,7 +85,9 @@ public class RainRadarPanel
     mSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
       @Override
       public void onStartTrackingTouch(@NonNull Slider slider)
-      {}
+      {
+        setPlaying(false);
+      }
 
       @Override
       public void onStopTrackingTouch(@NonNull Slider slider)
@@ -86,6 +110,8 @@ public class RainRadarPanel
     mState = state;
     UiUtils.showIf(state.mEnabled, mPanel);
     mHandler.removeCallbacks(mStatusUpdater);
+    if (!state.mEnabled || state.mIndex < 0)
+      setPlaying(false);
     if (!state.mEnabled)
       return;
     mStatusUpdater.run();
@@ -94,6 +120,7 @@ public class RainRadarPanel
                                                                       : R.string.rain_radar_credit_dwd);
     final boolean ready = state.mIndex >= 0;
     UiUtils.showIf(ready, mSlider);
+    UiUtils.showIf(ready && state.mFrames.size() > 1, mPlay);
     if (!ready)
     {
       mTime.setText(state.mFailed ? R.string.rain_radar_failed : R.string.rain_radar_loading);
@@ -113,6 +140,17 @@ public class RainRadarPanel
       mSlider.setValue(state.mIndex);
     }
     showTime(state.mIndex);
+  }
+
+  private void setPlaying(boolean playing)
+  {
+    mPlaying = playing;
+    mHandler.removeCallbacks(mPlayer);
+    mPlay.setImageResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
+    mPlay.setContentDescription(
+        mPlay.getContext().getString(playing ? R.string.rain_radar_pause : R.string.rain_radar_play));
+    if (playing)
+      mPlayer.run();
   }
 
   private void showStatus()
