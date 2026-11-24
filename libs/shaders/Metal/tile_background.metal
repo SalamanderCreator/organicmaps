@@ -9,7 +9,7 @@ using namespace metal;
 typedef struct
 {
   float4 position [[position]];
-  float3 texCoords;
+  float4 texCoords;  // xy: texture coordinates, z: texture array index, w: opacity
 } Fragment_T;
 
 typedef struct
@@ -20,6 +20,7 @@ typedef struct
   float4x4 u_modelView;
   float4x4 u_projection;
   float4x4 u_pivotTransform;
+  float u_opacity;
 } Uniforms_T;
 
 vertex Fragment_T vsTileBackground(uint vertexId [[vertex_id]],
@@ -38,7 +39,7 @@ vertex Fragment_T vsTileBackground(uint vertexId [[vertex_id]],
 
   float4 textureRectMinMax = uniforms.u_textureRectMinMax[instanceId];
   float2 texUV = mix(textureRectMinMax.xy, textureRectMinMax.zw, quadVertex);
-  out.texCoords = float3(texUV, float(uniforms.u_textureIndex[instanceId]));
+  out.texCoords = float4(texUV, float(uniforms.u_textureIndex[instanceId]), uniforms.u_opacity);
 
   return out;
 }
@@ -47,7 +48,9 @@ fragment float4 fsTileBackground(const Fragment_T in [[stage_in]],
                                  texture2d<float> u_colorTex [[texture(0)]],
                                  sampler u_colorTexSampler [[sampler(0)]])
 {
-  return u_colorTex.sample(u_colorTexSampler, in.texCoords.xy);
+  float4 color = u_colorTex.sample(u_colorTexSampler, in.texCoords.xy);
+  color.a *= in.texCoords.w;
+  return color;
 }
 
 fragment float4 fsTileBackgroundArray(const Fragment_T in [[stage_in]],
@@ -55,5 +58,7 @@ fragment float4 fsTileBackgroundArray(const Fragment_T in [[stage_in]],
                                       sampler u_colorTexSampler [[sampler(0)]])
 {
   uint textureIndex = uint(in.texCoords.z);
-  return u_colorTex.sample(u_colorTexSampler, in.texCoords.xy, textureIndex);
+  float4 color = u_colorTex.sample(u_colorTexSampler, in.texCoords.xy, textureIndex);
+  color.a *= in.texCoords.w;
+  return color;
 }

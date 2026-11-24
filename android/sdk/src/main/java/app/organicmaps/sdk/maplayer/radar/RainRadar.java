@@ -105,8 +105,8 @@ public final class RainRadar
     }
   }
 
-  private static final MutableLiveData<State> sState = new MutableLiveData<>(
-      new State(false, SOURCE_DWD, Collections.emptyList(), -1, -1, false, false));
+  private static final MutableLiveData<State> sState =
+      new MutableLiveData<>(new State(false, SOURCE_DWD, Collections.emptyList(), -1, -1, false, false));
   private static long sLoadedAtMs;
   // Drops the result of an older load when the source changed or the layer was switched off meanwhile.
   private static int sLoadGeneration;
@@ -282,7 +282,7 @@ public final class RainRadar
   }
 
   @Nullable
-  private static String download(@NonNull String url) throws Exception
+  static String download(@NonNull String url) throws Exception
   {
     final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
     try

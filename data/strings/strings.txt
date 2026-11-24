@@ -46250,6 +46250,72 @@ tags = android-app
 en = Long press Terrain, Distance, Satellite or Rain radar for more options
 de = Langes Drücken auf Gelände, Abstand, Satellit oder Regenradar öffnet weitere Optionen
 
+[rain_radar_play]
+comment = Rain radar panel: button that plays the radar frames as an animation
+tags = android-app
+en = Play
+de = Abspielen
+
+[rain_radar_pause]
+comment = Rain radar panel: button that stops the radar animation
+tags = android-app
+en = Pause
+de = Anhalten
+
+[rain_radar_legend]
+comment = Rain radar panel: button that shows the colour scale
+tags = android-app
+en = Legend
+de = Legende
+
+[rain_radar_legend_rain]
+comment = Rain radar legend: title of the rain colour scale
+tags = android-app
+en = Rain
+de = Regen
+
+[rain_radar_legend_snow]
+comment = Rain radar legend: title of the snow colour scale
+tags = android-app
+en = Snow
+de = Schnee
+
+[rain_radar_legend_precipitation]
+comment = Rain radar legend: title of the precipitation colour scale, the labels are in millimetres per hour
+tags = android-app
+en = Precipitation (mm/h)
+de = Niederschlag (mm/h)
+
+[rain_radar_legend_light]
+comment = Rain radar legend: low end of the rain scale
+tags = android-app
+en = light
+de = leicht
+
+[rain_radar_legend_heavy_hail]
+comment = Rain radar legend: high end of the rain scale
+tags = android-app
+en = heavy (hail)
+de = stark (Hagel)
+
+[rain_radar_legend_little]
+comment = Rain radar legend: low end of the snow scale
+tags = android-app
+en = little
+de = wenig
+
+[rain_radar_legend_much]
+comment = Rain radar legend: high end of the snow scale
+tags = android-app
+en = a lot
+de = viel
+
+[rain_radar_legend_unavailable]
+comment = Rain radar legend: the colour scale could not be downloaded
+tags = android-app
+en = Legend not available
+de = Legende nicht verfügbar
+
 [compass_button]
 comment = Map button: content description of the north arrow
 tags = android-app

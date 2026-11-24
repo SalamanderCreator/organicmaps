@@ -3148,13 +3148,16 @@ RasterTileProvider::Stats Framework::GetTileOverlayStats() const
 
 void Framework::SetTileOverlay(std::string const & url, int maxZoom, uint32_t opacityPct, bool dropNeutralPixels)
 {
+  bool const wasActive = m_overlayTilesActive;
   m_overlayTilesActive = !url.empty();
+  bool reload = false;
   if (m_overlayTilesActive)
   {
     float const alpha = std::min(opacityPct, 100u) / 100.0f;
     if (m_overlayTileProvider)
     {
       m_overlayTileProvider->SetSource(url, maxZoom, alpha, dropNeutralPixels);
+      reload = wasActive;
     }
     else
     {
@@ -3183,7 +3186,7 @@ void Framework::SetTileOverlay(std::string const & url, int maxZoom, uint32_t op
   }
 
   if (m_drapeEngine)
-    m_drapeEngine->SetTileOverlay(m_overlayTilesActive);
+    m_drapeEngine->SetTileOverlay(m_overlayTilesActive, reload);
 }
 
 void Framework::SetBackgroundTiles(bool enabled, std::string url, uint32_t cacheSizeMB, uint32_t areaOpacityPct)

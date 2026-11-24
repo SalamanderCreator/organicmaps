@@ -104,6 +104,11 @@ public class PlacePageButtonFactory
         titleId = R.string.avoid_steps;
         yield R.drawable.ic_avoid_steps;
       }
+      case TRACK_SHARE_GPX ->
+      {
+        titleId = R.string.route_share_gpx;
+        yield R.drawable.ic_file_gpx;
+      }
       case MORE ->
       {
         titleId = R.string.placepage_more_button;
