@@ -111,9 +111,10 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
 
       if (!data.m_label.empty() && !data.m_points.empty())
       {
-        // A white halo keeps the label readable on colored map features, and a gap keeps it off the point symbol.
+        // A halo keeps the label readable on colored map features, and a gap keeps it off the point symbol.
         float const vs = static_cast<float>(VisualParams::Instance().GetVisualScale());
-        dp::FontDecl const font(data.m_color, kFontSize, dp::Color::White());
+        dp::FontDecl const font(data.m_color, kFontSize,
+                                data.m_labelHalo ? dp::Color::White() : dp::Color::Transparent());
         BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
                   glsl::vec2(14.0f * vs, 4.0f * vs));
       }

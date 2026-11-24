@@ -49,10 +49,11 @@ struct DrapeApiLineData
     return *this;
   }
 
-  /// A text drawn at the first point.
-  DrapeApiLineData & Label(std::string const & label)
+  /// A text drawn next to the first point, optionally with a white halo.
+  DrapeApiLineData & Label(std::string const & label, bool halo = false)
   {
     m_label = label;
+    m_labelHalo = halo;
     return *this;
   }
 
@@ -63,6 +64,7 @@ struct DrapeApiLineData
   std::vector<double> m_pattern;
   double m_baseGtoPScale = 1.0;
   std::string m_label;
+  bool m_labelHalo = false;
 
   bool m_showPoints = false;
   bool m_markPoints = false;

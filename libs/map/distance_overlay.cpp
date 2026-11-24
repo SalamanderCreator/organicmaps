@@ -138,7 +138,7 @@ void DistanceOverlay::UpdateLine()
   // The label at the place, also when the line is outside the screen.
   double const distanceM = mercator::DistanceOnEarth(*m_selection, *m_myPosition);
   df::DrapeApiLineData label({*m_selection}, kLineColor);
-  label.Label(platform::Distance::CreateFormatted(distanceM).ToString());
+  label.Label(platform::Distance::CreateFormatted(distanceM).ToString(), true /* halo */);
   m_drapeApi.AddLine(std::string(kLineLabelId), label);
 
   // Dashes are built for the current zoom, so only the part around the screen is drawn.
