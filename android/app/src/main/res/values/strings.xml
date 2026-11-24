@@ -946,6 +946,12 @@
     <string name="route_path_grade_difficult">T3</string>
     <!-- Maps&Fly route panel: paths of SAC grade T4 to T6 -->
     <string name="route_path_grade_expert">T4–T6</string>
+    <!-- Maps&Fly route planning: current SAC path difficulty limit, e.g. "Path difficulty: up to T3" -->
+    <string name="route_sac_limit">Path difficulty: %s</string>
+    <!-- Maps&Fly route planning: SAC limit when T4-T6 paths are avoided -->
+    <string name="route_sac_limit_t3">up to T3</string>
+    <!-- Maps&Fly route planning: SAC limit when no path grade is avoided -->
+    <string name="route_sac_limit_all">also T4+</string>
     <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
     <string name="route_path_grade_expert_warning">The route uses T4–T6 paths that you avoid, e.g. because of a stop.</string>
     <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->

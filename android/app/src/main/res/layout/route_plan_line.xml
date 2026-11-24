@@ -15,6 +15,21 @@
     tools:layout_height="wrap_content"
     tools:layout_width="match_parent" />
 
+  <!-- Maps&Fly: current SAC limit, visible before any point is added; opens the route options. -->
+  <TextView
+    android:id="@+id/route_sac_limit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingStart="@dimen/margin_base"
+    android:paddingTop="@dimen/margin_quarter"
+    android:paddingEnd="@dimen/margin_base"
+    android:paddingBottom="@dimen/margin_quarter"
+    android:textAppearance="@style/MwmTextAppearance.Body3"
+    android:visibility="gone"
+    tools:text="Wegschwierigkeit: bis T3"
+    tools:visibility="visible" />
+
   <include
     android:id="@+id/manage_route_panel"
     layout="@layout/manage_route_bottom_sheet"
