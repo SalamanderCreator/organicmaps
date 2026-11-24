@@ -29,6 +29,7 @@ import app.organicmaps.sdk.downloader.MapManager;
 import app.organicmaps.sdk.downloader.UpdateInfo;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.maplayer.subway.SubwayManager;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
 import app.organicmaps.sdk.routing.RoutingController;
@@ -38,6 +39,7 @@ import app.organicmaps.util.ThemeUtils;
 import app.organicmaps.util.UiUtils;
 import app.organicmaps.util.Utils;
 import app.organicmaps.util.WindowInsetUtils;
+import app.organicmaps.widget.menu.CompassButton;
 import app.organicmaps.widget.menu.MyPositionButton;
 import app.organicmaps.widget.placepage.PlacePageViewModel;
 import com.google.android.material.badge.BadgeDrawable;
@@ -54,13 +56,12 @@ public class MapButtonsController extends Fragment
   private View mInnerLeftButtonsFrame;
   private View mInnerRightButtonsFrame;
   @Nullable
-  private View mBottomButtonsFrame;
-  @Nullable
   private LayersButton mToggleMapLayerButton;
   @Nullable
   FloatingActionButton mTrackRecordingStatusButton;
   @Nullable
   private MyPositionButton mNavMyPosition;
+  private CompassButton mCompass;
   private SearchWheel mSearchWheel;
   private BadgeDrawable mBadgeDrawable;
   @Nullable
@@ -76,10 +77,13 @@ public class MapButtonsController extends Fragment
 
   private final Observer<Integer> mPlacePageDistanceToTopObserver = translationY -> move(translationY, true);
   private final Observer<Integer> mRoutingBottomDistanceToTopObserver = translationY -> move(translationY, false);
-  private final Observer<Boolean> mBottomButtonHiddenObserver = this::setBottomButtonsHidden;
   private final Observer<Integer> mSearchPageDistanceToTopObserver = this::moveForSearch;
   private final Observer<Boolean> mButtonHiddenObserver = this::setButtonsHidden;
-  private final Observer<Integer> mMyPositionModeObserver = this::updateNavMyPositionButton;
+  private final Observer<Integer> mMyPositionModeObserver = mode ->
+  {
+    updateNavMyPositionButton(mode);
+    mCompass.updateMode(mode);
+  };
   private final Observer<SearchWheel.SearchOption> mSearchOptionObserver = this::onSearchOptionChange;
   private final Observer<Boolean> mTrackRecorderObserver = (enable) ->
   {
@@ -107,19 +111,19 @@ public class MapButtonsController extends Fragment
 
     mInnerLeftButtonsFrame = mFrame.findViewById(R.id.map_buttons_inner_left);
     mInnerRightButtonsFrame = mFrame.findViewById(R.id.map_buttons_inner_right);
-    mBottomButtonsFrame = mFrame.findViewById(R.id.map_buttons_bottom);
-
-    final FloatingActionButton helpButton = mFrame.findViewById(R.id.help_button);
     final View zoomFrame = mFrame.findViewById(R.id.zoom_buttons_container);
     mFrame.findViewById(R.id.nav_zoom_in)
         .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomIn));
     mFrame.findViewById(R.id.nav_zoom_out)
         .setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.zoomOut));
+    // Maps&Fly: the bookmarks button is left only in navigation, the main menu has them otherwise.
     final View bookmarksButton = mFrame.findViewById(R.id.btn_bookmarks);
-    bookmarksButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.bookmarks));
+    if (bookmarksButton != null)
+      bookmarksButton.setOnClickListener((v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.bookmarks));
     final View myPosition = mFrame.findViewById(R.id.my_position);
     mNavMyPosition =
         new MyPositionButton(myPosition, (v) -> mMapButtonClickListener.onMapButtonClick(MapButtons.myPosition));
+    mCompass = new CompassButton(mFrame.findViewById(R.id.compass_button));
 
     // Some buttons do not exist in navigation mode
     mToggleMapLayerButton = mFrame.findViewById(R.id.layers_button);
@@ -149,10 +153,6 @@ public class MapButtonsController extends Fragment
         }
       });
     }
-    // Maps&Fly hides the "About Organic Maps" button; About stays reachable from the settings.
-    if (helpButton != null)
-      UiUtils.hide(helpButton);
-
     mSearchWheel =
         new SearchWheel(mFrame,
                         (v)
@@ -166,7 +166,8 @@ public class MapButtonsController extends Fragment
     mButtonsMap = new HashMap<>();
     mButtonsMap.put(MapButtons.zoom, zoomFrame);
     mButtonsMap.put(MapButtons.myPosition, myPosition);
-    mButtonsMap.put(MapButtons.bookmarks, bookmarksButton);
+    if (bookmarksButton != null)
+      mButtonsMap.put(MapButtons.bookmarks, bookmarksButton);
     mButtonsMap.put(MapButtons.search, searchButton);
 
     if (mToggleMapLayerButton != null)
@@ -178,13 +179,6 @@ public class MapButtonsController extends Fragment
     showButton(false, MapButtons.trackRecordingStatus);
     return mFrame;
   }
-  // For disabling bottom buttons which are visible in tablets
-  private void setBottomButtonsHidden(boolean hide)
-  {
-    if (mBottomButtonsFrame != null)
-      UiUtils.showIf(!hide, mBottomButtonsFrame);
-  }
-
   public void showButton(boolean show, MapButtonsController.MapButtons button)
   {
     // TODO(AB): Why do we need this check? Isn't it better to crash and fix the wrong logic ASAP?
@@ -339,7 +333,8 @@ public class MapButtonsController extends Fragment
     final boolean buttonSelected = TrafficManager.INSTANCE.isEnabled() || IsolinesManager.isEnabled()
                                 || SubwayManager.isEnabled() || Framework.nativeIsOutdoorsLayerEnabled()
                                 || Framework.nativeIsHikingLayerEnabled() || Framework.nativeIsCyclingLayerEnabled()
-                                || Framework.nativeIsBackgroundTilesEnabled();
+                                || Framework.nativeIsBackgroundTilesEnabled()
+                                || RainRadar.isEnabled(mToggleMapLayerButton.getContext());
     mToggleMapLayerButton.setHasActiveLayers(buttonSelected);
   }
 
@@ -431,20 +426,13 @@ public class MapButtonsController extends Fragment
     }
   }
 
-  private float getBottomButtonsHeight()
-  {
-    if (mBottomButtonsFrame != null && mFrame != null && UiUtils.isVisible(mFrame))
-      return mBottomButtonsFrame.getMeasuredHeight();
-    else
-      return 0;
-  }
-
   public void setButtonsHidden(boolean buttonHidden)
   {
     UiUtils.showIf(!buttonHidden, mFrame);
     if (!buttonHidden)
       updateButtonsVisibility();
-    mMapButtonsViewModel.setBottomButtonsHeight(getBottomButtonsHeight());
+    // Maps&Fly has no bottom button bar.
+    mMapButtonsViewModel.setBottomButtonsHeight(0);
   }
 
   private boolean isInNavigationMode()
@@ -484,7 +472,6 @@ public class MapButtonsController extends Fragment
     mRoutingPlanViewModel.getRoutingBottomDistanceToTop().observe(viewLifecycleOwner,
                                                                   mRoutingBottomDistanceToTopObserver);
     mPlacePageViewModel.getPlacePageDistanceToTop().observe(viewLifecycleOwner, mPlacePageDistanceToTopObserver);
-    mMapButtonsViewModel.getBottomButtonsHidden().observe(viewLifecycleOwner, mBottomButtonHiddenObserver);
     mMapButtonsViewModel.getButtonsHidden().observe(viewLifecycleOwner, mButtonHiddenObserver);
     mSearchPageViewModel.getSearchPageDistanceToTop().observe(viewLifecycleOwner, mSearchPageDistanceToTopObserver);
     mMapButtonsViewModel.getMyPositionMode().observe(viewLifecycleOwner, mMyPositionModeObserver);
@@ -492,6 +479,7 @@ public class MapButtonsController extends Fragment
     mMapButtonsViewModel.getTrackRecorderState().observe(viewLifecycleOwner, mTrackRecorderObserver);
     mMapButtonsViewModel.getTopButtonsMarginTop().observe(viewLifecycleOwner, mTopButtonMarginObserver);
     mMapButtonsViewModel.getTopBannerOffset().observe(viewLifecycleOwner, mTopBannerOffsetObserver);
+    Framework.nativeSetMapAzimuthListener(mCompass);
   }
 
   @Override
@@ -509,6 +497,7 @@ public class MapButtonsController extends Fragment
   public void onStop()
   {
     super.onStop();
+    Framework.nativeSetMapAzimuthListener(null);
     if (mBlinkingAnimator != null)
     {
       mBlinkingAnimator.cancel();
@@ -566,7 +555,7 @@ public class MapButtonsController extends Fragment
     {
       mContentHeight = bottom - top;
       mContentWidth = right - left;
-      mMapButtonsViewModel.setBottomButtonsHeight(getBottomButtonsHeight());
+      mMapButtonsViewModel.setBottomButtonsHeight(0);
       mContentView.removeOnLayoutChangeListener(this);
     }
   }

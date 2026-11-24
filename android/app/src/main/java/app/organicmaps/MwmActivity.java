@@ -70,8 +70,10 @@ import app.organicmaps.intent.IntentProcessor;
 import app.organicmaps.location.OffTrackService;
 import app.organicmaps.location.TrackRecordingDebugLog;
 import app.organicmaps.location.TrackRecordingService;
+import app.organicmaps.maplayer.LayerSettingsPanel;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
+import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
 import app.organicmaps.routing.NavigationController;
 import app.organicmaps.routing.NavigationService;
@@ -105,6 +107,7 @@ import app.organicmaps.sdk.location.LocationUtils;
 import app.organicmaps.sdk.location.SensorListener;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesState;
+import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.routing.TrackFollowing;
@@ -185,6 +188,10 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private PlacePageViewModel mPlacePageViewModel;
   private SearchPageViewModel mSearchPageViewModel;
   private MapButtonsViewModel mMapButtonsViewModel;
+  @Nullable
+  private RainRadarPanel mRainRadarPanel;
+  @Nullable
+  private LayerSettingsPanel mLayerSettingsPanel;
   private MapButtonsController.LayoutMode mPreviousMapLayoutMode;
 
   @Nullable
@@ -567,6 +574,15 @@ public class MwmActivity extends BaseMwmFragmentActivity
       offTrackBanner.setText(banner.text);
       offTrackBanner.setBackgroundResource(banner.alarm ? R.color.notification_warning : R.color.base_accent);
     });
+    final Runnable updateLayerButton = () ->
+    {
+      final MapButtonsController buttons =
+          (MapButtonsController) getSupportFragmentManager().findFragmentById(R.id.map_buttons);
+      if (buttons != null)
+        buttons.updateLayerButton();
+    };
+    mRainRadarPanel = new RainRadarPanel(findViewById(R.id.rain_radar_panel), this, updateLayerButton);
+    mLayerSettingsPanel = new LayerSettingsPanel(findViewById(R.id.layer_settings_panel), updateLayerButton);
     // We don't need to manually handle removing the observers it follows the activity lifecycle
     mMapButtonsViewModel.getBottomButtonsHeight().observe(this, this::onMapBottomButtonsHeightChange);
     mMapButtonsViewModel.getLayoutMode().observe(this, this::initNavigationButtons);
@@ -678,6 +694,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   {
     mMapController = new MapController(findViewById(R.id.map), MwmApplication.from(this).getLocationHelper(), this,
                                        this::reportUnsupported, isLaunchByDeeplink);
+    // Maps&Fly: the compass is a map button (see MapButtonsController).
+    mMapController.disableCompassWidget();
     getLifecycle().addObserver(mMapController);
 
     initNavigationButtons();
@@ -875,8 +893,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
     case myPosition ->
     {
       Logger.i(LOCATION_TAG, "The location button pressed");
-      // Calls onMyPositionModeChanged(mode + 1).
-      LocationState.nativeSwitchToNextMode();
+      // Maps&Fly: centers and follows; the north arrow turns the map.
+      Framework.nativeCenterOnMyPosition();
     }
     case toggleMapLayer -> toggleMapLayerBottomSheet();
     case bookmarks -> showBookmarks();
@@ -1039,6 +1057,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   protected void onResume()
   {
     super.onResume();
+    // Maps&Fly: the radar frames age; also turns a radar left on at the last start back on.
+    RainRadar.refreshIfStale(this);
     ThemeSwitcher.INSTANCE.synchronizeApplicationTheme();
     ThemeSwitcher.INSTANCE.synchronizeMapStyle(this, mMapController.isRenderingActive());
     makeNavigationBarTransparentInLightMode();
@@ -1166,6 +1186,11 @@ public class MwmActivity extends BaseMwmFragmentActivity
   public boolean handleBackPress()
   {
     final RoutingController routingController = RoutingController.get();
+    if (mLayerSettingsPanel != null && mLayerSettingsPanel.isShowing())
+    {
+      mLayerSettingsPanel.hide();
+      return true;
+    }
     return (closeBottomSheet(MAIN_MENU_ID) || closeBottomSheet(LAYERS_MENU_ID) || collapseNavMenu() || closePlacePage()
             || closePositionChooser() || closeSearchFragment() || routingController.resetToPlanningStateIfNavigating()
             || routingController.cancel());
@@ -1296,6 +1321,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     final View navBottomSheetNavBar = findViewById(R.id.nav_bottom_sheet_nav_bar);
     if (navBottomSheetLineFrame != null)
       offsetY = Math.max(offsetY, navBottomSheetLineFrame.getHeight() + navBottomSheetNavBar.getHeight());
+    findViewById(R.id.map_bottom_panels).setTranslationY(-offsetY);
     if (mDisplayManager.isDeviceDisplayUsed())
     {
       mMapController.updateBottomWidgetsOffset(offsetX, offsetY);
@@ -2118,6 +2144,13 @@ public class MwmActivity extends BaseMwmFragmentActivity
     return true;
   }
 
+  /** Maps&Fly: the layer settings opened by a long press in the layers menu. */
+  @Nullable
+  public LayerSettingsPanel getLayerSettingsPanel()
+  {
+    return mLayerSettingsPanel;
+  }
+
   /** Maps&Fly: the off-track banner covers the top of the map; the turn hints and the top buttons move below it. */
   private void updateOffTrackBannerOffset(@NonNull View banner)
   {
@@ -2215,6 +2248,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
     {
       ArrayList<MenuBottomSheetItem> items = new ArrayList<>();
       // Maps&Fly hides "Add place": the OpenStreetMap editor is not offered.
+      // Bookmarks moved here from the map buttons.
+      items.add(new MenuBottomSheetItem(R.string.bookmarks_and_tracks, R.drawable.ic_bookmarks_and_tracks,
+                                        this::showBookmarks));
       items.add(new MenuBottomSheetItem(R.string.download_maps, R.drawable.ic_download, getDownloadMapsCounter(),
                                         this::onDownloadMapsOptionSelected));
       mDonatesUrl = Utils.getDonateUrl(getApplicationContext());

@@ -13,7 +13,7 @@ typedef struct
   float u_zScale;
   float u_interpolation;
   float u_isOutlinePass;
-  float u_dummy1;
+  float u_terrainShadeStrength;
   float u_dummy2;
   float4 u_terrainLightDir;
 } Uniforms_T;
@@ -90,7 +90,7 @@ fragment half4 fsTerrainShade(const TerrainShadeFragment_T in [[stage_in]],
   float const shadow = clamp(-in.intensity, 0.0, 1.0);
   float const highlight = clamp(in.intensity, 0.0, 1.0);
   half4 color = half4(half3(step(0.0, in.intensity)), half(shadow * kShadowMaxAlpha + highlight * kHighlightMaxAlpha));
-  color.a *= half(uniforms.u_opacity);
+  color.a = half(min(float(color.a) * uniforms.u_terrainShadeStrength, 1.0) * uniforms.u_opacity);
   return color;
 }
 

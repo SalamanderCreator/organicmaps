@@ -44,6 +44,9 @@
   <string name="pref_prefer_terrain_elevation" translatable="false">PreferTerrainElevation</string>
   <string name="pref_track_debug_share" translatable="false">TrackDebugShare</string>
   <string name="pref_off_track_threshold" translatable="false">OffTrackThreshold</string>
+  <!-- Maps&Fly: settings groups. -->
+  <string name="pref_settings_tracks" translatable="false">TracksSettings</string>
+  <string name="pref_settings_device" translatable="false">DeviceSettings</string>
   <string name="pref_show_downloaded_regions" translatable="false">ShowDownloadedRegions</string>
   <string name="pref_keep_screen_on" translatable="false">KeepScreenOn</string>
   <string name="pref_show_on_lock_screen" translatable="false">ShowOnLockScreen</string>

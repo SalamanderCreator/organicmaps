@@ -36,6 +36,8 @@ public:
   void DoScale(m2::PointD const & pt1, m2::PointD const & pt2);
   void StopScale(m2::PointD const & pt1, m2::PointD const & pt2);
   bool IsRotatingDuringScale() const;
+  // Maps&Fly north lock: two fingers only pan and zoom.
+  void SetRotationLocked(bool locked) { m_rotationLocked = locked; }
 
   void Scale(m2::PointD const & pixelScaleCenter, double factor);
   bool InAction() const;
@@ -65,6 +67,7 @@ private:
   bool m_DoCheckRotationThreshold = false;
   // Do screen rotates during the two fingers scaling.
   bool m_IsRotatingDuringScale = false;
+  bool m_rotationLocked = false;
   // Used in DoScale and ScaleByPoint
   bool ScaleImpl(m2::PointD const & newPt1, m2::PointD const & newPt2, m2::PointD const & oldPt1,
                  m2::PointD const & oldPt2, bool skipMinScaleAndBordersCheck, bool doRotateScreen, ScreenBase & screen);
