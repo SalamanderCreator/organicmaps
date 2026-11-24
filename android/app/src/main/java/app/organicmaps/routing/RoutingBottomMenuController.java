@@ -101,6 +101,12 @@ final class RoutingBottomMenuController
   private final View mSaveButton;
   @NonNull
   private final TextView mPathGrades;
+  @NonNull
+  private final View mGradeSummary;
+  @NonNull
+  private final TextView mGradeDetails;
+  // Maps&Fly: the info button shows the lengths behind the route statistics bars.
+  private boolean mStatsDetailsShown;
   @Nullable
   private final View mManageRoutePanel;
   @Nullable
@@ -181,6 +187,9 @@ final class RoutingBottomMenuController
     mArrival = arrival;
     mSaveButton = saveButton;
     mPathGrades = altitudeChartFrame.findViewById(R.id.route_path_grades);
+    mGradeSummary = altitudeChartFrame.findViewById(R.id.route_grade_summary);
+    mGradeDetails = altitudeChartFrame.findViewById(R.id.route_grade_details);
+    mGradeSummary.setOnClickListener(v -> toggleStatsDetails());
     mListener = listener;
     int dividerRes = ThemeUtils.getResource(mContext, R.attr.transitStepDivider);
     Drawable dividerDrawable = ContextCompat.getDrawable(mContext, dividerRes);
@@ -283,7 +292,7 @@ final class RoutingBottomMenuController
   void hideAltitudeChartAndRoutingDetails()
   {
     UiUtils.hide(mAltitudeChart, mTimeVehicle, mTimeElevationLine, mTransitTime, mTimeRuler, mTransitRecyclerView,
-                 mPathGrades);
+                 mPathGrades, mGradeSummary, mGradeDetails);
     notifyVisibilityChanged();
   }
 
@@ -441,46 +450,84 @@ final class RoutingBottomMenuController
     UiUtils.show(mAltitudeDifference, mAltitudeChart);
   }
 
-  // Maps&Fly: shows how much of a walking or cycling route runs on SAC T3 and T4-T6 paths, and warns
-  // when the route uses a grade the routing options avoid (e.g. because a stop lies on such a path).
+  private static final int[] GRADE_NAMES = {R.string.route_path_grade_normal, R.string.route_path_grade_difficult,
+                                            R.string.route_path_grade_expert};
+  private static final int[] GRADE_COLORS = {R.color.route_grade_normal, R.color.route_grade_difficult,
+                                             R.color.route_grade_expert};
+
+  // Maps&Fly: SAC grades of a walking or cycling route as a bar with the hardest grade, and a warning when
+  // the route uses a grade the routing options avoid (e.g. because a stop lies on such a path).
   private void showPathGrades()
   {
     final Router router = RoutingController.get().getLastRouterType();
     final double[] grades = Framework.nativeGetRoutePathGradeDistances();
     if (grades == null || (router != Router.Pedestrian && router != Router.Bicycle))
     {
-      UiUtils.hide(mPathGrades);
+      UiUtils.hide(mPathGrades, mGradeSummary, mGradeDetails);
       return;
     }
 
-    final SpannableStringBuilder text = new SpannableStringBuilder(mContext.getString(R.string.route_path_grades));
-    final String[] labels = {mContext.getString(R.string.route_path_grade_normal),
-                             mContext.getString(R.string.route_path_grade_difficult),
-                             mContext.getString(R.string.route_path_grade_expert)};
-    boolean first = true;
+    // Shorter parts are just junction snapping noise.
+    final double[] parts = new double[grades.length];
+    final int[] colors = new int[grades.length];
+    int hardest = 0;
     for (int i = 0; i < grades.length; ++i)
     {
-      // Shorter parts are just junction snapping noise.
-      if (grades[i] < 1)
-        continue;
-      text.append(first ? " " : " · ").append(labels[i]);
-      if (grades[1] + grades[2] >= 1)
-        text.append(" ").append(StringUtils.nativeFormatDistance(grades[i]).toString(mContext));
-      first = false;
+      parts[i] = grades[i] >= 1 ? grades[i] : 0;
+      colors[i] = ContextCompat.getColor(mContext, GRADE_COLORS[i]);
+      if (parts[i] > 0)
+        hardest = i;
     }
+    ((StackedBarView) mGradeSummary.findViewById(R.id.route_grade_bar)).setParts(parts, colors);
+    ((TextView) mGradeSummary.findViewById(R.id.route_grade_max))
+        .setText(hardest == 0
+                     ? mContext.getString(GRADE_NAMES[0])
+                     : mContext.getString(R.string.route_path_grade_max, mContext.getString(GRADE_NAMES[hardest])));
+    mGradeDetails.setText(makeLegend(parts, colors, GRADE_NAMES));
+    UiUtils.show(mGradeSummary);
+    UiUtils.showIf(mStatsDetailsShown, mGradeDetails);
 
-    final boolean expertAvoided = grades[2] >= 1 && RoutingOptions.hasOption(router, RoadType.PathExpert);
-    final boolean difficultAvoided = grades[1] >= 1 && RoutingOptions.hasOption(router, RoadType.PathDifficult);
+    final boolean expertAvoided = parts[2] > 0 && RoutingOptions.hasOption(router, RoadType.PathExpert);
+    final boolean difficultAvoided = parts[1] > 0 && RoutingOptions.hasOption(router, RoadType.PathDifficult);
     if (expertAvoided || difficultAvoided)
     {
-      final int start = text.length();
-      text.append("\n").append(mContext.getString(expertAvoided ? R.string.route_path_grade_expert_warning
-                                                                : R.string.route_path_grade_difficult_warning));
-      text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.base_red)), start, text.length(),
-                   Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      mPathGrades.setText(expertAvoided ? R.string.route_path_grade_expert_warning
+                                        : R.string.route_path_grade_difficult_warning);
+      UiUtils.show(mPathGrades);
     }
-    mPathGrades.setText(text);
-    UiUtils.show(mPathGrades);
+    else
+    {
+      UiUtils.hide(mPathGrades);
+    }
+  }
+
+  private void toggleStatsDetails()
+  {
+    mStatsDetailsShown = !mStatsDetailsShown;
+    UiUtils.showIf(mStatsDetailsShown, mGradeDetails);
+    notifyVisibilityChanged();
+  }
+
+  // A compact legend "■ Name 1,2 km" in the given order, skipping empty parts.
+  @NonNull
+  private SpannableStringBuilder makeLegend(@NonNull double[] values, @NonNull int[] colors, @NonNull int[] names)
+  {
+    final SpannableStringBuilder legend = new SpannableStringBuilder();
+    for (int i = 0; i < names.length; ++i)
+    {
+      if (values[i] <= 0)
+        continue;
+      if (legend.length() > 0)
+        legend.append("   ");
+      final int start = legend.length();
+      legend.append("■");
+      legend.setSpan(new ForegroundColorSpan(colors[i]), start, legend.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      legend.append("\u00A0")
+          .append(mContext.getString(names[i]))
+          .append("\u00A0")
+          .append(StringUtils.nativeFormatDistance(values[i]).toString(mContext));
+    }
+    return legend;
   }
 
   private void showRoutingDetails()
