@@ -1337,6 +1337,18 @@ JNIEXPORT jobjectArray Java_app_organicmaps_sdk_Framework_nativeGetRouteJunction
   return routing_jni::CreateJunctionInfoArray(env, result);
 }
 
+// Maps&Fly: {T1-T2 or ungraded, T3, T4-T6} route length in meters, or null without a route.
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRoutePathGradeDistances(JNIEnv * env, jclass)
+{
+  auto const grades = frm()->GetRoutingManager().GetRoutePathGradeDistances();
+  if (!grades)
+    return nullptr;
+  jdouble const values[] = {grades->m_normalM, grades->m_difficultM, grades->m_expertM};
+  jdoubleArray result = env->NewDoubleArray(std::size(values));
+  env->SetDoubleArrayRegion(result, 0, std::size(values), values);
+  return result;
+}
+
 JNIEXPORT jobject Java_app_organicmaps_sdk_Framework_nativeGetRouteAltitudeData(JNIEnv * env, jclass)
 {
   ElevationInfo ei;

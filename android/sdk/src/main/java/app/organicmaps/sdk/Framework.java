@@ -294,6 +294,13 @@ public class Framework
   @Nullable
   public static native app.organicmaps.sdk.routing.RouteAltitudeData nativeGetRouteAltitudeData();
 
+  /**
+   * Maps&Fly: route length in meters on paths up to SAC T2 (or ungraded), T3 and T4-T6.
+   * @return {normal, difficult, expert}, or null without a route.
+   */
+  @Nullable
+  public static native double[] nativeGetRoutePathGradeDistances();
+
   public static native void nativeRouteSetElevationActivePoint(double distanceMeters);
 
   public static native void nativeRouteRemoveElevationActivePoint();

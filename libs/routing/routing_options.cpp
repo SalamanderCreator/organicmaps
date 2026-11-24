@@ -38,8 +38,8 @@ RoutingOptions::RoadType RoutingOptions::GetSupportedOptions(VehicleType vehicle
   switch (vehicleType)
   {
   case VehicleType::Car: return Toll | Motorway | Ferry | Dirty;
-  case VehicleType::Bicycle: return Ferry | Dirty | Steps;
-  case VehicleType::Pedestrian: return Ferry | Steps;
+  case VehicleType::Bicycle: return Ferry | Dirty | Steps | PathDifficult | PathExpert;
+  case VehicleType::Pedestrian: return Ferry | Steps | PathDifficult | PathExpert;
   case VehicleType::Transit: return 0;
   case VehicleType::Count: break;
   }
@@ -71,7 +71,9 @@ std::optional<RoutingOptions::Road> RoutingOptions::RoadFromId(uint32_t id)
   case Motorway:
   case Ferry:
   case Dirty:
-  case Steps: return static_cast<Road>(id);
+  case Steps:
+  case PathDifficult:
+  case PathExpert: return static_cast<Road>(id);
   default: return {};
   }
 }
@@ -81,8 +83,9 @@ RoutingOptions RoutingOptions::LoadFromSettings(VehicleType vehicleType)
 {
   auto const key = SettingsKey(vehicleType);
   uint32_t mask = 0;
-  if (!key.empty())
-    settings::TryGet(key, mask);
+  // Maps&Fly: hiking and cycling avoid SAC T4-T6 paths until the user changes the options.
+  if (!key.empty() && !settings::Get(key, mask) && vehicleType != VehicleType::Car)
+    mask = PathExpert;
   return RoutingOptions(static_cast<RoadType>(mask & GetSupportedOptions(vehicleType)));
 }
 
@@ -137,7 +140,10 @@ RoutingOptionsClassifier::RoutingOptionsClassifier(bool includeDirtyRoadClasses)
       {{"psurface", "unpaved_bad"}, RoutingOptions::Road::Dirty},
       {{"psurface", "unpaved_good"}, RoutingOptions::Road::Dirty},
 
-      {{"highway", "steps"}, RoutingOptions::Road::Steps}};
+      {{"highway", "steps"}, RoutingOptions::Road::Steps},
+
+      {{"highway", "path", "difficult"}, RoutingOptions::Road::PathDifficult},
+      {{"highway", "path", "expert"}, RoutingOptions::Road::PathExpert}};
 
   char const * const dirtyRoadClasses[] = {"track", "road"};
   m_data.Reserve(std::size(types) + (includeDirtyRoadClasses ? std::size(dirtyRoadClasses) : 0));
@@ -151,10 +157,13 @@ RoutingOptionsClassifier::RoutingOptionsClassifier(bool includeDirtyRoadClasses)
 
 std::optional<RoutingOptions::Road> RoutingOptionsClassifier::Get(uint32_t type) const
 {
-  ftype::TruncValue(type, 2);  // in case of highway-motorway-bridge
+  // Path grades are third-level types (highway-path-expert).
+  ftype::TruncValue(type, 3);
+  if (auto const * res = m_data.Find(type))
+    return *res;
 
-  auto const * res = m_data.Find(type);
-  if (res)
+  ftype::TruncValue(type, 2);  // in case of highway-motorway-bridge
+  if (auto const * res = m_data.Find(type))
     return *res;
   return {};
 }
@@ -196,6 +205,8 @@ std::string DebugPrint(RoutingOptions const & routingOptions)
   append(RoutingOptions::Road::Ferry);
   append(RoutingOptions::Road::Dirty);
   append(RoutingOptions::Road::Steps);
+  append(RoutingOptions::Road::PathDifficult);
+  append(RoutingOptions::Road::PathExpert);
 
   if (wasAppended)
     ss << " | ";
@@ -214,6 +225,8 @@ std::string DebugPrint(RoutingOptions::Road type)
   case RoutingOptions::Road::Ferry: return "ferry";
   case RoutingOptions::Road::Dirty: return "dirty";
   case RoutingOptions::Road::Steps: return "steps";
+  case RoutingOptions::Road::PathDifficult: return "path_difficult";
+  case RoutingOptions::Road::PathExpert: return "path_expert";
   case RoutingOptions::Road::Usual: return "usual";
   case RoutingOptions::Road::Max: return "max";
   }

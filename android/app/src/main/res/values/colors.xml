@@ -135,4 +135,8 @@
   <color name="widget_accent">#FF006C35</color>
   <color name="widget_text_primary">@color/black_primary</color>
   <color name="widget_text_secondary">@color/black_secondary</color>
+  <!-- Maps&Fly: SAC path grades of a route, after the trail markings (T3 white-red-white, T4+ white-blue-white). -->
+  <color name="route_grade_normal">#FF9CB37A</color>
+  <color name="route_grade_difficult">#FFD9534F</color>
+  <color name="route_grade_expert">#FF3F6FB5</color>
 </resources>

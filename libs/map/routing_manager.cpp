@@ -1675,6 +1675,30 @@ bool RoutingManager::HasRouteAltitude() const
   return m_loadAltitudes && m_routingSession.HasRouteAltitude();
 }
 
+std::optional<RoutingManager::PathGradeDistances> RoutingManager::GetRoutePathGradeDistances() const
+{
+  auto const * route = m_routingSession.GetRoute();
+  if (!route || !route->IsValid())
+    return {};
+
+  using Road = routing::RoutingOptions::Road;
+  PathGradeDistances result;
+  double prevDistance = 0;
+  for (auto const & segment : route->GetRouteSegments())
+  {
+    double const length = segment.GetDistFromBeginningMeters() - prevDistance;
+    prevDistance = segment.GetDistFromBeginningMeters();
+    auto const roads = segment.GetRoadTypes();
+    if (roads.Has(Road::PathExpert))
+      result.m_expertM += length;
+    else if (roads.Has(Road::PathDifficult))
+      result.m_difficultM += length;
+    else
+      result.m_normalM += length;
+  }
+  return result;
+}
+
 bool RoutingManager::GetRouteElevationInfo(ElevationInfo & ei) const
 {
   auto const * route = m_routingSession.GetRoute();

@@ -938,6 +938,30 @@
     <string name="change_stop_along_route">Stopp ändern</string>
     <!-- Toast shown when the user tries to add one more intermediate stop to a route that already holds the maximum allowed number -->
     <string name="routing_max_stops_reached">Die maximale Anzahl an Stopps wurde erreicht</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T3 (or with bad trail visibility) unless needed -->
+    <string name="avoid_path_difficult">T3-Wege meiden (SAC)</string>
+    <!-- Maps&Fly routing option: avoid paths graded SAC T4-T6 (or hardly visible) unless needed -->
+    <string name="avoid_path_expert">T4–T6-Wege meiden (SAC)</string>
+    <!-- Maps&Fly route panel: label before the route length by SAC hiking grade -->
+    <string name="route_path_grades">Schwierigkeit:</string>
+    <!-- Maps&Fly route panel: roads and paths up to SAC T2 or without a grade -->
+    <string name="route_path_grade_normal">bis T2</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T3 -->
+    <string name="route_path_grade_difficult">T3</string>
+    <!-- Maps&Fly route panel: paths of SAC grade T4 to T6 -->
+    <string name="route_path_grade_expert">T4–T6</string>
+    <!-- Maps&Fly route planning: current SAC path difficulty limit, e.g. "Path difficulty: up to T3" -->
+    <string name="route_sac_limit">Wegschwierigkeit: %s</string>
+    <!-- Maps&Fly route planning: SAC limit when T4-T6 paths are avoided -->
+    <string name="route_sac_limit_t3">bis T3</string>
+    <!-- Maps&Fly route planning: SAC limit when no path grade is avoided -->
+    <string name="route_sac_limit_all">auch T4+</string>
+    <!-- Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3" -->
+    <string name="route_path_grade_max">max. %s</string>
+    <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
+    <string name="route_path_grade_expert_warning">Die Route führt über T4–T6-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
+    <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->
+    <string name="route_path_grade_difficult_warning">Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
     <!-- Maps&Fly: title of the menu behind the save button of a planned route -->
     <string name="route_save_title">Route speichern</string>
     <!-- Maps&Fly: save the planned route as a track in the bookmarks -->

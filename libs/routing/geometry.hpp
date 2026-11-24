@@ -73,7 +73,8 @@ public:
 
   bool SuitableForOptions(RoutingOptions avoidRoutingOptions) const
   {
-    return (avoidRoutingOptions.GetOptions() & m_routingOptions.GetOptions()) == 0;
+    auto const hardOptions = avoidRoutingOptions.GetOptions() & ~RoutingOptions::kSoftAvoidOptions;
+    return (hardOptions & m_routingOptions.GetOptions()) == 0;
   }
 
   RoutingOptions GetRoutingOptions() const { return m_routingOptions; }

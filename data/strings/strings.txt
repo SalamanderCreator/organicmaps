@@ -45794,6 +45794,78 @@ vi = Đã đạt đến số điểm dừng tối đa
 zh-Hans = 已达到最大途经点数量
 zh-Hant = 已達到最大途經點數量
 
+[avoid_path_difficult]
+comment = Maps&Fly routing option: avoid paths graded SAC T3 (or with bad trail visibility) unless needed
+tags = android-app
+en = Avoid T3 paths (SAC)
+de = T3-Wege meiden (SAC)
+
+[avoid_path_expert]
+comment = Maps&Fly routing option: avoid paths graded SAC T4-T6 (or hardly visible) unless needed
+tags = android-app
+en = Avoid T4–T6 paths (SAC)
+de = T4–T6-Wege meiden (SAC)
+
+[route_path_grades]
+comment = Maps&Fly route panel: label before the route length by SAC hiking grade
+tags = android-app
+en = Difficulty:
+de = Schwierigkeit:
+
+[route_path_grade_normal]
+comment = Maps&Fly route panel: roads and paths up to SAC T2 or without a grade
+tags = android-app
+en = up to T2
+de = bis T2
+
+[route_path_grade_difficult]
+comment = Maps&Fly route panel: paths of SAC grade T3
+tags = android-app
+en = T3
+de = T3
+
+[route_path_grade_expert]
+comment = Maps&Fly route panel: paths of SAC grade T4 to T6
+tags = android-app
+en = T4–T6
+de = T4–T6
+
+[route_sac_limit]
+comment = Maps&Fly route planning: current SAC path difficulty limit, e.g. "Path difficulty: up to T3"
+tags = android-app
+en = Path difficulty: %@
+de = Wegschwierigkeit: %@
+
+[route_sac_limit_t3]
+comment = Maps&Fly route planning: SAC limit when T4-T6 paths are avoided
+tags = android-app
+en = up to T3
+de = bis T3
+
+[route_sac_limit_all]
+comment = Maps&Fly route planning: SAC limit when no path grade is avoided
+tags = android-app
+en = also T4+
+de = auch T4+
+
+[route_path_grade_max]
+comment = Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3"
+tags = android-app
+en = max. %@
+de = max. %@
+
+[route_path_grade_expert_warning]
+comment = Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided
+tags = android-app
+en = The route uses T4–T6 paths that you avoid, e.g. because of a stop.
+de = Die Route führt über T4–T6-Wege, die du meidest, z. B. wegen eines Zwischenstopps.
+
+[route_path_grade_difficult_warning]
+comment = Maps&Fly route panel: warning when the route uses T3 paths although they are avoided
+tags = android-app
+en = The route uses T3 paths that you avoid, e.g. because of a stop.
+de = Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.
+
 [route_save_title]
 comment = Maps&Fly: title of the menu behind the save button of a planned route
 tags = android-app
