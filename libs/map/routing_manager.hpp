@@ -23,6 +23,7 @@
 
 #include "base/thread_checker.hpp"
 
+#include <array>
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -303,6 +304,39 @@ public:
   };
   /// Returns nullopt without a valid route.
   std::optional<PathGradeDistances> GetRoutePathGradeDistances() const;
+
+  /// Maps&Fly: way types and surfaces of the route, like Komoot shows them.
+  enum class RouteWayType : uint8_t
+  {
+    Road,       // motorway to tertiary
+    MinorRoad,  // unclassified, residential, service, living street
+    Track,
+    Cycleway,
+    Footway,  // footway, pedestrian street, platform, pier
+    Path,     // path, bridleway
+    Steps,
+    Ferry,
+    Other,
+    Count
+  };
+  enum class RouteSurface : uint8_t
+  {
+    PavedGood,
+    PavedBad,
+    UnpavedGood,
+    UnpavedBad,
+    Unknown,
+    Count
+  };
+  struct RouteWayStats
+  {
+    std::array<double, static_cast<size_t>(RouteWayType::Count)> m_wayTypeM{};
+    std::array<double, static_cast<size_t>(RouteSurface::Count)> m_surfaceM{};
+    // Unpaved, or untagged on a track or path: the "nature" share of the route.
+    double m_naturalM = 0;
+  };
+  /// Reads the features of the route; returns nullopt without a valid route.
+  std::optional<RouteWayStats> GetRouteWayStats() const;
 
   /// \brief Interpolates a point along the current route polyline at the given distance from start.
   /// \return Nullopt if the route is invalid.

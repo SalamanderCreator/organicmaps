@@ -956,12 +956,54 @@
     <string name="route_sac_limit_t3">bis T3</string>
     <!-- Maps&Fly route planning: SAC limit when no path grade is avoided -->
     <string name="route_sac_limit_all">auch T4+</string>
+    <!-- Maps&Fly route panel: share of unpaved ways, e.g. "62 % natural" -->
+    <string name="route_natural_share">%s naturnah</string>
+    <!-- Maps&Fly route panel: accessibility label of the info button that shows way types and surfaces -->
+    <string name="route_stats_details">Wegtypen und Oberflächen</string>
+    <!-- Maps&Fly route planning: way preference when natural ways are preferred -->
+    <string name="route_preference_natural">Bevorzugt: naturnah</string>
+    <!-- Maps&Fly route planning: way preference when natural ways are not preferred -->
+    <string name="route_preference_fast">Bevorzugt: schnell</string>
     <!-- Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3" -->
     <string name="route_path_grade_max">max. %s</string>
     <!-- Maps&Fly route panel: warning when the route uses T4-T6 paths although they are avoided -->
     <string name="route_path_grade_expert_warning">Die Route führt über T4–T6-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
     <!-- Maps&Fly route panel: warning when the route uses T3 paths although they are avoided -->
     <string name="route_path_grade_difficult_warning">Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.</string>
+    <!-- Maps&Fly routing option for walking and cycling: prefer natural ways, take asphalt only when the natural way is more than twice as long (like Komoot "nice" instead of "fast") -->
+    <string name="avoid_paved">Naturnahe Wege bevorzugen (weniger Asphalt)</string>
+    <!-- Maps&Fly route panel: heading of the route length per way type -->
+    <string name="route_way_types">Wegtypen</string>
+    <!-- Maps&Fly route panel: heading of the route length per surface -->
+    <string name="route_surfaces">Oberflächen</string>
+    <!-- Maps&Fly route panel way type: main roads (primary, secondary, tertiary and larger) -->
+    <string name="route_way_road">Straße</string>
+    <!-- Maps&Fly route panel way type: residential, service and unclassified roads -->
+    <string name="route_way_minor_road">Nebenstraße</string>
+    <!-- Maps&Fly route panel way type: agricultural or forest track (highway=track) -->
+    <string name="route_way_track">Wirtschaftsweg</string>
+    <!-- Maps&Fly route panel way type -->
+    <string name="route_way_cycleway">Radweg</string>
+    <!-- Maps&Fly route panel way type: footway or pedestrian street -->
+    <string name="route_way_footway">Fußweg</string>
+    <!-- Maps&Fly route panel way type: hiking path or trail -->
+    <string name="route_way_path">Pfad</string>
+    <!-- Maps&Fly route panel way type -->
+    <string name="route_way_steps">Treppe</string>
+    <!-- Maps&Fly route panel way type -->
+    <string name="route_way_ferry">Fähre</string>
+    <!-- Maps&Fly route panel way type: anything else -->
+    <string name="route_way_other">Sonstiges</string>
+    <!-- Maps&Fly route panel surface: asphalt, concrete, good paving -->
+    <string name="route_surface_paved_good">Asphalt</string>
+    <!-- Maps&Fly route panel surface: cobblestones or rough paving -->
+    <string name="route_surface_paved_bad">Pflaster</string>
+    <!-- Maps&Fly route panel surface: compacted, fine gravel -->
+    <string name="route_surface_unpaved_good">Schotter</string>
+    <!-- Maps&Fly route panel surface: dirt, ground, rock, sand -->
+    <string name="route_surface_unpaved_bad">Naturboden</string>
+    <!-- Maps&Fly route panel surface: not mapped -->
+    <string name="route_surface_unknown">Unbekannt</string>
     <!-- Maps&Fly: title of the menu behind the save button of a planned route -->
     <string name="route_save_title">Route speichern</string>
     <!-- Maps&Fly: save the planned route as a track in the bookmarks -->

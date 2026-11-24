@@ -393,7 +393,7 @@ public class RoutingPlanFragment extends Fragment implements View.OnLayoutChange
     updateSacLimit(router);
   }
 
-  // Maps&Fly: shows the SAC limit of the walking and cycling router, also before the first point is set.
+  // Maps&Fly: SAC limit and way preference of walking and cycling, shown before the first point is set.
   private void updateSacLimit(@NonNull Router router)
   {
     if (router != Router.Pedestrian && router != Router.Bicycle)
@@ -410,7 +410,9 @@ public class RoutingPlanFragment extends Fragment implements View.OnLayoutChange
       limit = R.string.route_sac_limit_t3;
     else
       limit = R.string.route_sac_limit_all;
-    mSacLimit.setText(getString(R.string.route_sac_limit, getString(limit)));
+    final String preference = getString(roadTypes.contains(RoadType.Paved) ? R.string.route_preference_natural
+                                                                           : R.string.route_preference_fast);
+    mSacLimit.setText(getString(R.string.route_sac_limit, getString(limit)) + " · " + preference);
     UiUtils.show(mSacLimit);
   }
 

@@ -135,6 +135,20 @@
   <color name="widget_accent">#FF006C35</color>
   <color name="widget_text_primary">@color/black_primary</color>
   <color name="widget_text_secondary">@color/black_secondary</color>
+  <!-- Maps&Fly: route way type and surface statistics. -->
+  <color name="route_natural">#FFB08A5A</color>
+  <color name="route_paved">#FF8E9AAB</color>
+  <color name="route_surface_paved_bad">#FFC3CAD4</color>
+  <color name="route_surface_unpaved_bad">#FFD2B48C</color>
+  <color name="route_stats_unknown">#FF6B6B6B</color>
+  <color name="route_way_road">#FF7F8A99</color>
+  <color name="route_way_minor_road">#FFA9B3C1</color>
+  <color name="route_way_track">#FFC9A27A</color>
+  <color name="route_way_cycleway">#FF6FA3D8</color>
+  <color name="route_way_footway">#FFCBD3DE</color>
+  <color name="route_way_path">#FF8C6239</color>
+  <color name="route_way_steps">#FF9C7B6B</color>
+  <color name="route_way_ferry">#FF4FA3B8</color>
   <!-- Maps&Fly: SAC path grades of a route, after the trail markings (T3 white-red-white, T4+ white-blue-white). -->
   <color name="route_grade_normal">#FF9CB37A</color>
   <color name="route_grade_difficult">#FFD9534F</color>

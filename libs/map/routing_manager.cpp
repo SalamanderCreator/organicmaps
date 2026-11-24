@@ -1675,6 +1675,148 @@ bool RoutingManager::HasRouteAltitude() const
   return m_loadAltitudes && m_routingSession.HasRouteAltitude();
 }
 
+namespace
+{
+class RouteWayClassifier
+{
+public:
+  using WayType = RoutingManager::RouteWayType;
+  using Surface = RoutingManager::RouteSurface;
+
+  RouteWayClassifier()
+  {
+    auto const & c = classif();
+    std::pair<std::vector<std::string>, WayType> const ways[] = {{{"highway", "motorway"}, WayType::Road},
+                                                                 {{"highway", "motorway_link"}, WayType::Road},
+                                                                 {{"highway", "trunk"}, WayType::Road},
+                                                                 {{"highway", "trunk_link"}, WayType::Road},
+                                                                 {{"highway", "primary"}, WayType::Road},
+                                                                 {{"highway", "primary_link"}, WayType::Road},
+                                                                 {{"highway", "secondary"}, WayType::Road},
+                                                                 {{"highway", "secondary_link"}, WayType::Road},
+                                                                 {{"highway", "tertiary"}, WayType::Road},
+                                                                 {{"highway", "tertiary_link"}, WayType::Road},
+                                                                 {{"highway", "unclassified"}, WayType::MinorRoad},
+                                                                 {{"highway", "residential"}, WayType::MinorRoad},
+                                                                 {{"highway", "living_street"}, WayType::MinorRoad},
+                                                                 {{"highway", "service"}, WayType::MinorRoad},
+                                                                 {{"highway", "road"}, WayType::MinorRoad},
+                                                                 {{"highway", "track"}, WayType::Track},
+                                                                 {{"highway", "cycleway"}, WayType::Cycleway},
+                                                                 {{"highway", "footway"}, WayType::Footway},
+                                                                 {{"highway", "pedestrian"}, WayType::Footway},
+                                                                 {{"highway", "platform"}, WayType::Footway},
+                                                                 {{"man_made", "pier"}, WayType::Footway},
+                                                                 {{"highway", "path"}, WayType::Path},
+                                                                 {{"highway", "bridleway"}, WayType::Path},
+                                                                 {{"highway", "steps"}, WayType::Steps},
+                                                                 {{"highway", "ladder"}, WayType::Steps},
+                                                                 {{"route", "ferry"}, WayType::Ferry}};
+    for (auto const & [path, type] : ways)
+      m_ways.emplace_back(c.GetTypeByPath(path), type);
+
+    std::pair<std::vector<std::string>, Surface> const surfaces[] = {
+        {{"psurface", "paved_good"}, Surface::PavedGood},
+        {{"psurface", "paved_bad"}, Surface::PavedBad},
+        {{"psurface", "unpaved_good"}, Surface::UnpavedGood},
+        {{"psurface", "unpaved_bad"}, Surface::UnpavedBad}};
+    for (auto const & [path, surface] : surfaces)
+      m_surfaces.emplace_back(c.GetTypeByPath(path), surface);
+  }
+
+  // The way type listed first wins, e.g. a cycleway that is also a footway counts as cycleway.
+  WayType GetWayType(feature::TypesHolder const & types) const
+  {
+    for (auto const & [type, wayType] : m_ways)
+      if (types.HasWithSubclass(type))
+        return wayType;
+    return WayType::Other;
+  }
+
+  Surface GetSurface(feature::TypesHolder const & types) const
+  {
+    for (auto const & [type, surface] : m_surfaces)
+      if (types.Has(type))
+        return surface;
+    return Surface::Unknown;
+  }
+
+private:
+  std::vector<std::pair<uint32_t, WayType>> m_ways;
+  std::vector<std::pair<uint32_t, Surface>> m_surfaces;
+};
+}  // namespace
+
+namespace
+{
+bool IsNatural(RoutingManager::RouteWayType wayType, RoutingManager::RouteSurface surface)
+{
+  using Surface = RoutingManager::RouteSurface;
+  using WayType = RoutingManager::RouteWayType;
+  if (surface == Surface::UnpavedGood || surface == Surface::UnpavedBad)
+    return true;
+  // Matches the paved default of the routing options for untagged ways.
+  return surface == Surface::Unknown && (wayType == WayType::Track || wayType == WayType::Path);
+}
+}  // namespace
+
+std::optional<RoutingManager::RouteWayStats> RoutingManager::GetRouteWayStats() const
+{
+  auto const * route = m_routingSession.GetRoute();
+  if (!route || !route->IsValid())
+    return {};
+
+  static RouteWayClassifier const classifier;
+  auto & dataSource = m_callbacks.m_dataSourceGetter();
+
+  RouteWayStats stats;
+  std::unique_ptr<FeaturesLoaderGuard> guard;
+  routing::NumMwmId guardMwm = routing::kFakeNumMwmId;
+  // Consecutive segments mostly belong to the same feature.
+  std::optional<std::pair<RouteWayType, RouteSurface>> last;
+  routing::NumMwmId lastMwm = routing::kFakeNumMwmId;
+  uint32_t lastFeature = 0;
+  double prevDistance = 0;
+  for (auto const & routeSegment : route->GetRouteSegments())
+  {
+    double const length = routeSegment.GetDistFromBeginningMeters() - prevDistance;
+    prevDistance = routeSegment.GetDistFromBeginningMeters();
+
+    auto const & segment = routeSegment.GetSegment();
+    std::pair<RouteWayType, RouteSurface> kind = {RouteWayType::Other, RouteSurface::Unknown};
+    if (!segment.IsRealSegment())
+    {
+      if (last)
+        kind = *last;
+    }
+    else if (last && lastMwm == segment.GetMwmId() && lastFeature == segment.GetFeatureId())
+    {
+      kind = *last;
+    }
+    else
+    {
+      if (!guard || guardMwm != segment.GetMwmId())
+      {
+        guard = std::make_unique<FeaturesLoaderGuard>(dataSource, GetMwmId(segment.GetMwmId()));
+        guardMwm = segment.GetMwmId();
+      }
+      if (auto const feature = guard->GetFeatureByIndex(segment.GetFeatureId()))
+      {
+        feature::TypesHolder const types(*feature);
+        kind = {classifier.GetWayType(types), classifier.GetSurface(types)};
+      }
+      last = kind;
+      lastMwm = segment.GetMwmId();
+      lastFeature = segment.GetFeatureId();
+    }
+    stats.m_wayTypeM[static_cast<size_t>(kind.first)] += length;
+    stats.m_surfaceM[static_cast<size_t>(kind.second)] += length;
+    if (IsNatural(kind.first, kind.second))
+      stats.m_naturalM += length;
+  }
+  return stats;
+}
+
 std::optional<RoutingManager::PathGradeDistances> RoutingManager::GetRoutePathGradeDistances() const
 {
   auto const * route = m_routingSession.GetRoute();

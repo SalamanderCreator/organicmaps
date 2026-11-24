@@ -47,6 +47,7 @@ import app.organicmaps.widget.RoutingProgressButton;
 import app.organicmaps.widget.recycler.DotDividerItemDecoration;
 import app.organicmaps.widget.recycler.MultilineLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,6 +108,10 @@ final class RoutingBottomMenuController
   private final TextView mGradeDetails;
   // Maps&Fly: the info button shows the lengths behind the route statistics bars.
   private boolean mStatsDetailsShown;
+  @NonNull
+  private final View mSurfaceSummary;
+  @NonNull
+  private final View mSurfaceDetails;
   @Nullable
   private final View mManageRoutePanel;
   @Nullable
@@ -190,6 +195,9 @@ final class RoutingBottomMenuController
     mGradeSummary = altitudeChartFrame.findViewById(R.id.route_grade_summary);
     mGradeDetails = altitudeChartFrame.findViewById(R.id.route_grade_details);
     mGradeSummary.setOnClickListener(v -> toggleStatsDetails());
+    mSurfaceSummary = altitudeChartFrame.findViewById(R.id.route_surface_summary);
+    mSurfaceDetails = altitudeChartFrame.findViewById(R.id.route_surface_details);
+    mSurfaceSummary.setOnClickListener(v -> toggleStatsDetails());
     mListener = listener;
     int dividerRes = ThemeUtils.getResource(mContext, R.attr.transitStepDivider);
     Drawable dividerDrawable = ContextCompat.getDrawable(mContext, dividerRes);
@@ -292,7 +300,7 @@ final class RoutingBottomMenuController
   void hideAltitudeChartAndRoutingDetails()
   {
     UiUtils.hide(mAltitudeChart, mTimeVehicle, mTimeElevationLine, mTransitTime, mTimeRuler, mTransitRecyclerView,
-                 mPathGrades, mGradeSummary, mGradeDetails);
+                 mPathGrades, mGradeSummary, mGradeDetails, mSurfaceSummary, mSurfaceDetails);
     notifyVisibilityChanged();
   }
 
@@ -463,7 +471,7 @@ final class RoutingBottomMenuController
     final double[] grades = Framework.nativeGetRoutePathGradeDistances();
     if (grades == null || (router != Router.Pedestrian && router != Router.Bicycle))
     {
-      UiUtils.hide(mPathGrades, mGradeSummary, mGradeDetails);
+      UiUtils.hide(mPathGrades, mGradeSummary, mGradeDetails, mSurfaceSummary, mSurfaceDetails);
       return;
     }
 
@@ -499,13 +507,85 @@ final class RoutingBottomMenuController
     {
       UiUtils.hide(mPathGrades);
     }
+    showWayStats();
   }
 
   private void toggleStatsDetails()
   {
     mStatsDetailsShown = !mStatsDetailsShown;
     UiUtils.showIf(mStatsDetailsShown, mGradeDetails);
+    UiUtils.showIf(mStatsDetailsShown && UiUtils.isVisible(mSurfaceSummary), mSurfaceDetails);
     notifyVisibilityChanged();
+  }
+
+  // Order of RoutingManager::RouteWayType and RouteSurface.
+  private static final int[] WAY_TYPE_NAMES = {
+      R.string.route_way_road,     R.string.route_way_minor_road, R.string.route_way_track,
+      R.string.route_way_cycleway, R.string.route_way_footway,    R.string.route_way_path,
+      R.string.route_way_steps,    R.string.route_way_ferry,      R.string.route_way_other};
+  private static final int[] WAY_TYPE_COLORS = {
+      R.color.route_way_road,     R.color.route_way_minor_road, R.color.route_way_track,
+      R.color.route_way_cycleway, R.color.route_way_footway,    R.color.route_way_path,
+      R.color.route_way_steps,    R.color.route_way_ferry,      R.color.route_stats_unknown};
+  // Shown from natural to asphalt, the rest last.
+  private static final int[] WAY_TYPE_ORDER = {5, 6, 2, 4, 3, 1, 0, 7, 8};
+  private static final int[] SURFACE_NAMES = {R.string.route_surface_paved_good, R.string.route_surface_paved_bad,
+                                              R.string.route_surface_unpaved_good, R.string.route_surface_unpaved_bad,
+                                              R.string.route_surface_unknown};
+  private static final int[] SURFACE_COLORS = {R.color.route_paved, R.color.route_surface_paved_bad,
+                                               R.color.route_natural, R.color.route_surface_unpaved_bad,
+                                               R.color.route_stats_unknown};
+  private static final int[] SURFACE_ORDER = {3, 2, 1, 0, 4};
+
+  // Maps&Fly: natural vs. paved share as a bar; the info button expands way types and surfaces like Komoot.
+  private void showWayStats()
+  {
+    final double[] stats = Framework.nativeGetRouteWayStats();
+    final int surfaceOffset = WAY_TYPE_NAMES.length;
+    final int naturalIndex = surfaceOffset + SURFACE_NAMES.length;
+    double total = 0;
+    if (stats != null && stats.length == naturalIndex + 1)
+      for (int i = 0; i < surfaceOffset; ++i)
+        total += stats[i];
+    if (total < 1)
+    {
+      UiUtils.hide(mSurfaceSummary, mSurfaceDetails);
+      return;
+    }
+
+    final double natural = Math.min(stats[naturalIndex], total);
+    ((StackedBarView) mSurfaceSummary.findViewById(R.id.route_surface_bar))
+        .setParts(new double[] {natural, total - natural},
+                  new int[] {ContextCompat.getColor(mContext, R.color.route_natural),
+                             ContextCompat.getColor(mContext, R.color.route_paved)});
+    ((TextView) mSurfaceSummary.findViewById(R.id.route_surface_share))
+        .setText(mContext.getString(R.string.route_natural_share,
+                                    NumberFormat.getPercentInstance().format(natural / total)));
+
+    showShares(R.id.route_way_types_bar, R.id.route_way_types_list, stats, 0, WAY_TYPE_ORDER, WAY_TYPE_NAMES,
+               WAY_TYPE_COLORS);
+    showShares(R.id.route_surfaces_bar, R.id.route_surfaces_list, stats, surfaceOffset, SURFACE_ORDER, SURFACE_NAMES,
+               SURFACE_COLORS);
+    UiUtils.show(mSurfaceSummary);
+    UiUtils.showIf(mStatsDetailsShown, mSurfaceDetails);
+  }
+
+  private void showShares(@IdRes int barId, @IdRes int listId, @NonNull double[] stats, int offset,
+                          @NonNull int[] order, @NonNull int[] names, @NonNull int[] colors)
+  {
+    final double[] parts = new double[order.length];
+    final int[] partColors = new int[order.length];
+    final int[] partNames = new int[order.length];
+    for (int k = 0; k < order.length; ++k)
+    {
+      final int i = order[k];
+      // Shorter parts are just junction snapping noise.
+      parts[k] = stats[offset + i] >= 1 ? stats[offset + i] : 0;
+      partColors[k] = ContextCompat.getColor(mContext, colors[i]);
+      partNames[k] = names[i];
+    }
+    ((StackedBarView) mSurfaceDetails.findViewById(barId)).setParts(parts, partColors);
+    ((TextView) mSurfaceDetails.findViewById(listId)).setText(makeLegend(parts, partColors, partNames));
   }
 
   // A compact legend "■ Name 1,2 km" in the given order, skipping empty parts.

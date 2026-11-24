@@ -45848,6 +45848,30 @@ tags = android-app
 en = also T4+
 de = auch T4+
 
+[route_natural_share]
+comment = Maps&Fly route panel: share of unpaved ways, e.g. "62 % natural"
+tags = android-app
+en = %@ natural
+de = %@ naturnah
+
+[route_stats_details]
+comment = Maps&Fly route panel: accessibility label of the info button that shows way types and surfaces
+tags = android-app
+en = Way types and surfaces
+de = Wegtypen und Oberflächen
+
+[route_preference_natural]
+comment = Maps&Fly route planning: way preference when natural ways are preferred
+tags = android-app
+en = Preferred: natural
+de = Bevorzugt: naturnah
+
+[route_preference_fast]
+comment = Maps&Fly route planning: way preference when natural ways are not preferred
+tags = android-app
+en = Preferred: fast
+de = Bevorzugt: schnell
+
 [route_path_grade_max]
 comment = Maps&Fly route panel: hardest SAC grade of the route next to the grade bar, e.g. "max. T3"
 tags = android-app
@@ -45865,6 +45889,108 @@ comment = Maps&Fly route panel: warning when the route uses T3 paths although th
 tags = android-app
 en = The route uses T3 paths that you avoid, e.g. because of a stop.
 de = Die Route führt über T3-Wege, die du meidest, z. B. wegen eines Zwischenstopps.
+
+[avoid_paved]
+comment = Maps&Fly routing option for walking and cycling: prefer natural ways, take asphalt only when the natural way is more than twice as long (like Komoot "nice" instead of "fast")
+tags = android-app
+en = Prefer natural ways (less asphalt)
+de = Naturnahe Wege bevorzugen (weniger Asphalt)
+
+[route_way_types]
+comment = Maps&Fly route panel: heading of the route length per way type
+tags = android-app
+en = Way types
+de = Wegtypen
+
+[route_surfaces]
+comment = Maps&Fly route panel: heading of the route length per surface
+tags = android-app
+en = Surfaces
+de = Oberflächen
+
+[route_way_road]
+comment = Maps&Fly route panel way type: main roads (primary, secondary, tertiary and larger)
+tags = android-app
+en = Road
+de = Straße
+
+[route_way_minor_road]
+comment = Maps&Fly route panel way type: residential, service and unclassified roads
+tags = android-app
+en = Minor road
+de = Nebenstraße
+
+[route_way_track]
+comment = Maps&Fly route panel way type: agricultural or forest track (highway=track)
+tags = android-app
+en = Track
+de = Wirtschaftsweg
+
+[route_way_cycleway]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Cycleway
+de = Radweg
+
+[route_way_footway]
+comment = Maps&Fly route panel way type: footway or pedestrian street
+tags = android-app
+en = Footway
+de = Fußweg
+
+[route_way_path]
+comment = Maps&Fly route panel way type: hiking path or trail
+tags = android-app
+en = Path
+de = Pfad
+
+[route_way_steps]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Steps
+de = Treppe
+
+[route_way_ferry]
+comment = Maps&Fly route panel way type
+tags = android-app
+en = Ferry
+de = Fähre
+
+[route_way_other]
+comment = Maps&Fly route panel way type: anything else
+tags = android-app
+en = Other
+de = Sonstiges
+
+[route_surface_paved_good]
+comment = Maps&Fly route panel surface: asphalt, concrete, good paving
+tags = android-app
+en = Asphalt
+de = Asphalt
+
+[route_surface_paved_bad]
+comment = Maps&Fly route panel surface: cobblestones or rough paving
+tags = android-app
+en = Paving stones
+de = Pflaster
+
+[route_surface_unpaved_good]
+comment = Maps&Fly route panel surface: compacted, fine gravel
+tags = android-app
+en = Gravel
+de = Schotter
+
+[route_surface_unpaved_bad]
+comment = Maps&Fly route panel surface: dirt, ground, rock, sand
+tags = android-app
+en = Natural ground
+de = Naturboden
+
+[route_surface_unknown]
+comment = Maps&Fly route panel surface: not mapped
+tags = android-app
+en = Unknown
+de = Unbekannt
 
 [route_save_title]
 comment = Maps&Fly: title of the menu behind the save button of a planned route

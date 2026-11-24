@@ -38,8 +38,8 @@ RoutingOptions::RoadType RoutingOptions::GetSupportedOptions(VehicleType vehicle
   switch (vehicleType)
   {
   case VehicleType::Car: return Toll | Motorway | Ferry | Dirty;
-  case VehicleType::Bicycle: return Ferry | Dirty | Steps | PathDifficult | PathExpert;
-  case VehicleType::Pedestrian: return Ferry | Steps | PathDifficult | PathExpert;
+  case VehicleType::Bicycle: return Ferry | Dirty | Steps | PathDifficult | PathExpert | Paved;
+  case VehicleType::Pedestrian: return Ferry | Steps | PathDifficult | PathExpert | Paved;
   case VehicleType::Transit: return 0;
   case VehicleType::Count: break;
   }
@@ -73,7 +73,8 @@ std::optional<RoutingOptions::Road> RoutingOptions::RoadFromId(uint32_t id)
   case Dirty:
   case Steps:
   case PathDifficult:
-  case PathExpert: return static_cast<Road>(id);
+  case PathExpert:
+  case Paved: return static_cast<Road>(id);
   default: return {};
   }
 }
@@ -95,6 +96,18 @@ void RoutingOptions::SaveToSettings(VehicleType vehicleType, RoutingOptions opti
   auto const key = SettingsKey(vehicleType);
   if (!key.empty())
     settings::Set(key, static_cast<uint32_t>(options.GetOptions() & GetSupportedOptions(vehicleType)));
+}
+
+// static
+double RoutingOptions::GetSoftAvoidWeightFactor(RoadType avoidedOnRoad)
+{
+  // Hard grades are taken only when there is no reasonable other way, asphalt is taken when the
+  // natural way is more than twice as long.
+  if (avoidedOnRoad & (PathDifficult | PathExpert))
+    return 10.0;
+  if (avoidedOnRoad & Paved)
+    return 2.0;
+  return 1.0;
 }
 
 // static
@@ -143,7 +156,10 @@ RoutingOptionsClassifier::RoutingOptionsClassifier(bool includeDirtyRoadClasses)
       {{"highway", "steps"}, RoutingOptions::Road::Steps},
 
       {{"highway", "path", "difficult"}, RoutingOptions::Road::PathDifficult},
-      {{"highway", "path", "expert"}, RoutingOptions::Road::PathExpert}};
+      {{"highway", "path", "expert"}, RoutingOptions::Road::PathExpert},
+
+      {{"psurface", "paved_good"}, RoutingOptions::Road::Paved},
+      {{"psurface", "paved_bad"}, RoutingOptions::Road::Paved}};
 
   char const * const dirtyRoadClasses[] = {"track", "road"};
   m_data.Reserve(std::size(types) + (includeDirtyRoadClasses ? std::size(dirtyRoadClasses) : 0));
@@ -166,6 +182,14 @@ std::optional<RoutingOptions::Road> RoutingOptionsClassifier::Get(uint32_t type)
   if (auto const * res = m_data.Find(type))
     return *res;
   return {};
+}
+
+// static
+bool RoutingOptionsClassifier::IsSurface(uint32_t type)
+{
+  static uint32_t const kSurface = classif().GetTypeByPath({"psurface"});
+  ftype::TruncValue(type, 1);
+  return type == kSurface;
 }
 
 RoutingOptionsClassifier const & RoutingOptionsClassifier::Instance(VehicleType vehicleType)
@@ -207,6 +231,7 @@ std::string DebugPrint(RoutingOptions const & routingOptions)
   append(RoutingOptions::Road::Steps);
   append(RoutingOptions::Road::PathDifficult);
   append(RoutingOptions::Road::PathExpert);
+  append(RoutingOptions::Road::Paved);
 
   if (wasAppended)
     ss << " | ";
@@ -227,6 +252,7 @@ std::string DebugPrint(RoutingOptions::Road type)
   case RoutingOptions::Road::Steps: return "steps";
   case RoutingOptions::Road::PathDifficult: return "path_difficult";
   case RoutingOptions::Road::PathExpert: return "path_expert";
+  case RoutingOptions::Road::Paved: return "paved";
   case RoutingOptions::Road::Usual: return "usual";
   case RoutingOptions::Road::Max: return "max";
   }
