@@ -173,6 +173,25 @@ RoadGeometry::RoadGeometry(bool oneWay, Maxspeed const & maxspeed, Points const 
   m_distances.resize(count - 1, -1);
 }
 
+namespace
+{
+bool IsUsuallyPaved(HighwayType type)
+{
+  switch (type)
+  {
+  case HighwayType::HighwayTrack:
+  case HighwayType::HighwayPath:
+  case HighwayType::HighwayBridleway:
+  case HighwayType::HighwayRoad:
+  case HighwayType::HighwayLadder:
+  case HighwayType::RouteFerry:
+  case HighwayType::RouteShuttleTrain:
+  case HighwayType::ManMadePier: return false;
+  default: return true;
+  }
+}
+}  // namespace
+
 void RoadGeometry::Load(VehicleModelInterface const & vehicleModel, FeatureType & feature,
                         geometry::Altitudes const & altitudes, bool hasAltitude, RoadAttrsGetter & attrs,
                         RoutingOptionsClassifier const & optionsClassifier)
@@ -213,9 +232,16 @@ void RoadGeometry::Load(VehicleModelInterface const & vehicleModel, FeatureType 
     }
   }
 
+  bool hasSurface = false;
   for (uint32_t type : types)
+  {
     if (auto const it = optionsClassifier.Get(type))
       m_routingOptions.Add(*it);
+    hasSurface |= RoutingOptionsClassifier::IsSurface(type);
+  }
+  // Maps&Fly: roads without a mapped surface are usually paved, unlike tracks and paths.
+  if (!hasSurface && m_highwayType && IsUsuallyPaved(*m_highwayType))
+    m_routingOptions.Add(RoutingOptions::Road::Paved);
 
   m_junctions.clear();
   m_junctions.reserve(count);

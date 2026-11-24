@@ -237,6 +237,28 @@ UNIT_CLASS_TEST(SurfaceRoutingFixture, BicycleDirtyMatchesMappedUnpavedSurfaces)
   }
 }
 
+UNIT_CLASS_TEST(SurfaceRoutingFixture, PavedMatchesSurfacesAndUntaggedRoadClasses)
+{
+  // Paved is avoided softly, so every road stays usable.
+  RoutingOptions::SaveToSettings(VehicleType::Pedestrian, RoutingOptions(RoutingOptions::Paved));
+  auto router = Router(VehicleType::Pedestrian);
+  auto graph = router->MakeSingleMwmWorldGraph();
+  std::pair<char const *, bool> const cases[] = {{"Paved track", true},
+                                                 {"Unknown track", false},
+                                                 {"Generic road", false},
+                                                 {"Paved road", true},
+                                                 {"Unpaved road", false},
+                                                 {"Unpaved cycleway", false},
+                                                 {"Trail without surface", false},
+                                                 {"Rough paved track", true}};
+  for (auto const & [name, paved] : cases)
+  {
+    auto const segment = NamedSegment(name);
+    TEST_EQUAL(graph->GetRoutingOptions(segment).Has(RoutingOptions::Paved), paved, (name));
+    TEST(graph->IsRoutingOptionsGood(segment), (name));
+  }
+}
+
 UNIT_CLASS_TEST(SurfaceRoutingFixture, CarDirtyMatchesRoadClassesAndSurfaces)
 {
   RoutingOptions::SaveToSettings(VehicleType::Car, RoutingOptions(RoutingOptions::Dirty));
@@ -408,6 +430,48 @@ UNIT_CLASS_TEST(StepsRoutingFixture, SubmittedOptionsOverrideSettingsForTheWhole
     RoutesResult result;
     TEST_EQUAL(Calculate(*router, result, delegate, true, true), RouterResultCode::NoError, (avoid));
     TEST_EQUAL(UsesRoadType(result.GetActive(), RoutingOptions::Steps), !avoid, (avoid));
+  }
+}
+
+class SacRoutingFixture : public RoutingPreferenceFixture
+{
+public:
+  // routing_steps.osm with the steps replaced by SAC T4 (alpine_hiking) paths and a 5x detour at latitude 1.
+  SacRoutingFixture() : RoutingPreferenceFixture("routing_sac.osm") {}
+};
+
+UNIT_CLASS_TEST(SacRoutingFixture, ExpertPathsAreAvoidedWhenPossible)
+{
+  for (auto const vehicle : {VehicleType::Bicycle, VehicleType::Pedestrian})
+  {
+    for (bool const avoid : {false, true})
+    {
+      RoutingOptions::SaveToSettings(vehicle, RoutingOptions(avoid ? RoutingOptions::PathExpert : 0));
+      auto router = Router(vehicle);
+      RoutesResult result;
+      TEST_EQUAL(Calculate(*router, result, {}, false, true), RouterResultCode::NoError, (vehicle, avoid));
+      TEST_EQUAL(UsesRoadType(result.GetActive(), RoutingOptions::PathExpert), !avoid, (vehicle, avoid));
+    }
+  }
+}
+
+UNIT_CLASS_TEST(SacRoutingFixture, RequiredExpertPathsStayRoutable)
+{
+  // Unlike steps, avoided path grades are soft: the route uses them when there is no other way.
+  for (auto const vehicle : {VehicleType::Bicycle, VehicleType::Pedestrian})
+  {
+    for (double const latitude : {2.0, 3.0})
+    {
+      RoutingOptions::SaveToSettings(vehicle,
+                                     RoutingOptions(RoutingOptions::PathExpert | RoutingOptions::PathDifficult));
+      auto router = Router(vehicle);
+      RoutesResult result;
+      TEST_EQUAL(router->CalculateRoute(
+                     Checkpoints(mercator::FromLatLon(latitude, 1.01), mercator::FromLatLon(latitude, 1.09)), {}, false,
+                     true, {}, result),
+                 RouterResultCode::NoError, (vehicle, latitude));
+      TEST(UsesRoadType(result.GetActive(), RoutingOptions::PathExpert), (vehicle, latitude));
+    }
   }
 }
 

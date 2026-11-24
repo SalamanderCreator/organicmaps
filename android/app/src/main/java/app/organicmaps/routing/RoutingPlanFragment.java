@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +26,7 @@ import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
 import app.organicmaps.sdk.routing.RoutingOptions;
 import app.organicmaps.sdk.routing.TransitRouteInfo;
+import app.organicmaps.sdk.settings.RoadType;
 import app.organicmaps.settings.DrivingOptionsActivity;
 import app.organicmaps.util.UiUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -49,6 +51,7 @@ public class RoutingPlanFragment extends Fragment implements View.OnLayoutChange
   private RadioGroup mRouterTypes;
   private RoutingBottomMenuController mRoutingBottomMenuController;
   private TextView mDrivingOptionsBadge;
+  private TextView mSacLimit;
   private View mSearchBtn;
   private View mBookmarkBtn;
   private View mRoutingContainer;
@@ -121,6 +124,8 @@ public class RoutingPlanFragment extends Fragment implements View.OnLayoutChange
     mDrivingOptionsBtn = mChartPanel.findViewById(R.id.driving_options_btn_img);
     mDrivingOptionsContainer = mChartPanel.findViewById(R.id.driving_options_btn_container);
     mDrivingOptionsBtn.setOnClickListener(v -> DrivingOptionsActivity.start(requireActivity()));
+    mSacLimit = mFrame.findViewById(R.id.route_sac_limit);
+    mSacLimit.setOnClickListener(v -> DrivingOptionsActivity.start(requireActivity()));
     mReverseRouteBtn = mChartPanel.findViewById(R.id.reverse_route_btn);
     mReverseRouteBtn.setOnClickListener(v -> RoutingController.get().reverseRoute());
 
@@ -385,6 +390,38 @@ public class RoutingPlanFragment extends Fragment implements View.OnLayoutChange
     mDrivingOptionsBtn.setEnabled(mRoutingContentActive && hasSettings);
     mDrivingOptionsContainer.setAlpha(hasSettings ? 1.0f : 0.5f);
     mViewModel.setDrivingOptionsCount(RoutingOptions.getActiveRoadTypes(router).size());
+    updateSacLimit(router);
+  }
+
+  // Maps&Fly: SAC limit and way preference of walking and cycling, shown before the first point is set.
+  private void updateSacLimit(@NonNull Router router)
+  {
+    if (router != Router.Pedestrian && router != Router.Bicycle)
+    {
+      UiUtils.hide(mSacLimit);
+      return;
+    }
+    final var roadTypes = RoutingOptions.getActiveRoadTypes(router);
+    @StringRes
+    final int limit;
+    if (roadTypes.contains(RoadType.PathDifficult))
+      limit = R.string.route_path_grade_normal;
+    else if (roadTypes.contains(RoadType.PathExpert))
+      limit = R.string.route_sac_limit_t3;
+    else
+      limit = R.string.route_sac_limit_all;
+    final String preference = getString(roadTypes.contains(RoadType.Paved) ? R.string.route_preference_natural
+                                                                           : R.string.route_preference_fast);
+    mSacLimit.setText(getString(R.string.route_sac_limit, getString(limit)) + " · " + preference);
+    UiUtils.show(mSacLimit);
+  }
+
+  @Override
+  public void onResume()
+  {
+    super.onResume();
+    // Options changed without a route don't trigger a rebuild callback.
+    updateRoutingOptions(RoutingController.get().getLastRouterType());
   }
 
   private void updateBuildProgress(int progress, @NonNull Router router)

@@ -47,7 +47,7 @@ void Checker(std::vector<RoutingOptions::Road> const & include)
     TEST(options.Has(type), ());
 
   auto max = static_cast<RoadType>(RoutingOptions::Road::Max);
-  for (uint8_t i = 1; i < max; i <<= 1)
+  for (uint32_t i = 1; i < max; i <<= 1)
   {
     bool hasInclude = false;
     auto type = static_cast<RoutingOptions::Road>(i);
@@ -88,19 +88,22 @@ UNIT_CLASS_TEST(RoutingOptionsTests, IndependentProfilesAndDefaults)
   for (auto const key :
        {"avoid_routing_options_car", "avoid_routing_options_bicycle", "avoid_routing_options_pedestrian"})
     settings::Delete(key);
-  for (auto const vehicle : {VehicleType::Car, VehicleType::Bicycle, VehicleType::Pedestrian, VehicleType::Transit})
-    TEST_EQUAL(RoutingOptions::LoadFromSettings(vehicle).GetOptions(), 0, (vehicle));
+  // Maps&Fly: hiking and cycling avoid SAC T4-T6 paths by default.
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Car).GetOptions(), 0, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Bicycle).GetOptions(), RoutingOptions::PathExpert, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).GetOptions(), RoutingOptions::PathExpert, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Transit).GetOptions(), 0, ());
 
   settings::Set("avoid_routing_options_car", static_cast<uint32_t>(RoutingOptions::Toll | RoutingOptions::Dirty));
   TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Car).GetOptions(),
              RoutingOptions::Toll | RoutingOptions::Dirty, ());
-  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Bicycle).GetOptions(), 0, ());
-  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).GetOptions(), 0, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Bicycle).GetOptions(), RoutingOptions::PathExpert, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).GetOptions(), RoutingOptions::PathExpert, ());
   TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Transit).GetOptions(), 0, ());
 
   RoutingOptions::SaveToSettings(VehicleType::Bicycle, CreateOptions({RoutingOptions::Ferry}));
-  TEST(RoutingOptions::LoadFromSettings(VehicleType::Bicycle).Has(RoutingOptions::Ferry), ());
-  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).GetOptions(), 0, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Bicycle).GetOptions(), RoutingOptions::Ferry, ());
+  TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).GetOptions(), RoutingOptions::PathExpert, ());
   RoutingOptions::SaveToSettings(VehicleType::Pedestrian, CreateOptions({RoutingOptions::Ferry}));
   RoutingOptions::SaveToSettings(VehicleType::Bicycle, {});
   TEST(RoutingOptions::LoadFromSettings(VehicleType::Pedestrian).Has(RoutingOptions::Ferry), ());
@@ -119,14 +122,15 @@ UNIT_CLASS_TEST(RoutingOptionsTests, UnsupportedBitsAreSanitizedBeforeNarrowing)
     settings::Set(key, uint32_t{0xffffffff});
     TEST_EQUAL(RoutingOptions::LoadFromSettings(vehicle).GetOptions(), RoutingOptions::GetSupportedOptions(vehicle),
                (vehicle));
-    RoutingOptions::SaveToSettings(vehicle, RoutingOptions(0xff));
+    RoutingOptions::SaveToSettings(vehicle, RoutingOptions(0xffff));
     uint32_t stored = 0;
     TEST(settings::Get(key, stored), ());
     TEST_EQUAL(stored, RoutingOptions::GetSupportedOptions(vehicle), (vehicle));
     settings::Set(key, std::string("invalid"));
-    TEST_EQUAL(RoutingOptions::LoadFromSettings(vehicle).GetOptions(), 0, (vehicle));
+    TEST_EQUAL(RoutingOptions::LoadFromSettings(vehicle).GetOptions(),
+               vehicle == VehicleType::Car ? 0 : RoutingOptions::PathExpert, (vehicle));
   }
-  RoutingOptions::SaveToSettings(VehicleType::Transit, RoutingOptions(0xff));
+  RoutingOptions::SaveToSettings(VehicleType::Transit, RoutingOptions(0xffff));
   TEST_EQUAL(RoutingOptions::LoadFromSettings(VehicleType::Transit).GetOptions(), 0, ());
 }
 
@@ -158,16 +162,34 @@ UNIT_TEST(RoutingOptions_StepsSubtypes)
     TEST(classifier.Get(classif().GetTypeByPath(path)) == RoutingOptions::Steps, (path));
 }
 
+UNIT_TEST(RoutingOptions_PathGrades)
+{
+  classificator::Load();
+  for (auto const vehicle : {VehicleType::Bicycle, VehicleType::Pedestrian})
+  {
+    auto const & classifier = RoutingOptionsClassifier::Instance(vehicle);
+    TEST(classifier.Get(classif().GetTypeByPath({"highway", "path", "difficult"})) == RoutingOptions::PathDifficult,
+         (vehicle));
+    TEST(classifier.Get(classif().GetTypeByPath({"highway", "path", "expert"})) == RoutingOptions::PathExpert,
+         (vehicle));
+    TEST(!classifier.Get(classif().GetTypeByPath({"highway", "path"})), (vehicle));
+    TEST(classifier.Get(classif().GetTypeByPath({"psurface", "paved_bad"})) == RoutingOptions::Paved, (vehicle));
+    TEST(RoutingOptionsClassifier::IsSurface(classif().GetTypeByPath({"psurface", "unpaved_good"})), ());
+    TEST(!RoutingOptionsClassifier::IsSurface(classif().GetTypeByPath({"highway", "path"})), ());
+  }
+}
+
 UNIT_TEST(RoutingOptions_StableIdsAndRouterConversion)
 {
   for (auto const road : {RoutingOptions::Usual, RoutingOptions::Toll, RoutingOptions::Motorway, RoutingOptions::Ferry,
-                          RoutingOptions::Dirty, RoutingOptions::Steps})
+                          RoutingOptions::Dirty, RoutingOptions::Steps, RoutingOptions::PathDifficult,
+                          RoutingOptions::PathExpert, RoutingOptions::Paved})
   {
     auto const parsed = RoutingOptions::RoadFromId(static_cast<uint32_t>(road));
     TEST(parsed, (road));
     TEST_EQUAL(*parsed, road, ());
   }
-  for (uint32_t const invalid : {0u, 3u, 6u, 33u, 64u, 256u, 0xffffffffu})
+  for (uint32_t const invalid : {0u, 3u, 6u, 33u, 129u, 257u, 512u, 0xffffffffu})
     TEST(!RoutingOptions::RoadFromId(invalid), (invalid));
   TEST(RoutingOptions::GetVehicleType(RouterType::Vehicle) == VehicleType::Car, ());
   TEST(RoutingOptions::GetVehicleType(RouterType::Bicycle) == VehicleType::Bicycle, ());
@@ -176,9 +198,13 @@ UNIT_TEST(RoutingOptions_StableIdsAndRouterConversion)
   TEST(!RoutingOptions::GetVehicleType(RouterType::Ruler), ());
   TEST_EQUAL(RoutingOptions::GetSupportedOptions(VehicleType::Car), 30, ());
   TEST_EQUAL(RoutingOptions::GetSupportedOptions(VehicleType::Bicycle),
-             RoutingOptions::Dirty | RoutingOptions::Ferry | RoutingOptions::Steps, ());
+             RoutingOptions::Dirty | RoutingOptions::Ferry | RoutingOptions::Steps | RoutingOptions::PathDifficult |
+                 RoutingOptions::PathExpert | RoutingOptions::Paved,
+             ());
   TEST_EQUAL(RoutingOptions::GetSupportedOptions(VehicleType::Pedestrian),
-             RoutingOptions::Ferry | RoutingOptions::Steps, ());
+             RoutingOptions::Ferry | RoutingOptions::Steps | RoutingOptions::PathDifficult |
+                 RoutingOptions::PathExpert | RoutingOptions::Paved,
+             ());
   TEST_EQUAL(RoutingOptions::GetSupportedOptions(VehicleType::Transit), 0, ());
 }
 

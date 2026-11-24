@@ -1337,6 +1337,32 @@ JNIEXPORT jobjectArray Java_app_organicmaps_sdk_Framework_nativeGetRouteJunction
   return routing_jni::CreateJunctionInfoArray(env, result);
 }
 
+// Maps&Fly: {T1-T2 or ungraded, T3, T4-T6} route length in meters, or null without a route.
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRoutePathGradeDistances(JNIEnv * env, jclass)
+{
+  auto const grades = frm()->GetRoutingManager().GetRoutePathGradeDistances();
+  if (!grades)
+    return nullptr;
+  jdouble const values[] = {grades->m_normalM, grades->m_difficultM, grades->m_expertM};
+  jdoubleArray result = env->NewDoubleArray(std::size(values));
+  env->SetDoubleArrayRegion(result, 0, std::size(values), values);
+  return result;
+}
+
+// Maps&Fly: route length in meters per RouteWayType followed by RouteSurface, or null without a route.
+JNIEXPORT jdoubleArray Java_app_organicmaps_sdk_Framework_nativeGetRouteWayStats(JNIEnv * env, jclass)
+{
+  auto const stats = frm()->GetRoutingManager().GetRouteWayStats();
+  if (!stats)
+    return nullptr;
+  std::vector<jdouble> values(stats->m_wayTypeM.begin(), stats->m_wayTypeM.end());
+  values.insert(values.end(), stats->m_surfaceM.begin(), stats->m_surfaceM.end());
+  values.push_back(stats->m_naturalM);
+  jdoubleArray result = env->NewDoubleArray(static_cast<jsize>(values.size()));
+  env->SetDoubleArrayRegion(result, 0, static_cast<jsize>(values.size()), values.data());
+  return result;
+}
+
 JNIEXPORT jobject Java_app_organicmaps_sdk_Framework_nativeGetRouteAltitudeData(JNIEnv * env, jclass)
 {
   ElevationInfo ei;

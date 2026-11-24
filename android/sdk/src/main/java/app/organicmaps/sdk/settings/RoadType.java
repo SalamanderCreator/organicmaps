@@ -7,7 +7,12 @@ public enum RoadType
   Motorway(4),
   Ferry(8),
   Dirty(16),
-  Steps(32);
+  Steps(32),
+  // Maps&Fly: paths of SAC T3 and of T4-T6, avoided softly.
+  PathDifficult(64),
+  PathExpert(128),
+  // Maps&Fly: asphalt and other paved ways, avoided softly to prefer natural ways.
+  Paved(256);
 
   public final int nativeValue;
 

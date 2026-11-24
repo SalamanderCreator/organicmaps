@@ -555,7 +555,13 @@ RouteWeight IndexGraph::CalculateEdgeWeight(EdgeEstimator::Purpose purpose, bool
   if (m_currentTimeGetter && prevWeight)
     arrivalTime = m_currentTimeGetter() + prevWeight->GetWeight();
 
-  auto const weight = RouteWeight(m_estimator->CalcSegmentWeight(segment, road, purpose, arrivalTime));
+  double segmentWeight = m_estimator->CalcSegmentWeight(segment, road, purpose, arrivalTime);
+  if (purpose == EdgeEstimator::Purpose::Weight)
+  {
+    segmentWeight *= RoutingOptions::GetSoftAvoidWeightFactor(
+        road.GetRoutingOptions().GetOptions() & m_avoidRoutingOptions.GetOptions() & RoutingOptions::kSoftAvoidOptions);
+  }
+  auto const weight = RouteWeight(segmentWeight);
   auto const penalties = GetPenalties(purpose, isOutgoing ? from : to, isOutgoing ? to : from, prevWeight);
 
   return weight + penalties;
