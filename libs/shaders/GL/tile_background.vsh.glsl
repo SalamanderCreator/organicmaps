@@ -1,7 +1,8 @@
 // Note: value must be synchronized with shaders libs/shaders/program_params.hpp
 #define TILE_BACKGROUND_MAX_COUNT 64
 
-layout (location = 0) out vec3 v_texCoords;
+// xy: texture coordinates, z: texture array index, w: opacity.
+layout (location = 0) out vec4 v_texCoords;
 
 // Note: std430 is important here, arrays must be 4-bytes aligned
 layout (binding = 0, std430) readonly buffer UBO
@@ -12,6 +13,7 @@ layout (binding = 0, std430) readonly buffer UBO
   mat4 u_modelView;
   mat4 u_projection;
   mat4 u_pivotTransform;
+  float u_opacity;
 };
 
 void main()
@@ -26,5 +28,5 @@ void main()
 
   vec4 textureRectMinMax = u_textureRectMinMax[gl_InstanceIndex];
   vec2 texUV = mix(textureRectMinMax.xy, textureRectMinMax.zw, quadVertex);
-  v_texCoords = vec3(texUV, float(u_textureIndex[gl_InstanceIndex]));
+  v_texCoords = vec4(texUV, float(u_textureIndex[gl_InstanceIndex]), u_opacity);
 }

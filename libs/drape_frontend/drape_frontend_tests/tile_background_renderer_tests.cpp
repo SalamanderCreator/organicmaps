@@ -145,6 +145,37 @@ UNIT_CLASS_TEST(TileBackgroundRendererTest, BoundTilesAreNotReRequested)
   TEST(ProbeUnboundTiles(kCoverageZ16, 16).empty(), ("Re-entering the same viewport must request nothing"));
 }
 
+// A rain radar frame change re-reads the visible tiles and keeps the old frame until the fade.
+UNIT_CLASS_TEST(TileBackgroundRendererTest, ReloadKeepsOldFrameWhileNewOneLoads)
+{
+  LoadZ16();
+  m_reads.clear();
+  m_renderer.ReloadWithCrossFade(GetContext());
+  TEST_EQUAL(m_reads.size(), size_t{4}, ("Every visible tile of the new frame must be read"));
+  TEST(m_renderer.IsCrossFading(), ());
+  TEST(m_pool.m_released.empty(), ("The old frame must stay on screen"));
+
+  auto const newFrame = m_reads;
+  for (size_t i = 0; i + 1 < newFrame.size(); ++i)
+    DeliverTile(newFrame[i]);
+  DeliverFailure(newFrame.back());
+  TEST(ProbeUnboundTiles(kCoverageZ16, 16).empty(), ("A failed tile of the new frame must not be retried"));
+  TEST(m_renderer.IsCrossFading(), ("The old frame fades out while rendering"));
+}
+
+// A frame change before the previous one loaded keeps the frame on screen and drops the partial one.
+UNIT_CLASS_TEST(TileBackgroundRendererTest, SecondReloadKeepsTheFrameOnScreen)
+{
+  LoadZ16();
+  m_renderer.ReloadWithCrossFade(GetContext());
+  m_reads.clear();
+  m_cancels.clear();
+  m_renderer.ReloadWithCrossFade(GetContext());
+  TEST_EQUAL(m_cancels.size(), size_t{4}, ("The reads of the skipped frame must be cancelled"));
+  TEST_EQUAL(m_reads.size(), size_t{4}, ());
+  TEST(m_pool.m_released.empty(), ("The old frame must stay on screen"));
+}
+
 // The level being left keeps covering the viewport until the replacement level resolves completely.
 UNIT_CLASS_TEST(TileBackgroundRendererTest, ZoomChangeKeepsPreviousLevelUntilLoaded)
 {

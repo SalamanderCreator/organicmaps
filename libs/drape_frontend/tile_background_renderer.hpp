@@ -15,7 +15,9 @@
 #include "geometry/rect2d.hpp"
 #include "geometry/screenbase.hpp"
 
+#include <chrono>
 #include <list>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -48,6 +50,12 @@ public:
 
   void SetBackgroundMode(ref_ptr<dp::GraphicsContext> context, dp::BackgroundMode mode);
   dp::BackgroundMode GetBackgroundMode() const;
+
+  // Re-reads the visible tiles from a new source (the next rain radar frame). The tiles on screen stay
+  // until the new ones are loaded, then they cross-fade.
+  void ReloadWithCrossFade(ref_ptr<dp::GraphicsContext> context);
+  // True while an old frame is shown or fading out, the render loop must keep drawing.
+  bool IsCrossFading() const { return !m_fadingTiles.empty(); }
 
   // Registered images can skip duplicate uploads, including over-zoom siblings sharing an ancestor.
   bool HasImage(std::string const & uid) const { return m_images.find(uid) != m_images.end(); }
@@ -106,13 +114,26 @@ private:
     uint64_t m_generation;
     // Image reference held between this request's upload and bind messages; empty before upload.
     std::string m_imageUid;
+    bool m_failed = false;
   };
+
+  using Clock = std::chrono::steady_clock;
+  // Draws m_sortedTiles with m_programParams.
+  void DrawTiles(ref_ptr<dp::GraphicsContext> context, ref_ptr<gpu::ProgramManager> mng, m2::PointD const & pivot);
+  // Starts the fade once every request of the new frame finished.
+  void StartCrossFadeIfReady();
+  void ReleaseFadingTiles(ref_ptr<dp::GraphicsContext> context);
 
   // Pending or failed requests; failures remain until coverage exit or layer reset.
   // Coordinate keys ignore m_generation, so check it separately.
   std::unordered_map<TileKey, TileRequest> m_tileRequests;
   uint64_t m_nextRequestGeneration = 0;
   std::unordered_map<TileKey, TileBinding> m_tiles;
+  // The previous frame of ReloadWithCrossFade(), at the current zoom level.
+  std::unordered_map<TileKey, TileBinding> m_fadingTiles;
+  Clock::time_point m_reloadTime;
+  // Unset while the new frame loads.
+  std::optional<Clock::time_point> m_fadeStartTime;
 
   std::unordered_map<std::string, ImageInfo> m_images;
   // LRU of image uids whose refCount == 0 (oldest at front). Bounded by kMaxUnreferencedImages.
