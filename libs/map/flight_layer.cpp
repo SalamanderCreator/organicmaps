@@ -29,8 +29,7 @@ dp::Color const kWingGreen(40, 170, 70, 255);
 dp::Color const kWingBlue(30, 110, 220, 255);
 dp::Color const kWingBlack(25, 25, 30, 255);
 dp::Color const kGliderLines(70, 75, 85, 255);
-dp::Color const kHarness(35, 40, 50, 255);
-dp::Color const kPilot(242, 140, 40, 255);
+dp::Color const kPilot(20, 20, 25, 255);
 dp::Color const kPole(120, 128, 138, 255);
 dp::Color const kSockRed(229, 51, 42, 255);
 dp::Color const kSockOutline(150, 40, 35, 255);
@@ -343,7 +342,7 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
 {
   Rings discs, rings, restrictedRings, sectors, sectorOutlines;
   // The wing has five cells: green, blue, black, blue, green.
-  Rings wingGreen, wingBlue, wingBlack, gliderLines, harnesses, torsos, heads;
+  Rings wingGreen, wingBlue, wingBlack, gliderLines, torsos, heads;
   Rings poles, sockRed, sockWhite, sockOutlines;
   size_t count = 0;
   for (auto const & site : m_sites)
@@ -361,15 +360,14 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
         sectors.push_back(std::move(sector));
       }
 
-      // A paraglider sitting in the harness under the wing.
+      // A paraglider with the pilot hanging under the wing.
       Rings * const cellColors[] = {&wingGreen, &wingBlue, &wingBlack, &wingBlue, &wingGreen};
       for (int c = 0; c < 5; ++c)
         cellColors[c]->push_back(s.Arc(0, 2.0, 10.5, 6.0, 168 - c * 31.2, 168 - (c + 1) * 31.2));
       gliderLines.push_back({s.P(-10.2, 3.3), s.P(-1.3, -7.5), s.P(-4.0, 7.6)});
       gliderLines.push_back({s.P(10.2, 3.3), s.P(1.3, -7.5), s.P(4.0, 7.6)});
       heads.push_back(MakeCircle(s.P(0, -5.6), 1.9 * unit, 10));
-      torsos.push_back({s.P(0, -7.6), s.P(0, -10.0)});
-      harnesses.push_back({s.P(-2.2, -10.8), s.P(2.6, -10.8), s.P(4.6, -9.0)});
+      torsos.push_back({s.P(0, -7.6), s.P(0, -10.6)});
     }
     else
     {
@@ -402,7 +400,6 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   e.Lines("wing_green", std::move(wingGreen), kWingGreen, 4.5);
   e.Lines("wing_blue", std::move(wingBlue), kWingBlue, 4.5);
   e.Lines("wing_black", std::move(wingBlack), kWingBlack, 4.5);
-  e.Lines("harnesses", std::move(harnesses), kHarness, 2.6);
   e.Lines("torsos", std::move(torsos), kPilot, 3.0);
   e.Fills("heads", std::move(heads), kPilot);
   e.Lines("poles", std::move(poles), kPole, 2.4);
