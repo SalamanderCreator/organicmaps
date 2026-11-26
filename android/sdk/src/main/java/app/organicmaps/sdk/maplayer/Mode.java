@@ -5,6 +5,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.R;
+import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
 import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.maplayer.subway.SubwayManager;
@@ -115,6 +116,21 @@ public enum Mode
     public void setEnabled(@NonNull Context context, boolean isEnabled)
     {
       DistanceLayer.setEnabled(context, isEnabled);
+    }
+  },
+
+  // Maps&Fly: paragliding takeoffs and landings with their weather and obstacles around them, see FlightLayer.
+  FLIGHT {
+    @Override
+    public boolean isEnabled(@NonNull Context context)
+    {
+      return FlightLayer.isEnabled();
+    }
+
+    @Override
+    public void setEnabled(@NonNull Context context, boolean isEnabled)
+    {
+      FlightLayer.setEnabled(context, isEnabled);
     }
   },
 

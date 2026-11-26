@@ -73,6 +73,7 @@ import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.LayerSettingsPanel;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
+import app.organicmaps.maplayer.FlightSiteSheet;
 import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
 import app.organicmaps.routing.NavigationController;
@@ -107,6 +108,7 @@ import app.organicmaps.sdk.location.LocationUtils;
 import app.organicmaps.sdk.location.SensorListener;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesState;
+import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingOptions;
@@ -1118,6 +1120,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
     super.onStart();
 
     Framework.nativePlacePageActivationListener(this);
+    // Maps&Fly: a tapped site of the flight preparation layer opens its own sheet.
+    FlightLayer.init(this);
+    FlightLayer.setTapListener(site -> FlightSiteSheet.show(this, site));
     BookmarkManager.INSTANCE.addLoadingListener(this);
     MwmApplication.from(getApplicationContext()).getIsolinesManager().attach(this::onIsolinesStateChanged);
     updateDrivingOptionCount();
@@ -1133,6 +1138,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
     super.onStop();
 
     Framework.nativeRemovePlacePageActivationListener(this);
+    FlightLayer.setTapListener(null);
     BookmarkManager.INSTANCE.removeLoadingListener(this);
     MwmApplication.from(this).getLocationHelper().removeListener(this);
     if (mDisplayManager.isDeviceDisplayUsed() && !RoutingController.get().isNavigating())

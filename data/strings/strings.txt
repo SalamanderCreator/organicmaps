@@ -46028,6 +46028,228 @@ tags = android-app
 en = Share as GPX
 de = Als GPX teilen
 
+[button_layer_flight]
+comment = Maps&Fly map layer: paragliding takeoffs and landings with weather and obstacles
+tags = android-app
+en = Flight prep
+de = Flugvorbereitung
+
+[flight_site_takeoff]
+comment = Maps&Fly flight layer: a paragliding takeoff site
+tags = android-app
+en = Takeoff
+de = Startplatz
+
+[flight_site_landing]
+comment = Maps&Fly flight layer: a paragliding landing site
+tags = android-app
+en = Landing
+de = Landeplatz
+
+[flight_site_source]
+comment = Maps&Fly flight layer: where the site comes from, e.g. ParaglidingEarth, OpenStreetMap
+tags = android-app
+en = Source: %s
+de = Quelle: %s
+
+[flight_site_altitude]
+comment = Maps&Fly flight layer: height of the site above sea level
+tags = android-app
+en = Altitude: %s
+de = Höhe: %s
+
+[flight_site_directions]
+comment = Maps&Fly flight layer: wind directions the takeoff works for, e.g. NW, W
+tags = android-app
+en = Takeoff directions: %s
+de = Startrichtungen: %s
+
+[flight_site_directions_unknown]
+comment = Maps&Fly flight layer: the takeoff has no known directions
+tags = android-app
+en = Takeoff directions unknown
+de = Startrichtungen unbekannt
+
+[flight_site_area_known]
+comment = Maps&Fly flight layer: the landing area is shown in green on the map
+tags = android-app
+en = Landing area shown in green on the map
+de = Landefläche grün auf der Karte
+
+[flight_site_open_source]
+comment = Maps&Fly flight layer: open the web page of the site
+tags = android-app
+en = Open the site page
+de = Seite des Platzes öffnen
+
+[flight_weather_title]
+comment = Maps&Fly flight layer: title of the forecast of a site
+tags = android-app
+en = Weather at the site
+de = Wetter am Platz
+
+[flight_weather_failed]
+comment = Maps&Fly flight layer: the forecast could not be downloaded
+tags = android-app
+en = The forecast could not be loaded.
+de = Die Vorhersage konnte nicht geladen werden.
+
+[flight_weather_wind]
+comment = Maps&Fly flight layer: wind of a forecast hour, direction, mean and gusts
+tags = android-app
+en = %1$s %2$d km/h, gusts %3$d
+de = %1$s %2$d km/h, Böen %3$d
+
+[flight_weather_rain]
+comment = Maps&Fly flight layer: rain amount of a forecast hour
+tags = android-app
+en = rain %s mm
+de = Regen %s mm
+
+[flight_weather_upper_wind]
+comment = Maps&Fly flight layer: wind at 850 hPa of a forecast hour
+tags = android-app
+en = wind at 1500 m %1$s %2$d km/h
+de = Wind in 1500 m %1$s %2$d km/h
+
+[flight_weather_thermal_weak]
+comment = Maps&Fly flight layer: weak thermals
+tags = android-app
+en = weak thermals
+de = schwache Thermik
+
+[flight_weather_thermal_moderate]
+comment = Maps&Fly flight layer: moderate thermals
+tags = android-app
+en = moderate thermals
+de = mäßige Thermik
+
+[flight_weather_thermal_good]
+comment = Maps&Fly flight layer: good thermals
+tags = android-app
+en = good thermals
+de = gute Thermik
+
+[flight_weather_thermal_top]
+comment = Maps&Fly flight layer: height thermals reach above sea level
+tags = android-app
+en = up to about %s
+de = bis etwa %s
+
+[flight_weather_cloud_base]
+comment = Maps&Fly flight layer: estimated cumulus cloud base above sea level
+tags = android-app
+en = cloud base about %s
+de = Basis etwa %s
+
+[flight_weather_attribution]
+comment = Maps&Fly flight layer: credit and disclaimer below the forecast
+tags = android-app
+en = Weather data by Open-Meteo.com. Only a hint: check the conditions on site.
+de = Wetterdaten von Open-Meteo.com. Nur ein Hinweis: prüfe die Bedingungen vor Ort.
+
+[flight_attribution_pge]
+comment = Maps&Fly flight layer: credit of ParaglidingEarth
+tags = android-app
+en = Sites: paraglidingearth.com.
+de = Plätze: paraglidingearth.com.
+
+[flight_attribution_osm]
+comment = Maps&Fly flight layer: credit of OpenStreetMap
+tags = android-app
+en = © OpenStreetMap contributors.
+de = © OpenStreetMap-Mitwirkende.
+
+[flight_reason_calm]
+comment = Maps&Fly flight layer rating: almost no wind
+tags = android-app
+en = little wind
+de = wenig Wind
+
+[flight_reason_direction_fits]
+comment = Maps&Fly flight layer rating: the wind direction fits the takeoff
+tags = android-app
+en = wind fits the takeoff
+de = Wind passt zum Start
+
+[flight_reason_direction_unknown]
+comment = Maps&Fly flight layer rating: no takeoff directions to compare with
+tags = android-app
+en = direction not rated
+de = Richtung nicht bewertet
+
+[flight_reason_crosswind]
+comment = Maps&Fly flight layer rating: wind from the side of the takeoff
+tags = android-app
+en = crosswind
+de = seitlicher Wind
+
+[flight_reason_wrong_direction]
+comment = Maps&Fly flight layer rating: the wind direction does not fit the takeoff
+tags = android-app
+en = wind does not fit
+de = Wind passt nicht
+
+[flight_reason_tailwind]
+comment = Maps&Fly flight layer rating: wind from behind the takeoff
+tags = android-app
+en = tailwind
+de = Rückenwind
+
+[flight_reason_wind_strong]
+comment = Maps&Fly flight layer rating: strong wind
+tags = android-app
+en = strong wind
+de = kräftiger Wind
+
+[flight_reason_wind_too_strong]
+comment = Maps&Fly flight layer rating: too much wind to fly
+tags = android-app
+en = too much wind
+de = zu viel Wind
+
+[flight_reason_gusty]
+comment = Maps&Fly flight layer rating: gusty wind
+tags = android-app
+en = gusty
+de = böig
+
+[flight_reason_gusts_too_strong]
+comment = Maps&Fly flight layer rating: too strong gusts
+tags = android-app
+en = strong gusts
+de = starke Böen
+
+[flight_reason_upper_wind_strong]
+comment = Maps&Fly flight layer rating: strong wind at altitude
+tags = android-app
+en = strong wind aloft
+de = kräftiger Höhenwind
+
+[flight_reason_upper_wind_too_strong]
+comment = Maps&Fly flight layer rating: too much wind at altitude
+tags = android-app
+en = too much wind aloft
+de = zu starker Höhenwind
+
+[flight_reason_rain_likely]
+comment = Maps&Fly flight layer rating: rain is possible
+tags = android-app
+en = rain possible
+de = Regen möglich
+
+[flight_reason_rain]
+comment = Maps&Fly flight layer rating: rain
+tags = android-app
+en = rain
+de = Regen
+
+[flight_reason_thunderstorm]
+comment = Maps&Fly flight layer rating: risk of overdevelopment and thunderstorms
+tags = android-app
+en = risk of thunderstorms
+de = Gewittergefahr
+
 [routing_save_route_error]
 comment = Toast shown when saving a planned route as a bookmark track fails
 tags = android-app,apple-maps

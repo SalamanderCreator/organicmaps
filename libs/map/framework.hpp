@@ -4,6 +4,7 @@
 #include "map/bookmark.hpp"
 #include "map/bookmark_manager.hpp"
 #include "map/distance_overlay.hpp"
+#include "map/flight_layer.hpp"
 #include "map/features_fetcher.hpp"
 #include "map/isolines_manager.hpp"
 #include "map/mwm_url.hpp"
@@ -187,6 +188,8 @@ protected:
 
   df::DrapeApi m_drapeApi;
   DistanceOverlay m_distanceOverlay{m_drapeApi};
+  FlightLayer m_flightLayer{m_drapeApi};
+  std::function<void(std::string const & siteId)> m_flightSiteTapFn;
 
   bool m_isRenderingEnabled;
 
@@ -242,6 +245,7 @@ protected:
   void ClearAllCaches();
 
   void OnViewportChanged(ScreenBase const & screen);
+  void ForEachFlightObstacle(m2::RectD const & rect, std::function<void(FlightLayer::Obstacle &&)> const & fn) const;
 
   void InitTransliteration();
 
@@ -504,6 +508,13 @@ public:
   /// Maps&Fly: dashed line with the straight-line distance from the selected place to the own position.
   void SetDistanceLineEnabled(bool enabled);
   bool IsDistanceLineEnabled() const { return m_distanceOverlay.IsLineEnabled(); }
+
+  /// Maps&Fly: the flight preparation layer with paragliding sites and obstacles around them.
+  void SetFlightLayerEnabled(bool enabled);
+  bool IsFlightLayerEnabled() const { return m_flightLayer.IsEnabled(); }
+  FlightLayer & GetFlightLayer() { return m_flightLayer; }
+  /// Called instead of opening the place page for a tap on a flight site.
+  void SetFlightSiteTapFn(std::function<void(std::string const & siteId)> fn) { m_flightSiteTapFn = std::move(fn); }
 
   /// Saves the built route as a track and shows it. Returns kml::kInvalidTrackId on failure.
   kml::TrackId SaveRoute();

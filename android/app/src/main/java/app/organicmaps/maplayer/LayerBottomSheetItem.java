@@ -82,6 +82,10 @@ public class LayerBottomSheetItem
       drawableResId = R.drawable.ic_layers_distance_circles;
       buttonTextResource = R.string.button_layer_distance;
       break;
+    case FLIGHT:
+      drawableResId = R.drawable.ic_layers_flight;
+      buttonTextResource = R.string.button_layer_flight;
+      break;
     case SATELLITE:
       drawableResId = R.drawable.ic_layers_satellite;
       buttonTextResource = R.string.button_layer_satellite;

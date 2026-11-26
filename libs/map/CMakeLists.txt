@@ -14,6 +14,8 @@ set(SRC
   bookmarks_search_params.hpp
   distance_overlay.cpp
   distance_overlay.hpp
+  flight_layer.cpp
+  flight_layer.hpp
   elevation_info.cpp
   elevation_info.hpp
   everywhere_search_params.hpp

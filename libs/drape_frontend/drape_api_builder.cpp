@@ -1,4 +1,5 @@
 #include "drape_frontend/drape_api_builder.hpp"
+#include "drape_frontend/area_shape.hpp"
 #include "drape_frontend/batcher_bucket.hpp"
 #include "drape_frontend/colored_symbol_shape.hpp"
 #include "drape_frontend/gui/gui_text.hpp"
@@ -11,6 +12,10 @@
 #include "indexer/feature_decl.hpp"
 
 #include "base/string_utils.hpp"
+
+#include "3party/earcut/earcut.hpp"
+
+#include <array>
 
 namespace
 {
@@ -71,7 +76,26 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
         property->m_buckets.emplace_back(state, std::move(b));
       });
 
-      if (data.m_points.size() > 1)
+      if (data.m_fill && data.m_points.size() > 2)
+      {
+        std::vector<std::vector<std::array<double, 2>>> rings(1);
+        for (auto const & p : data.m_points)
+          rings.front().push_back({p.x, p.y});
+        std::vector<m2::PointD> triangles;
+        for (uint32_t const i : mapbox::earcut<uint32_t>(rings))
+          triangles.push_back(data.m_points[i]);
+        if (!triangles.empty())
+        {
+          AreaViewParams avp;
+          avp.m_tileCenter = property->m_center;
+          avp.m_depthTestEnabled = false;
+          avp.m_minVisibleScale = 1;
+          avp.m_color = data.m_fillColor;
+          AreaShape(std::move(triangles), {}, avp).Draw(context, make_ref(&batcher), textures);
+        }
+      }
+
+      if (data.m_points.size() > 1 && !data.m_noLine)
       {
         m2::SharedSpline spline(data.m_points);
         LineViewParams lvp;

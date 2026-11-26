@@ -153,4 +153,8 @@
   <color name="route_grade_normal">#FF9CB37A</color>
   <color name="route_grade_difficult">#FFD9534F</color>
   <color name="route_grade_expert">#FF3F6FB5</color>
+  <!-- Maps&Fly: rating of a forecast hour at a flight site -->
+  <color name="flight_rating_good">#2E9638</color>
+  <color name="flight_rating_marginal">#E8A000</color>
+  <color name="flight_rating_bad">#D32F2F</color>
 </resources>

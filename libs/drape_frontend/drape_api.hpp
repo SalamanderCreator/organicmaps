@@ -49,6 +49,22 @@ struct DrapeApiLineData
     return *this;
   }
 
+  /// Only the points, no line through them: one entry for many unconnected point symbols.
+  DrapeApiLineData & PointsOnly()
+  {
+    m_showPoints = true;
+    m_noLine = true;
+    return *this;
+  }
+
+  /// Fills the closed ring of the points with |color| below the line, e.g. a translucent area.
+  DrapeApiLineData & Fill(dp::Color const & color)
+  {
+    m_fillColor = color;
+    m_fill = true;
+    return *this;
+  }
+
   /// A text drawn next to the first point, optionally with a white halo.
   DrapeApiLineData & Label(std::string const & label, bool halo = false)
   {
@@ -65,6 +81,10 @@ struct DrapeApiLineData
   double m_baseGtoPScale = 1.0;
   std::string m_label;
   bool m_labelHalo = false;
+
+  dp::Color m_fillColor;
+  bool m_fill = false;
+  bool m_noLine = false;
 
   bool m_showPoints = false;
   bool m_markPoints = false;
