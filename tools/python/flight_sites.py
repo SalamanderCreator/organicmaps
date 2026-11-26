@@ -6,8 +6,8 @@ merges the same sites of both and writes one JSON file that is packed into the A
 be reached is left out, so the build still gets the other one. DHV data is never read here: its terms
 forbid passing it on, so it is only imported privately on the phone.
 
-OpenStreetMap is read in tiles. With --previous, a source or tile that does not answer keeps the sites of the
-previous file, so that a busy server does not empty the map.
+With --previous, a source that does not answer keeps the sites of the previous file, so that a busy server does
+not empty the map.
 
 Usage: flight_sites.py OUTPUT.json [--previous OLD.json] [--bbox SOUTH,WEST,NORTH,EAST]
 """
@@ -24,21 +24,19 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
-# Europe and the Alps' neighbours, where Maps&Fly is used.
-DEFAULT_BBOX = (34.0, -25.0, 72.0, 45.0)
+# The whole world; --bbox narrows it.
+DEFAULT_BBOX = (-90.0, -180.0, 90.0, 180.0)
 # ParaglidingEarth moves to paragliding.earth, the old domain may stay for a while.
 PGE_HOSTS = ["https://www.paragliding.earth", "https://www.paraglidingearth.com"]
 PGE_PATH = "/api/geojson/getBoundingBoxSites.php?north={n}&south={s}&east={e}&west={w}&limit=5000&style=detailled"
 PGE_SITE_URL = "https://www.paragliding.earth/?site="
-PGE_TILE_DEG = 5
+PGE_TILE_DEG = 15
 OVERPASS_URLS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.private.coffee/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
 ]
-OSM_TILE_DEG = 10
-OSM_SECONDS = 1100
-OVERPASS_QUERY = '[out:json][timeout:170];nwr["free_flying:site"]({s},{w},{n},{e});out tags geom;'
+OVERPASS_QUERY = '[out:json][timeout:280];nwr["free_flying:site"];out tags geom;'
 OSM_URL = "https://www.openstreetmap.org/"
 USER_AGENT = "Maps&Fly flight sites builder (github.com/SalamanderCreator/organicmaps)"
 
@@ -308,50 +306,24 @@ def load_pge(bbox):
     return None
 
 
-def tiles(bbox, size):
-    s0, w0, n0, e0 = bbox
-    s = s0
-    while s < n0:
-        w = w0
-        while w < e0:
-            yield (s, w, min(s + size, n0), min(w + size, e0))
-            w += size
-        s += size
+def in_bbox(site, bbox):
+    s, w, n, e = bbox
+    return s <= site["lat"] <= n and w <= site["lon"] <= e
 
 
-def in_tile(site, tile):
-    s, w, n, e = tile
-    return s <= site["lat"] < n and w <= site["lon"] < e
-
-
-def load_osm_tile(tile):
-    s, w, n, e = tile
-    data = urllib.parse.urlencode({"data": OVERPASS_QUERY.format(s=s, w=w, n=n, e=e)}).encode()
-    for url in OVERPASS_URLS:
-        try:
-            return parse_overpass(download(url, data, timeout=180))
-        except Exception as ex:
-            log("Overpass not usable at", url, "for", tile, "-", ex)
-            time.sleep(3)
+def load_osm():
+    """All sites worldwide in one query: the tag index makes it fast, unlike a query for an area."""
+    data = urllib.parse.urlencode({"data": OVERPASS_QUERY}).encode()
+    for attempt in range(2):
+        for url in OVERPASS_URLS:
+            try:
+                sites = parse_overpass(download(url, data, timeout=300))
+                log("OpenStreetMap:", len(sites), "sites from", url)
+                return sites
+            except Exception as ex:
+                log("Overpass not usable at", url, "-", ex)
+                time.sleep(10)
     return None
-
-
-def load_osm(bbox, previous):
-    """The sites of each tile, from the previous file for a tile no server answers. None if nothing answered."""
-    sites, fresh = [], 0
-    # Stops asking well before the build's time limit; the remaining tiles come from the previous file.
-    deadline = time.monotonic() + OSM_SECONDS
-    for tile in tiles(bbox, OSM_TILE_DEG):
-        found = load_osm_tile(tile) if time.monotonic() < deadline else None
-        if found is None:
-            old = [x for x in previous if x["id"].startswith("osm:") and in_tile(x, tile)]
-            log("OpenStreetMap: tile", tile, "kept from the previous file:", len(old), "sites")
-            sites += old
-        else:
-            fresh += 1
-            sites += found
-    log("OpenStreetMap:", len(sites), "sites,", fresh, "tiles fresh")
-    return sites if fresh else None
 
 
 def main():
@@ -370,7 +342,9 @@ def main():
         log(len(previous), "sites in the previous file")
 
     pge = load_pge(bbox)
-    osm = load_osm(bbox, previous)
+    osm = load_osm()
+    if osm is not None:
+        osm = [x for x in osm if in_bbox(x, bbox)]
     if pge is None and osm is None:
         log("no source could be reached, no file written")
         return 1

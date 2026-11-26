@@ -48,25 +48,9 @@ class FlightSitesTest(unittest.TestCase):
         self.assertEqual(merged[2]["id"], "osm:n9")
         self.assertEqual(merged[2]["dirs"], (1 << 8) | (1 << 10))
 
-    def test_osm_tiles_keep_previous_sites(self):
-        previous = [{"id": "osm:n1", "lat": 47.5, "lon": 11.5}, {"id": "osm:n2", "lat": 47.5, "lon": 21.5},
-                    {"id": "pge:3", "lat": 47.5, "lon": 11.6}]
-        new = {"id": "osm:n4", "lat": 47.6, "lon": 21.6}
-        original = fs.load_osm_tile
-        try:
-            # The first tile does not answer, the second does.
-            fs.load_osm_tile = lambda tile: None if tile[1] < 20 else [new]
-            sites = fs.load_osm((40, 10, 50, 30), previous)
-        finally:
-            fs.load_osm_tile = original
-        self.assertEqual([x["id"] for x in sites], ["osm:n1", "osm:n4"])
-
-        fs.load_osm_tile = lambda tile: None
-        try:
-            self.assertIsNone(fs.load_osm((40, 10, 50, 30), previous))
-        finally:
-            fs.load_osm_tile = original
-
+    def test_bbox(self):
+        self.assertTrue(fs.in_bbox({"lat": 47.5, "lon": 11.5}, fs.DEFAULT_BBOX))
+        self.assertFalse(fs.in_bbox({"lat": 47.5, "lon": 11.5}, (40, 12, 50, 20)))
 
 if __name__ == "__main__":
     unittest.main()
