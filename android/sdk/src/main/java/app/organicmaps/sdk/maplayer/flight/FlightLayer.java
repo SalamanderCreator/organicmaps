@@ -35,6 +35,9 @@ public final class FlightLayer
   private static final String CACHE_DIR = "flight_sites";
   // Sites change rarely, older cells are reloaded when online.
   private static final long CACHE_MAX_AGE_MS = TimeUnit.DAYS.toMillis(14);
+  private static final long PARTIAL_CACHE_AGE_MS = TimeUnit.DAYS.toMillis(1);
+  // Cells that could not be loaded at all are asked for again after this time.
+  private static final long RETRY_AFTER_MS = TimeUnit.MINUTES.toMillis(2);
 
   // One request after the other, as Overpass allows few at once.
   private static final ExecutorService sLoader = Executors.newSingleThreadExecutor();
@@ -45,6 +48,8 @@ public final class FlightLayer
   private static Context sContext;
   @Nullable
   private static Consumer<FlightSite> sTapListener;
+  private static boolean sRetry;
+  private static boolean sRetryScheduled;
 
   private FlightLayer() {}
 
@@ -121,6 +126,9 @@ public final class FlightLayer
   {
     sLoadingCells.remove(cell);
     if (sites == null)
+      sRetry = true;
+    scheduleRetry();
+    if (sites == null)
       return;
     sLoadedCells.add(cell);
 
@@ -154,6 +162,21 @@ public final class FlightLayer
     nativeSetSites(cell, ids, names, lats, lons, landings, directions, areaOffsets, areaLatLons);
   }
 
+  /** Asks the core again for the cells in view, which loads the cells that failed. */
+  @MainThread
+  private static void scheduleRetry()
+  {
+    if (!sRetry || sRetryScheduled || !sLoadingCells.isEmpty())
+      return;
+    sRetryScheduled = true;
+    UiThread.runLater(() -> {
+      sRetryScheduled = false;
+      sRetry = false;
+      if (nativeIsEnabled())
+        nativeSetListener(new NativeListener());
+    }, RETRY_AFTER_MS);
+  }
+
   /** The sites of a cell from a fresh cache, else from the sources, else from an old cache. Null if none. */
   @Nullable
   private static List<FlightSite> load(@NonNull Context context, int cell)
@@ -166,24 +189,63 @@ public final class FlightLayer
         return cached;
     }
 
+    // Each source on its own: one that is down, like ParaglidingEarth while it moves, keeps the other.
+    List<FlightSite> pge = null;
+    List<FlightSite> osm = null;
     try
     {
-      final String pge = download(FlightSources.pgeUrl(cell));
-      final String osm = download(FlightSources.overpassUrl(cell));
-      // Both sources are needed for a complete cell in the cache.
-      if (pge != null && osm != null)
-      {
-        final List<FlightSite> sites =
-            FlightSources.merge(FlightSources.parsePge(pge), FlightSources.parseOverpass(osm));
-        writeCache(file, FlightSources.toCache(sites));
-        return sites;
-      }
+      pge = loadFirst(FlightSources.pgeUrls(cell), FlightSources::parsePge);
+      osm = loadFirst(FlightSources.overpassUrls(cell), FlightSources::parseOverpass);
     }
     catch (Exception e)
     {
       Logger.w(TAG, "Cannot load the flight sites of cell " + cell, e);
     }
-    return file.exists() ? readCache(file) : null;
+    if (pge == null && osm == null)
+      return file.exists() ? readCache(file) : null;
+
+    final List<FlightSite> sites =
+        FlightSources.merge(pge != null ? pge : new ArrayList<>(), osm != null ? osm : new ArrayList<>());
+    try
+    {
+      writeCache(file, FlightSources.toCache(sites));
+      // A cell without one of the sources is loaded again after a day.
+      if ((pge == null || osm == null)
+          && !file.setLastModified(System.currentTimeMillis() - CACHE_MAX_AGE_MS + PARTIAL_CACHE_AGE_MS))
+        Logger.w(TAG, "Cannot age " + file);
+    }
+    catch (Exception e)
+    {
+      Logger.w(TAG, "Cannot cache the flight sites of cell " + cell, e);
+    }
+    return sites;
+  }
+
+  private interface Parser
+  {
+    @NonNull
+    List<FlightSite> parse(@NonNull String json) throws Exception;
+  }
+
+  /** The sites of the first URL that answers with data it can read, null if none does. */
+  @Nullable
+  private static List<FlightSite> loadFirst(@NonNull String[] urls, @NonNull Parser parser)
+  {
+    for (String url : urls)
+    {
+      try
+      {
+        final String body = download(url);
+        if (body != null)
+          return parser.parse(body);
+      }
+      catch (Exception e)
+      {
+        // E.g. a "coming soon" page instead of JSON.
+        Logger.w(TAG, "No flight sites from " + url, e);
+      }
+    }
+    return null;
   }
 
   @Nullable

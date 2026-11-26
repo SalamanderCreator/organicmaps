@@ -17,10 +17,15 @@ import org.json.JSONObject;
  */
 final class FlightSources
 {
-  private static final String PGE_URL = "https://www.paraglidingearth.com/api/geojson/getBoundingBoxSites.php"
-                                      + "?north=%.4f&south=%.4f&east=%.4f&west=%.4f&limit=1000&style=detailled";
+  // ParaglidingEarth moves to paragliding.earth, the old domain may stay for a while.
+  private static final String[] PGE_HOSTS = {"https://www.paragliding.earth", "https://www.paraglidingearth.com"};
+  private static final String PGE_PATH = "/api/geojson/getBoundingBoxSites.php"
+                                       + "?north=%.4f&south=%.4f&east=%.4f&west=%.4f&limit=1000&style=detailled";
   private static final String PGE_SITE_URL = "https://www.paraglidingearth.com/?site=";
-  private static final String OVERPASS_URL = "https://overpass-api.de/api/interpreter?data=";
+  // The main server is often busy, the others mirror it.
+  private static final String[] OVERPASS_URLS = {"https://overpass-api.de/api/interpreter?data=",
+                                                 "https://overpass.private.coffee/api/interpreter?data=",
+                                                 "https://overpass.kumi.systems/api/interpreter?data="};
   private static final String OVERPASS_QUERY =
       "[out:json][timeout:25];nwr[\"free_flying:site\"](%.4f,%.4f,%.4f,%.4f);out tags geom;";
   private static final String OSM_URL = "https://www.openstreetmap.org/";
@@ -41,19 +46,28 @@ final class FlightSources
     return new double[] {south, west, south + 1, west + 1};
   }
 
+  /** The same request at each host, to try one after the other. */
   @NonNull
-  static String pgeUrl(int cell)
+  static String[] pgeUrls(int cell)
   {
     final double[] b = cellBounds(cell);
-    return String.format(Locale.US, PGE_URL, b[2], b[0], b[3], b[1]);
+    final String path = String.format(Locale.US, PGE_PATH, b[2], b[0], b[3], b[1]);
+    final String[] urls = new String[PGE_HOSTS.length];
+    for (int i = 0; i < urls.length; ++i)
+      urls[i] = PGE_HOSTS[i] + path;
+    return urls;
   }
 
+  /** The same query at each server, to try one after the other. */
   @NonNull
-  static String overpassUrl(int cell) throws UnsupportedEncodingException
+  static String[] overpassUrls(int cell) throws UnsupportedEncodingException
   {
     final double[] b = cellBounds(cell);
-    final String query = String.format(Locale.US, OVERPASS_QUERY, b[0], b[1], b[2], b[3]);
-    return OVERPASS_URL + URLEncoder.encode(query, "UTF-8");
+    final String query = URLEncoder.encode(String.format(Locale.US, OVERPASS_QUERY, b[0], b[1], b[2], b[3]), "UTF-8");
+    final String[] urls = new String[OVERPASS_URLS.length];
+    for (int i = 0; i < urls.length; ++i)
+      urls[i] = OVERPASS_URLS[i] + query;
+    return urls;
   }
 
   /** ParaglidingEarth GeoJSON: a takeoff per feature, with its main landing if given. */
