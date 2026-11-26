@@ -48,7 +48,18 @@ UNIT_TEST(FlightLayer_SectorsJoinNeighbouringDirections)
   TEST_ALMOST_EQUAL_ABS(Azimuth(center, south[south.size() - 2]), 191.25, 1e-6, ());
   TEST_ALMOST_EQUAL_ABS(north[1].Length(center), 1.0, 1e-9, ());
 
-  TEST_EQUAL(FlightLayer::MakeSectors(center, 0xFFFF, 1.0).size(), 1, ("all directions are a disc"));
+  TEST_EQUAL(FlightLayer::MakeSectors(center, 0xFFFF, 1.0).size(), 2, ("all directions in two halves"));
+
+  // Between the radii, like the wreath around a takeoff: SW alone, from 213.75 to 236.25 degrees.
+  auto const wreath = FlightLayer::MakeSectors(center, 1 << 10, 2.0, 1.0);
+  TEST_EQUAL(wreath.size(), 1, ());
+  auto const & piece = wreath.front();
+  TEST_EQUAL(piece.front(), piece.back(), ("closed"));
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, piece.front()), 213.75, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(piece.front().Length(center), 2.0, 1e-9, ());
+  TEST_ALMOST_EQUAL_ABS(piece[piece.size() / 2].Length(center), 1.0, 1e-9, ("the inner arc back"));
+  for (auto const & p : piece)
+    TEST(p.Length(center) > 0.99 && p.Length(center) < 2.01, ());
 }
 
 UNIT_TEST(FlightLayer_Circle)

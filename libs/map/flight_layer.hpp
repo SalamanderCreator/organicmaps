@@ -82,9 +82,10 @@ public:
   /// The id of the site at |point|, within |tolerancePx| on the screen or inside its landing area.
   std::optional<std::string> HitTest(m2::PointD const & point, ScreenBase const & screen, double tolerancePx) const;
 
-  /// Wedges of |radius| (in mercator) around |center|, one ring per run of neighbouring directions.
+  /// Closed rings for the runs of neighbouring directions around |center|: wedges from the center or, with
+  /// |innerRadius|, pieces of a ring between both radii (in mercator).
   static std::vector<std::vector<m2::PointD>> MakeSectors(m2::PointD const & center, uint16_t directions,
-                                                          double radius);
+                                                          double radius, double innerRadius = 0);
   /// A closed circle of |radius| (in mercator).
   static std::vector<m2::PointD> MakeCircle(m2::PointD const & center, double radius, size_t pointsCount = 24);
 

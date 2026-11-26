@@ -20,11 +20,11 @@ dp::Color const kLandingCircle(30, 158, 143, 255);
 dp::Color const kWhite(255, 255, 255, 255);
 
 // The flight preparation layer.
-dp::Color const kHalo(255, 255, 255, 190);
 dp::Color const kDisc(255, 255, 255, 215);
 dp::Color const kRing(29, 39, 51, 255);
 dp::Color const kRestrictedRing(217, 130, 43, 255);
-dp::Color const kSector(30, 150, 60, 255);
+dp::Color const kSector(40, 170, 70, 235);
+dp::Color const kSectorOutline(20, 90, 35, 255);
 dp::Color const kWingGreen(40, 170, 70, 255);
 dp::Color const kWingBlue(30, 110, 220, 255);
 dp::Color const kWingBlack(25, 25, 30, 255);
@@ -49,8 +49,9 @@ size_t constexpr kMaxObstacleLines = 600;
 
 // Symbol sizes in dp.
 double constexpr kIconRadius = 9.5;
-double constexpr kDiscRadius = 16.0;
-double constexpr kHaloRadius = 13.0;
+double constexpr kDiscRadius = 14.5;
+// The takeoff directions are a green wreath around the disc, so the paraglider does not hide them.
+double constexpr kSectorRadius = 24.0;
 
 using Rings = std::vector<std::vector<m2::PointD>>;
 
@@ -159,38 +160,56 @@ std::optional<std::string> FlightLayer::HitTest(m2::PointD const & point, Screen
 
 // static
 std::vector<std::vector<m2::PointD>> FlightLayer::MakeSectors(m2::PointD const & center, uint16_t directions,
-                                                              double radius)
+                                                              double radius, double innerRadius)
 {
   std::vector<std::vector<m2::PointD>> rings;
   if (directions == 0)
     return rings;
+
+  // Runs of neighbouring directions; all 16 are split in two halves to keep each ring simple.
+  std::vector<std::pair<int, int>> runs;
   if (directions == 0xFFFF)
   {
-    rings.push_back(MakeCircle(center, radius, 32));
-    return rings;
+    runs = {{0, 8}, {8, 8}};
+  }
+  else
+  {
+    for (int first = 0; first < 16; ++first)
+    {
+      if ((directions & (1 << first)) == 0 || (directions & (1 << ((first + 15) % 16))) != 0)
+        continue;
+      int count = 0;
+      while (count < 16 && (directions & (1 << ((first + count) % 16))) != 0)
+        ++count;
+      runs.emplace_back(first, count);
+    }
   }
 
-  // Start each run after a missing direction, so that a run across north stays one wedge.
-  int start = 0;
-  while ((directions & (1 << start)) != 0)
-    ++start;
-  for (int k = 1; k <= 16; ++k)
+  auto const at = [&center](double azimuthDeg, double r)
   {
-    int const first = (start + k) % 16;
-    if ((directions & (1 << first)) == 0 || (directions & (1 << ((first + 15) % 16))) != 0)
-      continue;
-    int count = 0;
-    while (count < 16 && (directions & (1 << ((first + count) % 16))) != 0)
-      ++count;
-
-    std::vector<m2::PointD> ring = {center};
+    double const a = math::DegToRad(azimuthDeg);
+    return m2::PointD(center.x + r * std::sin(a), center.y + r * std::cos(a));
+  };
+  for (auto const & [first, count] : runs)
+  {
+    double const from = first * 22.5 - 11.25;
+    double const to = from + 22.5 * count;
     int const steps = count * 4;
+    std::vector<m2::PointD> ring;
     for (int i = 0; i <= steps; ++i)
+      ring.push_back(at(from + (to - from) * i / steps, radius));
+    if (innerRadius > 0)
     {
-      double const azimuth = math::DegToRad(first * 22.5 - 11.25 + 22.5 * count * i / steps);
-      ring.emplace_back(center.x + radius * std::sin(azimuth), center.y + radius * std::cos(azimuth));
+      for (int i = steps; i >= 0; --i)
+        ring.push_back(at(from + (to - from) * i / steps, innerRadius));
     }
-    ring.push_back(center);
+    else
+    {
+      ring.insert(ring.begin(), center);
+      ring.push_back(center);
+    }
+    if (ring.front() != ring.back())
+      ring.push_back(ring.front());
     rings.push_back(std::move(ring));
   }
   return rings;
@@ -322,7 +341,7 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 
 void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit)
 {
-  Rings discs, rings, restrictedRings, sectors, halos;
+  Rings discs, rings, restrictedRings, sectors, sectorOutlines;
   // The wing has five cells: green, blue, black, blue, green.
   Rings wingGreen, wingBlue, wingBlack, gliderLines, harnesses, torsos, heads;
   Rings poles, sockRed, sockWhite, sockOutlines;
@@ -336,8 +355,11 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
     {
       discs.push_back(MakeCircle(site.m_point, kDiscRadius * unit, 32));
       (site.m_restricted ? restrictedRings : rings).push_back(discs.back());
-      for (auto & sector : MakeSectors(site.m_point, site.m_directions, kDiscRadius * unit))
+      for (auto & sector : MakeSectors(site.m_point, site.m_directions, kSectorRadius * unit, kDiscRadius * unit))
+      {
+        sectorOutlines.push_back(sector);
         sectors.push_back(std::move(sector));
+      }
 
       // A paraglider sitting in the harness under the wing.
       Rings * const cellColors[] = {&wingGreen, &wingBlue, &wingBlack, &wingBlue, &wingGreen};
@@ -351,11 +373,10 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
     }
     else
     {
-      halos.push_back(MakeCircle(site.m_point, kHaloRadius * unit));
       // A red and white windsock, wide at the pole, in four stripes.
       double constexpr kPoleX = -8.0, kTipX = 10.0, kTopWide = 8.5, kBottomWide = 2.5, kTopTip = 6.8,
                        kBottomTip = 4.2;
-      poles.push_back({s.P(kPoleX, -11.0), s.P(kPoleX, kTopWide + 0.5)});
+      poles.push_back({s.P(kPoleX, -4.5), s.P(kPoleX, kTopWide + 0.5)});
       for (int k = 0; k < 4; ++k)
       {
         double const t0 = k / 4.0, t1 = (k + 1) / 4.0;
@@ -374,9 +395,9 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
   e.Fills("discs", std::move(discs), kDisc);
   e.Fills("sectors", std::move(sectors), kSector);
+  e.Lines("sector_outlines", std::move(sectorOutlines), kSectorOutline, 1.0);
   e.Lines("rings", std::move(rings), kRing, 1.5);
   e.Lines("restricted_rings", std::move(restrictedRings), kRestrictedRing, 3.0);
-  e.Fills("halos", std::move(halos), kHalo);
   e.Lines("glider_lines", std::move(gliderLines), kGliderLines, 1.0);
   e.Lines("wing_green", std::move(wingGreen), kWingGreen, 4.5);
   e.Lines("wing_blue", std::move(wingBlue), kWingBlue, 4.5);
@@ -452,11 +473,11 @@ void FlightLayer::DrawObstacles()
     });
   }
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
-  e.Lines("obstacle_lines", std::move(lines), kObstacle, 7.0);
+  e.Lines("obstacle_lines", std::move(lines), kObstacle, 4.5);
   if (!points.empty())
   {
     df::DrapeApiLineData data(points, kObstacle);
-    data.PointsOnly().Width(static_cast<float>(4.0 * m_visualScale));
+    data.PointsOnly().Width(static_cast<float>(3.0 * m_visualScale));
     Add("flight_obstacle_points", data);
   }
 }
