@@ -27,35 +27,40 @@ double Azimuth(m2::PointD const & from, m2::PointD const & to)
   return deg < 0 ? deg + 360 : deg;
 }
 
-UNIT_TEST(FlightLayer_SectorsJoinNeighbouringDirections)
+UNIT_TEST(FlightLayer_NeighbouringSectorsTouch)
 {
   m2::PointD const center(10, 10);
   TEST(FlightLayer::MakeSectors(center, 0, 1.0).empty(), ());
 
-  // NNW, N and NNE make one wedge across north from 326.25 to 33.75 degrees, S another one.
-  auto const sectors = FlightLayer::MakeSectors(center, (1 << 15) | (1 << 0) | (1 << 1) | (1 << 8), 1.0);
-  TEST_EQUAL(sectors.size(), 2, ());
-  for (auto const & ring : sectors)
+  // SE, S and SW of 8 winds are 45 degrees each and touch: 112.5 to 247.5 degrees.
+  auto const eight = FlightLayer::MakeSectors(center, (1 << 6) | (1 << 8) | (1 << 10), 1.0);
+  TEST_EQUAL(eight.size(), 3, ());
+  for (auto const & ring : eight)
   {
     TEST_EQUAL(ring.front(), center, ());
     TEST_EQUAL(ring.back(), center, ());
   }
-  auto const & north = sectors[0].size() > sectors[1].size() ? sectors[0] : sectors[1];
-  auto const & south = sectors[0].size() > sectors[1].size() ? sectors[1] : sectors[0];
-  TEST_ALMOST_EQUAL_ABS(Azimuth(center, north[1]), 326.25, 1e-6, ());
-  TEST_ALMOST_EQUAL_ABS(Azimuth(center, north[north.size() - 2]), 33.75, 1e-6, ());
-  TEST_ALMOST_EQUAL_ABS(Azimuth(center, south[1]), 168.75, 1e-6, ());
-  TEST_ALMOST_EQUAL_ABS(Azimuth(center, south[south.size() - 2]), 191.25, 1e-6, ());
-  TEST_ALMOST_EQUAL_ABS(north[1].Length(center), 1.0, 1e-9, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, eight[0][1]), 112.5, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, eight[0][eight[0].size() - 2]), 157.5, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, eight[1][1]), 157.5, 1e-6, ("touches SE"));
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, eight[2][eight[2].size() - 2]), 247.5, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(eight[0][1].Length(center), 1.0, 1e-9, ());
 
-  TEST_EQUAL(FlightLayer::MakeSectors(center, 0xFFFF, 1.0).size(), 2, ("all directions in two halves"));
+  // With a direction of 16 winds, like NNW, each is 22.5 degrees: N from 348.75 to 11.25.
+  auto const sixteen = FlightLayer::MakeSectors(center, (1 << 15) | (1 << 0), 1.0);
+  TEST_EQUAL(sixteen.size(), 2, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, sixteen[0][1]), 348.75, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, sixteen[0][sixteen[0].size() - 2]), 11.25, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, sixteen[1][sixteen[1].size() - 2]), 348.75, 1e-6, ("touches N"));
 
-  // Between the radii, like the wreath around a takeoff: SW alone, from 213.75 to 236.25 degrees.
+  TEST_EQUAL(FlightLayer::MakeSectors(center, 0xFFFF, 1.0).size(), 16, ());
+
+  // Between the radii, like the wreath around a takeoff: SW of 8 winds, from 202.5 to 247.5 degrees.
   auto const wreath = FlightLayer::MakeSectors(center, 1 << 10, 2.0, 1.0);
   TEST_EQUAL(wreath.size(), 1, ());
   auto const & piece = wreath.front();
   TEST_EQUAL(piece.front(), piece.back(), ("closed"));
-  TEST_ALMOST_EQUAL_ABS(Azimuth(center, piece.front()), 213.75, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, piece.front()), 202.5, 1e-6, ());
   TEST_ALMOST_EQUAL_ABS(piece.front().Length(center), 2.0, 1e-9, ());
   TEST_ALMOST_EQUAL_ABS(piece[piece.size() / 2].Length(center), 1.0, 1e-9, ("the inner arc back"));
   for (auto const & p : piece)

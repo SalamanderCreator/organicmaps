@@ -24,7 +24,8 @@ dp::Color const kDisc(255, 255, 255, 215);
 dp::Color const kRing(29, 39, 51, 255);
 dp::Color const kRestrictedRing(217, 130, 43, 255);
 dp::Color const kSector(40, 170, 70, 235);
-dp::Color const kSectorOutline(20, 90, 35, 255);
+// A thin light line between neighbouring directions.
+dp::Color const kSectorOutline(235, 250, 235, 255);
 dp::Color const kWingGreen(40, 170, 70, 255);
 dp::Color const kWingBlue(30, 110, 220, 255);
 dp::Color const kWingBlack(25, 25, 30, 255);
@@ -169,42 +170,30 @@ std::vector<std::vector<m2::PointD>> FlightLayer::MakeSectors(m2::PointD const &
   if (directions == 0)
     return rings;
 
-  // Runs of neighbouring directions; all 16 are split in two halves to keep each ring simple.
-  std::vector<std::pair<int, int>> runs;
-  if (directions == 0xFFFF)
-  {
-    runs = {{0, 8}, {8, 8}};
-  }
-  else
-  {
-    for (int first = 0; first < 16; ++first)
-    {
-      if ((directions & (1 << first)) == 0 || (directions & (1 << ((first + 15) % 16))) != 0)
-        continue;
-      int count = 0;
-      while (count < 16 && (directions & (1 << ((first + count) % 16))) != 0)
-        ++count;
-      runs.emplace_back(first, count);
-    }
-  }
+  // Directions of 8 winds (only even bits, like ParaglidingEarth) are 45 degrees wide, of 16 winds (like
+  // the DHV) 22.5 degrees, so that neighbouring directions always touch.
+  bool const sixteenWinds = (directions & 0xAAAA) != 0;
+  double const halfWidth = sixteenWinds ? 11.25 : 22.5;
+  int constexpr kSteps = 6;
 
   auto const at = [&center](double azimuthDeg, double r)
   {
     double const a = math::DegToRad(azimuthDeg);
     return m2::PointD(center.x + r * std::sin(a), center.y + r * std::cos(a));
   };
-  for (auto const & [first, count] : runs)
+  for (int i = 0; i < 16; ++i)
   {
-    double const from = first * 22.5 - 11.25;
-    double const to = from + 22.5 * count;
-    int const steps = count * 4;
+    if ((directions & (1 << i)) == 0)
+      continue;
+    double const from = i * 22.5 - halfWidth;
+    double const to = i * 22.5 + halfWidth;
     std::vector<m2::PointD> ring;
-    for (int i = 0; i <= steps; ++i)
-      ring.push_back(at(from + (to - from) * i / steps, radius));
+    for (int k = 0; k <= kSteps; ++k)
+      ring.push_back(at(from + (to - from) * k / kSteps, radius));
     if (innerRadius > 0)
     {
-      for (int i = steps; i >= 0; --i)
-        ring.push_back(at(from + (to - from) * i / steps, innerRadius));
+      for (int k = kSteps; k >= 0; --k)
+        ring.push_back(at(from + (to - from) * k / kSteps, innerRadius));
     }
     else
     {
