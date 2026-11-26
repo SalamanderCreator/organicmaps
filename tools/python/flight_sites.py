@@ -6,13 +6,18 @@ merges the same sites of both and writes one JSON file that is packed into the A
 be reached is left out, so the build still gets the other one. DHV data is never read here: its terms
 forbid passing it on, so it is only imported privately on the phone.
 
-Usage: flight_sites.py OUTPUT.json [--bbox SOUTH,WEST,NORTH,EAST]
+OpenStreetMap is read in tiles. With --previous, a source or tile that does not answer keeps the sites of the
+previous file, so that a busy server does not empty the map.
+
+Usage: flight_sites.py OUTPUT.json [--previous OLD.json] [--bbox SOUTH,WEST,NORTH,EAST]
 """
 
 import argparse
 import json
 import math
+import os
 import re
+import socket
 import sys
 import time
 import urllib.parse
@@ -31,7 +36,9 @@ OVERPASS_URLS = [
     "https://overpass.private.coffee/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
 ]
-OVERPASS_QUERY = '[out:json][timeout:600];nwr["free_flying:site"]({s},{w},{n},{e});out tags geom;'
+OSM_TILE_DEG = 10
+OSM_SECONDS = 1100
+OVERPASS_QUERY = '[out:json][timeout:170];nwr["free_flying:site"]({s},{w},{n},{e});out tags geom;'
 OSM_URL = "https://www.openstreetmap.org/"
 USER_AGENT = "Maps&Fly flight sites builder (github.com/SalamanderCreator/organicmaps)"
 
@@ -50,11 +57,21 @@ SECTOR_NAMES = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "S
 SAME_SITE_M = 200
 
 
+def ipv4_only():
+    # GitHub runners have no IPv6 route, and Python does not always fall back to IPv4.
+    original = socket.getaddrinfo
+
+    def getaddrinfo(host, port, family=0, *args, **kwargs):
+        return original(host, port, socket.AF_INET, *args, **kwargs)
+
+    socket.getaddrinfo = getaddrinfo
+
+
 def log(*args):
     print("flight_sites:", *args, file=sys.stderr)
 
 
-def download(url, data=None, timeout=900):
+def download(url, data=None, timeout=240):
     request = urllib.request.Request(url, data=data, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return response.read().decode("utf-8")
@@ -280,7 +297,7 @@ def load_pge(bbox):
                 w = w0
                 while w < e0:
                     url = host + PGE_PATH.format(s=s, w=w, n=min(s + PGE_TILE_DEG, n0), e=min(w + PGE_TILE_DEG, e0))
-                    for x in parse_pge(download(url, timeout=120)):
+                    for x in parse_pge(download(url, timeout=45)):
                         sites[x["id"]] = x
                     w += PGE_TILE_DEG
                 s += PGE_TILE_DEG
@@ -291,34 +308,78 @@ def load_pge(bbox):
     return None
 
 
-def load_osm(bbox):
-    s, w, n, e = bbox
+def tiles(bbox, size):
+    s0, w0, n0, e0 = bbox
+    s = s0
+    while s < n0:
+        w = w0
+        while w < e0:
+            yield (s, w, min(s + size, n0), min(w + size, e0))
+            w += size
+        s += size
+
+
+def in_tile(site, tile):
+    s, w, n, e = tile
+    return s <= site["lat"] < n and w <= site["lon"] < e
+
+
+def load_osm_tile(tile):
+    s, w, n, e = tile
     data = urllib.parse.urlencode({"data": OVERPASS_QUERY.format(s=s, w=w, n=n, e=e)}).encode()
     for url in OVERPASS_URLS:
-        for attempt in range(2):
-            try:
-                sites = parse_overpass(download(url, data))
-                log("OpenStreetMap:", len(sites), "sites from", url)
-                return sites
-            except Exception as ex:
-                log("Overpass not usable at", url, "-", ex)
-                time.sleep(10)
+        try:
+            return parse_overpass(download(url, data, timeout=180))
+        except Exception as ex:
+            log("Overpass not usable at", url, "for", tile, "-", ex)
+            time.sleep(3)
     return None
+
+
+def load_osm(bbox, previous):
+    """The sites of each tile, from the previous file for a tile no server answers. None if nothing answered."""
+    sites, fresh = [], 0
+    # Stops asking well before the build's time limit; the remaining tiles come from the previous file.
+    deadline = time.monotonic() + OSM_SECONDS
+    for tile in tiles(bbox, OSM_TILE_DEG):
+        found = load_osm_tile(tile) if time.monotonic() < deadline else None
+        if found is None:
+            old = [x for x in previous if x["id"].startswith("osm:") and in_tile(x, tile)]
+            log("OpenStreetMap: tile", tile, "kept from the previous file:", len(old), "sites")
+            sites += old
+        else:
+            fresh += 1
+            sites += found
+    log("OpenStreetMap:", len(sites), "sites,", fresh, "tiles fresh")
+    return sites if fresh else None
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("output")
+    parser.add_argument("--previous")
     parser.add_argument("--bbox", default=",".join(str(v) for v in DEFAULT_BBOX))
     args = parser.parse_args()
     bbox = tuple(float(v) for v in args.bbox.split(","))
+    ipv4_only()
+
+    previous = []
+    if args.previous and os.path.exists(args.previous):
+        with open(args.previous, encoding="utf-8") as f:
+            previous = json.load(f).get("sites", [])
+        log(len(previous), "sites in the previous file")
 
     pge = load_pge(bbox)
-    osm = load_osm(bbox)
+    osm = load_osm(bbox, previous)
     if pge is None and osm is None:
         log("no source could be reached, no file written")
         return 1
-    sites = merge(pge or [], osm or [])
+    if pge is None:
+        pge = [x for x in previous if x["id"].startswith("pge:")]
+        log("ParaglidingEarth: kept", len(pge), "sites from the previous file")
+    if osm is None:
+        osm = [x for x in previous if x["id"].startswith("osm:")]
+    sites = merge(pge, osm)
     out = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
            "sources": {"pge": pge is not None, "osm": osm is not None}, "sites": sites}
     with open(args.output, "w", encoding="utf-8") as f:

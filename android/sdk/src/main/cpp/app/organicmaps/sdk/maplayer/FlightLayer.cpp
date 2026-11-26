@@ -5,7 +5,6 @@
 
 #include "geometry/mercator.hpp"
 
-#include <cmath>
 #include <string>
 #include <vector>
 
@@ -28,8 +27,9 @@ JNIEXPORT jdouble Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeGet
                                                                                                jdouble lat,
                                                                                                jdouble lon)
 {
+  // No NaN: the app is built with fast math, which assumes there is none.
   auto const elevation = frm()->GetTerrainElevation(mercator::FromLatLon(lat, lon));
-  return elevation ? *elevation : NAN;
+  return elevation ? *elevation : -1e6;
 }
 
 // "kind\tname\tdistance\tlat\tlon" of the nearest aerial lift station ("cablecar") and parking ("parking").

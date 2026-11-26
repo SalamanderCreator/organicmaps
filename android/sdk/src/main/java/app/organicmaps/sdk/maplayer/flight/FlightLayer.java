@@ -195,7 +195,8 @@ public final class FlightLayer
     if (site.hasAltitude())
       return;
     final double elevation = nativeGetTerrainElevation(site.mLat, site.mLon);
-    if (Double.isNaN(elevation))
+    // Below any terrain: none there.
+    if (elevation < -20000)
       return;
     site.mAltitude = (int) Math.round(elevation);
     site.mAltitudeFromTerrain = true;
