@@ -38,7 +38,8 @@ dp::Color const kLabel(70, 70, 70, 255);
 // Turquoise: bluer than the green of meadows and parks, greener than the blue of lakes.
 dp::Color const kAreaOutline(0, 165, 155, 255);
 dp::Color const kAreaFill(0, 190, 175, 80);
-dp::Color const kObstacle(220, 20, 20, 220);
+// Translucent, so that the map still shows the kind of line and its name below.
+dp::Color const kObstacle(225, 20, 20, 150);
 
 // Keeps the geometry small on a crowded screen.
 size_t constexpr kMaxSymbols = 600;

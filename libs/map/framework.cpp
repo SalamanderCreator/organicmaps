@@ -2364,11 +2364,17 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
   int constexpr kScale = scales::GetUpperScale();
   m_featuresFetcher.ForEachFeature(rect, [&](FeatureType & ft)
   {
+    // Only the lines themselves, not e.g. the stations of an aerial lift, and wind turbines as points.
+    auto const geomType = ft.GetGeomType();
     bool isObstacle = false;
     ft.ForEachType([&](uint32_t type)
     {
-      if (ftype::Trunc(type, 1) == kAerialway || ftype::Trunc(type, 3) == kWindTurbine ||
-          base::IsExist(kLevel2, ftype::Trunc(type, 2)))
+      if (geomType == feature::GeomType::Line &&
+          (ftype::Trunc(type, 1) == kAerialway || base::IsExist(kLevel2, ftype::Trunc(type, 2))))
+      {
+        isObstacle = true;
+      }
+      else if (geomType == feature::GeomType::Point && ftype::Trunc(type, 3) == kWindTurbine)
       {
         isObstacle = true;
       }
@@ -2377,12 +2383,10 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
       return;
 
     FlightLayer::Obstacle obstacle;
-    if (ft.GetGeomType() == feature::GeomType::Line)
+    if (geomType == feature::GeomType::Line)
       ft.ForEachPoint([&obstacle](m2::PointD const & p) { obstacle.m_points.push_back(p); }, kScale);
-    else if (ft.GetGeomType() == feature::GeomType::Point)
-      obstacle.m_points.push_back(feature::GetCenter(ft, kScale));
     else
-      return;
+      obstacle.m_points.push_back(feature::GetCenter(ft, kScale));
     fn(std::move(obstacle));
   }, kScale);
 }
