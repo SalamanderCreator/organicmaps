@@ -1026,6 +1026,8 @@
     <string name="flight_site_source">Quelle: %s</string>
     <!-- Maps&Fly flight layer: height of the site above sea level -->
     <string name="flight_site_altitude">Höhe: %s</string>
+    <!-- Maps&Fly flight layer: height of the site above sea level, taken from the terrain of the map -->
+    <string name="flight_site_altitude_terrain">Höhe: %s (aus der Karte)</string>
     <!-- Maps&Fly flight layer: wind directions the takeoff works for, e.g. NW, W -->
     <string name="flight_site_directions">Startrichtungen: %s</string>
     <!-- Maps&Fly flight layer: the takeoff has no known directions -->
