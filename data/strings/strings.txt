@@ -46028,6 +46028,174 @@ tags = android-app
 en = Share as GPX
 de = Als GPX teilen
 
+[button_layer_flight]
+comment = Maps&Fly map layer: paragliding takeoffs and landings with weather and obstacles
+tags = android-app
+en = Flight prep
+de = Flugvorbereitung
+
+[flight_site_takeoff]
+comment = Maps&Fly flight layer: a paragliding takeoff site
+tags = android-app
+en = Takeoff
+de = Startplatz
+
+[flight_site_landing]
+comment = Maps&Fly flight layer: a paragliding landing site
+tags = android-app
+en = Landing
+de = Landeplatz
+
+[flight_site_source]
+comment = Maps&Fly flight layer: where the site comes from, e.g. ParaglidingEarth, OpenStreetMap
+tags = android-app
+en = Source: %s
+de = Quelle: %s
+
+[flight_site_altitude]
+comment = Maps&Fly flight layer: height of the site above sea level
+tags = android-app
+en = Altitude: %s
+de = Höhe: %s
+
+[flight_site_altitude_terrain]
+comment = Maps&Fly flight layer: height of the site above sea level, taken from the terrain of the map
+tags = android-app
+en = Altitude: %s (from the map)
+de = Höhe: %s (aus der Karte)
+
+[flight_site_directions]
+comment = Maps&Fly flight layer: wind directions the takeoff works for, e.g. NW, W
+tags = android-app
+en = Takeoff directions: %s
+de = Startrichtungen: %s
+
+[flight_site_directions_unknown]
+comment = Maps&Fly flight layer: the takeoff has no known directions
+tags = android-app
+en = Takeoff directions unknown
+de = Startrichtungen unbekannt
+
+[flight_site_area_known]
+comment = Maps&Fly flight layer: the landing area is shown in green on the map
+tags = android-app
+en = Landing area shown in green on the map
+de = Landefläche grün auf der Karte
+
+[flight_site_restricted]
+comment = Maps&Fly flight site: the site has rules for club members only
+tags = android-app
+en = Rules for club members
+de = Regeln für Vereinsmitglieder
+
+[flight_site_landings]
+comment = Maps&Fly flight site: title of the landings of a takeoff
+tags = android-app
+en = Landings
+de = Landeplätze
+
+[flight_site_takeoffs]
+comment = Maps&Fly flight site: title of the takeoffs a landing belongs to
+tags = android-app
+en = Belongs to
+de = Gehört zu
+
+[flight_site_rules]
+comment = Maps&Fly flight site: title of the flight rules
+tags = android-app
+en = Rules
+de = Regeln
+
+[flight_site_access]
+comment = Maps&Fly flight site: title of how to get to the site
+tags = android-app
+en = Access
+de = Zugang
+
+[flight_site_description]
+comment = Maps&Fly flight site: title of the description
+tags = android-app
+en = Description
+de = Beschreibung
+
+[flight_site_comments]
+comment = Maps&Fly flight site: title of further notes
+tags = android-app
+en = Notes
+de = Hinweise
+
+[flight_site_nearby]
+comment = Maps&Fly flight site: title of the aerial lift and parking found in the maps
+tags = android-app
+en = Nearby (from the map)
+de = In der Nähe (aus der Karte)
+
+[flight_site_cable_car]
+comment = Maps&Fly flight site: nearest aerial lift station, name and distance
+tags = android-app
+en = Cable car: %1$s · %2$s
+de = Bergbahn: %1$s · %2$s
+
+[flight_site_parking]
+comment = Maps&Fly flight site: nearest parking, name and distance
+tags = android-app
+en = Parking: %1$s · %2$s
+de = Parkplatz: %1$s · %2$s
+
+[flight_site_unnamed]
+comment = Maps&Fly flight site: a site or place without a name
+tags = android-app
+en = no name
+de = ohne Namen
+
+[flight_site_link_pge]
+comment = Maps&Fly flight site: open the page of the site at ParaglidingEarth
+tags = android-app
+en = Open at ParaglidingEarth
+de = Bei ParaglidingEarth öffnen
+
+[flight_site_link_osm]
+comment = Maps&Fly flight site: open the site at OpenStreetMap
+tags = android-app
+en = Open at OpenStreetMap
+de = Bei OpenStreetMap öffnen
+
+[flight_site_link_web]
+comment = Maps&Fly flight site: open the website of the site
+tags = android-app
+en = Open the website
+de = Webseite öffnen
+
+[flight_site_weather]
+comment = Maps&Fly flight site: button that opens the weather of a takeoff
+tags = android-app
+en = Weather
+de = Wetter
+
+[flight_weather_title]
+comment = Maps&Fly flight weather: title of the window, the name of the takeoff
+tags = android-app
+en = Weather: %s
+de = Wetter: %s
+
+[flight_weather_offline]
+comment = Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time
+tags = android-app
+en = Offline: forecast of %s
+de = Offline: Vorhersage vom %s
+
+[flight_attribution_pge]
+comment = Maps&Fly flight layer: credit of ParaglidingEarth
+tags = android-app
+en = Sites: paragliding.earth (CC BY-SA).
+de = Plätze: paragliding.earth (CC BY-SA).
+
+[flight_attribution_osm]
+comment = Maps&Fly flight layer: credit of OpenStreetMap
+tags = android-app
+en = © OpenStreetMap contributors.
+de = © OpenStreetMap-Mitwirkende.
+
 [routing_save_route_error]
 comment = Toast shown when saving a planned route as a bookmark track fails
 tags = android-app,apple-maps

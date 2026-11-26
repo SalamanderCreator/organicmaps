@@ -74,6 +74,7 @@
 #include "std/target_os.hpp"
 
 #include <algorithm>
+#include <array>
 
 using namespace location;
 using namespace routing;
@@ -218,6 +219,7 @@ namespace
 {
 std::string_view constexpr kDistanceCirclesKey = "DistanceCircles";
 std::string_view constexpr kDistanceLineKey = "DistanceLine";
+std::string_view constexpr kFlightLayerKey = "FlightLayer";
 }  // namespace
 
 void Framework::OnLocationError(TLocationError /*error*/)
@@ -360,6 +362,7 @@ void Framework::OnViewportChanged(ScreenBase const & screen)
   m_isolinesManager.UpdateViewport(m_currentModelView);
   UpdateIsolinesAvailability();
   m_distanceOverlay.SetViewport(m_currentModelView);
+  m_flightLayer.SetViewport(m_currentModelView);
 
   if (m_viewportChangedFn != nullptr)
     m_viewportChangedFn(screen);
@@ -496,6 +499,11 @@ Framework::Framework(FrameworkParams const & params, bool loadMaps)
     enabled = false;
     settings::TryGet(kDistanceLineKey, enabled);
     m_distanceOverlay.SetLineEnabled(enabled);
+    enabled = false;
+    settings::TryGet(kFlightLayerKey, enabled);
+    m_flightLayer.SetForEachObstacleFn([this](m2::RectD const & rect, auto const & fn)
+    { ForEachFlightObstacle(rect, fn); });
+    m_flightLayer.SetEnabled(enabled);
   }
 
   InitTransliteration();
@@ -2150,6 +2158,7 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
 
   GetBookmarkManager().SetDrapeEngine(make_ref(m_drapeEngine));
   m_drapeApi.SetDrapeEngine(make_ref(m_drapeEngine));
+  m_flightLayer.SetVisualScale(params.m_visualScale);
   m_routingManager.SetDrapeEngine(make_ref(m_drapeEngine), allow3d);
   m_trafficManager.SetDrapeEngine(make_ref(m_drapeEngine));
   m_transitManager.SetDrapeEngine(make_ref(m_drapeEngine));
@@ -2332,6 +2341,96 @@ void Framework::SetDistanceLineEnabled(bool enabled)
 {
   settings::Set(kDistanceLineKey, enabled);
   m_distanceOverlay.SetLineEnabled(enabled);
+}
+
+void Framework::SetFlightLayerEnabled(bool enabled)
+{
+  settings::Set(kFlightLayerKey, enabled);
+  m_flightLayer.SetEnabled(enabled);
+}
+
+void Framework::ForEachFlightObstacle(m2::RectD const & rect,
+                                      std::function<void(FlightLayer::Obstacle &&)> const & fn) const
+{
+  auto const & c = classif();
+  // Lines and points a paraglider can hit or must not land on: power lines, all kinds of aerial lifts,
+  // motorways and wind turbines.
+  static uint32_t const kAerialway = c.GetTypeByPath({"aerialway"});
+  static std::array<uint32_t, 3> const kLevel2 = {c.GetTypeByPathSafe({"power", "line"}),
+                                                  c.GetTypeByPathSafe({"power", "minor_line"}),
+                                                  c.GetTypeByPathSafe({"highway", "motorway"})};
+  static uint32_t const kWindTurbine = c.GetTypeByPathSafe({"power", "generator", "wind"});
+
+  int constexpr kScale = scales::GetUpperScale();
+  m_featuresFetcher.ForEachFeature(rect, [&](FeatureType & ft)
+  {
+    // Only the lines themselves, not e.g. the stations of an aerial lift, and wind turbines as points.
+    auto const geomType = ft.GetGeomType();
+    std::optional<FlightLayer::Obstacle::Kind> kind;
+    ft.ForEachType([&](uint32_t type)
+    {
+      using Kind = FlightLayer::Obstacle::Kind;
+      if (geomType == feature::GeomType::Line)
+      {
+        if (ftype::Trunc(type, 1) == kAerialway)
+          kind = Kind::AerialLift;
+        else if (ftype::Trunc(type, 2) == kLevel2[2])
+          kind = Kind::Motorway;
+        else if (base::IsExist(kLevel2, ftype::Trunc(type, 2)))
+          kind = Kind::PowerLine;
+      }
+      else if (geomType == feature::GeomType::Point && ftype::Trunc(type, 3) == kWindTurbine)
+      {
+        kind = Kind::WindTurbine;
+      }
+    });
+    if (!kind)
+      return;
+
+    FlightLayer::Obstacle obstacle;
+    obstacle.m_kind = *kind;
+    if (geomType == feature::GeomType::Line)
+      ft.ForEachPoint([&obstacle](m2::PointD const & p) { obstacle.m_points.push_back(p); }, kScale);
+    else
+      obstacle.m_points.push_back(feature::GetCenter(ft, kScale));
+    fn(std::move(obstacle));
+  }, kScale);
+}
+
+std::vector<Framework::FlightService> Framework::FindFlightServices(m2::PointD const & point) const
+{
+  auto const & c = classif();
+  static uint32_t const kStation = c.GetTypeByPathSafe({"aerialway", "station"});
+  static uint32_t const kParking = c.GetTypeByPathSafe({"amenity", "parking"});
+  double constexpr kRadiusM = 3000;
+
+  std::array<std::optional<FlightService>, 2> nearest;
+  int constexpr kScale = scales::GetUpperScale();
+  m_featuresFetcher.ForEachFeature(mercator::RectByCenterXYAndSizeInMeters(point, 2 * kRadiusM), [&](FeatureType & ft)
+  {
+    std::optional<FlightService::Kind> kind;
+    ft.ForEachType([&](uint32_t type)
+    {
+      if (ftype::Trunc(type, 2) == kStation)
+        kind = FlightService::Kind::CableCarStation;
+      else if (!kind && ftype::Trunc(type, 2) == kParking)
+        kind = FlightService::Kind::Parking;
+    });
+    if (!kind)
+      return;
+    auto const center = feature::GetCenter(ft, kScale);
+    double const distanceM = mercator::DistanceOnEarth(point, center);
+    auto & best = nearest[static_cast<size_t>(*kind)];
+    if (distanceM > kRadiusM || (best && best->m_distanceM <= distanceM))
+      return;
+    best = FlightService{*kind, std::string(ft.GetReadableName()), center, distanceM};
+  }, kScale);
+
+  std::vector<FlightService> result;
+  for (auto const & service : nearest)
+    if (service)
+      result.push_back(*service);
+  return result;
 }
 
 bool Framework::IsTrackRecordingEnabled() const
@@ -2650,6 +2749,17 @@ void Framework::OnTapEvent(place_page::BuildInfo const & buildInfo)
   {
     SwitchFullScreen();
     return;
+  }
+
+  if (m_flightSiteTapFn)
+  {
+    double const tolerancePx = 20.0 * df::VisualParams::Instance().GetVisualScale();
+    if (auto const siteId = m_flightLayer.HitTest(buildInfo.m_mercator, m_currentModelView, tolerancePx))
+    {
+      DeactivateMapSelection();
+      m_flightSiteTapFn(*siteId);
+      return;
+    }
   }
 
   // Taps on an alternative route's ETA balloon (ROUTE_ALT mark) or on its polyline,

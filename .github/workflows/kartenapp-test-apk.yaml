@@ -65,6 +65,37 @@ jobs:
           key: ${{ github.workflow }}
           save: ${{ github.ref == 'refs/heads/master' }}
 
+      # Maps&Fly: the flight sites of the last build, used when no source answers this time.
+      - name: Restore the flight sites file
+        uses: actions/cache/restore@v4
+        with:
+          path: android/app/src/main/assets/flight_sites.json
+          key: flight-sites-${{ github.run_id }}
+          restore-keys: flight-sites-
+
+      - name: Build the flight sites file
+        id: flight_sites
+        shell: bash
+        # ParaglidingEarth and OpenStreetMap paragliding sites for the APK. An unreachable source is left out;
+        # without any the last file stays, or the APK has only its test sites.
+        run: |
+          if timeout 1500 python3 tools/python/flight_sites.py /tmp/flight_sites.json \
+              --previous android/app/src/main/assets/flight_sites.json; then
+            cp /tmp/flight_sites.json android/app/src/main/assets/flight_sites.json
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          elif [ -f android/app/src/main/assets/flight_sites.json ]; then
+            echo "::warning::No source answered, the APK keeps the flight sites of an earlier build."
+          else
+            echo "::warning::No flight sites file, the APK shows only the test sites."
+          fi
+
+      - name: Save the flight sites file
+        if: steps.flight_sites.outputs.fresh == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: android/app/src/main/assets/flight_sites.json
+          key: flight-sites-${{ github.run_id }}
+
       - name: Compile
         shell: bash
         working-directory: android

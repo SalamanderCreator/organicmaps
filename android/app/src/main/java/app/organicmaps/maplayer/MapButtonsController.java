@@ -29,6 +29,7 @@ import app.organicmaps.sdk.downloader.MapManager;
 import app.organicmaps.sdk.downloader.UpdateInfo;
 import app.organicmaps.sdk.location.TrackRecorder;
 import app.organicmaps.sdk.maplayer.isolines.IsolinesManager;
+import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.maplayer.radar.RainRadar;
 import app.organicmaps.sdk.maplayer.subway.SubwayManager;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
@@ -334,7 +335,8 @@ public class MapButtonsController extends Fragment
                                 || SubwayManager.isEnabled() || Framework.nativeIsOutdoorsLayerEnabled()
                                 || Framework.nativeIsHikingLayerEnabled() || Framework.nativeIsCyclingLayerEnabled()
                                 || Framework.nativeIsBackgroundTilesEnabled()
-                                || RainRadar.isEnabled(mToggleMapLayerButton.getContext());
+                                || RainRadar.isEnabled(mToggleMapLayerButton.getContext())
+                                || FlightLayer.isEnabled();
     mToggleMapLayerButton.setHasActiveLayers(buttonSelected);
   }
 
