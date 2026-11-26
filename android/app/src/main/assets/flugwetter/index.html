@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- Maps&Fly: copy of flugwetter/index.html (SalamanderCreator) for the weather of a takeoff in the app. Changes:
-     the Markbachjoch defaults with DHV data and the link to karte.html are removed. -->
+     the Markbachjoch defaults with DHV data and the link to karte.html are removed, all days fit in one row,
+     and an unknown height or direction is written out. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -17,10 +18,10 @@
   .btn { border:1px solid var(--line); background:#fafafa; border-radius:16px; padding:5px 11px; font:inherit; font-size:14px; color:var(--ink); text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
   .btn:hover { background:#f0f0f2; }
   .btn.info { width:30px; height:30px; padding:0; justify-content:center; font-weight:700; font-style:italic; font-family:Georgia, serif; }
-  nav#days { display:flex; gap:6px; padding:0 12px 6px; flex-wrap:wrap; align-items:center; }
-  nav#days button { border:1px solid var(--line); background:#fff; border-radius:18px; padding:6px 12px; font:inherit; font-size:14px; cursor:pointer; }
+  nav#days { display:flex; gap:3px; padding:0 6px 6px; flex-wrap:wrap; align-items:center; }
+  nav#days button { flex:1 1 0; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:clip; border:1px solid var(--line); background:#fff; border-radius:14px; padding:5px 2px; font:inherit; font-size:12px; cursor:pointer; }
   nav#days button.on { background:#0b2e59; color:#fff; border-color:#0b2e59; }
-  #runinfo { color:var(--muted); font-size:13px; margin-left:6px; }
+  #runinfo { color:var(--muted); font-size:12px; margin-left:6px; flex-basis:100%; }
   #status { padding:4px 12px; color:var(--muted); font-size:14px; }
   #status.err { color:#b00020; }
   #chartWrap { position:relative; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
@@ -762,7 +763,7 @@ const navUrl = (lat, lon) => `https://www.google.com/maps/dir/?api=1&destination
 
 function setupHeader() {
   $("siteName").textContent = SITE.name;
-  $("siteMeta").textContent = `${SITE.alt} m${SITE.dir ? " · Startrichtung " + SITE.dir : ""} · ${SITE.lat.toFixed(4)}, ${SITE.lon.toFixed(4)}`;
+  $("siteMeta").textContent = `${SITE.alt ? SITE.alt + " m" : "Höhe unbekannt"} · ${SITE.dir ? "Startrichtung " + SITE.dir : "Startrichtung unbekannt"}`;
   $("lnkNav").href = navUrl(SITE.lat, SITE.lon);
   if (SITE.dhvUrl) $("lnkDhv").href = SITE.dhvUrl; else $("lnkDhv").style.display = "none";
   if (!SITE.info) $("btnInfo").style.display = "none";
@@ -776,7 +777,7 @@ function setupDays() {
     const [y, m, dd] = d.split("-");
     const wd = new Date(+y, m - 1, +dd).toLocaleDateString("de-DE", { weekday: "short" });
     const b = document.createElement("button");
-    b.textContent = names[i] ? `${names[i]} · ${wd} ${dd}.` : `${wd} ${dd}.${m}.`;
+    b.textContent = names[i] || `${wd} ${+dd}.`;
     b.className = i === CUR ? "on" : "";
     b.onclick = () => { CUR = i; [...nav.querySelectorAll("button")].forEach((x, k) => x.className = k === i ? "on" : ""); render(); };
     nav.appendChild(b);

@@ -13,9 +13,7 @@ import androidx.core.widget.TextViewCompat;
 import app.organicmaps.R;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.maplayer.flight.FlightDirections;
-import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.maplayer.flight.FlightSite;
-import app.organicmaps.sdk.maplayer.flight.FlightSources;
 import app.organicmaps.util.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
@@ -23,9 +21,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Maps&Fly: a tapped takeoff with its height, directions, landings, rules and access, the nearest aerial
- * lift and parking and the links to its sources; or a tapped landing with its description, parking and the
- * takeoffs it belongs to.
+ * Maps&Fly: the information of a takeoff (from its weather window) or of a tapped landing: height,
+ * directions, rules, access, description and the links to its sources.
  */
 public final class FlightSiteSheet
 {
@@ -64,57 +61,10 @@ public final class FlightSiteSheet
       facts.add(context.getString(R.string.flight_site_restricted));
     addText(sections, String.join("\n", facts));
 
-    // The weather of a takeoff in a window over the map.
-    if (!site.mLanding)
-    {
-      final com.google.android.material.button.MaterialButton weather =
-          new com.google.android.material.button.MaterialButton(context);
-      weather.setText(R.string.flight_site_weather);
-      weather.setOnClickListener(v -> FlightWeatherSheet.show(context, site));
-      final LinearLayout.LayoutParams params =
-          new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-      params.topMargin = context.getResources().getDimensionPixelSize(R.dimen.margin_half);
-      sections.addView(weather, params);
-    }
-
-    // The landings of a takeoff or the takeoffs of a landing.
-    final List<FlightSources.Related> related = FlightLayer.getRelated(site);
-    if (!related.isEmpty())
-    {
-      addHeader(sections, site.mLanding ? R.string.flight_site_takeoffs : R.string.flight_site_landings);
-      for (FlightSources.Related r : related)
-      {
-        String text = (r.mSite.mName.isEmpty() ? context.getString(R.string.flight_site_unnamed) : r.mSite.mName)
-                    + " · " + distance(r.mDistanceM);
-        if (r.mSite.hasAltitude())
-          text += " · " + Framework.nativeFormatAltitude(r.mSite.mAltitude);
-        addLink(sections, text, v -> {
-          dialog.dismiss();
-          show(context, r.mSite);
-        });
-      }
-    }
-
     addSection(sections, R.string.flight_site_rules, site.mRules);
     addSection(sections, R.string.flight_site_access, site.mAccess);
     addSection(sections, R.string.flight_site_description, site.mDescription);
     addSection(sections, R.string.flight_site_comments, site.mComments);
-
-    final List<String> nearby = new ArrayList<>();
-    for (FlightLayer.Service service : FlightLayer.findServices(site))
-    {
-      // A landing needs only the parking.
-      if (site.mLanding && service.mCableCar)
-        continue;
-      final String name = service.mName.isEmpty() ? context.getString(R.string.flight_site_unnamed) : service.mName;
-      nearby.add(context.getString(service.mCableCar ? R.string.flight_site_cable_car : R.string.flight_site_parking,
-                                   name, distance(service.mDistanceM)));
-    }
-    if (!nearby.isEmpty())
-    {
-      addHeader(sections, R.string.flight_site_nearby);
-      addText(sections, String.join("\n", nearby));
-    }
 
     if (site.mUrl != null && (site.mSources & FlightSite.SOURCE_PGE) != 0)
       addLink(sections, context.getString(R.string.flight_site_link_pge), v -> Utils.openUrl(context, site.mUrl));
@@ -152,14 +102,6 @@ public final class FlightSiteSheet
     if ((site.mSources & FlightSite.SOURCE_TEST) != 0)
       names.add("Test");
     return String.join(", ", names);
-  }
-
-  @NonNull
-  private static String distance(double meters)
-  {
-    if (meters < 1000)
-      return String.format(Locale.getDefault(), "%d m", Math.round(meters / 10) * 10);
-    return String.format(Locale.getDefault(), "%.1f km", meters / 1000);
   }
 
   private static void addSection(@NonNull LinearLayout parent, @StringRes int title, @Nullable String text)

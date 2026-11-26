@@ -36,17 +36,15 @@ public final class FlightWeatherSheet
 
   private FlightWeatherSheet() {}
 
+  /** |onRoute| builds a route to the site in the app, for the navigation button of the page. */
   @SuppressLint("SetJavaScriptEnabled")
-  public static void show(@NonNull Context context, @NonNull FlightSite site)
+  public static void show(@NonNull Context context, @NonNull FlightSite site, @NonNull Runnable onRoute)
   {
     final BottomSheetDialog dialog = new BottomSheetDialog(context);
     final View view = LayoutInflater.from(context).inflate(R.layout.flight_weather_sheet, null);
     dialog.setContentView(view);
 
-    ((TextView) view.findViewById(R.id.flight_weather_title))
-        .setText(context.getString(R.string.flight_weather_title,
-                                   site.mName.isEmpty() ? context.getString(R.string.flight_site_takeoff)
-                                                        : site.mName));
+    view.findViewById(R.id.flight_weather_info).setOnClickListener(v -> FlightSiteSheet.show(context, site));
     view.findViewById(R.id.flight_weather_close).setOnClickListener(v -> dialog.dismiss());
 
     final TextView offline = view.findViewById(R.id.flight_weather_offline);
@@ -76,15 +74,23 @@ public final class FlightWeatherSheet
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
       {
-        // Links of the page, like the navigation, open outside.
         final Uri uri = request.getUrl();
         if ("file".equals(uri.getScheme()))
           return false;
-        Utils.openUrl(context, uri.toString());
+        // The navigation button of the page builds the route in the app, other links open outside.
+        if (isNavigation(uri))
+        {
+          dialog.dismiss();
+          onRoute.run();
+        }
+        else
+        {
+          Utils.openUrl(context, uri.toString());
+        }
         return true;
       }
     });
-    // Links with target="_blank" open outside too.
+    // Links with target="_blank" load in this WebView and so come to shouldOverrideUrlLoading.
     settings.setSupportMultipleWindows(false);
     web.loadUrl(FlightWeatherCache.pageUrl(site));
 
@@ -95,5 +101,13 @@ public final class FlightWeatherSheet
     behavior.setDraggable(false);
     dialog.setOnDismissListener(d -> web.destroy());
     dialog.show();
+  }
+
+  /** The page links its navigation button to Google Maps directions. */
+  static boolean isNavigation(@NonNull Uri uri)
+  {
+    final String host = uri.getHost();
+    final String path = uri.getPath();
+    return host != null && path != null && host.endsWith("google.com") && path.startsWith("/maps/dir");
   }
 }

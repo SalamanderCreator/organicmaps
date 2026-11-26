@@ -74,6 +74,7 @@ import app.organicmaps.maplayer.LayerSettingsPanel;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
 import app.organicmaps.maplayer.FlightSiteSheet;
+import app.organicmaps.maplayer.FlightWeatherSheet;
 import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
 import app.organicmaps.routing.NavigationController;
@@ -1122,7 +1123,13 @@ public class MwmActivity extends BaseMwmFragmentActivity
     Framework.nativePlacePageActivationListener(this);
     // Maps&Fly: a tapped site of the flight preparation layer opens its own sheet.
     FlightLayer.init(this);
-    FlightLayer.setTapListener(site -> FlightSiteSheet.show(this, site));
+    FlightLayer.setTapListener(site -> {
+      if (site.mLanding)
+        FlightSiteSheet.show(this, site);
+      else
+        FlightWeatherSheet.show(this, site, () -> startLocationToPoint(MapObject.createMapObject(
+                                                  MapObject.API_POINT, site.mName, "", site.mLat, site.mLon)));
+    });
     BookmarkManager.INSTANCE.addLoadingListener(this);
     MwmApplication.from(getApplicationContext()).getIsolinesManager().attach(this::onIsolinesStateChanged);
     updateDrivingOptionCount();

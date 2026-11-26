@@ -30,26 +30,6 @@ public final class FlightLayer
   @Nullable
   private static Consumer<FlightSite> sTapListener;
 
-  /** An aerial lift station or parking near a site, from the maps. */
-  public static final class Service
-  {
-    public final boolean mCableCar;
-    @NonNull
-    public final String mName;
-    public final double mDistanceM;
-    public final double mLat;
-    public final double mLon;
-
-    Service(boolean cableCar, @NonNull String name, double distanceM, double lat, double lon)
-    {
-      mCableCar = cableCar;
-      mName = name;
-      mDistanceM = distanceM;
-      mLat = lat;
-      mLon = lon;
-    }
-  }
-
   private FlightLayer() {}
 
   /** Reads the sites and shows them, once per process. */
@@ -103,33 +83,6 @@ public final class FlightLayer
   public static FlightSite getSite(@NonNull String id)
   {
     return sSites.get(id);
-  }
-
-  /** The landings of a takeoff or the takeoffs of a landing, closest first. */
-  @NonNull
-  @MainThread
-  public static List<FlightSources.Related> getRelated(@NonNull FlightSite site)
-  {
-    final List<FlightSources.Related> related = FlightSources.related(site, sSites);
-    for (FlightSources.Related r : related)
-      fillAltitudeFromTerrain(r.mSite);
-    return related;
-  }
-
-  /** The nearest aerial lift station and parking within 3 km, from the downloaded maps. */
-  @NonNull
-  @MainThread
-  public static List<Service> findServices(@NonNull FlightSite site)
-  {
-    final List<Service> services = new ArrayList<>();
-    for (String item : nativeFindServices(site.mLat, site.mLon))
-    {
-      final String[] f = item.split("\t", -1);
-      if (f.length == 5)
-        services.add(new Service("cablecar".equals(f[0]), f[1], Double.parseDouble(f[2]), Double.parseDouble(f[3]),
-                                 Double.parseDouble(f[4])));
-    }
-    return services;
   }
 
   private static final class NativeListener
@@ -218,8 +171,6 @@ public final class FlightLayer
   private static native void nativeSetEnabled(boolean enabled);
   private static native boolean nativeIsEnabled();
   private static native double nativeGetTerrainElevation(double lat, double lon);
-  @NonNull
-  private static native String[] nativeFindServices(double lat, double lon);
   private static native void nativeSetListener(@NonNull Object listener);
   private static native void nativeSetSites(@NonNull String[] ids, @NonNull String[] names, @NonNull double[] lats,
                                             @NonNull double[] lons, @NonNull boolean[] landings,

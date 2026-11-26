@@ -59,27 +59,11 @@ public class FlightSourcesTest
   }
 
   @Test
-  public void findsTheLandingsOfATakeoffAndBack() throws Exception
-  {
-    final Map<String, FlightSite> sites = byId(FlightSources.parseFile(FILE));
-    final List<FlightSources.Related> landings = FlightSources.related(sites.get("pge:42"), sites);
-    // The linked landing, the one 2 km away, but neither one above the takeoff nor one 55 km away.
-    assertEquals(2, landings.size());
-    assertEquals("pge:42:landing", landings.get(0).mSite.mId);
-    assertEquals("osm:n9", landings.get(1).mSite.mId);
-    assertEquals(2224, landings.get(1).mDistanceM, 5);
-
-    final List<FlightSources.Related> takeoffs = FlightSources.related(sites.get("osm:n9"), sites);
-    assertEquals(1, takeoffs.size());
-    assertEquals("pge:42", takeoffs.get(0).mSite.mId);
-  }
-
-  @Test
   public void testSitesBelongTogether()
   {
     final Map<String, FlightSite> sites = byId(FlightSources.testSites());
     final FlightSite takeoff = sites.get("test:liezen");
     assertEquals(FlightDirections.parse("SW;S;SE"), takeoff.mDirections);
-    assertEquals("test:liezen:landing", FlightSources.related(takeoff, sites).get(0).mSite.mId);
+    assertEquals("test:liezen:landing", takeoff.mLinks[0]);
   }
 }

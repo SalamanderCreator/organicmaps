@@ -3,24 +3,17 @@ package app.organicmaps.sdk.maplayer.flight;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
  * Maps&Fly: reads the flight sites file of the APK, which tools/python/flight_sites.py builds from
- * ParaglidingEarth (CC BY-SA) and OpenStreetMap (ODbL) at build time, and finds the sites that belong
- * together.
+ * ParaglidingEarth (CC BY-SA) and OpenStreetMap (ODbL) at build time.
  */
 public final class FlightSources
 {
   public static final String ASSET = "flight_sites.json";
-  // Landings this close to a takeoff belong to it, and back.
-  static final double NEARBY_M = 8000;
-  static final int MAX_RELATED = 6;
 
   private FlightSources() {}
 
@@ -89,75 +82,5 @@ public final class FlightSources
     sites.add(takeoff);
     sites.add(landing);
     return sites;
-  }
-
-  /** A site with its distance from another one. */
-  public static final class Related
-  {
-    @NonNull
-    public final FlightSite mSite;
-    public final double mDistanceM;
-
-    Related(@NonNull FlightSite site, double distanceM)
-    {
-      mSite = site;
-      mDistanceM = distanceM;
-    }
-  }
-
-  /**
-   * The landings of a takeoff, or the takeoffs of a landing: the ones the source links and the ones
-   * nearby, closest first.
-   */
-  @NonNull
-  static List<Related> related(@NonNull FlightSite site, @NonNull Map<String, FlightSite> sites)
-  {
-    final List<Related> result = new ArrayList<>();
-    for (String id : site.mLinks)
-    {
-      final FlightSite linked = sites.get(id);
-      if (linked != null && linked.mLanding != site.mLanding)
-        result.add(new Related(linked, distanceM(site.mLat, site.mLon, linked.mLat, linked.mLon)));
-    }
-    final List<Related> nearby = new ArrayList<>();
-    for (FlightSite other : sites.values())
-    {
-      if (other.mLanding == site.mLanding || contains(result, other))
-        continue;
-      final double d = distanceM(site.mLat, site.mLon, other.mLat, other.mLon);
-      if (d > NEARBY_M)
-        continue;
-      // A landing lies below its takeoff.
-      final FlightSite takeoff = site.mLanding ? other : site;
-      final FlightSite landing = site.mLanding ? site : other;
-      if (takeoff.hasAltitude() && landing.hasAltitude() && landing.mAltitude >= takeoff.mAltitude)
-        continue;
-      nearby.add(new Related(other, d));
-    }
-    Collections.sort(result, Comparator.comparingDouble(r -> r.mDistanceM));
-    Collections.sort(nearby, Comparator.comparingDouble(r -> r.mDistanceM));
-    for (Related r : nearby)
-    {
-      if (result.size() >= MAX_RELATED)
-        break;
-      result.add(r);
-    }
-    return result;
-  }
-
-  private static boolean contains(@NonNull List<Related> list, @NonNull FlightSite site)
-  {
-    for (Related r : list)
-      if (r.mSite == site)
-        return true;
-    return false;
-  }
-
-  static double distanceM(double lat1, double lon1, double lat2, double lon2)
-  {
-    final double r = 6371000;
-    final double dLat = Math.toRadians(lat2 - lat1);
-    final double dLon = Math.toRadians(lon2 - lon1) * Math.cos(Math.toRadians((lat1 + lat2) / 2));
-    return r * Math.sqrt(dLat * dLat + dLon * dLon);
   }
 }

@@ -46088,18 +46088,6 @@ tags = android-app
 en = Rules for club members
 de = Regeln für Vereinsmitglieder
 
-[flight_site_landings]
-comment = Maps&Fly flight site: title of the landings of a takeoff
-tags = android-app
-en = Landings
-de = Landeplätze
-
-[flight_site_takeoffs]
-comment = Maps&Fly flight site: title of the takeoffs a landing belongs to
-tags = android-app
-en = Belongs to
-de = Gehört zu
-
 [flight_site_rules]
 comment = Maps&Fly flight site: title of the flight rules
 tags = android-app
@@ -46124,30 +46112,6 @@ tags = android-app
 en = Notes
 de = Hinweise
 
-[flight_site_nearby]
-comment = Maps&Fly flight site: title of the aerial lift and parking found in the maps
-tags = android-app
-en = Nearby (from the map)
-de = In der Nähe (aus der Karte)
-
-[flight_site_cable_car]
-comment = Maps&Fly flight site: nearest aerial lift station, name and distance
-tags = android-app
-en = Cable car: %1$s · %2$s
-de = Bergbahn: %1$s · %2$s
-
-[flight_site_parking]
-comment = Maps&Fly flight site: nearest parking, name and distance
-tags = android-app
-en = Parking: %1$s · %2$s
-de = Parkplatz: %1$s · %2$s
-
-[flight_site_unnamed]
-comment = Maps&Fly flight site: a site or place without a name
-tags = android-app
-en = no name
-de = ohne Namen
-
 [flight_site_link_pge]
 comment = Maps&Fly flight site: open the page of the site at ParaglidingEarth
 tags = android-app
@@ -46166,17 +46130,11 @@ tags = android-app
 en = Open the website
 de = Webseite öffnen
 
-[flight_site_weather]
-comment = Maps&Fly flight site: button that opens the weather of a takeoff
+[flight_weather_site_info]
+comment = Maps&Fly flight weather: button that shows the information of the takeoff
 tags = android-app
-en = Weather
-de = Wetter
-
-[flight_weather_title]
-comment = Maps&Fly flight weather: title of the window, the name of the takeoff
-tags = android-app
-en = Weather: %s
-de = Wetter: %s
+en = Information about the takeoff
+de = Infos zum Startplatz
 
 [flight_weather_offline]
 comment = Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time
