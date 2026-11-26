@@ -46166,6 +46166,24 @@ tags = android-app
 en = Open the website
 de = Webseite öffnen
 
+[flight_site_weather]
+comment = Maps&Fly flight site: button that opens the weather of a takeoff
+tags = android-app
+en = Weather
+de = Wetter
+
+[flight_weather_title]
+comment = Maps&Fly flight weather: title of the window, the name of the takeoff
+tags = android-app
+en = Weather: %s
+de = Wetter: %s
+
+[flight_weather_offline]
+comment = Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time
+tags = android-app
+en = Offline: forecast of %s
+de = Offline: Vorhersage vom %s
+
 [flight_attribution_pge]
 comment = Maps&Fly flight layer: credit of ParaglidingEarth
 tags = android-app

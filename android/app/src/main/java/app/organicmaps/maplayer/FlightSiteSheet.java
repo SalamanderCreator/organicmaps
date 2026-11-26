@@ -64,6 +64,19 @@ public final class FlightSiteSheet
       facts.add(context.getString(R.string.flight_site_restricted));
     addText(sections, String.join("\n", facts));
 
+    // The weather of a takeoff in a window over the map.
+    if (!site.mLanding)
+    {
+      final com.google.android.material.button.MaterialButton weather =
+          new com.google.android.material.button.MaterialButton(context);
+      weather.setText(R.string.flight_site_weather);
+      weather.setOnClickListener(v -> FlightWeatherSheet.show(context, site));
+      final LinearLayout.LayoutParams params =
+          new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+      params.topMargin = context.getResources().getDimensionPixelSize(R.dimen.margin_half);
+      sections.addView(weather, params);
+    }
+
     // The landings of a takeoff or the takeoffs of a landing.
     final List<FlightSources.Related> related = FlightLayer.getRelated(site);
     if (!related.isEmpty())
