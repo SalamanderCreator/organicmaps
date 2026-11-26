@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Maps&Fly: a tapped site of the flight preparation layer with its forecast. -->
+<!-- Maps&Fly: a tapped takeoff or landing site. The sections are added by FlightSiteSheet. -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
@@ -27,52 +27,8 @@
       android:layout_marginTop="@dimen/margin_quarter"
       android:textAppearance="@style/MwmTextAppearance.Body3" />
 
-    <TextView
-      android:id="@+id/flight_site_details"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_half"
-      android:textAppearance="@style/MwmTextAppearance.Body2" />
-
-    <TextView
-      android:id="@+id/flight_site_link"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_half"
-      android:background="?selectableItemBackground"
-      android:paddingTop="@dimen/margin_quarter"
-      android:paddingBottom="@dimen/margin_quarter"
-      android:text="@string/flight_site_open_source"
-      android:textAppearance="@style/MwmTextAppearance.Body2"
-      android:textColor="?colorAccent" />
-
-    <TextView
-      android:id="@+id/flight_weather_title"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_base"
-      android:text="@string/flight_weather_title"
-      android:textAppearance="@style/MwmTextAppearance.Body1"
-      android:textStyle="bold" />
-
-    <ProgressBar
-      android:id="@+id/flight_weather_progress"
-      style="?android:attr/progressBarStyleSmall"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_half" />
-
-    <TextView
-      android:id="@+id/flight_weather_status"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_half"
-      android:text="@string/flight_weather_failed"
-      android:textAppearance="@style/MwmTextAppearance.Body3"
-      android:visibility="gone" />
-
     <LinearLayout
-      android:id="@+id/flight_weather_rows"
+      android:id="@+id/flight_site_sections"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical" />

@@ -7,8 +7,6 @@
 
 #include "geometry/mercator.hpp"
 
-#include "base/math.hpp"
-
 #include <cmath>
 
 namespace flight_layer_tests
@@ -23,57 +21,54 @@ ScreenBase MakeScreen(m2::PointD const & center, double sizeM)
   return screen;
 }
 
-UNIT_TEST(FlightLayer_CellKey)
+double Azimuth(m2::PointD const & from, m2::PointD const & to)
 {
-  TEST_EQUAL(FlightLayer::CellKey(47.5, 11.5), (47 + 90) * 360 + (11 + 180), ());
-  TEST_EQUAL(FlightLayer::CellKey(-0.5, -0.5), 89 * 360 + 179, ());
-  TEST_EQUAL(FlightLayer::CellKey(90.0, 180.0), 179 * 360 + 359, ());
+  double const deg = std::atan2(to.x - from.x, to.y - from.y) * 180.0 / M_PI;
+  return deg < 0 ? deg + 360 : deg;
 }
 
-UNIT_TEST(FlightLayer_CellsInRect)
+UNIT_TEST(FlightLayer_SectorsJoinNeighbouringDirections)
 {
-  m2::RectD const rect(mercator::FromLatLon(46.5, 10.5), mercator::FromLatLon(47.5, 11.5));
-  auto const cells = FlightLayer::CellsInRect(rect, 4);
-  TEST_EQUAL(cells.size(), 4, ());
-  TEST_EQUAL(cells.front(), FlightLayer::CellKey(46.5, 10.5), ());
-  TEST_EQUAL(cells.back(), FlightLayer::CellKey(47.5, 11.5), ());
-  TEST(FlightLayer::CellsInRect(rect, 3).empty(), ("too many cells"));
+  m2::PointD const center(10, 10);
+  TEST(FlightLayer::MakeSectors(center, 0, 1.0).empty(), ());
+
+  // NNW, N and NNE make one wedge across north from 326.25 to 33.75 degrees, S another one.
+  auto const sectors = FlightLayer::MakeSectors(center, (1 << 15) | (1 << 0) | (1 << 1) | (1 << 8), 1.0);
+  TEST_EQUAL(sectors.size(), 2, ());
+  for (auto const & ring : sectors)
+  {
+    TEST_EQUAL(ring.front(), center, ());
+    TEST_EQUAL(ring.back(), center, ());
+  }
+  auto const & north = sectors[0].size() > sectors[1].size() ? sectors[0] : sectors[1];
+  auto const & south = sectors[0].size() > sectors[1].size() ? sectors[1] : sectors[0];
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, north[1]), 326.25, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, north[north.size() - 2]), 33.75, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, south[1]), 168.75, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(Azimuth(center, south[south.size() - 2]), 191.25, 1e-6, ());
+  TEST_ALMOST_EQUAL_ABS(north[1].Length(center), 1.0, 1e-9, ());
+
+  TEST_EQUAL(FlightLayer::MakeSectors(center, 0xFFFF, 1.0).size(), 1, ("all directions are a disc"));
 }
 
-UNIT_TEST(FlightLayer_DirectionStar)
+UNIT_TEST(FlightLayer_Circle)
 {
-  auto const center = mercator::FromLatLon(47.0, 11.0);
-  // North (bit 0) and west (bit 12).
-  auto const star = FlightLayer::MakeDirectionStar(center, (1 << 0) | (1 << 12), 100.0);
-  TEST_EQUAL(star.size(), 5, ());
-  TEST_EQUAL(star.front(), center, ());
-  TEST_EQUAL(star.back(), center, ());
-  TEST_ALMOST_EQUAL_ABS(mercator::DistanceOnEarth(center, star[1]), 100.0, 1.0, ());
-  TEST_ALMOST_EQUAL_ABS(star[1].x, center.x, 1e-9, ("north"));
-  TEST_GREATER(star[1].y, center.y, ("north"));
-  TEST_LESS(star[3].x, center.x, ("west"));
-  TEST_ALMOST_EQUAL_ABS(star[3].y, center.y, 1e-9, ("west"));
-  TEST(FlightLayer::MakeDirectionStar(center, 0, 100.0).empty(), ());
+  m2::PointD const center(1, 2);
+  auto const circle = FlightLayer::MakeCircle(center, 0.5, 16);
+  TEST_EQUAL(circle.size(), 17, ());
+  TEST(circle.front().EqualDxDy(circle.back(), 1e-12), ());
+  for (auto const & p : circle)
+    TEST_ALMOST_EQUAL_ABS(p.Length(center), 0.5, 1e-12, ());
 }
 
-UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_RequestsCellsAndHitsSites)
+UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_HitsSitesAlsoWithoutTheLayer)
 {
   df::DrapeApi drapeApi;
   FlightLayer layer(drapeApi);
 
   auto const center = mercator::FromLatLon(47.2, 11.3);
-  std::vector<int> requested;
-  layer.SetCellsRequestFn([&requested](std::vector<int> const & cells)
-  { requested.insert(requested.end(), cells.begin(), cells.end()); });
-  // A 5 km wide screen is at a zoom of more than kLoadZoom.
   auto const screen = MakeScreen(center, 5000.0);
   layer.SetViewport(screen);
-  TEST(requested.empty(), ("disabled"));
-
-  layer.SetEnabled(true);
-  TEST_EQUAL(requested, std::vector<int>{FlightLayer::CellKey(47.2, 11.3)}, ());
-  layer.SetViewport(screen);
-  TEST_EQUAL(requested.size(), 1, ("asked once"));
 
   FlightLayer::Site takeoff;
   takeoff.m_id = "pge:1";
@@ -85,7 +80,7 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_RequestsCellsAndHitsSites)
   auto const areaRect = mercator::RectByCenterXYAndSizeInMeters(landing.m_point, 400.0);
   landing.m_area = {areaRect.LeftBottom(), areaRect.LeftTop(), areaRect.RightTop(), areaRect.RightBottom(),
                     areaRect.LeftBottom()};
-  layer.SetSites(requested.front(), {takeoff, landing});
+  layer.SetSites({takeoff, landing});
 
   // 1000 px for 5 km: 20 px are 100 m.
   TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.2003, 11.3), screen, 20.0), std::optional<std::string>("pge:1"), ());
@@ -93,7 +88,11 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_RequestsCellsAndHitsSites)
              ("inside the area, away from the point"));
   TEST(!layer.HitTest(mercator::FromLatLon(47.21, 11.3), screen, 20.0), ());
 
-  layer.SetEnabled(false);
-  TEST(!layer.HitTest(center, screen, 20.0), ("disabled"));
+  layer.SetEnabled(true);
+  TEST_EQUAL(layer.HitTest(center, screen, 20.0), std::optional<std::string>("pge:1"), ("in the layer"));
+
+  // Zoomed out of the whole of Europe the sites are hidden.
+  auto const far = MakeScreen(center, 5'000'000.0);
+  TEST(!layer.HitTest(center, far, 20.0), ());
 }
 }  // namespace flight_layer_tests

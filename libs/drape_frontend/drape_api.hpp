@@ -65,6 +65,21 @@ struct DrapeApiLineData
     return *this;
   }
 
+  /// More polylines drawn like the line through the points, e.g. the same symbol at many places.
+  DrapeApiLineData & Polylines(std::vector<std::vector<m2::PointD>> lines)
+  {
+    m_polylines = std::move(lines);
+    return *this;
+  }
+
+  /// Rings filled with |color|, e.g. many symbol backgrounds in one entry.
+  DrapeApiLineData & FillRings(std::vector<std::vector<m2::PointD>> rings, dp::Color const & color)
+  {
+    m_fillRings = std::move(rings);
+    m_fillColor = color;
+    return *this;
+  }
+
   /// A text drawn next to the first point, optionally with a white halo.
   DrapeApiLineData & Label(std::string const & label, bool halo = false)
   {
@@ -82,6 +97,8 @@ struct DrapeApiLineData
   std::string m_label;
   bool m_labelHalo = false;
 
+  std::vector<std::vector<m2::PointD>> m_polylines;
+  std::vector<std::vector<m2::PointD>> m_fillRings;
   dp::Color m_fillColor;
   bool m_fill = false;
   bool m_noLine = false;

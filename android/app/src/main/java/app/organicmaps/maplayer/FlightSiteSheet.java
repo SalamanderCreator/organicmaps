@@ -1,41 +1,34 @@
 package app.organicmaps.maplayer;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.view.Gravity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
 import app.organicmaps.R;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.maplayer.flight.FlightDirections;
-import app.organicmaps.sdk.maplayer.flight.FlightRating;
+import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.maplayer.flight.FlightSite;
-import app.organicmaps.sdk.maplayer.flight.FlightWeather;
-import app.organicmaps.util.UiUtils;
+import app.organicmaps.sdk.maplayer.flight.FlightSources;
 import app.organicmaps.util.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * Maps&Fly: name, height, takeoff directions, type and source of a tapped flight site, and its forecast
- * for the next days with a rating of each hour.
+ * Maps&Fly: a tapped takeoff with its height, directions, landings, rules and access, the nearest aerial
+ * lift and parking and the links to its sources; or a tapped landing with its description, parking and the
+ * takeoffs it belongs to.
  */
 public final class FlightSiteSheet
 {
-  // Hours outside are rarely flown.
-  private static final int FIRST_HOUR = 7;
-  private static final int LAST_HOUR = 20;
-
   private FlightSiteSheet() {}
 
   public static void show(@NonNull Context context, @NonNull FlightSite site)
@@ -44,225 +37,164 @@ public final class FlightSiteSheet
     final View view = LayoutInflater.from(context).inflate(R.layout.flight_site_sheet, null);
     dialog.setContentView(view);
 
-    final TextView name = view.findViewById(R.id.flight_site_name);
-    name.setText(site.mName.isEmpty() ? context.getString(site.mLanding ? R.string.flight_site_landing
-                                                                        : R.string.flight_site_takeoff)
-                                      : site.mName);
+    @StringRes
+    final int type = site.mLanding ? R.string.flight_site_landing : R.string.flight_site_takeoff;
+    ((TextView) view.findViewById(R.id.flight_site_name)).setText(site.mName.isEmpty() ? context.getString(type)
+                                                                                       : site.mName);
     ((TextView) view.findViewById(R.id.flight_site_type))
-        .setText(context.getString(site.mLanding ? R.string.flight_site_landing : R.string.flight_site_takeoff) + " · "
-                 + context.getString(R.string.flight_site_source, sources(site.mSources)));
+        .setText(context.getString(type) + " · " + context.getString(R.string.flight_site_source, sources(site)));
 
-    final List<String> details = new ArrayList<>();
+    final LinearLayout sections = view.findViewById(R.id.flight_site_sections);
+    final List<String> facts = new ArrayList<>();
     if (site.hasAltitude())
     {
       final String altitude = Framework.nativeFormatAltitude(site.mAltitude);
-      details.add(site.mAltitudeFromTerrain ? context.getString(R.string.flight_site_altitude_terrain, altitude)
-                                            : context.getString(R.string.flight_site_altitude, altitude));
+      facts.add(site.mAltitudeFromTerrain ? context.getString(R.string.flight_site_altitude_terrain, altitude)
+                                          : context.getString(R.string.flight_site_altitude, altitude));
     }
     if (!site.mLanding)
     {
-      details.add(site.mDirections == 0
-                      ? context.getString(R.string.flight_site_directions_unknown)
-                      : context.getString(R.string.flight_site_directions, FlightDirections.format(site.mDirections)));
+      facts.add(site.mDirections == 0
+                    ? context.getString(R.string.flight_site_directions_unknown)
+                    : context.getString(R.string.flight_site_directions, directions(site.mDirections)));
     }
     if (site.mArea.length > 0)
-      details.add(context.getString(R.string.flight_site_area_known));
-    ((TextView) view.findViewById(R.id.flight_site_details)).setText(String.join("\n", details));
+      facts.add(context.getString(R.string.flight_site_area_known));
+    if (site.mRestricted)
+      facts.add(context.getString(R.string.flight_site_restricted));
+    addText(sections, String.join("\n", facts));
 
-    final TextView link = view.findViewById(R.id.flight_site_link);
-    UiUtils.showIf(site.mUrl != null, link);
-    link.setOnClickListener(v -> Utils.openUrl(context, site.mUrl));
-
-    final StringBuilder attribution = new StringBuilder();
-    if ((site.mSources & FlightSite.SOURCE_PGE) != 0)
-      attribution.append(context.getString(R.string.flight_attribution_pge)).append(" ");
-    if ((site.mSources & FlightSite.SOURCE_OSM) != 0)
-      attribution.append(context.getString(R.string.flight_attribution_osm)).append(" ");
-    attribution.append(context.getString(R.string.flight_weather_attribution));
-    ((TextView) view.findViewById(R.id.flight_attribution)).setText(attribution);
-
-    final View progress = view.findViewById(R.id.flight_weather_progress);
-    final View status = view.findViewById(R.id.flight_weather_status);
-    final LinearLayout rows = view.findViewById(R.id.flight_weather_rows);
-    FlightWeather.load(site, hours -> {
-      if (!dialog.isShowing())
-        return;
-      UiUtils.hide(progress);
-      if (hours == null)
+    // The landings of a takeoff or the takeoffs of a landing.
+    final List<FlightSources.Related> related = FlightLayer.getRelated(site);
+    if (!related.isEmpty())
+    {
+      addHeader(sections, site.mLanding ? R.string.flight_site_takeoffs : R.string.flight_site_landings);
+      for (FlightSources.Related r : related)
       {
-        UiUtils.show(status);
-        return;
+        String text = (r.mSite.mName.isEmpty() ? context.getString(R.string.flight_site_unnamed) : r.mSite.mName)
+                    + " · " + distance(r.mDistanceM);
+        if (r.mSite.hasAltitude())
+          text += " · " + Framework.nativeFormatAltitude(r.mSite.mAltitude);
+        addLink(sections, text, v -> {
+          dialog.dismiss();
+          show(context, r.mSite);
+        });
       }
-      fillRows(context, rows, hours);
-    });
+    }
+
+    addSection(sections, R.string.flight_site_rules, site.mRules);
+    addSection(sections, R.string.flight_site_access, site.mAccess);
+    addSection(sections, R.string.flight_site_description, site.mDescription);
+    addSection(sections, R.string.flight_site_comments, site.mComments);
+
+    final List<String> nearby = new ArrayList<>();
+    for (FlightLayer.Service service : FlightLayer.findServices(site))
+    {
+      // A landing needs only the parking.
+      if (site.mLanding && service.mCableCar)
+        continue;
+      final String name = service.mName.isEmpty() ? context.getString(R.string.flight_site_unnamed) : service.mName;
+      nearby.add(context.getString(service.mCableCar ? R.string.flight_site_cable_car : R.string.flight_site_parking,
+                                   name, distance(service.mDistanceM)));
+    }
+    if (!nearby.isEmpty())
+    {
+      addHeader(sections, R.string.flight_site_nearby);
+      addText(sections, String.join("\n", nearby));
+    }
+
+    if (site.mUrl != null && (site.mSources & FlightSite.SOURCE_PGE) != 0)
+      addLink(sections, context.getString(R.string.flight_site_link_pge), v -> Utils.openUrl(context, site.mUrl));
+    if (site.mOsmUrl != null)
+      addLink(sections, context.getString(R.string.flight_site_link_osm), v -> Utils.openUrl(context, site.mOsmUrl));
+    if (site.mWebsite != null)
+      addLink(sections, context.getString(R.string.flight_site_link_web), v -> Utils.openUrl(context, site.mWebsite));
+
+    final List<String> credits = new ArrayList<>();
+    if ((site.mSources & FlightSite.SOURCE_PGE) != 0)
+      credits.add(context.getString(R.string.flight_attribution_pge));
+    if ((site.mSources & FlightSite.SOURCE_OSM) != 0)
+      credits.add(context.getString(R.string.flight_attribution_osm));
+    ((TextView) view.findViewById(R.id.flight_attribution)).setText(String.join(" ", credits));
 
     dialog.show();
   }
 
+  /** Directions with the German O for east in German, as the DHV and the weather page write them. */
   @NonNull
-  private static String sources(int sources)
+  static String directions(int mask)
+  {
+    final String names = FlightDirections.format(mask);
+    return "de".equals(Locale.getDefault().getLanguage()) ? names.replace('E', 'O') : names;
+  }
+
+  @NonNull
+  private static String sources(@NonNull FlightSite site)
   {
     final List<String> names = new ArrayList<>();
-    if ((sources & FlightSite.SOURCE_PGE) != 0)
+    if ((site.mSources & FlightSite.SOURCE_PGE) != 0)
       names.add("ParaglidingEarth");
-    if ((sources & FlightSite.SOURCE_OSM) != 0)
+    if ((site.mSources & FlightSite.SOURCE_OSM) != 0)
       names.add("OpenStreetMap");
-    if ((sources & FlightSite.SOURCE_TEST) != 0)
+    if ((site.mSources & FlightSite.SOURCE_TEST) != 0)
       names.add("Test");
     return String.join(", ", names);
   }
 
-  private static void fillRows(@NonNull Context context, @NonNull LinearLayout rows,
-                               @NonNull List<FlightWeather.Hour> hours)
+  @NonNull
+  private static String distance(double meters)
   {
+    if (meters < 1000)
+      return String.format(Locale.getDefault(), "%d m", Math.round(meters / 10) * 10);
+    return String.format(Locale.getDefault(), "%.1f km", meters / 1000);
+  }
+
+  private static void addSection(@NonNull LinearLayout parent, @StringRes int title, @Nullable String text)
+  {
+    if (text == null || text.isEmpty())
+      return;
+    addHeader(parent, title);
+    addText(parent, text);
+  }
+
+  private static void addHeader(@NonNull LinearLayout parent, @StringRes int title)
+  {
+    final Context context = parent.getContext();
+    final TextView header = new TextView(context);
+    TextViewCompat.setTextAppearance(header, R.style.MwmTextAppearance_Body2);
+    header.setTypeface(header.getTypeface(), Typeface.BOLD);
+    header.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.margin_base), 0, 0);
+    header.setText(title);
+    parent.addView(header);
+  }
+
+  private static void addText(@NonNull LinearLayout parent, @NonNull String text)
+  {
+    if (text.isEmpty())
+      return;
+    final Context context = parent.getContext();
+    final TextView view = new TextView(context);
+    TextViewCompat.setTextAppearance(view, R.style.MwmTextAppearance_Body3);
+    view.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.margin_quarter), 0, 0);
+    view.setTextIsSelectable(true);
+    view.setText(text);
+    parent.addView(view);
+  }
+
+  private static void addLink(@NonNull LinearLayout parent, @NonNull String text, @NonNull View.OnClickListener onClick)
+  {
+    final Context context = parent.getContext();
+    final TextView link = new TextView(context);
+    TextViewCompat.setTextAppearance(link, R.style.MwmTextAppearance_Body2);
     final int pad = context.getResources().getDimensionPixelSize(R.dimen.margin_half);
-    String date = null;
-    for (FlightWeather.Hour hour : hours)
-    {
-      final int clock = hourOf(hour);
-      if (clock < FIRST_HOUR || clock > LAST_HOUR)
-        continue;
-      if (!hour.getDate().equals(date))
-      {
-        date = hour.getDate();
-        final TextView header = new TextView(context);
-        TextViewCompat.setTextAppearance(header, R.style.MwmTextAppearance_Body2);
-        header.setTypeface(header.getTypeface(), android.graphics.Typeface.BOLD);
-        header.setPadding(0, pad * 2, 0, pad / 2);
-        header.setText(formatDate(date));
-        rows.addView(header);
-      }
-      rows.addView(makeRow(context, hour, pad));
-    }
-  }
-
-  @NonNull
-  private static View makeRow(@NonNull Context context, @NonNull FlightWeather.Hour hour, int pad)
-  {
-    final LinearLayout row = new LinearLayout(context);
-    row.setOrientation(LinearLayout.HORIZONTAL);
-    row.setGravity(Gravity.TOP);
-    row.setPadding(0, pad / 2, 0, pad / 2);
-
-    final View dot = new View(context);
-    final GradientDrawable circle = new GradientDrawable();
-    circle.setShape(GradientDrawable.OVAL);
-    circle.setColor(ContextCompat.getColor(context, colorOf(hour.mRating.mLevel)));
-    dot.setBackground(circle);
-    final int size = pad * 3 / 2;
-    final LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(size, size);
-    dotParams.setMargins(0, pad / 2, pad, 0);
-    row.addView(dot, dotParams);
-
-    final List<String> lines = new ArrayList<>();
-    String first = hour.getClock() + "  ";
-    if (!Double.isNaN(hour.mWindKmh))
-    {
-      first += context.getString(R.string.flight_weather_wind, FlightDirections.name(hour.mWindFromDeg),
-                                 Math.round(hour.mWindKmh), Math.round(hour.mGustKmh));
-    }
-    if (!Double.isNaN(hour.mRainMm))
-    {
-      final String rain = String.format(Locale.getDefault(), "%.1f", hour.mRainMm);
-      first += " · " + context.getString(R.string.flight_weather_rain, rain);
-    }
-    lines.add(first);
-
-    final List<String> second = new ArrayList<>();
-    final int thermal = FlightWeather.thermalStrength(hour);
-    if (thermal >= 0)
-    {
-      @StringRes
-      final int strength = thermal == 0   ? R.string.flight_weather_thermal_weak
-                         : thermal == 1 ? R.string.flight_weather_thermal_moderate
-                                        : R.string.flight_weather_thermal_good;
-      String text = context.getString(strength);
-      if (!Double.isNaN(hour.mThermalTopM))
-        text += " " + context.getString(R.string.flight_weather_thermal_top,
-                                        Framework.nativeFormatAltitude(hour.mThermalTopM));
-      second.add(text);
-    }
-    if (!Double.isNaN(hour.mCloudBaseM))
-      second.add(
-          context.getString(R.string.flight_weather_cloud_base, Framework.nativeFormatAltitude(hour.mCloudBaseM)));
-    if (!Double.isNaN(hour.mUpperWindKmh))
-    {
-      second.add(context.getString(R.string.flight_weather_upper_wind, FlightDirections.name(hour.mUpperWindFromDeg),
-                                   Math.round(hour.mUpperWindKmh)));
-    }
-    if (!second.isEmpty())
-      lines.add(String.join(" · ", second));
-
-    final List<String> reasons = new ArrayList<>();
-    for (FlightRating.Reason reason : hour.mRating.mReasons)
-      reasons.add(context.getString(reasonText(reason)));
-    if (!reasons.isEmpty())
-      lines.add(String.join(", ", reasons));
-
-    final TextView text = new TextView(context);
-    TextViewCompat.setTextAppearance(text, R.style.MwmTextAppearance_Body3);
-    text.setText(String.join("\n", lines));
-    row.addView(text, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-    return row;
-  }
-
-  private static int hourOf(@NonNull FlightWeather.Hour hour)
-  {
-    final String clock = hour.getClock();
-    try
-    {
-      return Integer.parseInt(clock.substring(0, Math.min(2, clock.length())));
-    }
-    catch (NumberFormatException e)
-    {
-      return -1;
-    }
-  }
-
-  @NonNull
-  private static String formatDate(@NonNull String isoDate)
-  {
-    try
-    {
-      final Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(isoDate);
-      if (date != null)
-        return new SimpleDateFormat("EEEE, d. MMMM", Locale.getDefault()).format(date);
-    }
-    catch (java.text.ParseException ignored)
-    {}
-    return isoDate;
-  }
-
-  private static int colorOf(@NonNull FlightRating.Level level)
-  {
-    return switch (level)
-    {
-      case GOOD -> R.color.flight_rating_good;
-      case MARGINAL -> R.color.flight_rating_marginal;
-      case BAD -> R.color.flight_rating_bad;
-    };
-  }
-
-  @StringRes
-  private static int reasonText(@NonNull FlightRating.Reason reason)
-  {
-    return switch (reason)
-    {
-      case CALM -> R.string.flight_reason_calm;
-      case DIRECTION_FITS -> R.string.flight_reason_direction_fits;
-      case DIRECTION_UNKNOWN -> R.string.flight_reason_direction_unknown;
-      case CROSSWIND -> R.string.flight_reason_crosswind;
-      case WRONG_DIRECTION -> R.string.flight_reason_wrong_direction;
-      case TAILWIND -> R.string.flight_reason_tailwind;
-      case WIND_STRONG -> R.string.flight_reason_wind_strong;
-      case WIND_TOO_STRONG -> R.string.flight_reason_wind_too_strong;
-      case GUSTY -> R.string.flight_reason_gusty;
-      case GUSTS_TOO_STRONG -> R.string.flight_reason_gusts_too_strong;
-      case UPPER_WIND_STRONG -> R.string.flight_reason_upper_wind_strong;
-      case UPPER_WIND_TOO_STRONG -> R.string.flight_reason_upper_wind_too_strong;
-      case RAIN_LIKELY -> R.string.flight_reason_rain_likely;
-      case RAIN -> R.string.flight_reason_rain;
-      case THUNDERSTORM_RISK -> R.string.flight_reason_thunderstorm;
-    };
+    link.setPadding(0, pad, 0, pad);
+    final android.util.TypedValue value = new android.util.TypedValue();
+    context.getTheme().resolveAttribute(androidx.appcompat.R.attr.colorAccent, value, true);
+    link.setTextColor(value.data);
+    context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, value, true);
+    link.setBackgroundResource(value.resourceId);
+    link.setText(text);
+    link.setOnClickListener(onClick);
+    parent.addView(link);
   }
 }

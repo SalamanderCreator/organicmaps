@@ -3,7 +3,7 @@ package app.organicmaps.sdk.maplayer.flight;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/** Maps&Fly: a paragliding takeoff or landing site of the flight preparation layer. */
+/** Maps&Fly: a paragliding takeoff or landing site. */
 public final class FlightSite
 {
   public static final int NO_ALTITUDE = Integer.MIN_VALUE;
@@ -15,7 +15,7 @@ public final class FlightSite
   @NonNull
   public final String mId;
   @NonNull
-  public String mName;
+  public final String mName;
   public final double mLat;
   public final double mLon;
   public final boolean mLanding;
@@ -24,18 +24,36 @@ public final class FlightSite
   /** The altitude is taken from the terrain of the map, the source has none. */
   public boolean mAltitudeFromTerrain;
   /** See FlightDirections: bit i is i * 22.5 degrees from north, where the wind should come from. */
-  public int mDirections;
+  public final int mDirections;
   /** SOURCE_* bits. */
-  public int mSources;
+  public final int mSources;
+  /** Shown with an orange ring, e.g. for club members only. */
+  public boolean mRestricted;
   /** The lat/lon pairs of a closed ring of a known landing area, or empty. */
   @NonNull
-  public double[] mArea;
-  /** The page of the site at its source. */
+  public final double[] mArea;
+  /** The ids of the sites that belong together at the source: the landings of a takeoff and back. */
+  @NonNull
+  public String[] mLinks = new String[0];
+
+  // Texts and links of the sources, empty if unknown.
+  @NonNull
+  public String mDescription = "";
+  @NonNull
+  public String mRules = "";
+  @NonNull
+  public String mAccess = "";
+  @NonNull
+  public String mComments = "";
   @Nullable
   public String mUrl;
+  @Nullable
+  public String mOsmUrl;
+  @Nullable
+  public String mWebsite;
 
   public FlightSite(@NonNull String id, @NonNull String name, double lat, double lon, boolean landing, int altitude,
-                    int directions, int sources, @NonNull double[] area, @Nullable String url)
+                    int directions, int sources, @NonNull double[] area)
   {
     mId = id;
     mName = name;
@@ -46,7 +64,6 @@ public final class FlightSite
     mDirections = directions;
     mSources = sources;
     mArea = area;
-    mUrl = url;
   }
 
   public boolean hasAltitude()

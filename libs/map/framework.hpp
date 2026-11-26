@@ -513,6 +513,21 @@ public:
   void SetFlightLayerEnabled(bool enabled);
   bool IsFlightLayerEnabled() const { return m_flightLayer.IsEnabled(); }
   FlightLayer & GetFlightLayer() { return m_flightLayer; }
+  /// Maps&Fly: the nearest aerial lift station and parking within 3 km of a flight site, from the maps.
+  struct FlightService
+  {
+    enum class Kind : uint8_t
+    {
+      CableCarStation,
+      Parking
+    };
+    Kind m_kind;
+    std::string m_name;
+    m2::PointD m_point;
+    double m_distanceM;
+  };
+  std::vector<FlightService> FindFlightServices(m2::PointD const & point) const;
+
   /// Elevation from the downloaded terrain, if present.
   std::optional<double> GetTerrainElevation(m2::PointD const & point) const
   {

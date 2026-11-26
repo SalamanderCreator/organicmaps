@@ -65,6 +65,14 @@ jobs:
           key: ${{ github.workflow }}
           save: ${{ github.ref == 'refs/heads/master' }}
 
+      - name: Build the flight sites file
+        shell: bash
+        # Maps&Fly: ParaglidingEarth and OpenStreetMap paragliding sites for the APK. An unreachable source
+        # is left out; without any the APK has only its test sites.
+        run: |
+          timeout 1500 python3 tools/python/flight_sites.py android/app/src/main/assets/flight_sites.json \
+            || echo "::warning::No flight sites file, the APK shows only the test sites."
+
       - name: Compile
         shell: bash
         working-directory: android

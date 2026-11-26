@@ -6,9 +6,11 @@
 #include "geometry/mercator.hpp"
 
 #include <cmath>
+#include <string>
 #include <vector>
 
-// Maps&Fly: the flight preparation layer, see FlightLayer.java. All calls run on the UI thread.
+// Maps&Fly: the flight sites and the flight preparation layer, see FlightLayer.java. All calls run on the
+// UI thread.
 extern "C"
 {
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetEnabled(JNIEnv *, jclass,
@@ -30,19 +32,27 @@ JNIEXPORT jdouble Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeGet
   return elevation ? *elevation : NAN;
 }
 
-// void onCellsNeeded(int[] cells); void onSiteTapped(String id);
+// "kind\tname\tdistance\tlat\tlon" of the nearest aerial lift station ("cablecar") and parking ("parking").
+JNIEXPORT jobjectArray Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeFindServices(JNIEnv * env, jclass,
+                                                                                             jdouble lat,
+                                                                                             jdouble lon)
+{
+  std::vector<std::string> items;
+  for (auto const & s : frm()->FindFlightServices(mercator::FromLatLon(lat, lon)))
+  {
+    auto const ll = mercator::ToLatLon(s.m_point);
+    items.push_back(std::string(s.m_kind == Framework::FlightService::Kind::CableCarStation ? "cablecar" : "parking") +
+                    "\t" + s.m_name + "\t" + std::to_string(s.m_distanceM) + "\t" + std::to_string(ll.m_lat) + "\t" +
+                    std::to_string(ll.m_lon));
+  }
+  return jni::ToJavaStringArray(env, items);
+}
+
+// void onSiteTapped(String id);
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetListener(JNIEnv *, jclass,
                                                                                      jobject listener)
 {
   auto const ref = jni::make_global_ref(listener);
-  frm()->GetFlightLayer().SetCellsRequestFn([ref](std::vector<int> const & cells)
-  {
-    JNIEnv * env = jni::GetEnv();
-    jni::TScopedLocalIntArrayRef jCells(env, env->NewIntArray(static_cast<jsize>(cells.size())));
-    env->SetIntArrayRegion(jCells.get(), 0, static_cast<jsize>(cells.size()), cells.data());
-    jmethodID const method = jni::GetMethodID(env, *ref, "onCellsNeeded", "([I)V");
-    env->CallVoidMethod(*ref, method, jCells.get());
-  });
   frm()->SetFlightSiteTapFn([ref](std::string const & id)
   {
     JNIEnv * env = jni::GetEnv();
@@ -55,16 +65,18 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetLis
 // |areaOffsets| has one more entry than sites: the area of site i are the lat/lon pairs
 // [areaOffsets[i], areaOffsets[i + 1]) of |areaLatLons|.
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSites(
-    JNIEnv * env, jclass, jint cell, jobjectArray ids, jobjectArray names, jdoubleArray lats, jdoubleArray lons,
-    jbooleanArray landings, jintArray directions, jintArray areaOffsets, jdoubleArray areaLatLons)
+    JNIEnv * env, jclass, jobjectArray ids, jobjectArray names, jdoubleArray lats, jdoubleArray lons,
+    jbooleanArray landings, jintArray directions, jbooleanArray restricted, jintArray areaOffsets,
+    jdoubleArray areaLatLons)
 {
   jsize const count = env->GetArrayLength(ids);
   std::vector<jdouble> latV(count), lonV(count);
-  std::vector<jboolean> landingV(count);
+  std::vector<jboolean> landingV(count), restrictedV(count);
   std::vector<jint> directionV(count), offsetV(count + 1);
   env->GetDoubleArrayRegion(lats, 0, count, latV.data());
   env->GetDoubleArrayRegion(lons, 0, count, lonV.data());
   env->GetBooleanArrayRegion(landings, 0, count, landingV.data());
+  env->GetBooleanArrayRegion(restricted, 0, count, restrictedV.data());
   env->GetIntArrayRegion(directions, 0, count, directionV.data());
   env->GetIntArrayRegion(areaOffsets, 0, count + 1, offsetV.data());
   std::vector<jdouble> areaV(env->GetArrayLength(areaLatLons));
@@ -81,9 +93,10 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSit
     site.m_point = mercator::FromLatLon(latV[i], lonV[i]);
     site.m_type = landingV[i] ? FlightLayer::Site::Type::Landing : FlightLayer::Site::Type::Takeoff;
     site.m_directions = static_cast<uint16_t>(directionV[i]);
+    site.m_restricted = restrictedV[i];
     for (jint j = offsetV[i]; j < offsetV[i + 1]; ++j)
       site.m_area.push_back(mercator::FromLatLon(areaV[2 * j], areaV[2 * j + 1]));
   }
-  frm()->GetFlightLayer().SetSites(static_cast<int>(cell), std::move(sites));
+  frm()->GetFlightLayer().SetSites(std::move(sites));
 }
 }  // extern "C"

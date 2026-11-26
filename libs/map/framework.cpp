@@ -2353,11 +2353,12 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
                                       std::function<void(FlightLayer::Obstacle &&)> const & fn) const
 {
   auto const & c = classif();
-  // Lines and points a paraglider can hit: power lines, all kinds of aerial lifts, masts, towers and wind turbines.
+  // Lines and points a paraglider can hit or must not land on: power lines, all kinds of aerial lifts,
+  // motorways and wind turbines.
   static uint32_t const kAerialway = c.GetTypeByPath({"aerialway"});
-  static std::array<uint32_t, 4> const kLevel2 = {
-      c.GetTypeByPathSafe({"power", "line"}), c.GetTypeByPathSafe({"power", "minor_line"}),
-      c.GetTypeByPathSafe({"man_made", "mast"}), c.GetTypeByPathSafe({"man_made", "tower"})};
+  static std::array<uint32_t, 3> const kLevel2 = {c.GetTypeByPathSafe({"power", "line"}),
+                                                  c.GetTypeByPathSafe({"power", "minor_line"}),
+                                                  c.GetTypeByPathSafe({"highway", "motorway"})};
   static uint32_t const kWindTurbine = c.GetTypeByPathSafe({"power", "generator", "wind"});
 
   int constexpr kScale = scales::GetUpperScale();
@@ -2378,10 +2379,48 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
     FlightLayer::Obstacle obstacle;
     if (ft.GetGeomType() == feature::GeomType::Line)
       ft.ForEachPoint([&obstacle](m2::PointD const & p) { obstacle.m_points.push_back(p); }, kScale);
-    else
+    else if (ft.GetGeomType() == feature::GeomType::Point)
       obstacle.m_points.push_back(feature::GetCenter(ft, kScale));
+    else
+      return;
     fn(std::move(obstacle));
   }, kScale);
+}
+
+std::vector<Framework::FlightService> Framework::FindFlightServices(m2::PointD const & point) const
+{
+  auto const & c = classif();
+  static uint32_t const kStation = c.GetTypeByPathSafe({"aerialway", "station"});
+  static uint32_t const kParking = c.GetTypeByPathSafe({"amenity", "parking"});
+  double constexpr kRadiusM = 3000;
+
+  std::array<std::optional<FlightService>, 2> nearest;
+  int constexpr kScale = scales::GetUpperScale();
+  m_featuresFetcher.ForEachFeature(mercator::RectByCenterXYAndSizeInMeters(point, 2 * kRadiusM), [&](FeatureType & ft)
+  {
+    std::optional<FlightService::Kind> kind;
+    ft.ForEachType([&](uint32_t type)
+    {
+      if (ftype::Trunc(type, 2) == kStation)
+        kind = FlightService::Kind::CableCarStation;
+      else if (!kind && ftype::Trunc(type, 2) == kParking)
+        kind = FlightService::Kind::Parking;
+    });
+    if (!kind)
+      return;
+    auto const center = feature::GetCenter(ft, kScale);
+    double const distanceM = mercator::DistanceOnEarth(point, center);
+    auto & best = nearest[static_cast<size_t>(*kind)];
+    if (distanceM > kRadiusM || (best && best->m_distanceM <= distanceM))
+      return;
+    best = FlightService{*kind, std::string(ft.GetReadableName()), center, distanceM};
+  }, kScale);
+
+  std::vector<FlightService> result;
+  for (auto const & service : nearest)
+    if (service)
+      result.push_back(*service);
+  return result;
 }
 
 bool Framework::IsTrackRecordingEnabled() const
