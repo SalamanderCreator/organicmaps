@@ -1012,6 +1012,80 @@
     <string name="route_save_as_track">Save as track</string>
     <!-- Maps&Fly: save the planned route as a track if needed and share it as a GPX file -->
     <string name="route_share_gpx">Share as GPX</string>
+    <!-- Maps&Fly map layer: paragliding takeoffs and landings with weather and obstacles -->
+    <string name="button_layer_flight">Flight prep</string>
+    <!-- Maps&Fly flight layer: a paragliding takeoff site -->
+    <string name="flight_site_takeoff">Takeoff</string>
+    <!-- Maps&Fly flight layer: a paragliding landing site -->
+    <string name="flight_site_landing">Landing</string>
+    <!-- Maps&Fly flight layer: where the site comes from, e.g. ParaglidingEarth, OpenStreetMap -->
+    <string name="flight_site_source">Source: %s</string>
+    <!-- Maps&Fly flight layer: height of the site above sea level -->
+    <string name="flight_site_altitude">Altitude: %s</string>
+    <!-- Maps&Fly flight layer: wind directions the takeoff works for, e.g. NW, W -->
+    <string name="flight_site_directions">Takeoff directions: %s</string>
+    <!-- Maps&Fly flight layer: the takeoff has no known directions -->
+    <string name="flight_site_directions_unknown">Takeoff directions unknown</string>
+    <!-- Maps&Fly flight layer: the landing area is shown in green on the map -->
+    <string name="flight_site_area_known">Landing area shown in green on the map</string>
+    <!-- Maps&Fly flight layer: open the web page of the site -->
+    <string name="flight_site_open_source">Open the site page</string>
+    <!-- Maps&Fly flight layer: title of the forecast of a site -->
+    <string name="flight_weather_title">Weather at the site</string>
+    <!-- Maps&Fly flight layer: the forecast could not be downloaded -->
+    <string name="flight_weather_failed">The forecast could not be loaded.</string>
+    <!-- Maps&Fly flight layer: wind of a forecast hour, direction, mean and gusts -->
+    <string name="flight_weather_wind">%1$s %2$d km/h, gusts %3$d</string>
+    <!-- Maps&Fly flight layer: rain amount of a forecast hour -->
+    <string name="flight_weather_rain">rain %s mm</string>
+    <!-- Maps&Fly flight layer: wind at 850 hPa of a forecast hour -->
+    <string name="flight_weather_upper_wind">wind at 1500 m %1$s %2$d km/h</string>
+    <!-- Maps&Fly flight layer: weak thermals -->
+    <string name="flight_weather_thermal_weak">weak thermals</string>
+    <!-- Maps&Fly flight layer: moderate thermals -->
+    <string name="flight_weather_thermal_moderate">moderate thermals</string>
+    <!-- Maps&Fly flight layer: good thermals -->
+    <string name="flight_weather_thermal_good">good thermals</string>
+    <!-- Maps&Fly flight layer: height thermals reach above sea level -->
+    <string name="flight_weather_thermal_top">up to about %s</string>
+    <!-- Maps&Fly flight layer: estimated cumulus cloud base above sea level -->
+    <string name="flight_weather_cloud_base">cloud base about %s</string>
+    <!-- Maps&Fly flight layer: credit and disclaimer below the forecast -->
+    <string name="flight_weather_attribution">Weather data by Open-Meteo.com. Only a hint: check the conditions on site.</string>
+    <!-- Maps&Fly flight layer: credit of ParaglidingEarth -->
+    <string name="flight_attribution_pge">Sites: paraglidingearth.com.</string>
+    <!-- Maps&Fly flight layer: credit of OpenStreetMap -->
+    <string name="flight_attribution_osm">© OpenStreetMap contributors.</string>
+    <!-- Maps&Fly flight layer rating: almost no wind -->
+    <string name="flight_reason_calm">little wind</string>
+    <!-- Maps&Fly flight layer rating: the wind direction fits the takeoff -->
+    <string name="flight_reason_direction_fits">wind fits the takeoff</string>
+    <!-- Maps&Fly flight layer rating: no takeoff directions to compare with -->
+    <string name="flight_reason_direction_unknown">direction not rated</string>
+    <!-- Maps&Fly flight layer rating: wind from the side of the takeoff -->
+    <string name="flight_reason_crosswind">crosswind</string>
+    <!-- Maps&Fly flight layer rating: the wind direction does not fit the takeoff -->
+    <string name="flight_reason_wrong_direction">wind does not fit</string>
+    <!-- Maps&Fly flight layer rating: wind from behind the takeoff -->
+    <string name="flight_reason_tailwind">tailwind</string>
+    <!-- Maps&Fly flight layer rating: strong wind -->
+    <string name="flight_reason_wind_strong">strong wind</string>
+    <!-- Maps&Fly flight layer rating: too much wind to fly -->
+    <string name="flight_reason_wind_too_strong">too much wind</string>
+    <!-- Maps&Fly flight layer rating: gusty wind -->
+    <string name="flight_reason_gusty">gusty</string>
+    <!-- Maps&Fly flight layer rating: too strong gusts -->
+    <string name="flight_reason_gusts_too_strong">strong gusts</string>
+    <!-- Maps&Fly flight layer rating: strong wind at altitude -->
+    <string name="flight_reason_upper_wind_strong">strong wind aloft</string>
+    <!-- Maps&Fly flight layer rating: too much wind at altitude -->
+    <string name="flight_reason_upper_wind_too_strong">too much wind aloft</string>
+    <!-- Maps&Fly flight layer rating: rain is possible -->
+    <string name="flight_reason_rain_likely">rain possible</string>
+    <!-- Maps&Fly flight layer rating: rain -->
+    <string name="flight_reason_rain">rain</string>
+    <!-- Maps&Fly flight layer rating: risk of overdevelopment and thunderstorms -->
+    <string name="flight_reason_thunderstorm">risk of thunderstorms</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Could not save the route as a track</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->
