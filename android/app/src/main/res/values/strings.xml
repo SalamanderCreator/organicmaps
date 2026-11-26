@@ -1032,10 +1032,6 @@
     <string name="flight_site_area_known">Landing area shown in green on the map</string>
     <!-- Maps&Fly flight site: the site has rules for club members only -->
     <string name="flight_site_restricted">Rules for club members</string>
-    <!-- Maps&Fly flight site: title of the landings of a takeoff -->
-    <string name="flight_site_landings">Landings</string>
-    <!-- Maps&Fly flight site: title of the takeoffs a landing belongs to -->
-    <string name="flight_site_takeoffs">Belongs to</string>
     <!-- Maps&Fly flight site: title of the flight rules -->
     <string name="flight_site_rules">Rules</string>
     <!-- Maps&Fly flight site: title of how to get to the site -->
@@ -1044,24 +1040,14 @@
     <string name="flight_site_description">Description</string>
     <!-- Maps&Fly flight site: title of further notes -->
     <string name="flight_site_comments">Notes</string>
-    <!-- Maps&Fly flight site: title of the aerial lift and parking found in the maps -->
-    <string name="flight_site_nearby">Nearby (from the map)</string>
-    <!-- Maps&Fly flight site: nearest aerial lift station, name and distance -->
-    <string name="flight_site_cable_car">Cable car: %1$s · %2$s</string>
-    <!-- Maps&Fly flight site: nearest parking, name and distance -->
-    <string name="flight_site_parking">Parking: %1$s · %2$s</string>
-    <!-- Maps&Fly flight site: a site or place without a name -->
-    <string name="flight_site_unnamed">no name</string>
     <!-- Maps&Fly flight site: open the page of the site at ParaglidingEarth -->
     <string name="flight_site_link_pge">Open at ParaglidingEarth</string>
     <!-- Maps&Fly flight site: open the site at OpenStreetMap -->
     <string name="flight_site_link_osm">Open at OpenStreetMap</string>
     <!-- Maps&Fly flight site: open the website of the site -->
     <string name="flight_site_link_web">Open the website</string>
-    <!-- Maps&Fly flight site: button that opens the weather of a takeoff -->
-    <string name="flight_site_weather">Weather</string>
-    <!-- Maps&Fly flight weather: title of the window, the name of the takeoff -->
-    <string name="flight_weather_title">Weather: %s</string>
+    <!-- Maps&Fly flight weather: button that shows the information of the takeoff -->
+    <string name="flight_weather_site_info">Information about the takeoff</string>
     <!-- Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time -->
     <string name="flight_weather_offline">Offline: forecast of %s</string>
     <!-- Maps&Fly flight layer: credit of ParaglidingEarth -->
