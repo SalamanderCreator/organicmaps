@@ -160,6 +160,7 @@ public final class FlightLayer
     final boolean[] landings = new boolean[n];
     final int[] directions = new int[n];
     final boolean[] restricted = new boolean[n];
+    final boolean[] labeled = new boolean[n];
     final int[] areaOffsets = new int[n + 1];
     int areaSize = 0;
     for (FlightSite s : sites)
@@ -177,12 +178,14 @@ public final class FlightLayer
       landings[i] = s.mLanding;
       directions[i] = s.mDirections;
       restricted[i] = s.mRestricted;
+      // Only landings get a label, and the map labels the ones from OpenStreetMap already.
+      labeled[i] = s.mLanding && (s.mSources & FlightSite.SOURCE_OSM) == 0;
       areaOffsets[i] = areaPos / 2;
       System.arraycopy(s.mArea, 0, areaLatLons, areaPos, s.mArea.length);
       areaPos += s.mArea.length;
     }
     areaOffsets[n] = areaPos / 2;
-    nativeSetSites(ids, names, lats, lons, landings, directions, restricted, areaOffsets, areaLatLons);
+    nativeSetSites(ids, names, lats, lons, landings, directions, restricted, labeled, areaOffsets, areaLatLons);
   }
 
   /** Takes the height of a site without one from the downloaded terrain, if there is terrain. */
@@ -220,5 +223,6 @@ public final class FlightLayer
   private static native void nativeSetSites(@NonNull String[] ids, @NonNull String[] names, @NonNull double[] lats,
                                             @NonNull double[] lons, @NonNull boolean[] landings,
                                             @NonNull int[] directions, @NonNull boolean[] restricted,
-                                            @NonNull int[] areaOffsets, @NonNull double[] areaLatLons);
+                                            @NonNull boolean[] labeled, @NonNull int[] areaOffsets,
+                                            @NonNull double[] areaLatLons);
 }

@@ -12,33 +12,46 @@
 
 namespace
 {
-std::string_view constexpr kPrefix = "flight_";
 std::string_view constexpr kLabelPrefix = "flight_label_";
 
-dp::Color const kDark(40, 50, 65, 255);
-dp::Color const kGrey(110, 120, 132, 255);
-dp::Color const kHalo(255, 255, 255, 170);
-dp::Color const kDisc(255, 255, 255, 220);
+// The normal map: a colored circle with a white symbol, like the other map icons.
+dp::Color const kTakeoffCircle(47, 126, 194, 255);
+dp::Color const kLandingCircle(30, 158, 143, 255);
+dp::Color const kWhite(255, 255, 255, 255);
+
+// The flight preparation layer.
+dp::Color const kHalo(255, 255, 255, 190);
+dp::Color const kDisc(255, 255, 255, 215);
 dp::Color const kRing(29, 39, 51, 255);
 dp::Color const kRestrictedRing(217, 130, 43, 255);
-dp::Color const kSector(30, 138, 60, 230);
-dp::Color const kCanopy(225, 50, 40, 255);
-dp::Color const kSock(245, 120, 0, 255);
-dp::Color const kLabel(30, 30, 30, 255);
-dp::Color const kAreaOutline(30, 150, 40, 230);
-dp::Color const kAreaFill(60, 200, 60, 90);
-dp::Color const kObstacle(220, 20, 20, 200);
+dp::Color const kSector(30, 150, 60, 255);
+dp::Color const kWingGreen(40, 170, 70, 255);
+dp::Color const kWingBlue(30, 110, 220, 255);
+dp::Color const kWingBlack(25, 25, 30, 255);
+dp::Color const kGliderLines(70, 75, 85, 255);
+dp::Color const kHarness(35, 40, 50, 255);
+dp::Color const kPilot(242, 140, 40, 255);
+dp::Color const kPole(120, 128, 138, 255);
+dp::Color const kSockRed(229, 51, 42, 255);
+dp::Color const kSockOutline(150, 40, 35, 255);
+dp::Color const kLabel(70, 70, 70, 255);
+// Turquoise: bluer than the green of meadows and parks, greener than the blue of lakes.
+dp::Color const kAreaOutline(0, 165, 155, 255);
+dp::Color const kAreaFill(0, 190, 175, 80);
+dp::Color const kObstacle(220, 20, 20, 220);
 
 // Keeps the geometry small on a crowded screen.
 size_t constexpr kMaxSymbols = 600;
-size_t constexpr kMaxLabels = 200;
+size_t constexpr kMaxLabels = 150;
 size_t constexpr kMaxObstacleSites = 40;
 size_t constexpr kMaxObstacleLines = 600;
 
-// Symbol sizes in dp, the layer draws them bigger.
-double constexpr kLayerFactor = 1.6;
-double constexpr kHaloRadius = 9.0;
-double constexpr kDiscRadius = 10.0;
+// Symbol sizes in dp.
+double constexpr kIconRadius = 9.5;
+double constexpr kDiscRadius = 16.0;
+double constexpr kHaloRadius = 13.0;
+
+using Rings = std::vector<std::vector<m2::PointD>>;
 
 int GetZoom(ScreenBase const & screen)
 {
@@ -90,8 +103,8 @@ void FlightLayer::SetSites(std::vector<Site> && sites)
 void FlightLayer::SetViewport(ScreenBase const & screen)
 {
   m_screen = screen;
-  bool needsRedraw = GetDetail(screen) != m_drawnDetail;
-  if (!needsRedraw && m_drawnDetail >= Detail::Symbols)
+  bool needsRedraw = GetZoom(screen) != m_drawnZoom;
+  if (!needsRedraw)
   {
     // Symbols are built in the size of the current zoom and for the area around the screen.
     double const scaleRatio = screen.GetScale() / m_drawnScale;
@@ -104,15 +117,15 @@ void FlightLayer::SetViewport(ScreenBase const & screen)
 std::optional<std::string> FlightLayer::HitTest(m2::PointD const & point, ScreenBase const & screen,
                                                 double tolerancePx) const
 {
-  if (GetDetail(screen) == Detail::Hidden)
-    return {};
-
+  int const zoom = GetZoom(screen);
   m2::PointD const tapPx = screen.GtoP(point);
   double bestSqrPx = tolerancePx * tolerancePx;
   Site const * best = nullptr;
   Site const * inArea = nullptr;
   for (auto const & site : m_sites)
   {
+    if (!IsVisible(site, zoom))
+      continue;
     double const sqrPx = screen.GtoP(site.m_point).SquaredLength(tapPx);
     if (sqrPx <= bestSqrPx)
     {
@@ -195,19 +208,12 @@ std::vector<m2::PointD> FlightLayer::MakeCircle(m2::PointD const & center, doubl
   return points;
 }
 
-// static
-FlightLayer::Detail FlightLayer::GetDetail(ScreenBase const & screen)
+bool FlightLayer::IsVisible(Site const & site, int zoom) const
 {
-  int const zoom = GetZoom(screen);
-  if (zoom >= kObstaclesZoom)
-    return Detail::Obstacles;
-  if (zoom >= kLabelsZoom)
-    return Detail::Labels;
-  if (zoom >= kSymbolsZoom)
-    return Detail::Symbols;
-  if (zoom >= kDotsZoom)
-    return Detail::Dots;
-  return Detail::Hidden;
+  bool const takeoff = site.m_type == Site::Type::Takeoff;
+  if (m_enabled)
+    return zoom >= (takeoff ? kLayerTakeoffsZoom : kLayerLandingsZoom);
+  return zoom >= (takeoff ? kTakeoffsZoom : kLandingsZoom);
 }
 
 void FlightLayer::Add(std::string const & id, df::DrapeApiLineData const & data)
@@ -223,154 +229,198 @@ void FlightLayer::Redraw()
 
   auto const previousIds = std::move(m_drawnIds);
   m_drawnIds.clear();
-  m_drawnDetail = GetDetail(*m_screen);
+  int const zoom = GetZoom(*m_screen);
+  m_drawnZoom = zoom;
   m_drawnScale = m_screen->GetScale();
   m_drawnRect = m_screen->ClipRect();
   m_drawnRect.Scale(3.0);
 
-  auto const detail = *m_drawnDetail;
-  if (detail == Detail::Dots)
-  {
-    std::vector<m2::PointD> takeoffs;
-    std::vector<m2::PointD> landings;
-    for (auto const & site : m_sites)
-      (site.m_type == Site::Type::Takeoff ? takeoffs : landings).push_back(site.m_point);
-    for (auto const & [name, points, color] :
-         {std::tuple("dots_takeoffs", &takeoffs, m_enabled ? kCanopy : kDark),
-          std::tuple("dots_landings", &landings, m_enabled ? kSock : kGrey)})
-    {
-      if (points->empty())
-        continue;
-      df::DrapeApiLineData data(*points, color);
-      data.PointsOnly().Width(m_enabled ? 2.5f : 1.8f);
-      Add(std::string(kPrefix) + name, data);
-    }
-  }
-  if (detail >= Detail::Labels)
-    DrawAreas(m_drawnRect);
-  if (detail >= Detail::Obstacles && m_enabled)
+  // Bottom up: areas, obstacles, symbols, labels.
+  DrawAreas(m_drawnRect, zoom);
+  if (m_enabled && zoom >= kObstaclesZoom)
     DrawObstacles();
-  if (detail >= Detail::Symbols)
-    DrawSymbols(m_drawnRect, m_drawnScale * m_visualScale);
-  if (detail >= Detail::Labels)
-    DrawLabels(m_drawnRect);
+  double const unit = m_drawnScale * m_visualScale;
+  if (m_enabled)
+    DrawLayerSymbols(m_drawnRect, zoom, unit);
+  else
+    DrawMapIcons(m_drawnRect, zoom, unit);
+  DrawLabels(m_drawnRect, zoom);
 
   for (auto const & id : previousIds)
     if (!m_drawnIds.contains(id))
       m_drapeApi.RemoveLine(id);
 }
 
-void FlightLayer::DrawSymbols(m2::RectD const & rect, double unit)
+namespace
 {
-  double const f = m_enabled ? kLayerFactor : 1.0;
-  std::vector<std::vector<m2::PointD>> halos, discs, rings, restrictedRings, sectors, canopies, risers, pilots, poles,
-      socks;
-  size_t count = 0;
-  for (auto const & site : m_sites)
-  {
-    if (!rect.IsPointInside(site.m_point) || ++count > kMaxSymbols)
-      continue;
-    Symbol const s(site.m_point, unit * f);
-    if (m_enabled && site.m_type == Site::Type::Takeoff)
-    {
-      discs.push_back(MakeCircle(site.m_point, kDiscRadius * unit * f));
-      (site.m_restricted ? restrictedRings : rings).push_back(discs.back());
-      for (auto & sector : MakeSectors(site.m_point, site.m_directions, kDiscRadius * unit * f))
-        sectors.push_back(std::move(sector));
-    }
-    else
-    {
-      halos.push_back(MakeCircle(site.m_point, kHaloRadius * unit * f));
-    }
+class Entries
+{
+public:
+  Entries(std::function<void(std::string const &, df::DrapeApiLineData const &)> add, double vs)
+    : m_add(std::move(add)), m_vs(vs)
+  {}
 
-    if (site.m_type == Site::Type::Takeoff)
-    {
-      // A paraglider: the canopy, the lines and the pilot.
-      canopies.push_back(s.Arc(0, 1.5, 7.0, 4.5, 15, 165));
-      risers.push_back({s.P(-6.8, 2.7), s.P(0, -5.0), s.P(6.8, 2.7)});
-      pilots.push_back(MakeCircle(s.P(0, -5.6), 1.6 * unit * f, 8));
-    }
-    else
-    {
-      // A windsock on its pole.
-      poles.push_back({s.P(-5.0, -7.0), s.P(-5.0, 7.0)});
-      socks.push_back({s.P(-5.0, 7.0), s.P(6.0, 5.5), s.P(6.0, 2.5), s.P(-5.0, 1.0), s.P(-5.0, 7.0)});
-    }
-  }
-
-  auto const addFills = [this](std::string_view name, std::vector<std::vector<m2::PointD>> & fills,
-                               dp::Color const & color)
+  void Fills(std::string_view name, Rings && rings, dp::Color const & color)
   {
-    if (fills.empty())
+    if (rings.empty())
       return;
     df::DrapeApiLineData data({}, color);
-    data.FillRings(std::move(fills), color);
-    Add(std::string(kPrefix) + std::string(name), data);
-  };
-  auto const addLines = [this](std::string_view name, std::vector<std::vector<m2::PointD>> & lines,
-                               dp::Color const & color, float width)
+    data.FillRings(std::move(rings), color);
+    m_add(std::string("flight_") + std::string(name), data);
+  }
+
+  // |widthDp| in density-independent pixels, the DrapeApi takes pixels.
+  void Lines(std::string_view name, Rings && lines, dp::Color const & color, double widthDp)
   {
     if (lines.empty())
       return;
     df::DrapeApiLineData data({}, color);
-    data.Polylines(std::move(lines)).Width(width);
-    Add(std::string(kPrefix) + std::string(name), data);
-  };
+    data.Polylines(std::move(lines)).Width(static_cast<float>(widthDp * m_vs));
+    m_add(std::string("flight_") + std::string(name), data);
+  }
 
-  addFills("halos", halos, kHalo);
-  addFills("discs", discs, kDisc);
-  addFills("sectors", sectors, kSector);
-  addLines("rings", rings, kRing, 1.5f);
-  addLines("restricted_rings", restrictedRings, kRestrictedRing, 2.5f);
-  addLines("canopies", canopies, m_enabled ? kCanopy : kDark, m_enabled ? 3.5f : 2.5f);
-  addLines("risers", risers, kDark, 1.0f);
-  addFills("pilots", pilots, kDark);
-  addLines("poles", poles, kDark, m_enabled ? 2.0f : 1.5f);
-  if (m_enabled)
+private:
+  std::function<void(std::string const &, df::DrapeApiLineData const &)> m_add;
+  double m_vs;
+};
+}  // namespace
+
+void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
+{
+  Rings takeoffCircles, landingCircles, canopies, risers, pilots, poles, socks;
+  size_t count = 0;
+  for (auto const & site : m_sites)
   {
-    std::vector<std::vector<m2::PointD>> outlines = socks;
-    addFills("socks", socks, kSock);
-    addLines("sock_outlines", outlines, kDark, 1.0f);
+    if (!IsVisible(site, zoom) || !rect.IsPointInside(site.m_point) || ++count > kMaxSymbols)
+      continue;
+    Symbol const s(site.m_point, unit);
+    if (site.m_type == Site::Type::Takeoff)
+    {
+      takeoffCircles.push_back(MakeCircle(site.m_point, kIconRadius * unit));
+      canopies.push_back(s.Arc(0, 0.2, 6.0, 4.0, 12, 168));
+      risers.push_back({s.P(-5.8, 1.0), s.P(0, -4.2), s.P(5.8, 1.0)});
+      pilots.push_back(MakeCircle(s.P(0, -5.0), 1.6 * unit, 8));
+    }
+    else
+    {
+      landingCircles.push_back(MakeCircle(site.m_point, kIconRadius * unit));
+      poles.push_back({s.P(-4.5, -6.0), s.P(-4.5, 5.5)});
+      socks.push_back({s.P(-4.5, 5.5), s.P(5.5, 4.3), s.P(5.5, 1.7), s.P(-4.5, 0.5), s.P(-4.5, 5.5)});
+    }
   }
-  else
-  {
-    addFills("socks", socks, kGrey);
-  }
+
+  Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
+  e.Fills("icon_takeoffs", std::move(takeoffCircles), kTakeoffCircle);
+  e.Fills("icon_landings", std::move(landingCircles), kLandingCircle);
+  e.Lines("icon_canopies", std::move(canopies), kWhite, 2.0);
+  e.Lines("icon_risers", std::move(risers), kWhite, 1.1);
+  e.Fills("icon_pilots", std::move(pilots), kWhite);
+  e.Lines("icon_poles", std::move(poles), kWhite, 1.5);
+  e.Fills("icon_socks", std::move(socks), kWhite);
 }
 
-void FlightLayer::DrawLabels(m2::RectD const & rect)
+void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit)
 {
-  // Labels close to the screen first, as there are fewer of them.
+  Rings discs, rings, restrictedRings, sectors, halos;
+  // The wing has five cells: green, blue, black, blue, green.
+  Rings wingGreen, wingBlue, wingBlack, gliderLines, harnesses, torsos, heads;
+  Rings poles, sockRed, sockWhite, sockOutlines;
+  size_t count = 0;
+  for (auto const & site : m_sites)
+  {
+    if (!IsVisible(site, zoom) || !rect.IsPointInside(site.m_point) || ++count > kMaxSymbols)
+      continue;
+    Symbol const s(site.m_point, unit);
+    if (site.m_type == Site::Type::Takeoff)
+    {
+      discs.push_back(MakeCircle(site.m_point, kDiscRadius * unit, 32));
+      (site.m_restricted ? restrictedRings : rings).push_back(discs.back());
+      for (auto & sector : MakeSectors(site.m_point, site.m_directions, kDiscRadius * unit))
+        sectors.push_back(std::move(sector));
+
+      // A paraglider sitting in the harness under the wing.
+      Rings * const cellColors[] = {&wingGreen, &wingBlue, &wingBlack, &wingBlue, &wingGreen};
+      for (int c = 0; c < 5; ++c)
+        cellColors[c]->push_back(s.Arc(0, 2.0, 10.5, 6.0, 168 - c * 31.2, 168 - (c + 1) * 31.2));
+      gliderLines.push_back({s.P(-10.2, 3.3), s.P(-1.3, -7.5), s.P(-4.0, 7.6)});
+      gliderLines.push_back({s.P(10.2, 3.3), s.P(1.3, -7.5), s.P(4.0, 7.6)});
+      heads.push_back(MakeCircle(s.P(0, -5.6), 1.9 * unit, 10));
+      torsos.push_back({s.P(0, -7.6), s.P(0, -10.0)});
+      harnesses.push_back({s.P(-2.2, -10.8), s.P(2.6, -10.8), s.P(4.6, -9.0)});
+    }
+    else
+    {
+      halos.push_back(MakeCircle(site.m_point, kHaloRadius * unit));
+      // A red and white windsock, wide at the pole, in four stripes.
+      double constexpr kPoleX = -8.0, kTipX = 10.0, kTopWide = 8.5, kBottomWide = 2.5, kTopTip = 6.8,
+                       kBottomTip = 4.2;
+      poles.push_back({s.P(kPoleX, -11.0), s.P(kPoleX, kTopWide + 0.5)});
+      for (int k = 0; k < 4; ++k)
+      {
+        double const t0 = k / 4.0, t1 = (k + 1) / 4.0;
+        auto const x = [&](double t) { return kPoleX + (kTipX - kPoleX) * t; };
+        auto const top = [&](double t) { return kTopWide + (kTopTip - kTopWide) * t; };
+        auto const bottom = [&](double t) { return kBottomWide + (kBottomTip - kBottomWide) * t; };
+        (k % 2 == 0 ? sockRed : sockWhite)
+            .push_back({s.P(x(t0), top(t0)), s.P(x(t1), top(t1)), s.P(x(t1), bottom(t1)), s.P(x(t0), bottom(t0)),
+                        s.P(x(t0), top(t0))});
+      }
+      sockOutlines.push_back({s.P(kPoleX, kTopWide), s.P(kTipX, kTopTip), s.P(kTipX, kBottomTip),
+                              s.P(kPoleX, kBottomWide)});
+    }
+  }
+
+  Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
+  e.Fills("discs", std::move(discs), kDisc);
+  e.Fills("sectors", std::move(sectors), kSector);
+  e.Lines("rings", std::move(rings), kRing, 1.5);
+  e.Lines("restricted_rings", std::move(restrictedRings), kRestrictedRing, 3.0);
+  e.Fills("halos", std::move(halos), kHalo);
+  e.Lines("glider_lines", std::move(gliderLines), kGliderLines, 1.0);
+  e.Lines("wing_green", std::move(wingGreen), kWingGreen, 4.5);
+  e.Lines("wing_blue", std::move(wingBlue), kWingBlue, 4.5);
+  e.Lines("wing_black", std::move(wingBlack), kWingBlack, 4.5);
+  e.Lines("harnesses", std::move(harnesses), kHarness, 2.6);
+  e.Lines("torsos", std::move(torsos), kPilot, 3.0);
+  e.Fills("heads", std::move(heads), kPilot);
+  e.Lines("poles", std::move(poles), kPole, 2.4);
+  e.Fills("sock_red", std::move(sockRed), kSockRed);
+  e.Fills("sock_white", std::move(sockWhite), kWhite);
+  e.Lines("sock_outlines", std::move(sockOutlines), kSockOutline, 1.0);
+}
+
+void FlightLayer::DrawLabels(m2::RectD const & rect, int zoom)
+{
+  if (zoom < kLabelsZoom)
+    return;
   m2::RectD near = m_screen->ClipRect();
   near.Scale(1.5);
   size_t count = 0;
   for (auto const & site : m_sites)
   {
-    if (site.m_name.empty() || !near.IsPointInside(site.m_point) || !rect.IsPointInside(site.m_point))
+    if (!site.m_labeled || site.m_name.empty() || !IsVisible(site, zoom) || !near.IsPointInside(site.m_point) ||
+        !rect.IsPointInside(site.m_point))
+    {
       continue;
+    }
     if (++count > kMaxLabels)
       return;
     df::DrapeApiLineData label({site.m_point}, kLabel);
-    label.Label(site.m_name, true /* halo */);
+    label.Label(site.m_name, true /* halo */).LabelSize(11);
     Add(std::string(kLabelPrefix) + site.m_id, label);
   }
 }
 
-void FlightLayer::DrawAreas(m2::RectD const & rect)
+void FlightLayer::DrawAreas(m2::RectD const & rect, int zoom)
 {
-  std::vector<std::vector<m2::PointD>> areas;
+  Rings areas;
   for (auto const & site : m_sites)
-    if (site.m_area.size() > 2 && rect.IsPointInside(site.m_point))
+    if (site.m_area.size() > 2 && IsVisible(site, zoom) && rect.IsPointInside(site.m_point))
       areas.push_back(site.m_area);
-  if (areas.empty())
-    return;
-  std::vector<std::vector<m2::PointD>> outlines = areas;
-  df::DrapeApiLineData fill({}, kAreaFill);
-  fill.FillRings(std::move(areas), kAreaFill);
-  Add(std::string(kPrefix) + "area_fills", fill);
-  df::DrapeApiLineData outline({}, kAreaOutline);
-  outline.Polylines(std::move(outlines)).Width(2.0f);
-  Add(std::string(kPrefix) + "area_outlines", outline);
+  Rings outlines = areas;
+  Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
+  e.Fills("area_fills", std::move(areas), kAreaFill);
+  e.Lines("area_outlines", std::move(outlines), kAreaOutline, 3.5);
 }
 
 void FlightLayer::DrawObstacles()
@@ -380,7 +430,7 @@ void FlightLayer::DrawObstacles()
 
   // Obstacles near several sites are found more than once.
   std::set<std::pair<m2::PointD, m2::PointD>> seen;
-  std::vector<std::vector<m2::PointD>> lines;
+  Rings lines;
   std::vector<m2::PointD> points;
   m2::RectD near = m_screen->ClipRect();
   near.Scale(1.5);
@@ -400,16 +450,12 @@ void FlightLayer::DrawObstacles()
         lines.push_back(std::move(obstacle.m_points));
     });
   }
-  if (!lines.empty())
-  {
-    df::DrapeApiLineData data({}, kObstacle);
-    data.Polylines(std::move(lines)).Width(4.0f);
-    Add(std::string(kPrefix) + "obstacle_lines", data);
-  }
+  Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
+  e.Lines("obstacle_lines", std::move(lines), kObstacle, 7.0);
   if (!points.empty())
   {
     df::DrapeApiLineData data(points, kObstacle);
-    data.PointsOnly().Width(3.0f);
-    Add(std::string(kPrefix) + "obstacle_points", data);
+    data.PointsOnly().Width(static_cast<float>(4.0 * m_visualScale));
+    Add("flight_obstacle_points", data);
   }
 }

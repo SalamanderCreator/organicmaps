@@ -66,17 +66,18 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetLis
 // [areaOffsets[i], areaOffsets[i + 1]) of |areaLatLons|.
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSites(
     JNIEnv * env, jclass, jobjectArray ids, jobjectArray names, jdoubleArray lats, jdoubleArray lons,
-    jbooleanArray landings, jintArray directions, jbooleanArray restricted, jintArray areaOffsets,
-    jdoubleArray areaLatLons)
+    jbooleanArray landings, jintArray directions, jbooleanArray restricted, jbooleanArray labeled,
+    jintArray areaOffsets, jdoubleArray areaLatLons)
 {
   jsize const count = env->GetArrayLength(ids);
   std::vector<jdouble> latV(count), lonV(count);
-  std::vector<jboolean> landingV(count), restrictedV(count);
+  std::vector<jboolean> landingV(count), restrictedV(count), labeledV(count);
   std::vector<jint> directionV(count), offsetV(count + 1);
   env->GetDoubleArrayRegion(lats, 0, count, latV.data());
   env->GetDoubleArrayRegion(lons, 0, count, lonV.data());
   env->GetBooleanArrayRegion(landings, 0, count, landingV.data());
   env->GetBooleanArrayRegion(restricted, 0, count, restrictedV.data());
+  env->GetBooleanArrayRegion(labeled, 0, count, labeledV.data());
   env->GetIntArrayRegion(directions, 0, count, directionV.data());
   env->GetIntArrayRegion(areaOffsets, 0, count + 1, offsetV.data());
   std::vector<jdouble> areaV(env->GetArrayLength(areaLatLons));
@@ -94,6 +95,7 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSit
     site.m_type = landingV[i] ? FlightLayer::Site::Type::Landing : FlightLayer::Site::Type::Takeoff;
     site.m_directions = static_cast<uint16_t>(directionV[i]);
     site.m_restricted = restrictedV[i];
+    site.m_labeled = labeledV[i];
     for (jint j = offsetV[i]; j < offsetV[i + 1]; ++j)
       site.m_area.push_back(mercator::FromLatLon(areaV[2 * j], areaV[2 * j + 1]));
   }

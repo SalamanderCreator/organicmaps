@@ -13,6 +13,8 @@
 
 #include "base/string_utils.hpp"
 
+#include "geometry/robust_orientation.hpp"
+
 #include "3party/earcut/earcut.hpp"
 
 #include <array>
@@ -90,8 +92,19 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
         std::vector<std::vector<std::array<double, 2>>> rings(1);
         for (auto const & p : ring)
           rings.front().push_back({p.x, p.y});
-        for (uint32_t const i : mapbox::earcut<uint32_t>(rings))
-          triangles.push_back(ring[i]);
+        // Back faces are culled, so all triangles must be clockwise, which earcut does not promise.
+        auto const indices = mapbox::earcut<uint32_t>(rings);
+        for (size_t i = 0; i + 2 < indices.size(); i += 3)
+        {
+          auto const & a = ring[indices[i]];
+          auto const & b = ring[indices[i + 1]];
+          auto const & c = ring[indices[i + 2]];
+          double const s = m2::robust::OrientedS(a, b, c);
+          if (s < 0)
+            triangles.insert(triangles.end(), {a, b, c});
+          else if (s > 0)
+            triangles.insert(triangles.end(), {a, c, b});
+        }
       }
       if (!triangles.empty())
       {
@@ -151,7 +164,7 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
       {
         // A halo keeps the label readable on colored map features, and a gap keeps it off the point symbol.
         float const vs = static_cast<float>(VisualParams::Instance().GetVisualScale());
-        dp::FontDecl const font(data.m_color, kFontSize,
+        dp::FontDecl const font(data.m_color, data.m_labelSize,
                                 data.m_labelHalo ? dp::Color::White() : dp::Color::Transparent());
         BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
                   glsl::vec2(14.0f * vs, 4.0f * vs));

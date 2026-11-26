@@ -88,6 +88,13 @@ struct DrapeApiLineData
     return *this;
   }
 
+  /// Font size of the label, 14 by default.
+  DrapeApiLineData & LabelSize(uint8_t size)
+  {
+    m_labelSize = size;
+    return *this;
+  }
+
   std::vector<m2::PointD> m_points;
   float m_width = 1.0f;
   dp::Color m_color;
@@ -97,6 +104,7 @@ struct DrapeApiLineData
   std::string m_label;
   bool m_labelHalo = false;
 
+  uint8_t m_labelSize = 14;
   std::vector<std::vector<m2::PointD>> m_polylines;
   std::vector<std::vector<m2::PointD>> m_fillRings;
   dp::Color m_fillColor;

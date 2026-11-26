@@ -17,10 +17,10 @@ class DrapeApi;
 struct DrapeApiLineData;
 }  // namespace df
 
-/// Maps&Fly: paragliding takeoffs and landings on the map, drawn with the DrapeApi. They are always shown,
-/// a takeoff as a small paraglider and a landing as a windsock. The "Flight preparation" layer makes them
-/// bigger and colored, adds the takeoff direction sectors and highlights obstacles around the sites
-/// (power lines, aerial lifts, motorways, wind turbines) from the maps.
+/// Maps&Fly: paragliding takeoffs and landings on the map, drawn with the DrapeApi. On the normal map they
+/// look like the other map icons: a colored circle with a white paraglider or windsock. The "Flight
+/// preparation" layer shows colored symbols instead, takeoffs with their direction sectors, from further
+/// out, and highlights obstacles around the sites (power lines, aerial lifts, motorways, wind turbines).
 class FlightLayer
 {
 public:
@@ -40,6 +40,8 @@ public:
     uint16_t m_directions = 0;
     /// Drawn with an orange ring, e.g. a site for club members only.
     bool m_restricted = false;
+    /// Gets a label, e.g. not when the map shows the site's name already.
+    bool m_labeled = false;
     /// The closed ring of a known landing area, or empty.
     std::vector<m2::PointD> m_area;
   };
@@ -52,12 +54,13 @@ public:
 
   using ForEachObstacleFn = std::function<void(m2::RectD const & rect, std::function<void(Obstacle &&)> const & fn)>;
 
-  /// Sites are dots from kDotsZoom on, symbols from kSymbolsZoom on and get their names from kLabelsZoom
-  /// on. Landing areas are drawn from kAreasZoom on, obstacles from kObstaclesZoom on in the layer.
-  static int constexpr kDotsZoom = 7;
-  static int constexpr kSymbolsZoom = 10;
-  static int constexpr kLabelsZoom = 12;
-  static int constexpr kAreasZoom = 12;
+  /// Zooms from which takeoffs and landings show up, on the normal map like camp sites and restaurants,
+  /// in the layer from further out. Labels come like the ones of restaurants, obstacles in the layer only.
+  static int constexpr kTakeoffsZoom = 13;
+  static int constexpr kLandingsZoom = 15;
+  static int constexpr kLayerTakeoffsZoom = 10;
+  static int constexpr kLayerLandingsZoom = 12;
+  static int constexpr kLabelsZoom = 16;
   static int constexpr kObstaclesZoom = 13;
   static double constexpr kObstacleRadiusM = 1500.0;
 
@@ -86,22 +89,14 @@ public:
   static std::vector<m2::PointD> MakeCircle(m2::PointD const & center, double radius, size_t pointsCount = 24);
 
 private:
-  enum class Detail
-  {
-    Hidden,
-    Dots,
-    Symbols,
-    Labels,
-    Obstacles
-  };
-
-  static Detail GetDetail(ScreenBase const & screen);
+  bool IsVisible(Site const & site, int zoom) const;
 
   void Redraw();
   void Add(std::string const & id, df::DrapeApiLineData const & data);
-  void DrawSymbols(m2::RectD const & rect, double unit);
-  void DrawLabels(m2::RectD const & rect);
-  void DrawAreas(m2::RectD const & rect);
+  void DrawMapIcons(m2::RectD const & rect, int zoom, double unit);
+  void DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit);
+  void DrawLabels(m2::RectD const & rect, int zoom);
+  void DrawAreas(m2::RectD const & rect, int zoom);
   void DrawObstacles();
 
   df::DrapeApi & m_drapeApi;
@@ -113,7 +108,7 @@ private:
 
   // What is drawn now, for which area and scale.
   std::set<std::string> m_drawnIds;
-  std::optional<Detail> m_drawnDetail;
+  std::optional<int> m_drawnZoom;
   m2::RectD m_drawnRect;
   double m_drawnScale = 0;
 };

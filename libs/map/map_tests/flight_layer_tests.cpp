@@ -67,7 +67,7 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_HitsSitesAlsoWithoutTheLayer)
   FlightLayer layer(drapeApi);
 
   auto const center = mercator::FromLatLon(47.2, 11.3);
-  auto const screen = MakeScreen(center, 5000.0);
+  auto const screen = MakeScreen(center, 250.0);
   layer.SetViewport(screen);
 
   FlightLayer::Site takeoff;
@@ -82,14 +82,18 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_HitsSitesAlsoWithoutTheLayer)
                     areaRect.LeftBottom()};
   layer.SetSites({takeoff, landing});
 
-  // 1000 px for 5 km: 20 px are 100 m.
-  TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.2003, 11.3), screen, 20.0), std::optional<std::string>("pge:1"), ());
+  // About 0.5 m per pixel: 20 px are 10 m.
+  TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.20005, 11.3), screen, 20.0), std::optional<std::string>("pge:1"), ());
   TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.19, 11.3015), screen, 20.0), std::optional<std::string>("osm:w2"),
              ("inside the area, away from the point"));
   TEST(!layer.HitTest(mercator::FromLatLon(47.21, 11.3), screen, 20.0), ());
 
+  // Further out landings show up in the layer only.
+  auto const wider = MakeScreen(center, 2000.0);
+  TEST(!layer.HitTest(landing.m_point, wider, 20.0), ());
   layer.SetEnabled(true);
-  TEST_EQUAL(layer.HitTest(center, screen, 20.0), std::optional<std::string>("pge:1"), ("in the layer"));
+  TEST_EQUAL(layer.HitTest(landing.m_point, wider, 20.0), std::optional<std::string>("osm:w2"), ("in the layer"));
+  TEST_EQUAL(layer.HitTest(center, wider, 20.0), std::optional<std::string>("pge:1"), ("in the layer"));
 
   // Zoomed out of the whole of Europe the sites are hidden.
   auto const far = MakeScreen(center, 5'000'000.0);
