@@ -103,6 +103,8 @@ public final class FlightSiteSheet
       names.add("ParaglidingEarth");
     if ((sources & FlightSite.SOURCE_OSM) != 0)
       names.add("OpenStreetMap");
+    if ((sources & FlightSite.SOURCE_TEST) != 0)
+      names.add("Test");
     return String.join(", ", names);
   }
 

@@ -106,8 +106,11 @@ public final class FlightLayer
         if (sLoadedCells.contains(cell) || !sLoadingCells.add(cell))
           continue;
         sLoader.execute(() -> {
-          final List<FlightSite> sites = load(context, cell);
-          UiThread.run(() -> onCellLoaded(cell, sites));
+          final List<FlightSite> loaded = load(context, cell);
+          final List<FlightSite> sites = new ArrayList<>(FlightSources.testSites(cell));
+          if (loaded != null)
+            sites.addAll(loaded);
+          UiThread.run(() -> onCellLoaded(cell, sites, loaded != null));
         });
       }
     }
@@ -122,15 +125,14 @@ public final class FlightLayer
   }
 
   @MainThread
-  private static void onCellLoaded(int cell, @Nullable List<FlightSite> sites)
+  private static void onCellLoaded(int cell, @NonNull List<FlightSite> sites, boolean loaded)
   {
     sLoadingCells.remove(cell);
-    if (sites == null)
+    if (loaded)
+      sLoadedCells.add(cell);
+    else
       sRetry = true;
     scheduleRetry();
-    if (sites == null)
-      return;
-    sLoadedCells.add(cell);
 
     final int n = sites.size();
     final String[] ids = new String[n];

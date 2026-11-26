@@ -88,4 +88,12 @@ public class FlightSourcesTest
     assertEquals(48, b[2], 0);
     assertEquals(12, b[3], 0);
   }
+
+  @Test
+  public void testSitesAreOnlyInTheirCell()
+  {
+    // Liezen, 47.58 N 14.23 E.
+    assertEquals(2, FlightSources.testSites((47 + 90) * 360 + (14 + 180)).size());
+    assertEquals(0, FlightSources.testSites((47 + 90) * 360 + (13 + 180)).size());
+  }
 }

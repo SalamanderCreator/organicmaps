@@ -214,6 +214,28 @@ final class FlightSources
     return sites;
   }
 
+  /**
+   * Maps&Fly test sites at Liezen, shown whatever the sources answer, to test the layer while
+   * ParaglidingEarth and Overpass cannot be reached. Remove them once real data shows up.
+   */
+  @NonNull
+  static List<FlightSite> testSites(int cell)
+  {
+    final List<FlightSite> sites = new ArrayList<>();
+    final FlightSite[] all = {
+        new FlightSite("test:liezen", "Test-Startplatz Liezen", 47.0 + 34.0 / 60 + 55.09 / 3600,
+                       14.0 + 13.0 / 60 + 55.57 / 3600, false, FlightSite.NO_ALTITUDE, 0, FlightSite.SOURCE_TEST,
+                       new double[0], null),
+        new FlightSite("test:liezen:landing", "Test-Landeplatz Liezen", 47.0 + 33.0 / 60 + 58.39 / 3600,
+                       14.0 + 13.0 / 60 + 52.17 / 3600, true, FlightSite.NO_ALTITUDE, 0, FlightSite.SOURCE_TEST,
+                       new double[0], null)};
+    final double[] b = cellBounds(cell);
+    for (FlightSite site : all)
+      if (site.mLat >= b[0] && site.mLat < b[2] && site.mLon >= b[1] && site.mLon < b[3])
+        sites.add(site);
+    return sites;
+  }
+
   /** Adds the OpenStreetMap sites to the ParaglidingEarth ones, a site in both only once. */
   @NonNull
   static List<FlightSite> merge(@NonNull List<FlightSite> pge, @NonNull List<FlightSite> osm)
