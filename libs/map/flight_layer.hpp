@@ -48,7 +48,17 @@ public:
 
   struct Obstacle
   {
-    /// A line (power line, aerial lift, motorway) or a single point (wind turbine).
+    /// Each kind is drawn differently, so that the map still shows what it is below.
+    enum class Kind : uint8_t
+    {
+      PowerLine,
+      AerialLift,
+      Motorway,
+      WindTurbine
+    };
+
+    Kind m_kind = Kind::PowerLine;
+    /// A line, or a single point for a wind turbine.
     std::vector<m2::PointD> m_points;
   };
 

@@ -2366,23 +2366,29 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
   {
     // Only the lines themselves, not e.g. the stations of an aerial lift, and wind turbines as points.
     auto const geomType = ft.GetGeomType();
-    bool isObstacle = false;
+    std::optional<FlightLayer::Obstacle::Kind> kind;
     ft.ForEachType([&](uint32_t type)
     {
-      if (geomType == feature::GeomType::Line &&
-          (ftype::Trunc(type, 1) == kAerialway || base::IsExist(kLevel2, ftype::Trunc(type, 2))))
+      using Kind = FlightLayer::Obstacle::Kind;
+      if (geomType == feature::GeomType::Line)
       {
-        isObstacle = true;
+        if (ftype::Trunc(type, 1) == kAerialway)
+          kind = Kind::AerialLift;
+        else if (ftype::Trunc(type, 2) == kLevel2[2])
+          kind = Kind::Motorway;
+        else if (base::IsExist(kLevel2, ftype::Trunc(type, 2)))
+          kind = Kind::PowerLine;
       }
       else if (geomType == feature::GeomType::Point && ftype::Trunc(type, 3) == kWindTurbine)
       {
-        isObstacle = true;
+        kind = Kind::WindTurbine;
       }
     });
-    if (!isObstacle)
+    if (!kind)
       return;
 
     FlightLayer::Obstacle obstacle;
+    obstacle.m_kind = *kind;
     if (geomType == feature::GeomType::Line)
       ft.ForEachPoint([&obstacle](m2::PointD const & p) { obstacle.m_points.push_back(p); }, kScale);
     else
