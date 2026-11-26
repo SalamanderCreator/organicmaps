@@ -21,6 +21,8 @@ public final class FlightSite
   public final boolean mLanding;
   /** Meters above sea level or NO_ALTITUDE. */
   public int mAltitude;
+  /** The altitude is taken from the terrain of the map, the source has none. */
+  public boolean mAltitudeFromTerrain;
   /** See FlightDirections: bit i is i * 22.5 degrees from north, where the wind should come from. */
   public int mDirections;
   /** SOURCE_* bits. */

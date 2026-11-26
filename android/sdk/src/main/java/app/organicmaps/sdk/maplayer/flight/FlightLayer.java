@@ -119,7 +119,11 @@ public final class FlightLayer
     public void onSiteTapped(@NonNull String id)
     {
       final FlightSite site = sSites.get(id);
-      if (site != null && sTapListener != null)
+      if (site == null)
+        return;
+      // The terrain of the region may have been downloaded after the site was loaded.
+      fillAltitudeFromTerrain(site);
+      if (sTapListener != null)
         sTapListener.accept(site);
     }
   }
@@ -146,6 +150,7 @@ public final class FlightLayer
     for (int i = 0; i < n; ++i)
     {
       final FlightSite s = sites.get(i);
+      fillAltitudeFromTerrain(s);
       sSites.put(s.mId, s);
       ids[i] = s.mId;
       names[i] = s.mName;
@@ -162,6 +167,19 @@ public final class FlightLayer
     for (int i = 0; i < areaLatLons.length; ++i)
       areaLatLons[i] = area.get(i);
     nativeSetSites(cell, ids, names, lats, lons, landings, directions, areaOffsets, areaLatLons);
+  }
+
+  /** Takes the height of a site without one from the downloaded terrain, if there is terrain. */
+  @MainThread
+  private static void fillAltitudeFromTerrain(@NonNull FlightSite site)
+  {
+    if (site.hasAltitude())
+      return;
+    final double elevation = nativeGetTerrainElevation(site.mLat, site.mLon);
+    if (Double.isNaN(elevation))
+      return;
+    site.mAltitude = (int) Math.round(elevation);
+    site.mAltitudeFromTerrain = true;
   }
 
   /** Asks the core again for the cells in view, which loads the cells that failed. */
@@ -324,6 +342,7 @@ public final class FlightLayer
 
   private static native void nativeSetEnabled(boolean enabled);
   private static native boolean nativeIsEnabled();
+  private static native double nativeGetTerrainElevation(double lat, double lon);
   private static native void nativeSetListener(@NonNull Object listener);
   private static native void nativeSetSites(int cell, @NonNull String[] ids, @NonNull String[] names,
                                             @NonNull double[] lats, @NonNull double[] lons,

@@ -5,6 +5,7 @@
 
 #include "geometry/mercator.hpp"
 
+#include <cmath>
 #include <vector>
 
 // Maps&Fly: the flight preparation layer, see FlightLayer.java. All calls run on the UI thread.
@@ -19,6 +20,14 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetEna
 JNIEXPORT jboolean Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeIsEnabled(JNIEnv *, jclass)
 {
   return static_cast<jboolean>(frm()->IsFlightLayerEnabled());
+}
+
+JNIEXPORT jdouble Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeGetTerrainElevation(JNIEnv *, jclass,
+                                                                                               jdouble lat,
+                                                                                               jdouble lon)
+{
+  auto const elevation = frm()->GetTerrainElevation(mercator::FromLatLon(lat, lon));
+  return elevation ? *elevation : NAN;
 }
 
 // void onCellsNeeded(int[] cells); void onSiteTapped(String id);

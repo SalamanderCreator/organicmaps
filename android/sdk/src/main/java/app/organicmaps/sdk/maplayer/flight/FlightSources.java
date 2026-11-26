@@ -216,7 +216,8 @@ final class FlightSources
 
   /**
    * Maps&Fly test sites at Liezen, shown whatever the sources answer, to test the layer while
-   * ParaglidingEarth and Overpass cannot be reached. Remove them once real data shows up.
+   * ParaglidingEarth and Overpass cannot be reached. Their height comes from the terrain of the map.
+   * Remove them once real data shows up.
    */
   @NonNull
   static List<FlightSite> testSites(int cell)
@@ -224,7 +225,8 @@ final class FlightSources
     final List<FlightSite> sites = new ArrayList<>();
     final FlightSite[] all = {
         new FlightSite("test:liezen", "Test-Startplatz Liezen", 47.0 + 34.0 / 60 + 55.09 / 3600,
-                       14.0 + 13.0 / 60 + 55.57 / 3600, false, FlightSite.NO_ALTITUDE, 0, FlightSite.SOURCE_TEST,
+                       14.0 + 13.0 / 60 + 55.57 / 3600, false, FlightSite.NO_ALTITUDE,
+                       FlightDirections.parse("SW;S;SE"), FlightSite.SOURCE_TEST,
                        new double[0], null),
         new FlightSite("test:liezen:landing", "Test-Landeplatz Liezen", 47.0 + 33.0 / 60 + 58.39 / 3600,
                        14.0 + 13.0 / 60 + 52.17 / 3600, true, FlightSite.NO_ALTITUDE, 0, FlightSite.SOURCE_TEST,

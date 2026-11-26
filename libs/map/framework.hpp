@@ -513,6 +513,11 @@ public:
   void SetFlightLayerEnabled(bool enabled);
   bool IsFlightLayerEnabled() const { return m_flightLayer.IsEnabled(); }
   FlightLayer & GetFlightLayer() { return m_flightLayer; }
+  /// Elevation from the downloaded terrain, if present.
+  std::optional<double> GetTerrainElevation(m2::PointD const & point) const
+  {
+    return m_terrainProvider.GetElevation(point);
+  }
   /// Called instead of opening the place page for a tap on a flight site.
   void SetFlightSiteTapFn(std::function<void(std::string const & siteId)> fn) { m_flightSiteTapFn = std::move(fn); }
 

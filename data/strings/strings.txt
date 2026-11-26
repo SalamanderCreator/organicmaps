@@ -46058,6 +46058,12 @@ tags = android-app
 en = Altitude: %s
 de = Höhe: %s
 
+[flight_site_altitude_terrain]
+comment = Maps&Fly flight layer: height of the site above sea level, taken from the terrain of the map
+tags = android-app
+en = Altitude: %s (from the map)
+de = Höhe: %s (aus der Karte)
+
 [flight_site_directions]
 comment = Maps&Fly flight layer: wind directions the takeoff works for, e.g. NW, W
 tags = android-app

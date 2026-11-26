@@ -54,7 +54,11 @@ public final class FlightSiteSheet
 
     final List<String> details = new ArrayList<>();
     if (site.hasAltitude())
-      details.add(context.getString(R.string.flight_site_altitude, Framework.nativeFormatAltitude(site.mAltitude)));
+    {
+      final String altitude = Framework.nativeFormatAltitude(site.mAltitude);
+      details.add(site.mAltitudeFromTerrain ? context.getString(R.string.flight_site_altitude_terrain, altitude)
+                                            : context.getString(R.string.flight_site_altitude, altitude));
+    }
     if (!site.mLanding)
     {
       details.add(site.mDirections == 0
