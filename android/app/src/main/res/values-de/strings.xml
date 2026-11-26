@@ -1034,64 +1034,38 @@
     <string name="flight_site_directions_unknown">Startrichtungen unbekannt</string>
     <!-- Maps&Fly flight layer: the landing area is shown in green on the map -->
     <string name="flight_site_area_known">Landefläche grün auf der Karte</string>
-    <!-- Maps&Fly flight layer: open the web page of the site -->
-    <string name="flight_site_open_source">Seite des Platzes öffnen</string>
-    <!-- Maps&Fly flight layer: title of the forecast of a site -->
-    <string name="flight_weather_title">Wetter am Platz</string>
-    <!-- Maps&Fly flight layer: the forecast could not be downloaded -->
-    <string name="flight_weather_failed">Die Vorhersage konnte nicht geladen werden.</string>
-    <!-- Maps&Fly flight layer: wind of a forecast hour, direction, mean and gusts -->
-    <string name="flight_weather_wind">%1$s %2$d km/h, Böen %3$d</string>
-    <!-- Maps&Fly flight layer: rain amount of a forecast hour -->
-    <string name="flight_weather_rain">Regen %s mm</string>
-    <!-- Maps&Fly flight layer: wind at 850 hPa of a forecast hour -->
-    <string name="flight_weather_upper_wind">Wind in 1500 m %1$s %2$d km/h</string>
-    <!-- Maps&Fly flight layer: weak thermals -->
-    <string name="flight_weather_thermal_weak">schwache Thermik</string>
-    <!-- Maps&Fly flight layer: moderate thermals -->
-    <string name="flight_weather_thermal_moderate">mäßige Thermik</string>
-    <!-- Maps&Fly flight layer: good thermals -->
-    <string name="flight_weather_thermal_good">gute Thermik</string>
-    <!-- Maps&Fly flight layer: height thermals reach above sea level -->
-    <string name="flight_weather_thermal_top">bis etwa %s</string>
-    <!-- Maps&Fly flight layer: estimated cumulus cloud base above sea level -->
-    <string name="flight_weather_cloud_base">Basis etwa %s</string>
-    <!-- Maps&Fly flight layer: credit and disclaimer below the forecast -->
-    <string name="flight_weather_attribution">Wetterdaten von Open-Meteo.com. Nur ein Hinweis: prüfe die Bedingungen vor Ort.</string>
+    <!-- Maps&Fly flight site: the site has rules for club members only -->
+    <string name="flight_site_restricted">Regeln für Vereinsmitglieder</string>
+    <!-- Maps&Fly flight site: title of the landings of a takeoff -->
+    <string name="flight_site_landings">Landeplätze</string>
+    <!-- Maps&Fly flight site: title of the takeoffs a landing belongs to -->
+    <string name="flight_site_takeoffs">Gehört zu</string>
+    <!-- Maps&Fly flight site: title of the flight rules -->
+    <string name="flight_site_rules">Regeln</string>
+    <!-- Maps&Fly flight site: title of how to get to the site -->
+    <string name="flight_site_access">Zugang</string>
+    <!-- Maps&Fly flight site: title of the description -->
+    <string name="flight_site_description">Beschreibung</string>
+    <!-- Maps&Fly flight site: title of further notes -->
+    <string name="flight_site_comments">Hinweise</string>
+    <!-- Maps&Fly flight site: title of the aerial lift and parking found in the maps -->
+    <string name="flight_site_nearby">In der Nähe (aus der Karte)</string>
+    <!-- Maps&Fly flight site: nearest aerial lift station, name and distance -->
+    <string name="flight_site_cable_car">Bergbahn: %1$s · %2$s</string>
+    <!-- Maps&Fly flight site: nearest parking, name and distance -->
+    <string name="flight_site_parking">Parkplatz: %1$s · %2$s</string>
+    <!-- Maps&Fly flight site: a site or place without a name -->
+    <string name="flight_site_unnamed">ohne Namen</string>
+    <!-- Maps&Fly flight site: open the page of the site at ParaglidingEarth -->
+    <string name="flight_site_link_pge">Bei ParaglidingEarth öffnen</string>
+    <!-- Maps&Fly flight site: open the site at OpenStreetMap -->
+    <string name="flight_site_link_osm">Bei OpenStreetMap öffnen</string>
+    <!-- Maps&Fly flight site: open the website of the site -->
+    <string name="flight_site_link_web">Webseite öffnen</string>
     <!-- Maps&Fly flight layer: credit of ParaglidingEarth -->
-    <string name="flight_attribution_pge">Plätze: paraglidingearth.com.</string>
+    <string name="flight_attribution_pge">Plätze: paragliding.earth (CC BY-SA).</string>
     <!-- Maps&Fly flight layer: credit of OpenStreetMap -->
     <string name="flight_attribution_osm">© OpenStreetMap-Mitwirkende.</string>
-    <!-- Maps&Fly flight layer rating: almost no wind -->
-    <string name="flight_reason_calm">wenig Wind</string>
-    <!-- Maps&Fly flight layer rating: the wind direction fits the takeoff -->
-    <string name="flight_reason_direction_fits">Wind passt zum Start</string>
-    <!-- Maps&Fly flight layer rating: no takeoff directions to compare with -->
-    <string name="flight_reason_direction_unknown">Richtung nicht bewertet</string>
-    <!-- Maps&Fly flight layer rating: wind from the side of the takeoff -->
-    <string name="flight_reason_crosswind">seitlicher Wind</string>
-    <!-- Maps&Fly flight layer rating: the wind direction does not fit the takeoff -->
-    <string name="flight_reason_wrong_direction">Wind passt nicht</string>
-    <!-- Maps&Fly flight layer rating: wind from behind the takeoff -->
-    <string name="flight_reason_tailwind">Rückenwind</string>
-    <!-- Maps&Fly flight layer rating: strong wind -->
-    <string name="flight_reason_wind_strong">kräftiger Wind</string>
-    <!-- Maps&Fly flight layer rating: too much wind to fly -->
-    <string name="flight_reason_wind_too_strong">zu viel Wind</string>
-    <!-- Maps&Fly flight layer rating: gusty wind -->
-    <string name="flight_reason_gusty">böig</string>
-    <!-- Maps&Fly flight layer rating: too strong gusts -->
-    <string name="flight_reason_gusts_too_strong">starke Böen</string>
-    <!-- Maps&Fly flight layer rating: strong wind at altitude -->
-    <string name="flight_reason_upper_wind_strong">kräftiger Höhenwind</string>
-    <!-- Maps&Fly flight layer rating: too much wind at altitude -->
-    <string name="flight_reason_upper_wind_too_strong">zu starker Höhenwind</string>
-    <!-- Maps&Fly flight layer rating: rain is possible -->
-    <string name="flight_reason_rain_likely">Regen möglich</string>
-    <!-- Maps&Fly flight layer rating: rain -->
-    <string name="flight_reason_rain">Regen</string>
-    <!-- Maps&Fly flight layer rating: risk of overdevelopment and thunderstorms -->
-    <string name="flight_reason_thunderstorm">Gewittergefahr</string>
     <!-- Toast shown when saving a planned route as a bookmark track fails -->
     <string name="routing_save_route_error">Die Route konnte nicht als Track gespeichert werden</string>
     <!-- Hint under the title of the full-screen route point picker: a crosshair stays fixed in the centre of the screen while the user moves the map under it -->
