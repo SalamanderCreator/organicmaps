@@ -1062,6 +1062,12 @@
     <string name="flight_site_link_osm">Bei OpenStreetMap öffnen</string>
     <!-- Maps&Fly flight site: open the website of the site -->
     <string name="flight_site_link_web">Webseite öffnen</string>
+    <!-- Maps&Fly flight site: button that opens the weather of a takeoff -->
+    <string name="flight_site_weather">Wetter</string>
+    <!-- Maps&Fly flight weather: title of the window, the name of the takeoff -->
+    <string name="flight_weather_title">Wetter: %s</string>
+    <!-- Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time -->
+    <string name="flight_weather_offline">Offline: Vorhersage vom %s</string>
     <!-- Maps&Fly flight layer: credit of ParaglidingEarth -->
     <string name="flight_attribution_pge">Plätze: paragliding.earth (CC BY-SA).</string>
     <!-- Maps&Fly flight layer: credit of OpenStreetMap -->
