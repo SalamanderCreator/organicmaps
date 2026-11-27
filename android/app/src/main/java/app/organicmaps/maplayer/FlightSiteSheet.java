@@ -2,6 +2,7 @@ package app.organicmaps.maplayer;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -184,6 +185,8 @@ public final class FlightSiteSheet
     TextViewCompat.setTextAppearance(view, R.style.MwmTextAppearance_Body3);
     view.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.margin_quarter), 0, 0);
     view.setTextIsSelectable(true);
+    // Texts of the DHV hold written out links; a selectable text view still opens auto links on a tap.
+    view.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
     view.setText(text);
     parent.addView(view);
   }

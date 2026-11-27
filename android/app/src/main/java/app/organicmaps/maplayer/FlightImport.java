@@ -105,7 +105,7 @@ public final class FlightImport
                               }
                               new MaterialAlertDialogBuilder(mActivity, R.style.MwmTheme_AlertDialog)
                                   .setTitle(R.string.flight_import_title)
-                                  .setMessage(linked(message))
+                                  .setMessage(message)
                                   .setPositiveButton(R.string.ok, null)
                                   .show();
                             }
