@@ -77,6 +77,15 @@ UNIT_TEST(FlightLayer_Circle)
     TEST_ALMOST_EQUAL_ABS(p.Length(center), 0.5, 1e-12, ());
 }
 
+std::optional<std::string> HitSite(FlightLayer const & layer, m2::PointD const & point, ScreenBase const & screen)
+{
+  auto const hit = layer.HitTest(point, screen, 20.0);
+  if (!hit)
+    return {};
+  TEST(!hit->m_cluster, ());
+  return hit->m_siteId;
+}
+
 UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_HitsSitesAlsoWithoutTheLayer)
 {
   df::DrapeApi drapeApi;
@@ -99,20 +108,60 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_HitsSitesAlsoWithoutTheLayer)
   layer.SetSites({takeoff, landing});
 
   // About 0.5 m per pixel: 20 px are 10 m.
-  TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.20005, 11.3), screen, 20.0), std::optional<std::string>("pge:1"), ());
-  TEST_EQUAL(layer.HitTest(mercator::FromLatLon(47.19, 11.3015), screen, 20.0), std::optional<std::string>("osm:w2"),
+  TEST_EQUAL(HitSite(layer, mercator::FromLatLon(47.20005, 11.3), screen), std::optional<std::string>("pge:1"), ());
+  TEST_EQUAL(HitSite(layer, mercator::FromLatLon(47.19, 11.3015), screen), std::optional<std::string>("osm:w2"),
              ("inside the area, away from the point"));
-  TEST(!layer.HitTest(mercator::FromLatLon(47.21, 11.3), screen, 20.0), ());
+  TEST(!HitSite(layer, mercator::FromLatLon(47.21, 11.3), screen), ());
 
   // Further out landings show up in the layer only.
   auto const wider = MakeScreen(center, 2000.0);
-  TEST(!layer.HitTest(landing.m_point, wider, 20.0), ());
+  TEST(!HitSite(layer, landing.m_point, wider), ());
   layer.SetEnabled(true);
-  TEST_EQUAL(layer.HitTest(landing.m_point, wider, 20.0), std::optional<std::string>("osm:w2"), ("in the layer"));
-  TEST_EQUAL(layer.HitTest(center, wider, 20.0), std::optional<std::string>("pge:1"), ("in the layer"));
+  TEST_EQUAL(HitSite(layer, landing.m_point, wider), std::optional<std::string>("osm:w2"), ("in the layer"));
+  TEST_EQUAL(HitSite(layer, center, wider), std::optional<std::string>("pge:1"), ("in the layer"));
 
   // Zoomed out of the whole of Europe the sites are hidden.
   auto const far = MakeScreen(center, 5'000'000.0);
-  TEST(!layer.HitTest(center, far, 20.0), ());
+  TEST(!HitSite(layer, center, far), ());
+}
+UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_JoinsNearTakeoffsInTheLayer)
+{
+  df::DrapeApi drapeApi;
+  FlightLayer layer(drapeApi);
+  layer.SetEnabled(true);
+
+  auto const center = mercator::FromLatLon(47.2, 11.3);
+  auto const makeTakeoff = [](std::string const & id, m2::PointD const & point, uint16_t directions)
+  {
+    FlightLayer::Site site;
+    site.m_id = id;
+    site.m_point = point;
+    site.m_directions = directions;
+    return site;
+  };
+  // 100 m apart, and one 3 km away.
+  auto const east = mercator::FromLatLon(47.2, 11.3013);
+  layer.SetSites({makeTakeoff("a", center, 0x1), makeTakeoff("b", east, 0x10),
+                  makeTakeoff("c", mercator::FromLatLon(47.227, 11.3), 0x100)});
+
+  // About 10 m per pixel: one symbol between both, tapped to zoom in.
+  auto const wide = MakeScreen(center, 10'000.0);
+  layer.SetViewport(wide);
+  auto const middle = (center + east) / 2.0;
+  auto const hit = layer.HitTest(middle, wide, 20.0);
+  TEST(hit && hit->m_cluster, ());
+  TEST(hit->m_cluster->EqualDxDy(middle, 1e-9), ());
+  TEST_EQUAL(HitSite(layer, mercator::FromLatLon(47.227, 11.3), wide), std::optional<std::string>("c"), ("alone"));
+
+  // Closer both come apart.
+  auto const close = MakeScreen(center, 1'000.0);
+  layer.SetViewport(close);
+  TEST_EQUAL(HitSite(layer, center, close), std::optional<std::string>("a"), ());
+  TEST_EQUAL(HitSite(layer, east, close), std::optional<std::string>("b"), ());
+
+  // Without the layer they are never joined.
+  layer.SetEnabled(false);
+  layer.SetViewport(wide);
+  TEST(!layer.HitTest(middle, wide, 20.0) || !layer.HitTest(middle, wide, 20.0)->m_cluster, ());
 }
 }  // namespace flight_layer_tests

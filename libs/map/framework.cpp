@@ -2718,10 +2718,19 @@ void Framework::OnTapEvent(place_page::BuildInfo const & buildInfo)
   if (m_flightSiteTapFn)
   {
     double const tolerancePx = 20.0 * df::VisualParams::Instance().GetVisualScale();
-    if (auto const siteId = m_flightLayer.HitTest(buildInfo.m_mercator, m_currentModelView, tolerancePx))
+    if (auto const hit = m_flightLayer.HitTest(buildInfo.m_mercator, m_currentModelView, tolerancePx))
     {
       DeactivateMapSelection();
-      m_flightSiteTapFn(*siteId);
+      if (hit->m_cluster)
+      {
+        // Closer, the takeoffs of the symbol come apart.
+        int const zoom = static_cast<int>(df::GetZoomLevel(m_currentModelView.GetScale()));
+        SetViewportCenter(*hit->m_cluster, std::min(zoom + 2, FlightLayer::kClustersMaxZoom));
+      }
+      else
+      {
+        m_flightSiteTapFn(hit->m_siteId);
+      }
       return;
     }
   }

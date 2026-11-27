@@ -8,8 +8,12 @@ import app.organicmaps.sdk.util.concurrency.ThreadPool;
 import app.organicmaps.sdk.util.concurrency.UiThread;
 import app.organicmaps.sdk.util.log.Logger;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,8 +22,9 @@ import java.util.function.Consumer;
 
 /**
  * Maps&Fly: the paragliding sites on the map and the flight preparation layer. The sites come from the
- * file of the APK (ParaglidingEarth and OpenStreetMap) and are always shown; the layer shows them bigger
- * with their takeoff directions and the obstacles around them. They are no bookmarks.
+ * file of the APK (ParaglidingEarth and OpenStreetMap) and from a private DHV import on the phone, and are
+ * always shown; the layer shows them bigger with their takeoff directions and the obstacles around them.
+ * They are no bookmarks.
  */
 public final class FlightLayer
 {
@@ -32,6 +37,20 @@ public final class FlightLayer
 
   private FlightLayer() {}
 
+  // Same sites of other sources this close to a DHV site are left out, the DHV ones are more detailed.
+  private static final double DHV_DUPLICATE_M = 300;
+
+  private static int sDhvTakeoffs;
+  @NonNull
+  private static String sDhvGenerated = "";
+
+  /** The end of a DHV import, on the UI thread. */
+  public interface ImportListener
+  {
+    void onImported(int takeoffs);
+    void onFailed(@NonNull Exception e);
+  }
+
   /** Reads the sites and shows them, once per process. */
   @MainThread
   public static void init(@NonNull Context context)
@@ -40,7 +59,13 @@ public final class FlightLayer
       return;
     sInitialized = true;
     nativeSetListener(new NativeListener());
-    final Context appContext = context.getApplicationContext();
+    reload(context.getApplicationContext());
+  }
+
+  /** Reads the sites of the APK and the ones imported on the phone and shows them. */
+  @MainThread
+  private static void reload(@NonNull Context appContext)
+  {
     ThreadPool.getWorker().execute(() -> {
       final List<FlightSite> sites = new ArrayList<>(FlightSources.testSites());
       try (InputStream in = appContext.getAssets().open(FlightSources.ASSET))
@@ -55,8 +80,102 @@ public final class FlightLayer
       {
         Logger.e(TAG, "Cannot read the flight sites", e);
       }
-      UiThread.run(() -> setSites(sites));
+
+      List<FlightSite> dhv = new ArrayList<>();
+      String generated = "";
+      final File file = dhvFile(appContext);
+      if (file.exists())
+      {
+        try (InputStream in = new FileInputStream(file))
+        {
+          final String json = readAll(in);
+          dhv = FlightSources.parseFile(json);
+          generated = FlightSources.generated(json);
+        }
+        catch (Exception e)
+        {
+          Logger.e(TAG, "Cannot read the imported DHV sites", e);
+        }
+      }
+      final List<FlightSite> all = new ArrayList<>(FlightSources.withoutDuplicates(sites, dhv, DHV_DUPLICATE_M));
+      all.addAll(dhv);
+      int takeoffs = 0;
+      for (FlightSite s : dhv)
+        if (!s.mLanding)
+          ++takeoffs;
+      final int dhvTakeoffs = takeoffs;
+      final String dhvGenerated = generated;
+      UiThread.run(() -> {
+        sDhvTakeoffs = dhvTakeoffs;
+        sDhvGenerated = dhvGenerated;
+        setSites(all);
+      });
     });
+  }
+
+  /**
+   * Imports the "DHV XML" file of |in| (.xml or .zip) for this phone only, replacing an earlier import, and
+   * shows its sites.
+   */
+  @MainThread
+  public static void importDhv(@NonNull Context context, @NonNull java.util.concurrent.Callable<InputStream> in,
+                               @NonNull ImportListener listener)
+  {
+    final Context appContext = context.getApplicationContext();
+    ThreadPool.getWorker().execute(() -> {
+      try (InputStream stream = in.call())
+      {
+        final FlightDhvImport.Result result = FlightDhvImport.read(stream);
+        final File file = dhvFile(appContext);
+        final File tmp = new File(file.getPath() + ".tmp");
+        try (FileOutputStream out = new FileOutputStream(tmp))
+        {
+          out.write(FlightSources.toFile(result.mSites, result.mGenerated).getBytes(StandardCharsets.UTF_8));
+        }
+        if (!tmp.renameTo(file))
+          throw new java.io.IOException("Cannot replace " + file);
+        UiThread.run(() -> {
+          reload(appContext);
+          listener.onImported(result.mTakeoffs);
+        });
+      }
+      catch (Exception e)
+      {
+        Logger.e(TAG, "Cannot import the DHV file", e);
+        UiThread.run(() -> listener.onFailed(e));
+      }
+    });
+  }
+
+  /** Deletes the imported DHV sites from the phone. */
+  @MainThread
+  public static void removeDhv(@NonNull Context context)
+  {
+    final Context appContext = context.getApplicationContext();
+    if (!dhvFile(appContext).delete())
+      Logger.w(TAG, "No DHV sites to delete");
+    reload(appContext);
+  }
+
+  /** The number of imported DHV takeoffs, 0 without an import. */
+  @MainThread
+  public static int getDhvTakeoffs()
+  {
+    return sDhvTakeoffs;
+  }
+
+  /** The date of the imported DHV file, or empty. */
+  @NonNull
+  @MainThread
+  public static String getDhvGenerated()
+  {
+    return sDhvGenerated;
+  }
+
+  @NonNull
+  private static File dhvFile(@NonNull Context appContext)
+  {
+    return new File(appContext.getFilesDir(), FlightDhvImport.FILE);
   }
 
   public static boolean isEnabled()

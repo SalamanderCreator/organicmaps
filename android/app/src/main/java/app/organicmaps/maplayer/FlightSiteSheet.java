@@ -2,6 +2,7 @@ package app.organicmaps.maplayer;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -59,15 +60,28 @@ public final class FlightSiteSheet
       facts.add(context.getString(R.string.flight_site_area_known));
     if (site.mRestricted)
       facts.add(context.getString(R.string.flight_site_restricted));
+    if (site.mGuestRules)
+      facts.add(context.getString(R.string.flight_site_guest_rules));
+    addDetail(context, facts, R.string.flight_site_height_difference, site, FlightSite.DETAIL_HEIGHT_DIFFERENCE);
+    addDetail(context, facts, R.string.flight_site_suitability, site, FlightSite.DETAIL_SUITABILITY);
     addText(sections, String.join("\n", facts));
 
     addSection(sections, R.string.flight_site_rules, site.mRules);
-    addSection(sections, R.string.flight_site_access, site.mAccess);
+    addSection(sections, R.string.flight_site_access, access(context, site));
     addSection(sections, R.string.flight_site_description, site.mDescription);
     addSection(sections, R.string.flight_site_comments, site.mComments);
+    addSection(sections, R.string.flight_site_cable_car, site.mDetails.get(FlightSite.DETAIL_CABLE_CAR));
+    addSection(sections, R.string.flight_site_other_takeoffs, site.mDetails.get(FlightSite.DETAIL_OTHER_TAKEOFFS));
+    addSection(sections, R.string.flight_site_info, site.mDetails.get(FlightSite.DETAIL_INFO));
+    addSection(sections, R.string.flight_site_weather_info, site.mDetails.get(FlightSite.DETAIL_WEATHER));
+    addSection(sections, R.string.flight_site_webcams, site.mDetails.get(FlightSite.DETAIL_WEBCAMS));
+    addSection(sections, R.string.flight_site_holder, site.mDetails.get(FlightSite.DETAIL_HOLDER));
+    addSection(sections, R.string.flight_site_contact, site.mDetails.get(FlightSite.DETAIL_CONTACT));
 
     if (site.mUrl != null && (site.mSources & FlightSite.SOURCE_PGE) != 0)
       addLink(sections, context.getString(R.string.flight_site_link_pge), v -> Utils.openUrl(context, site.mUrl));
+    if (site.mUrl != null && (site.mSources & FlightSite.SOURCE_DHV) != 0)
+      addLink(sections, context.getString(R.string.flight_site_link_dhv), v -> Utils.openUrl(context, site.mUrl));
     if (site.mOsmUrl != null)
       addLink(sections, context.getString(R.string.flight_site_link_osm), v -> Utils.openUrl(context, site.mOsmUrl));
     if (site.mWebsite != null)
@@ -78,6 +92,8 @@ public final class FlightSiteSheet
       credits.add(context.getString(R.string.flight_attribution_pge));
     if ((site.mSources & FlightSite.SOURCE_OSM) != 0)
       credits.add(context.getString(R.string.flight_attribution_osm));
+    if ((site.mSources & FlightSite.SOURCE_DHV) != 0)
+      credits.add(context.getString(R.string.flight_attribution_dhv));
     ((TextView) view.findViewById(R.id.flight_attribution)).setText(String.join(" ", credits));
 
     dialog.show();
@@ -101,7 +117,44 @@ public final class FlightSiteSheet
       names.add("OpenStreetMap");
     if ((site.mSources & FlightSite.SOURCE_TEST) != 0)
       names.add("Test");
+    if ((site.mSources & FlightSite.SOURCE_DHV) != 0)
+      names.add("DHV");
     return String.join(", ", names);
+  }
+
+  private static void addDetail(@NonNull Context context, @NonNull List<String> facts, @StringRes int label,
+                                @NonNull FlightSite site, @NonNull String key)
+  {
+    final String value = site.mDetails.get(key);
+    if (value != null && !value.isEmpty())
+      facts.add(context.getString(label, value));
+  }
+
+  /** How to get there, like "By car, on foot", and the remarks of the source. */
+  @NonNull
+  private static String access(@NonNull Context context, @NonNull FlightSite site)
+  {
+    final List<String> ways = new ArrayList<>();
+    final String accessBy = site.mDetails.get(FlightSite.DETAIL_ACCESS_BY);
+    if (accessBy != null)
+    {
+      for (String way : accessBy.split(","))
+      {
+        switch (way)
+        {
+        case FlightSite.ACCESS_CAR -> ways.add(context.getString(R.string.flight_site_access_car));
+        case FlightSite.ACCESS_PUBLIC_TRANSPORT -> ways.add(context.getString(R.string.flight_site_access_public));
+        case FlightSite.ACCESS_FOOT -> ways.add(context.getString(R.string.flight_site_access_foot));
+        default -> {}
+        }
+      }
+    }
+    final List<String> lines = new ArrayList<>();
+    if (!ways.isEmpty())
+      lines.add(String.join(", ", ways));
+    if (!site.mAccess.isEmpty())
+      lines.add(site.mAccess);
+    return String.join("\n", lines);
   }
 
   private static void addSection(@NonNull LinearLayout parent, @StringRes int title, @Nullable String text)
@@ -132,6 +185,8 @@ public final class FlightSiteSheet
     TextViewCompat.setTextAppearance(view, R.style.MwmTextAppearance_Body3);
     view.setPadding(0, context.getResources().getDimensionPixelSize(R.dimen.margin_quarter), 0, 0);
     view.setTextIsSelectable(true);
+    // Texts of the DHV hold written out links; a selectable text view still opens auto links on a tap.
+    view.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
     view.setText(text);
     parent.addView(view);
   }

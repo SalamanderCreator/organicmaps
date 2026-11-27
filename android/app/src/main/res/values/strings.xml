@@ -1046,6 +1046,58 @@
     <string name="flight_site_link_osm">Open at OpenStreetMap</string>
     <!-- Maps&Fly flight site: open the website of the site -->
     <string name="flight_site_link_web">Open the website</string>
+    <!-- Maps&Fly main menu: import paragliding takeoffs of the DHV -->
+    <string name="flight_import_menu">Import takeoffs</string>
+    <!-- Maps&Fly DHV import: dialog title -->
+    <string name="flight_import_title">Import DHV takeoffs</string>
+    <!-- Maps&Fly DHV import: what to download at dhv.de and why the data stays on the phone -->
+    <string name="flight_import_text">Download the site data in the format “DHV XML” at dhv.de (as .xml or .zip) and choose the file here. Slope sites with a paragliding takeoff are imported, with their landings. The data stays on this phone only: the DHV allows private use only.</string>
+    <!-- Maps&Fly DHV import: the current import, number of takeoffs and the date of the file -->
+    <string name="flight_import_current">Imported: %1$d takeoffs, data of %2$s</string>
+    <!-- Maps&Fly DHV import: button that opens the file picker -->
+    <string name="flight_import_choose">Choose file</string>
+    <!-- Maps&Fly DHV import: button that deletes the imported takeoffs -->
+    <string name="flight_import_remove">Remove import</string>
+    <!-- Maps&Fly DHV import: the imported takeoffs were deleted -->
+    <string name="flight_import_removed">The DHV takeoffs were removed.</string>
+    <!-- Maps&Fly DHV import: number of imported takeoffs -->
+    <string name="flight_import_done">%d DHV takeoffs imported.</string>
+    <!-- Maps&Fly DHV import: the file could not be read -->
+    <string name="flight_import_failed">The file could not be read.</string>
+    <!-- Maps&Fly DHV import: the file is no DHV XML file -->
+    <string name="flight_import_not_dhv">This is no DHV XML file. Please choose the format “DHV XML” at dhv.de.</string>
+    <!-- Maps&Fly DHV import: the zip file holds no XML file -->
+    <string name="flight_import_no_xml_in_zip">The zip file holds no XML file.</string>
+    <!-- Maps&Fly flight site: the site has rules for guest pilots -->
+    <string name="flight_site_guest_rules">Rules for guest pilots, like a sign-up or a briefing</string>
+    <!-- Maps&Fly flight site: height difference of the site -->
+    <string name="flight_site_height_difference">Height difference: %s</string>
+    <!-- Maps&Fly flight site: for which pilots the takeoff is suitable -->
+    <string name="flight_site_suitability">Suitability: %s</string>
+    <!-- Maps&Fly flight site: the takeoff can be reached by car -->
+    <string name="flight_site_access_car">By car</string>
+    <!-- Maps&Fly flight site: the takeoff can be reached by public transport -->
+    <string name="flight_site_access_public">By public transport</string>
+    <!-- Maps&Fly flight site: the takeoff can be reached on foot -->
+    <string name="flight_site_access_foot">On foot</string>
+    <!-- Maps&Fly flight site: title of the cable car to the takeoff -->
+    <string name="flight_site_cable_car">Cable car</string>
+    <!-- Maps&Fly flight site: title of the other takeoffs of the same area -->
+    <string name="flight_site_other_takeoffs">Other takeoffs</string>
+    <!-- Maps&Fly flight site: title of more information about the area -->
+    <string name="flight_site_info">Information</string>
+    <!-- Maps&Fly flight site: title of weather hints of the area -->
+    <string name="flight_site_weather_info">Weather</string>
+    <!-- Maps&Fly flight site: title of the webcams of the area -->
+    <string name="flight_site_webcams">Webcams</string>
+    <!-- Maps&Fly flight site: title of the holder of the area's certificate -->
+    <string name="flight_site_holder">Holder</string>
+    <!-- Maps&Fly flight site: title of the contact of the area -->
+    <string name="flight_site_contact">Contact</string>
+    <!-- Maps&Fly flight site: open the page of the area at the DHV -->
+    <string name="flight_site_link_dhv">Open at the DHV</string>
+    <!-- Maps&Fly flight site: credit of the DHV for privately imported data -->
+    <string name="flight_attribution_dhv">Site data © DHV (imported privately).</string>
     <!-- Maps&Fly flight weather: button that shows the information of the takeoff -->
     <string name="flight_weather_site_info">Information about the takeoff</string>
     <!-- Maps&Fly flight weather: offline, the stored forecast is shown, with its date and time -->

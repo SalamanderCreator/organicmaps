@@ -73,6 +73,7 @@ import app.organicmaps.location.TrackRecordingService;
 import app.organicmaps.maplayer.LayerSettingsPanel;
 import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
+import app.organicmaps.maplayer.FlightImport;
 import app.organicmaps.maplayer.FlightSiteSheet;
 import app.organicmaps.maplayer.FlightWeatherSheet;
 import app.organicmaps.maplayer.RainRadarPanel;
@@ -208,6 +209,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
   @SuppressWarnings("NotNullFieldNotInitialized")
   private ActivityResultLauncher<String[]> mLocationPermissionRequest;
+  // Maps&Fly: the private import of DHV takeoffs.
+  private FlightImport mFlightImport;
   private boolean mLocationPermissionRequestedForRecording = false;
 
   @SuppressWarnings("NotNullFieldNotInitialized")
@@ -614,6 +617,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::onPowerSaveResult);
 
     mShareLauncher = SharingUtils.RegisterLauncher(this);
+    mFlightImport = new FlightImport(this);
 
     mDisplayManager = MwmApplication.from(this).getDisplayManager();
     if (mDisplayManager.isCarDisplayUsed())
@@ -2275,6 +2279,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
       mDonatesUrl = Utils.getDonateUrl(getApplicationContext());
       if (!TextUtils.isEmpty(mDonatesUrl))
         items.add(new MenuBottomSheetItem(R.string.donate, R.drawable.ic_donate, this::onDonateOptionSelected));
+      items.add(new MenuBottomSheetItem(R.string.flight_import_menu, R.drawable.ic_paragliding,
+                                        () -> mFlightImport.showDialog()));
       items.add(new MenuBottomSheetItem(R.string.settings, R.drawable.ic_settings, this::onSettingsOptionSelected));
       items.add(new MenuBottomSheetItem(R.string.start_track_recording, R.drawable.ic_track_recording_off, -1,
                                         this::onTrackRecordingOptionSelected));
