@@ -46,6 +46,8 @@ public final class FlightWeatherSheet
 
     view.findViewById(R.id.flight_weather_info).setOnClickListener(v -> FlightSiteSheet.show(context, site));
     view.findViewById(R.id.flight_weather_close).setOnClickListener(v -> dialog.dismiss());
+    final FlightDirectionsView directions = view.findViewById(R.id.flight_weather_directions);
+    directions.setDirections(site.mDirections);
 
     final TextView offline = view.findViewById(R.id.flight_weather_offline);
     final FlightWeatherCache cache = new FlightWeatherCache(context, storedAtMs -> UiThread.run(() -> {
