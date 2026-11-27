@@ -88,6 +88,13 @@ struct DrapeApiLineData
     return *this;
   }
 
+  /// Centers the label on the first point, like a number on a symbol.
+  DrapeApiLineData & LabelCentered()
+  {
+    m_labelCentered = true;
+    return *this;
+  }
+
   /// Font size of the label, 14 by default.
   DrapeApiLineData & LabelSize(uint8_t size)
   {
@@ -103,6 +110,7 @@ struct DrapeApiLineData
   double m_baseGtoPScale = 1.0;
   std::string m_label;
   bool m_labelHalo = false;
+  bool m_labelCentered = false;
 
   uint8_t m_labelSize = 14;
   std::vector<std::vector<m2::PointD>> m_polylines;

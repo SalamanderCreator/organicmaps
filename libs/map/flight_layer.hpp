@@ -76,6 +76,8 @@ public:
   static int constexpr kLayerLandingsZoom = 12;
   static int constexpr kLabelsZoom = 16;
   static int constexpr kObstaclesZoom = 13;
+  /// In the layer, takeoffs whose symbols would overlap are one symbol with their number, up to this zoom.
+  static int constexpr kClustersMaxZoom = 15;
   static double constexpr kObstacleRadiusM = 1500.0;
 
   explicit FlightLayer(df::DrapeApi & drapeApi);
@@ -93,8 +95,15 @@ public:
   void SetSites(std::vector<Site> && sites);
   void SetViewport(ScreenBase const & screen);
 
-  /// The id of the site at |point|, within |tolerancePx| on the screen or inside its landing area.
-  std::optional<std::string> HitTest(m2::PointD const & point, ScreenBase const & screen, double tolerancePx) const;
+  /// A tapped site, or a symbol of several takeoffs to zoom into.
+  struct Hit
+  {
+    std::string m_siteId;
+    std::optional<m2::PointD> m_cluster;
+  };
+
+  /// The site or takeoffs symbol at |point|, within |tolerancePx| on the screen or inside a landing area.
+  std::optional<Hit> HitTest(m2::PointD const & point, ScreenBase const & screen, double tolerancePx) const;
 
   /// A closed ring for each direction around |center|: a wedge from the center or, with |innerRadius|, a
   /// piece of a ring between both radii (in mercator). Neighbouring directions touch: 45 degrees each for
@@ -105,7 +114,19 @@ public:
   static std::vector<m2::PointD> MakeCircle(m2::PointD const & center, double radius, size_t pointsCount = 24);
 
 private:
+  /// Takeoffs drawn as one symbol: their directions together, restricted only if all are.
+  struct Cluster
+  {
+    m2::PointD m_point;
+    size_t m_first = 0;
+    size_t m_count = 0;
+    uint16_t m_directions = 0;
+    bool m_restricted = true;
+  };
+
   bool IsVisible(Site const & site, int zoom) const;
+  /// The visible takeoffs in |rect|, near ones together in the layer; |scale| in mercator per pixel.
+  std::vector<Cluster> MakeTakeoffClusters(m2::RectD const & rect, int zoom, double scale) const;
 
   void Redraw();
   void Add(std::string const & id, df::DrapeApiLineData const & data);
@@ -127,4 +148,5 @@ private:
   std::optional<int> m_drawnZoom;
   m2::RectD m_drawnRect;
   double m_drawnScale = 0;
+  std::vector<Cluster> m_drawnClusters;
 };

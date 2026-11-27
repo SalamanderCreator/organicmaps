@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
 
 namespace
 {
@@ -61,6 +62,9 @@ double constexpr kGlyphRadius = 9.5;
 double constexpr kDiscRadius = 14.5;
 // The takeoff directions are a green wreath around the disc, so the paraglider does not hide them.
 double constexpr kSectorRadius = 24.0;
+// The number of takeoffs in one symbol, at the top right of the disc.
+double constexpr kBadgeOffset = 11.5;
+double constexpr kBadgeRadius = 6.5;
 
 using Rings = std::vector<std::vector<m2::PointD>>;
 
@@ -108,6 +112,7 @@ void FlightLayer::SetEnabled(bool enabled)
 void FlightLayer::SetSites(std::vector<Site> && sites)
 {
   m_sites = std::move(sites);
+  m_drawnClusters.clear();
   Redraw();
 }
 
@@ -125,23 +130,51 @@ void FlightLayer::SetViewport(ScreenBase const & screen)
     Redraw();
 }
 
-std::optional<std::string> FlightLayer::HitTest(m2::PointD const & point, ScreenBase const & screen,
-                                                double tolerancePx) const
+std::optional<FlightLayer::Hit> FlightLayer::HitTest(m2::PointD const & point, ScreenBase const & screen,
+                                                    double tolerancePx) const
 {
   int const zoom = GetZoom(screen);
   m2::PointD const tapPx = screen.GtoP(point);
   double bestSqrPx = tolerancePx * tolerancePx;
-  Site const * best = nullptr;
+  std::optional<Hit> best;
   Site const * inArea = nullptr;
+
+  // In the layer takeoffs are tapped as they are drawn, maybe several in one symbol.
+  if (m_enabled)
+  {
+    std::vector<Cluster> computed;
+    bool const drawn = m_drawnZoom == zoom && m_drawnRect.IsPointInside(point);
+    if (!drawn)
+    {
+      m2::RectD rect = screen.ClipRect();
+      rect.Scale(3.0);
+      computed = MakeTakeoffClusters(rect, zoom, screen.GetScale());
+    }
+    for (auto const & cluster : drawn ? m_drawnClusters : computed)
+    {
+      double const sqrPx = screen.GtoP(cluster.m_point).SquaredLength(tapPx);
+      if (sqrPx > bestSqrPx)
+        continue;
+      bestSqrPx = sqrPx;
+      if (cluster.m_count > 1)
+        best = Hit{{}, cluster.m_point};
+      else
+        best = Hit{m_sites[cluster.m_first].m_id, {}};
+    }
+  }
+
   for (auto const & site : m_sites)
   {
     if (!IsVisible(site, zoom))
       continue;
-    double const sqrPx = screen.GtoP(site.m_point).SquaredLength(tapPx);
-    if (sqrPx <= bestSqrPx)
+    if (!m_enabled || site.m_type == Site::Type::Landing)
     {
-      bestSqrPx = sqrPx;
-      best = &site;
+      double const sqrPx = screen.GtoP(site.m_point).SquaredLength(tapPx);
+      if (sqrPx <= bestSqrPx)
+      {
+        bestSqrPx = sqrPx;
+        best = Hit{site.m_id, {}};
+      }
     }
     if (!inArea && site.m_area.size() > 2)
     {
@@ -161,10 +194,74 @@ std::optional<std::string> FlightLayer::HitTest(m2::PointD const & point, Screen
     }
   }
   if (best)
-    return best->m_id;
+    return best;
   if (inArea)
-    return inArea->m_id;
+    return Hit{inArea->m_id, {}};
   return {};
+}
+
+std::vector<FlightLayer::Cluster> FlightLayer::MakeTakeoffClusters(m2::RectD const & rect, int zoom,
+                                                                   double scale) const
+{
+  // Symbols overlap when their discs do.
+  double const distance = m_enabled && zoom < kClustersMaxZoom ? 2 * kDiscRadius * m_visualScale * scale : 0;
+  auto const cell = [distance](m2::PointD const & p, int dx, int dy)
+  {
+    auto const cx = static_cast<int64_t>(std::floor(p.x / distance)) + dx;
+    auto const cy = static_cast<int64_t>(std::floor(p.y / distance)) + dy;
+    return (static_cast<uint64_t>(cx) << 32) ^ static_cast<uint32_t>(cy);
+  };
+
+  std::vector<Cluster> clusters;
+  std::vector<m2::PointD> sums;
+  // Clusters by the cell of their first takeoff.
+  std::unordered_map<uint64_t, std::vector<size_t>> grid;
+  for (size_t i = 0; i < m_sites.size(); ++i)
+  {
+    auto const & site = m_sites[i];
+    if (site.m_type != Site::Type::Takeoff || !IsVisible(site, zoom) || !rect.IsPointInside(site.m_point))
+      continue;
+    std::optional<size_t> target;
+    if (distance > 0)
+    {
+      double bestSqr = distance * distance;
+      for (int dx = -1; dx <= 1; ++dx)
+      {
+        for (int dy = -1; dy <= 1; ++dy)
+        {
+          auto const it = grid.find(cell(site.m_point, dx, dy));
+          if (it == grid.end())
+            continue;
+          for (size_t const c : it->second)
+          {
+            double const sqr = m_sites[clusters[c].m_first].m_point.SquaredLength(site.m_point);
+            if (sqr < bestSqr)
+            {
+              bestSqr = sqr;
+              target = c;
+            }
+          }
+        }
+      }
+    }
+    if (!target)
+    {
+      target = clusters.size();
+      if (distance > 0)
+        grid[cell(site.m_point, 0, 0)].push_back(*target);
+      clusters.push_back({});
+      clusters.back().m_first = i;
+      sums.emplace_back(0, 0);
+    }
+    auto & cluster = clusters[*target];
+    ++cluster.m_count;
+    cluster.m_directions |= site.m_directions;
+    cluster.m_restricted = cluster.m_restricted && site.m_restricted;
+    sums[*target] += site.m_point;
+  }
+  for (size_t c = 0; c < clusters.size(); ++c)
+    clusters[c].m_point = sums[c] / static_cast<double>(clusters[c].m_count);
+  return clusters;
 }
 
 // static
@@ -257,6 +354,7 @@ void FlightLayer::Redraw()
   if (m_enabled && zoom >= kObstaclesZoom)
     DrawObstacles();
   double const unit = m_drawnScale * m_visualScale;
+  m_drawnClusters.clear();
   if (m_enabled)
     DrawLayerSymbols(m_drawnRect, zoom, unit);
   else
@@ -355,17 +453,20 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   // The wing has five cells: green, blue, black, blue, green.
   Rings wingGreen, wingBlue, wingBlack, gliderLines, torsos, heads;
   Rings poles, sockRed, sockWhite, sockOutlines;
+  Rings badges;
+  std::vector<std::pair<m2::PointD, size_t>> counts;
+  m_drawnClusters = MakeTakeoffClusters(rect, zoom, m_drawnScale);
   size_t count = 0;
-  for (auto const & site : m_sites)
+  for (auto const & cluster : m_drawnClusters)
   {
-    if (!IsVisible(site, zoom) || !rect.IsPointInside(site.m_point) || ++count > kMaxSymbols)
-      continue;
-    Symbol const s(site.m_point, unit);
-    if (site.m_type == Site::Type::Takeoff)
+    if (++count > kMaxSymbols)
+      break;
+    m2::PointD const & center = cluster.m_point;
+    Symbol const s(center, unit);
     {
-      discs.push_back(MakeCircle(site.m_point, kDiscRadius * unit, 32));
-      (site.m_restricted ? restrictedRings : rings).push_back(discs.back());
-      for (auto & sector : MakeSectors(site.m_point, site.m_directions, kSectorRadius * unit, kDiscRadius * unit))
+      discs.push_back(MakeCircle(center, kDiscRadius * unit, 32));
+      (cluster.m_restricted ? restrictedRings : rings).push_back(discs.back());
+      for (auto & sector : MakeSectors(center, cluster.m_directions, kSectorRadius * unit, kDiscRadius * unit))
       {
         sectorOutlines.push_back(sector);
         sectors.push_back(std::move(sector));
@@ -379,8 +480,23 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
       gliderLines.push_back({s.P(10.2, 3.3), s.P(1.3, -7.5), s.P(4.0, 7.6)});
       heads.push_back(MakeCircle(s.P(0, -5.6), 1.9 * unit, 10));
       torsos.push_back({s.P(0, -7.6), s.P(0, -10.6)});
+      if (cluster.m_count > 1)
+      {
+        badges.push_back(MakeCircle(s.P(kBadgeOffset, kBadgeOffset), kBadgeRadius * unit, 16));
+        counts.emplace_back(s.P(kBadgeOffset, kBadgeOffset), cluster.m_count);
+      }
     }
-    else
+  }
+
+  count = 0;
+  for (auto const & site : m_sites)
+  {
+    if (site.m_type != Site::Type::Landing || !IsVisible(site, zoom) || !rect.IsPointInside(site.m_point) ||
+        ++count > kMaxSymbols)
+    {
+      continue;
+    }
+    Symbol const s(site.m_point, unit);
     {
       // A red and white windsock, wide at the pole, in four stripes.
       double constexpr kPoleX = -8.0, kTipX = 10.0, kTopWide = 8.5, kBottomWide = 2.5, kTopTip = 6.8,
@@ -417,6 +533,15 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   e.Fills("sock_red", std::move(sockRed), kSockRed);
   e.Fills("sock_white", std::move(sockWhite), kWhite);
   e.Lines("sock_outlines", std::move(sockOutlines), kSockOutline, 1.0);
+  Rings badgeOutlines = badges;
+  e.Fills("badges", std::move(badges), kWhite);
+  e.Lines("badge_outlines", std::move(badgeOutlines), kPilot, 1.2);
+  for (auto const & [point, number] : counts)
+  {
+    df::DrapeApiLineData label({point}, kPilot);
+    label.Label(std::to_string(number)).LabelSize(10).LabelCentered();
+    Add("flight_count_" + std::to_string(point.x) + "_" + std::to_string(point.y), label);
+  }
 }
 
 void FlightLayer::DrawLabels(m2::RectD const & rect, int zoom)

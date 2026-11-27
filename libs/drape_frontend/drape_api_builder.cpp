@@ -23,10 +23,11 @@ namespace
 {
 void BuildText(ref_ptr<dp::GraphicsContext> context, std::string const & str, dp::FontDecl const & font,
                m2::PointD const & position, m2::PointD const & center, ref_ptr<dp::TextureManager> textures,
-               dp::Batcher & batcher, glsl::vec2 const & pixelOffset = glsl::vec2(0.0f, 0.0f))
+               dp::Batcher & batcher, glsl::vec2 const & pixelOffset = glsl::vec2(0.0f, 0.0f),
+               dp::Anchor anchor = dp::LeftTop)
 {
   gui::StaticLabel::LabelResult result;
-  gui::StaticLabel::CacheStaticText(str, "\n", dp::LeftTop, font, textures, result);
+  gui::StaticLabel::CacheStaticText(str, "\n", anchor, font, textures, result);
   glsl::vec2 const pt = glsl::ToVec2(df::MapShape::ConvertToLocal(position, center, df::kShapeCoordScalar));
   for (gui::StaticLabel::Vertex & v : result.m_buffer)
   {
@@ -166,8 +167,16 @@ void DrapeApiBuilder::BuildLines(ref_ptr<dp::GraphicsContext> context, DrapeApi:
         float const vs = static_cast<float>(VisualParams::Instance().GetVisualScale());
         dp::FontDecl const font(data.m_color, data.m_labelSize,
                                 data.m_labelHalo ? dp::Color::White() : dp::Color::Transparent());
-        BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
-                  glsl::vec2(14.0f * vs, 4.0f * vs));
+        if (data.m_labelCentered)
+        {
+          BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
+                    glsl::vec2(0.0f, 0.0f), dp::Center);
+        }
+        else
+        {
+          BuildText(context, data.m_label, font, data.m_points.front(), property->m_center, textures, batcher,
+                    glsl::vec2(14.0f * vs, 4.0f * vs));
+        }
       }
 
       if (data.m_markPoints || data.m_showId)
