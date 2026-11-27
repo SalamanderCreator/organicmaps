@@ -36,7 +36,8 @@ OVERPASS_URLS = [
     "https://overpass.private.coffee/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
 ]
-OVERPASS_QUERY = '[out:json][timeout:280];nwr["free_flying:site"];out tags geom;'
+# The sites, and the cableways for goods, which are no part of the maps but are a danger to paragliders.
+OVERPASS_QUERY = '[out:json][timeout:280];(nwr["free_flying:site"];way["aerialway"="goods"];);out tags geom;'
 OSM_URL = "https://www.openstreetmap.org/"
 USER_AGENT = "Maps&Fly flight sites builder (github.com/SalamanderCreator/organicmaps)"
 
@@ -192,11 +193,55 @@ def parse_pge(text):
     return sites
 
 
+def outer_ring(members):
+    """The largest closed ring of the outer ways of a multipolygon, joined where they are split."""
+    parts = [[(pt["lat"], pt["lon"]) for pt in m["geometry"]] for m in members
+             if m.get("type") == "way" and m.get("role", "outer") in ("outer", "") and m.get("geometry")]
+    rings = []
+    while parts:
+        ring = parts.pop()
+        while ring[0] != ring[-1]:
+            for i, part in enumerate(parts):
+                if part[0] == ring[-1]:
+                    ring += part[1:]
+                elif part[-1] == ring[-1]:
+                    ring += part[-2::-1]
+                elif part[-1] == ring[0]:
+                    ring = part[:-1] + ring
+                elif part[0] == ring[0]:
+                    ring = part[:0:-1] + ring
+                else:
+                    continue
+                del parts[i]
+                break
+            else:
+                break
+        if len(ring) >= 4 and ring[0] == ring[-1]:
+            rings.append(ring)
+    if not rings:
+        return None
+
+    def size(r):
+        return (max(p[0] for p in r) - min(p[0] for p in r)) * (max(p[1] for p in r) - min(p[1] for p in r))
+    return max(rings, key=size)
+
+
+def parse_cables(text):
+    """Cableways for goods as lines of latitudes and longitudes."""
+    cables = []
+    for e in json.loads(text).get("elements") or []:
+        if e.get("type") == "way" and (e.get("tags") or {}).get("aerialway") == "goods" and \
+                len(e.get("geometry") or []) >= 2:
+            cables.append({"id": "osm:w%d" % e["id"],
+                           "line": [round(v, 6) for pt in e["geometry"] for v in (pt["lat"], pt["lon"])]})
+    return cables
+
+
 def parse_overpass(text):
     sites = []
     for e in json.loads(text).get("elements") or []:
         tags = e.get("tags") or {}
-        if tags.get("free_flying:paragliding") == "no":
+        if "free_flying:site" not in tags or tags.get("free_flying:paragliding") == "no":
             continue
         kind = tags.get("free_flying:site", "").lower()
         if "landing" in kind:
@@ -217,6 +262,10 @@ def parse_overpass(text):
                 lon = sum(pt["lon"] for pt in g[:-1]) / (len(g) - 1)
             else:
                 lat, lon = g[len(g) // 2]["lat"], g[len(g) // 2]["lon"]
+        elif type_ == "relation" and (ring := outer_ring(e.get("members") or [])):
+            area = [v for pt in ring for v in pt]
+            lat = sum(pt[0] for pt in ring[:-1]) / (len(ring) - 1)
+            lon = sum(pt[1] for pt in ring[:-1]) / (len(ring) - 1)
         elif e.get("bounds"):
             b = e["bounds"]
             lat, lon = (b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2
@@ -317,9 +366,11 @@ def load_osm():
     for attempt in range(2):
         for url in OVERPASS_URLS:
             try:
-                sites = parse_overpass(download(url, data, timeout=300))
-                log("OpenStreetMap:", len(sites), "sites from", url)
-                return sites
+                text = download(url, data, timeout=300)
+                sites, cables = parse_overpass(text), parse_cables(text)
+                log("OpenStreetMap:", len(sites), "sites,", sum(1 for x in sites if x.get("area")), "with an area,",
+                    len(cables), "cableways for goods from", url)
+                return sites, cables
             except Exception as ex:
                 log("Overpass not usable at", url, "-", ex)
                 time.sleep(10)
@@ -335,14 +386,16 @@ def main():
     bbox = tuple(float(v) for v in args.bbox.split(","))
     ipv4_only()
 
-    previous = []
+    previous, previous_cables = [], []
     if args.previous and os.path.exists(args.previous):
         with open(args.previous, encoding="utf-8") as f:
-            previous = json.load(f).get("sites", [])
+            previous_file = json.load(f)
+        previous = previous_file.get("sites", [])
+        previous_cables = previous_file.get("cables", [])
         log(len(previous), "sites in the previous file")
 
     pge = load_pge(bbox)
-    osm = load_osm()
+    osm, cables = load_osm() or (None, None)
     if osm is not None:
         osm = [x for x in osm if in_bbox(x, bbox)]
     if pge is None and osm is None:
@@ -353,9 +406,11 @@ def main():
         log("ParaglidingEarth: kept", len(pge), "sites from the previous file")
     if osm is None:
         osm = [x for x in previous if x["id"].startswith("osm:")]
+        cables = previous_cables
     sites = merge(pge, osm)
     out = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-           "sources": {"pge": pge is not None, "osm": osm is not None}, "sites": sites}
+           "sources": {"pge": pge is not None, "osm": osm is not None}, "sites": sites,
+           "cables": cables}
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
     log(len(sites), "sites written to", args.output)

@@ -52,6 +52,9 @@ Palette const kGrays{{150, 154, 160, 255}, {165, 168, 172, 220}, {242, 242, 242,
 // Turquoise: bluer than the green of meadows and parks, greener than the blue of lakes.
 dp::Color const kAreaOutline(0, 165, 155, 255);
 dp::Color const kAreaFill(0, 190, 175, 80);
+// Takeoff areas in the blue of the takeoff icons.
+dp::Color const kTakeoffAreaOutline(47, 126, 194, 255);
+dp::Color const kTakeoffAreaFill(47, 126, 194, 70);
 // Obstacles are thin or translucent, so that the map still shows the kind of line and its name below: power
 // lines dotted red, aerial lifts dashed magenta, motorways a wide orange band, wind turbines red dots.
 dp::Color const kPowerLine(230, 30, 30, 220);
@@ -125,6 +128,23 @@ void FlightLayer::SetSites(std::vector<Site> && sites)
 {
   m_sites = std::move(sites);
   m_drawnClusters.clear();
+  Redraw();
+}
+
+void FlightLayer::SetCables(std::vector<std::vector<m2::PointD>> && cables)
+{
+  m_cables.clear();
+  m_cableRects.clear();
+  for (auto & cable : cables)
+  {
+    if (cable.size() < 2)
+      continue;
+    m2::RectD rect;
+    for (auto const & p : cable)
+      rect.Add(p);
+    m_cableRects.push_back(rect);
+    m_cables.push_back(std::move(cable));
+  }
   Redraw();
 }
 
@@ -592,14 +612,16 @@ void FlightLayer::DrawAreas(m2::RectD const & rect, int zoom)
 {
   if (zoom < kAreasZoom)
     return;
-  Rings areas;
+  Rings landings, takeoffs;
   for (auto const & site : m_sites)
     if (site.m_area.size() > 2 && rect.IsPointInside(site.m_point))
-      areas.push_back(site.m_area);
-  Rings outlines = areas;
+      (site.m_type == Site::Type::Landing ? landings : takeoffs).push_back(site.m_area);
+  Rings landingOutlines = landings, takeoffOutlines = takeoffs;
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
-  e.Fills("area_fills", std::move(areas), kAreaFill);
-  e.Lines("area_outlines", std::move(outlines), kAreaOutline, 3.5);
+  e.Fills("area_fills", std::move(landings), kAreaFill);
+  e.Lines("area_outlines", std::move(landingOutlines), kAreaOutline, 3.5);
+  e.Fills("takeoff_area_fills", std::move(takeoffs), kTakeoffAreaFill);
+  e.Lines("takeoff_area_outlines", std::move(takeoffOutlines), kTakeoffAreaOutline, 3.5);
 }
 
 void FlightLayer::DrawObstacles()
@@ -610,23 +632,23 @@ void FlightLayer::DrawObstacles()
   // Obstacles near several sites are found more than once.
   std::set<std::pair<m2::PointD, m2::PointD>> seen;
   Rings powerLines, aerialLifts, motorways;
-  std::vector<m2::PointD> windTurbines;
-  m2::RectD near = m_screen->ClipRect();
-  near.Scale(1.5);
+  // Wind turbines and masts.
+  std::vector<m2::PointD> points;
   size_t sitesCount = 0;
   size_t linesCount = 0;
   for (auto const & site : m_sites)
   {
-    if (!near.IsPointInside(site.m_point) || ++sitesCount > kMaxObstacleSites)
-      continue;
+    // Close up the site itself may be off the screen, its obstacles not.
     auto const around = mercator::RectByCenterXYAndSizeInMeters(site.m_point, kObstacleRadiusM * 2);
+    if (!around.IsIntersect(m_drawnRect) || ++sitesCount > kMaxObstacleSites)
+      continue;
     m_forEachObstacle(around, [&](Obstacle && obstacle)
     {
       if (obstacle.m_points.empty() || !seen.emplace(obstacle.m_points.front(), obstacle.m_points.back()).second)
         return;
-      if (obstacle.m_kind == Obstacle::Kind::WindTurbine)
+      if (obstacle.m_kind == Obstacle::Kind::WindTurbine || obstacle.m_kind == Obstacle::Kind::Mast)
       {
-        windTurbines.push_back(obstacle.m_points.front());
+        points.push_back(obstacle.m_points.front());
         return;
       }
       if (obstacle.m_points.size() < 2 || ++linesCount > kMaxObstacleLines)
@@ -636,6 +658,14 @@ void FlightLayer::DrawObstacles()
                                                                    : powerLines;
       lines.push_back(std::move(obstacle.m_points));
     });
+    for (size_t i = 0; i < m_cables.size(); ++i)
+    {
+      if (m_cableRects[i].IsIntersect(around) && seen.emplace(m_cables[i].front(), m_cables[i].back()).second &&
+          ++linesCount <= kMaxObstacleLines)
+      {
+        aerialLifts.push_back(m_cables[i]);
+      }
+    }
   }
 
   auto const add = [this](std::string_view name, Rings && lines, dp::Color const & color, double widthDp,
@@ -650,11 +680,11 @@ void FlightLayer::DrawObstacles()
     Add(std::string("flight_") + std::string(name), data);
   };
   add("obstacle_motorways", std::move(motorways), kMotorway, 9.0, {});
-  add("obstacle_power_lines", std::move(powerLines), kPowerLine, 3.0, {2.0, 2.0});
+  add("obstacle_power_lines", std::move(powerLines), kPowerLine, 5.5, {3.0, 3.0});
   add("obstacle_aerial_lifts", std::move(aerialLifts), kAerialLift, 3.0, {10.0, 3.5});
-  if (!windTurbines.empty())
+  if (!points.empty())
   {
-    df::DrapeApiLineData data(windTurbines, kWindTurbine);
+    df::DrapeApiLineData data(points, kWindTurbine);
     data.PointsOnly().Width(static_cast<float>(3.0 * m_visualScale));
     Add("flight_obstacle_wind_turbines", data);
   }

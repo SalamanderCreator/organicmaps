@@ -84,4 +84,21 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSit
   }
   frm()->GetFlightLayer().SetSites(std::move(sites));
 }
+
+JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetCables(JNIEnv * env, jclass,
+                                                                                    jintArray offsets,
+                                                                                    jdoubleArray latLons)
+{
+  jsize const count = env->GetArrayLength(offsets) - 1;
+  std::vector<jint> offsetV(count + 1);
+  env->GetIntArrayRegion(offsets, 0, count + 1, offsetV.data());
+  std::vector<jdouble> latLonV(env->GetArrayLength(latLons));
+  env->GetDoubleArrayRegion(latLons, 0, static_cast<jsize>(latLonV.size()), latLonV.data());
+
+  std::vector<std::vector<m2::PointD>> cables(count);
+  for (jsize i = 0; i < count; ++i)
+    for (jint j = offsetV[i]; j < offsetV[i + 1]; ++j)
+      cables[i].push_back(mercator::FromLatLon(latLonV[2 * j], latLonV[2 * j + 1]));
+  frm()->GetFlightLayer().SetCables(std::move(cables));
+}
 }  // extern "C"

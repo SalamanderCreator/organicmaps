@@ -42,7 +42,7 @@ public:
     bool m_restricted = false;
     /// Gets a label, e.g. not when the map shows the site's name already.
     bool m_labeled = false;
-    /// The closed ring of a known landing area, or empty.
+    /// The closed ring of a known landing or takeoff area, or empty.
     std::vector<m2::PointD> m_area;
   };
 
@@ -54,19 +54,21 @@ public:
       PowerLine,
       AerialLift,
       Motorway,
-      WindTurbine
+      WindTurbine,
+      /// Masts, towers and chimneys.
+      Mast
     };
 
     Kind m_kind = Kind::PowerLine;
-    /// A line, or a single point for a wind turbine.
+    /// A line, or a single point for a wind turbine or a mast.
     std::vector<m2::PointD> m_points;
   };
 
   using ForEachObstacleFn = std::function<void(m2::RectD const & rect, std::function<void(Obstacle &&)> const & fn)>;
 
   /// Zooms from which takeoffs and landings show up, on the normal map like railway stations and camp sites
-  /// (small icons first, medium ones closer, takeoffs sooner), in the layer from further out. Labels come like the ones of
-  /// restaurants, areas from a 500 m scale bar, obstacles in the layer only.
+  /// (small icons first, medium ones closer, takeoffs sooner), in the layer from further out. Labels come like
+  /// the ones of restaurants, areas from a 500 m scale bar, obstacles in the layer only.
   static int constexpr kTakeoffsZoom = 12;
   static int constexpr kMediumTakeoffsZoom = 13;
   static int constexpr kLandingsZoom = 13;
@@ -93,6 +95,8 @@ public:
 
   /// Replaces all sites.
   void SetSites(std::vector<Site> && sites);
+  /// Aerial lifts missing in the maps, like the cableways for goods, from the flight sites file.
+  void SetCables(std::vector<std::vector<m2::PointD>> && cables);
   void SetViewport(ScreenBase const & screen);
 
   /// A tapped site, or a symbol of several takeoffs to zoom into.
@@ -140,6 +144,8 @@ private:
   bool m_enabled = false;
   ForEachObstacleFn m_forEachObstacle;
   std::vector<Site> m_sites;
+  std::vector<std::vector<m2::PointD>> m_cables;
+  std::vector<m2::RectD> m_cableRects;
   std::optional<ScreenBase> m_screen;
   double m_visualScale = 1.0;
 

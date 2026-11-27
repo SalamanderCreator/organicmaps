@@ -59,6 +59,17 @@ public class FlightSourcesTest
   }
 
   @Test
+  public void readsTheCables() throws Exception
+  {
+    final List<double[]> cables = FlightSources.parseCables(
+        "{\"sites\":[],\"cables\":[{\"id\":\"osm:w4\",\"line\":[47.1,11.1,47.11,11.12]},"
+        + "{\"id\":\"osm:w5\",\"line\":[47.2,11.2]}]}");
+    assertEquals(1, cables.size());
+    assertEquals(11.12, cables.get(0)[3], 1e-9);
+    assertEquals(0, FlightSources.parseCables(FILE).size());
+  }
+
+  @Test
   public void testSitesBelongTogether()
   {
     final Map<String, FlightSite> sites = byId(FlightSources.testSites());

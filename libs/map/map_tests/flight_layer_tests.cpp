@@ -164,4 +164,27 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_JoinsNearTakeoffsInTheLayer)
   layer.SetViewport(wide);
   TEST(!layer.HitTest(middle, wide, 20.0) || !layer.HitTest(middle, wide, 20.0)->m_cluster, ());
 }
+UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_KeepsObstaclesCloseUpBesideTheSite)
+{
+  df::DrapeApi drapeApi;
+  FlightLayer layer(drapeApi);
+  size_t queries = 0;
+  layer.SetForEachObstacleFn([&queries](m2::RectD const &, std::function<void(FlightLayer::Obstacle &&)> const &)
+  { ++queries; });
+  layer.SetEnabled(true);
+
+  FlightLayer::Site site;
+  site.m_id = "a";
+  site.m_point = mercator::FromLatLon(47.2, 11.3);
+  layer.SetSites({site});
+
+  // 200 m of screen 1 km beside the site, inside the radius of its obstacles.
+  layer.SetViewport(MakeScreen(mercator::FromLatLon(47.209, 11.3), 200.0));
+  TEST_GREATER(queries, 0, ());
+
+  // Far away nothing is asked for.
+  queries = 0;
+  layer.SetViewport(MakeScreen(mercator::FromLatLon(47.3, 11.3), 200.0));
+  TEST_EQUAL(queries, 0, ());
+}
 }  // namespace flight_layer_tests
