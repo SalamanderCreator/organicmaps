@@ -634,15 +634,14 @@ void FlightLayer::DrawObstacles()
   Rings powerLines, aerialLifts, motorways;
   // Wind turbines and masts.
   std::vector<m2::PointD> points;
-  m2::RectD near = m_screen->ClipRect();
-  near.Scale(1.5);
   size_t sitesCount = 0;
   size_t linesCount = 0;
   for (auto const & site : m_sites)
   {
-    if (!near.IsPointInside(site.m_point) || ++sitesCount > kMaxObstacleSites)
-      continue;
+    // Close up the site itself may be off the screen, its obstacles not.
     auto const around = mercator::RectByCenterXYAndSizeInMeters(site.m_point, kObstacleRadiusM * 2);
+    if (!around.IsIntersect(m_drawnRect) || ++sitesCount > kMaxObstacleSites)
+      continue;
     m_forEachObstacle(around, [&](Obstacle && obstacle)
     {
       if (obstacle.m_points.empty() || !seen.emplace(obstacle.m_points.front(), obstacle.m_points.back()).second)
