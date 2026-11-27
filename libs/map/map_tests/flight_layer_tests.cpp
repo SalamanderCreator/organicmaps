@@ -187,4 +187,28 @@ UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_KeepsObstaclesCloseUpBesideTheS
   layer.SetViewport(MakeScreen(mercator::FromLatLon(47.3, 11.3), 200.0));
   TEST_EQUAL(queries, 0, ());
 }
+UNIT_CLASS_TEST(VisualParamsFixture, FlightLayer_AsksToRateAroundTheScreenInTheLayer)
+{
+  df::DrapeApi drapeApi;
+  FlightLayer layer(drapeApi);
+  std::optional<int> askedZoom;
+  layer.SetViewportFn([&askedZoom](m2::PointD const &, int zoom) { askedZoom = zoom; });
+
+  FlightLayer::Site site;
+  site.m_id = "a";
+  site.m_point = mercator::FromLatLon(47.2, 11.3);
+  layer.SetSites({site});
+  auto const screen = MakeScreen(site.m_point, 10'000.0);
+  layer.SetViewport(screen);
+  TEST(!askedZoom, ("Only in the layer"));
+
+  layer.SetEnabled(true);
+  TEST(askedZoom, ());
+  askedZoom.reset();
+  layer.SetRatings({{"a", FlightLayer::kGreen, true}, {"unknown", FlightLayer::kRed, false}});
+  TEST(askedZoom, ("Redrawn with the new rating"));
+  askedZoom.reset();
+  layer.SetRatings({{"a", FlightLayer::kGreen, true}});
+  TEST(!askedZoom, ("Nothing changed"));
+}
 }  // namespace flight_layer_tests
