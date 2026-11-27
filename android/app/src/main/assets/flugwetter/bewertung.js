@@ -19,7 +19,6 @@ const RATING = {
   foehnYellow: 3, foehnRed: 6,        // hPa Druckunterschied über den Alpenhauptkamm
   foehnWind: 40,                      // km/h in 700 hPa von der anderen Seite des Kamms
   cloudAtStart: 70,                   // % Bedeckung auf Starthöhe: Start in den Wolken
-  fogAbove: 300,                      // m: so weit über dem Modellgrund liegt der Start über dem Talnebel
   thermikMin: 300,                    // m Thermik über dem Start, darunter nur Abgleiter
   soarMin: 15, soarMax: 25, soarGust: 10, // km/h Soaringwind aus der Startrichtung, Böen höchstens so viel stärker
   xcThermik: 1500, xcUpper: 20, xcCape: 800, // Stern für Strecke
@@ -118,15 +117,15 @@ function rateHour(r, foehn) {
   add("Niederschlag", thunder ? "Gewitter" : snow ? "Schnee" : r.precip ? r.precip.toFixed(1) + " mm" : "keiner",
     thunder || snow || r.precip >= RATING.rainRed ? RATE.RED : r.precip > 0 ? RATE.YELLOW : RATE.GREEN);
 
-  if (r.code === 45 || r.code === 48) {
-    const aboveFog = SITE.alt > r.ground + RATING.fogAbove;
-    add("Wolken", aboveFog ? "Nebel im Tal" : "Nebel am Start", aboveFog ? RATE.YELLOW : RATE.RED);
-  } else {
-    const p = prof(r, Math.max(SITE.alt, r.ground + 10));
-    const inCloud = p && p.cc >= RATING.cloudAtStart;
-    add("Wolken", inCloud ? `Start in den Wolken (${octas(p.cc)}/8)` : r.base ? `Basis ${r.base.lcl} m` : "–",
-      inCloud ? RATE.YELLOW : RATE.GREEN);
-  }
+  // Das Nebelsymbol gilt für den Modellboden. Ob der Start im Nebel liegt, sagt die Bewölkung auf Starthöhe
+  // im Profil, wie sie die Seite zeigt.
+  const fog = r.code === 45 || r.code === 48;
+  const p = prof(r, Math.max(SITE.alt, r.ground + 10));
+  const inCloud = p && p.cc >= RATING.cloudAtStart;
+  if (fog && inCloud) add("Wolken", "Nebel am Start", RATE.RED);
+  else if (fog) add("Wolken", "Nebel im Tal, Start darüber", RATE.YELLOW);
+  else add("Wolken", inCloud ? `Start in den Wolken (${octas(p.cc)}/8)` : r.base ? `Basis ${r.base.lcl} m` : "–",
+    inCloud ? RATE.YELLOW : RATE.GREEN);
 
   const side = alpsSide(SITE.lat, SITE.lon), fp = foehn && foehn[r.time];
   if (side && fp) {
