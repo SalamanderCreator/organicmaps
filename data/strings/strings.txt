@@ -46130,6 +46130,162 @@ tags = android-app
 en = Open the website
 de = Webseite öffnen
 
+[flight_import_menu]
+comment = Maps&Fly main menu: import paragliding takeoffs of the DHV
+tags = android-app
+en = Import takeoffs
+de = Startplätze importieren
+
+[flight_import_title]
+comment = Maps&Fly DHV import: dialog title
+tags = android-app
+en = Import DHV takeoffs
+de = DHV-Startplätze importieren
+
+[flight_import_text]
+comment = Maps&Fly DHV import: what to download at dhv.de and why the data stays on the phone
+tags = android-app
+en = Download the site data in the format “DHV XML” at dhv.de (as .xml or .zip) and choose the file here. Slope sites with a paragliding takeoff are imported, with their landings. The data stays on this phone only: the DHV allows private use only.
+de = Lade bei dhv.de die Geländedaten im Format „DHV XML“ herunter (als .xml oder .zip) und wähle die Datei hier aus. Übernommen werden Hanggelände mit Gleitschirmstart und ihre Landeplätze. Die Daten bleiben nur auf diesem Handy: Der DHV erlaubt nur die private Nutzung.
+
+[flight_import_current]
+comment = Maps&Fly DHV import: the current import, number of takeoffs and the date of the file
+tags = android-app
+en = Imported: %1$d takeoffs, data of %2$s
+de = Importiert: %1$d Startplätze, Stand %2$s
+
+[flight_import_choose]
+comment = Maps&Fly DHV import: button that opens the file picker
+tags = android-app
+en = Choose file
+de = Datei auswählen
+
+[flight_import_remove]
+comment = Maps&Fly DHV import: button that deletes the imported takeoffs
+tags = android-app
+en = Remove import
+de = Import entfernen
+
+[flight_import_removed]
+comment = Maps&Fly DHV import: the imported takeoffs were deleted
+tags = android-app
+en = The DHV takeoffs were removed.
+de = Die DHV-Startplätze wurden entfernt.
+
+[flight_import_done]
+comment = Maps&Fly DHV import: number of imported takeoffs
+tags = android-app
+en = %d DHV takeoffs imported.
+de = %d DHV-Startplätze importiert.
+
+[flight_import_failed]
+comment = Maps&Fly DHV import: the file could not be read
+tags = android-app
+en = The file could not be read.
+de = Die Datei konnte nicht gelesen werden.
+
+[flight_import_not_dhv]
+comment = Maps&Fly DHV import: the file is no DHV XML file
+tags = android-app
+en = This is no DHV XML file. Please choose the format “DHV XML” at dhv.de.
+de = Das ist keine DHV-XML-Datei. Bitte wähle bei dhv.de das Format „DHV XML“.
+
+[flight_import_no_xml_in_zip]
+comment = Maps&Fly DHV import: the zip file holds no XML file
+tags = android-app
+en = The zip file holds no XML file.
+de = In der Zip-Datei ist keine XML-Datei.
+
+[flight_site_guest_rules]
+comment = Maps&Fly flight site: the site has rules for guest pilots
+tags = android-app
+en = Rules for guest pilots, like a sign-up or a briefing
+de = Regeln für Gastflieger, z. B. Anmeldung oder Einweisung
+
+[flight_site_height_difference]
+comment = Maps&Fly flight site: height difference of the site
+tags = android-app
+en = Height difference: %s
+de = Höhendifferenz: %s
+
+[flight_site_suitability]
+comment = Maps&Fly flight site: for which pilots the takeoff is suitable
+tags = android-app
+en = Suitability: %s
+de = Eignung: %s
+
+[flight_site_access_car]
+comment = Maps&Fly flight site: the takeoff can be reached by car
+tags = android-app
+en = By car
+de = Mit dem Auto
+
+[flight_site_access_public]
+comment = Maps&Fly flight site: the takeoff can be reached by public transport
+tags = android-app
+en = By public transport
+de = Mit Öffis
+
+[flight_site_access_foot]
+comment = Maps&Fly flight site: the takeoff can be reached on foot
+tags = android-app
+en = On foot
+de = Zu Fuß
+
+[flight_site_cable_car]
+comment = Maps&Fly flight site: title of the cable car to the takeoff
+tags = android-app
+en = Cable car
+de = Bahn
+
+[flight_site_other_takeoffs]
+comment = Maps&Fly flight site: title of the other takeoffs of the same area
+tags = android-app
+en = Other takeoffs
+de = Weitere Startplätze
+
+[flight_site_info]
+comment = Maps&Fly flight site: title of more information about the area
+tags = android-app
+en = Information
+de = Infos
+
+[flight_site_weather_info]
+comment = Maps&Fly flight site: title of weather hints of the area
+tags = android-app
+en = Weather
+de = Wetter
+
+[flight_site_webcams]
+comment = Maps&Fly flight site: title of the webcams of the area
+tags = android-app
+en = Webcams
+de = Webcams
+
+[flight_site_holder]
+comment = Maps&Fly flight site: title of the holder of the area's certificate
+tags = android-app
+en = Holder
+de = Halter
+
+[flight_site_contact]
+comment = Maps&Fly flight site: title of the contact of the area
+tags = android-app
+en = Contact
+de = Kontakt
+
+[flight_site_link_dhv]
+comment = Maps&Fly flight site: open the page of the area at the DHV
+tags = android-app
+en = Open at the DHV
+de = Beim DHV öffnen
+
+[flight_attribution_dhv]
+comment = Maps&Fly flight site: credit of the DHV for privately imported data
+tags = android-app
+en = Site data © DHV (imported privately).
+de = Geländedaten © DHV (privat importiert).
+
 [flight_weather_site_info]
 comment = Maps&Fly flight weather: button that shows the information of the takeoff
 tags = android-app

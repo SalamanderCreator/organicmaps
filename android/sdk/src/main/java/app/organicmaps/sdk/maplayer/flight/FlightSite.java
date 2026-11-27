@@ -2,6 +2,8 @@ package app.organicmaps.sdk.maplayer.flight;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** Maps&Fly: a paragliding takeoff or landing site. */
 public final class FlightSite
@@ -11,6 +13,24 @@ public final class FlightSite
   public static final int SOURCE_OSM = 2;
   /** Fixed test sites of the app, see FlightSources.testSites. */
   public static final int SOURCE_TEST = 4;
+  /** Privately imported from the DHV on this phone, see FlightDhvImport. */
+  public static final int SOURCE_DHV = 8;
+
+  // Keys of mDetails, shown with their own labels.
+  public static final String DETAIL_HEIGHT_DIFFERENCE = "height_difference";
+  public static final String DETAIL_SUITABILITY = "suitability";
+  public static final String DETAIL_CABLE_CAR = "cable_car";
+  public static final String DETAIL_OTHER_TAKEOFFS = "other_takeoffs";
+  public static final String DETAIL_INFO = "info";
+  public static final String DETAIL_WEATHER = "weather";
+  public static final String DETAIL_WEBCAMS = "webcams";
+  public static final String DETAIL_HOLDER = "holder";
+  public static final String DETAIL_CONTACT = "contact";
+  /** Comma separated ACCESS_* values. */
+  public static final String DETAIL_ACCESS_BY = "access_by";
+  public static final String ACCESS_CAR = "car";
+  public static final String ACCESS_PUBLIC_TRANSPORT = "public_transport";
+  public static final String ACCESS_FOOT = "foot";
 
   @NonNull
   public final String mId;
@@ -29,6 +49,8 @@ public final class FlightSite
   public final int mSources;
   /** Shown with an orange ring, e.g. for club members only. */
   public boolean mRestricted;
+  /** There are rules for guest pilots, like a sign-up or a briefing. */
+  public boolean mGuestRules;
   /** The lat/lon pairs of a closed ring of a known landing area, or empty. */
   @NonNull
   public final double[] mArea;
@@ -51,6 +73,9 @@ public final class FlightSite
   public String mOsmUrl;
   @Nullable
   public String mWebsite;
+  /** More texts of the source by DETAIL_* keys, in their order. */
+  @NonNull
+  public Map<String, String> mDetails = new LinkedHashMap<>();
 
   public FlightSite(@NonNull String id, @NonNull String name, double lat, double lon, boolean landing, int altitude,
                     int directions, int sources, @NonNull double[] area)

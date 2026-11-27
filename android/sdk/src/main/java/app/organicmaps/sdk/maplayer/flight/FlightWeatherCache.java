@@ -191,6 +191,9 @@ public final class FlightWeatherCache
     sb.append("&name=").append(encode(site.mName.isEmpty() ? "Startplatz" : site.mName));
     if (site.mDirections != 0)
       sb.append("&dir=").append(encode(FlightDirections.format(site.mDirections).replace('E', 'O')));
+    // The page links the DHV page of a privately imported site.
+    if ((site.mSources & FlightSite.SOURCE_DHV) != 0 && site.mUrl != null)
+      sb.append("&dhv=").append(encode(site.mUrl));
     return sb.toString();
   }
 
