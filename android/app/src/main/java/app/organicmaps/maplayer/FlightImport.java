@@ -1,7 +1,12 @@
 package app.organicmaps.maplayer;
 
 import android.net.Uri;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,6 +29,9 @@ public final class FlightImport
   private final ActivityResultLauncher<String[]> mPicker;
 
   /** Must be created before the activity is started, like any activity result launcher. */
+  private static final String DOWNLOAD_URL =
+      "https://www.dhv.de/flugbetrieb/fluggelaende-datenbank/download-gelaendedaten/";
+
   public FlightImport(@NonNull ComponentActivity activity)
   {
     mActivity = activity;
@@ -33,7 +41,7 @@ public final class FlightImport
   public void showDialog()
   {
     final int takeoffs = FlightLayer.getDhvTakeoffs();
-    String message = mActivity.getString(R.string.flight_import_text);
+    String message = mActivity.getString(R.string.flight_import_text) + "\n\n" + DOWNLOAD_URL;
     if (takeoffs > 0)
     {
       message += "\n\n" + mActivity.getString(R.string.flight_import_current, takeoffs, FlightLayer.getDhvGenerated());
@@ -41,7 +49,7 @@ public final class FlightImport
     final MaterialAlertDialogBuilder builder =
         new MaterialAlertDialogBuilder(mActivity, R.style.MwmTheme_AlertDialog)
             .setTitle(R.string.flight_import_title)
-            .setMessage(message)
+            .setMessage(linked(message))
             // The DHV offers .xml and .zip, and some file pickers know neither type.
             .setPositiveButton(R.string.flight_import_choose,
                                (d, w) -> mPicker.launch(new String[] {"text/xml", "application/xml", "application/zip",
@@ -54,7 +62,18 @@ public final class FlightImport
         Toast.makeText(mActivity, R.string.flight_import_removed, Toast.LENGTH_LONG).show();
       });
     }
-    builder.show();
+    final AlertDialog dialog = builder.show();
+    final TextView text = dialog.findViewById(android.R.id.message);
+    if (text != null)
+      text.setMovementMethod(LinkMovementMethod.getInstance());
+  }
+
+  @NonNull
+  private static SpannableString linked(@NonNull String text)
+  {
+    final SpannableString spannable = new SpannableString(text);
+    Linkify.addLinks(spannable, Linkify.WEB_URLS);
+    return spannable;
   }
 
   private void onPicked(Uri uri)
@@ -86,7 +105,7 @@ public final class FlightImport
                               }
                               new MaterialAlertDialogBuilder(mActivity, R.style.MwmTheme_AlertDialog)
                                   .setTitle(R.string.flight_import_title)
-                                  .setMessage(message)
+                                  .setMessage(linked(message))
                                   .setPositiveButton(R.string.ok, null)
                                   .show();
                             }
