@@ -20,11 +20,12 @@ dp::Color const kIconHaloColor(255, 255, 255, 153);
 dp::Color const kTakeoffCircle(47, 126, 194, 255);
 dp::Color const kLandingCircle(30, 158, 143, 255);
 dp::Color const kWhite(255, 255, 255, 255);
+// Sites for members only are gray, on the map and in the layer.
+dp::Color const kRestrictedCircle(160, 164, 168, 255);
 
 // The flight preparation layer.
 dp::Color const kDisc(255, 255, 255, 215);
 dp::Color const kRing(29, 39, 51, 255);
-dp::Color const kRestrictedRing(217, 130, 43, 255);
 dp::Color const kSector(40, 170, 70, 235);
 // A thin light line between neighbouring directions.
 dp::Color const kSectorOutline(235, 250, 235, 255);
@@ -37,6 +38,17 @@ dp::Color const kPole(120, 128, 138, 255);
 dp::Color const kSockRed(229, 51, 42, 255);
 dp::Color const kSockOutline(150, 40, 35, 255);
 dp::Color const kLabel(70, 70, 70, 255);
+
+struct Palette
+{
+  dp::Color m_ring, m_sector, m_sectorOutline, m_wingOuter, m_wingMiddle, m_wingCenter, m_gliderLines, m_pilot,
+      m_sockRed, m_sockOutline;
+};
+Palette const kColors{kRing,      kSector,      kSectorOutline, kWingGreen,   kWingBlue,
+                      kWingBlack, kGliderLines, kPilot,         kSockRed,     kSockOutline};
+Palette const kGrays{{150, 154, 160, 255}, {165, 168, 172, 220}, {242, 242, 242, 255}, {185, 188, 192, 255},
+                     {145, 148, 152, 255}, {100, 103, 108, 255}, {160, 163, 168, 255}, {110, 113, 118, 255},
+                     {160, 163, 168, 255}, {120, 123, 128, 255}};
 // Turquoise: bluer than the green of meadows and parks, greener than the blue of lakes.
 dp::Color const kAreaOutline(0, 165, 155, 255);
 dp::Color const kAreaFill(0, 190, 175, 80);
@@ -402,7 +414,7 @@ private:
 
 void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 {
-  Rings halos, takeoffCircles, landingCircles;
+  Rings halos, takeoffCircles, landingCircles, restrictedCircles;
   // Glyph lines of small and medium icons have different widths.
   Rings canopies[2], risers[2], pilots, poles[2], socks;
   size_t count = 0;
@@ -418,14 +430,16 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
     Symbol const s(site.m_point, unit * k);
     if (takeoff)
     {
-      takeoffCircles.push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
+      (site.m_restricted ? restrictedCircles : takeoffCircles)
+          .push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
       canopies[medium].push_back(s.Arc(0, 0.2, 6.0, 4.0, 12, 168));
       risers[medium].push_back({s.P(-5.8, 1.0), s.P(0, -4.2), s.P(5.8, 1.0)});
       pilots.push_back(MakeCircle(s.P(0, -5.0), 1.6 * k * unit, 8));
     }
     else
     {
-      landingCircles.push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
+      (site.m_restricted ? restrictedCircles : landingCircles)
+          .push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
       poles[medium].push_back({s.P(-4.5, -6.0), s.P(-4.5, 5.5)});
       socks.push_back({s.P(-4.5, 5.5), s.P(5.5, 4.3), s.P(5.5, 1.7), s.P(-4.5, 0.5), s.P(-4.5, 5.5)});
     }
@@ -435,6 +449,7 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
   e.Fills("icon_halos", std::move(halos), kIconHaloColor);
   e.Fills("icon_takeoffs", std::move(takeoffCircles), kTakeoffCircle);
   e.Fills("icon_landings", std::move(landingCircles), kLandingCircle);
+  e.Fills("icon_restricted", std::move(restrictedCircles), kRestrictedCircle);
   for (int m = 0; m < 2; ++m)
   {
     double const k = ((m ? kMediumIconRadius : kSmallIconRadius) - kIconHalo) / kGlyphRadius;
@@ -449,10 +464,14 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 
 void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit)
 {
-  Rings discs, rings, restrictedRings, sectors, sectorOutlines;
-  // The wing has five cells: green, blue, black, blue, green.
-  Rings wingGreen, wingBlue, wingBlack, gliderLines, torsos, heads;
-  Rings poles, sockRed, sockWhite, sockOutlines;
+  // Colored, and gray for members only.
+  struct Parts
+  {
+    Rings discs, rings, sectors, sectorOutlines;
+    // The wing has five cells: green, blue, black, blue, green.
+    Rings wingOuter, wingMiddle, wingCenter, gliderLines, torsos, heads;
+    Rings poles, sockRed, sockWhite, sockOutlines;
+  } parts[2];
   Rings badges;
   std::vector<std::pair<m2::PointD, size_t>> counts;
   m_drawnClusters = MakeTakeoffClusters(rect, zoom, m_drawnScale);
@@ -461,30 +480,29 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   {
     if (++count > kMaxSymbols)
       break;
+    auto & p = parts[cluster.m_restricted ? 1 : 0];
     m2::PointD const & center = cluster.m_point;
     Symbol const s(center, unit);
+    p.discs.push_back(MakeCircle(center, kDiscRadius * unit, 32));
+    p.rings.push_back(p.discs.back());
+    for (auto & sector : MakeSectors(center, cluster.m_directions, kSectorRadius * unit, kDiscRadius * unit))
     {
-      discs.push_back(MakeCircle(center, kDiscRadius * unit, 32));
-      (cluster.m_restricted ? restrictedRings : rings).push_back(discs.back());
-      for (auto & sector : MakeSectors(center, cluster.m_directions, kSectorRadius * unit, kDiscRadius * unit))
-      {
-        sectorOutlines.push_back(sector);
-        sectors.push_back(std::move(sector));
-      }
+      p.sectorOutlines.push_back(sector);
+      p.sectors.push_back(std::move(sector));
+    }
 
-      // A paraglider with the pilot hanging under the wing.
-      Rings * const cellColors[] = {&wingGreen, &wingBlue, &wingBlack, &wingBlue, &wingGreen};
-      for (int c = 0; c < 5; ++c)
-        cellColors[c]->push_back(s.Arc(0, 2.0, 10.5, 6.0, 168 - c * 31.2, 168 - (c + 1) * 31.2));
-      gliderLines.push_back({s.P(-10.2, 3.3), s.P(-1.3, -7.5), s.P(-4.0, 7.6)});
-      gliderLines.push_back({s.P(10.2, 3.3), s.P(1.3, -7.5), s.P(4.0, 7.6)});
-      heads.push_back(MakeCircle(s.P(0, -5.6), 1.9 * unit, 10));
-      torsos.push_back({s.P(0, -7.6), s.P(0, -10.6)});
-      if (cluster.m_count > 1)
-      {
-        badges.push_back(MakeCircle(s.P(kBadgeOffset, kBadgeOffset), kBadgeRadius * unit, 16));
-        counts.emplace_back(s.P(kBadgeOffset, kBadgeOffset), cluster.m_count);
-      }
+    // A paraglider with the pilot hanging under the wing.
+    Rings * const cellColors[] = {&p.wingOuter, &p.wingMiddle, &p.wingCenter, &p.wingMiddle, &p.wingOuter};
+    for (int c = 0; c < 5; ++c)
+      cellColors[c]->push_back(s.Arc(0, 2.0, 10.5, 6.0, 168 - c * 31.2, 168 - (c + 1) * 31.2));
+    p.gliderLines.push_back({s.P(-10.2, 3.3), s.P(-1.3, -7.5), s.P(-4.0, 7.6)});
+    p.gliderLines.push_back({s.P(10.2, 3.3), s.P(1.3, -7.5), s.P(4.0, 7.6)});
+    p.heads.push_back(MakeCircle(s.P(0, -5.6), 1.9 * unit, 10));
+    p.torsos.push_back({s.P(0, -7.6), s.P(0, -10.6)});
+    if (cluster.m_count > 1)
+    {
+      badges.push_back(MakeCircle(s.P(kBadgeOffset, kBadgeOffset), kBadgeRadius * unit, 16));
+      counts.emplace_back(s.P(kBadgeOffset, kBadgeOffset), cluster.m_count);
     }
   }
 
@@ -496,43 +514,47 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
     {
       continue;
     }
+    auto & p = parts[site.m_restricted ? 1 : 0];
     Symbol const s(site.m_point, unit);
+    // A red and white windsock, wide at the pole, in four stripes.
+    double constexpr kPoleX = -8.0, kTipX = 10.0, kTopWide = 8.5, kBottomWide = 2.5, kTopTip = 6.8, kBottomTip = 4.2;
+    p.poles.push_back({s.P(kPoleX, -4.5), s.P(kPoleX, kTopWide + 0.5)});
+    for (int k = 0; k < 4; ++k)
     {
-      // A red and white windsock, wide at the pole, in four stripes.
-      double constexpr kPoleX = -8.0, kTipX = 10.0, kTopWide = 8.5, kBottomWide = 2.5, kTopTip = 6.8,
-                       kBottomTip = 4.2;
-      poles.push_back({s.P(kPoleX, -4.5), s.P(kPoleX, kTopWide + 0.5)});
-      for (int k = 0; k < 4; ++k)
-      {
-        double const t0 = k / 4.0, t1 = (k + 1) / 4.0;
-        auto const x = [&](double t) { return kPoleX + (kTipX - kPoleX) * t; };
-        auto const top = [&](double t) { return kTopWide + (kTopTip - kTopWide) * t; };
-        auto const bottom = [&](double t) { return kBottomWide + (kBottomTip - kBottomWide) * t; };
-        (k % 2 == 0 ? sockRed : sockWhite)
-            .push_back({s.P(x(t0), top(t0)), s.P(x(t1), top(t1)), s.P(x(t1), bottom(t1)), s.P(x(t0), bottom(t0)),
-                        s.P(x(t0), top(t0))});
-      }
-      sockOutlines.push_back({s.P(kPoleX, kTopWide), s.P(kTipX, kTopTip), s.P(kTipX, kBottomTip),
-                              s.P(kPoleX, kBottomWide)});
+      double const t0 = k / 4.0, t1 = (k + 1) / 4.0;
+      auto const x = [&](double t) { return kPoleX + (kTipX - kPoleX) * t; };
+      auto const top = [&](double t) { return kTopWide + (kTopTip - kTopWide) * t; };
+      auto const bottom = [&](double t) { return kBottomWide + (kBottomTip - kBottomWide) * t; };
+      (k % 2 == 0 ? p.sockRed : p.sockWhite)
+          .push_back({s.P(x(t0), top(t0)), s.P(x(t1), top(t1)), s.P(x(t1), bottom(t1)), s.P(x(t0), bottom(t0)),
+                      s.P(x(t0), top(t0))});
     }
+    p.sockOutlines.push_back(
+        {s.P(kPoleX, kTopWide), s.P(kTipX, kTopTip), s.P(kTipX, kBottomTip), s.P(kPoleX, kBottomWide)});
   }
 
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
-  e.Fills("discs", std::move(discs), kDisc);
-  e.Fills("sectors", std::move(sectors), kSector);
-  e.Lines("sector_outlines", std::move(sectorOutlines), kSectorOutline, 1.0);
-  e.Lines("rings", std::move(rings), kRing, 1.5);
-  e.Lines("restricted_rings", std::move(restrictedRings), kRestrictedRing, 3.0);
-  e.Lines("glider_lines", std::move(gliderLines), kGliderLines, 1.0);
-  e.Lines("wing_green", std::move(wingGreen), kWingGreen, 4.5);
-  e.Lines("wing_blue", std::move(wingBlue), kWingBlue, 4.5);
-  e.Lines("wing_black", std::move(wingBlack), kWingBlack, 4.5);
-  e.Lines("torsos", std::move(torsos), kPilot, 3.0);
-  e.Fills("heads", std::move(heads), kPilot);
-  e.Lines("poles", std::move(poles), kPole, 2.4);
-  e.Fills("sock_red", std::move(sockRed), kSockRed);
-  e.Fills("sock_white", std::move(sockWhite), kWhite);
-  e.Lines("sock_outlines", std::move(sockOutlines), kSockOutline, 1.0);
+  // The gray ones below the colored ones.
+  for (int g = 1; g >= 0; --g)
+  {
+    auto & p = parts[g];
+    Palette const & c = g ? kGrays : kColors;
+    std::string const suffix = g ? "_gray" : "";
+    e.Fills("discs" + suffix, std::move(p.discs), kDisc);
+    e.Fills("sectors" + suffix, std::move(p.sectors), c.m_sector);
+    e.Lines("sector_outlines" + suffix, std::move(p.sectorOutlines), c.m_sectorOutline, 1.0);
+    e.Lines("rings" + suffix, std::move(p.rings), c.m_ring, 1.5);
+    e.Lines("glider_lines" + suffix, std::move(p.gliderLines), c.m_gliderLines, 1.0);
+    e.Lines("wing_outer" + suffix, std::move(p.wingOuter), c.m_wingOuter, 4.5);
+    e.Lines("wing_middle" + suffix, std::move(p.wingMiddle), c.m_wingMiddle, 4.5);
+    e.Lines("wing_center" + suffix, std::move(p.wingCenter), c.m_wingCenter, 4.5);
+    e.Lines("torsos" + suffix, std::move(p.torsos), c.m_pilot, 3.0);
+    e.Fills("heads" + suffix, std::move(p.heads), c.m_pilot);
+    e.Lines("poles" + suffix, std::move(p.poles), kPole, 2.4);
+    e.Fills("sock_red" + suffix, std::move(p.sockRed), c.m_sockRed);
+    e.Fills("sock_white" + suffix, std::move(p.sockWhite), kWhite);
+    e.Lines("sock_outlines" + suffix, std::move(p.sockOutlines), c.m_sockOutline, 1.0);
+  }
   Rings badgeOutlines = badges;
   e.Fills("badges", std::move(badges), kWhite);
   e.Lines("badge_outlines", std::move(badgeOutlines), kPilot, 1.2);

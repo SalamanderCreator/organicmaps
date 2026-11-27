@@ -38,7 +38,7 @@ public:
     Type m_type = Type::Takeoff;
     /// Bit i is the direction i * 22.5 degrees clockwise from north, as the wind should blow from.
     uint16_t m_directions = 0;
-    /// Drawn with an orange ring, e.g. a site for club members only.
+    /// Drawn gray, e.g. a site for club members only.
     bool m_restricted = false;
     /// Gets a label, e.g. not when the map shows the site's name already.
     bool m_labeled = false;

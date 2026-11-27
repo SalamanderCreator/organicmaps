@@ -47,7 +47,7 @@ public final class FlightSite
   public final int mDirections;
   /** SOURCE_* bits. */
   public final int mSources;
-  /** Shown with an orange ring, e.g. for club members only. */
+  /** Shown gray, e.g. for club members only. */
   public boolean mRestricted;
   /** There are rules for guest pilots, like a sign-up or a briefing. */
   public boolean mGuestRules;
