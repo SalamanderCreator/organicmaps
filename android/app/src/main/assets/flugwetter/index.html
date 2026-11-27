@@ -901,6 +901,8 @@ async function init() {
       // Heute zählt nur der Rest des Tages, wie auf der Karte.
       DAYSUM[d] = summarizeDay(RATED[d], i === 0 ? new Date(Date.now() + RECS.utcOffset * 1000).getUTCHours() : 0);
     });
+    // Nach der Abenddämmerung zeigt die Karte schon morgen, die Seite dann auch.
+    if (DAYS.length > 1 && !DAYSUM[DAYS[0]]) CUR = 1;
     setupDays(); render();
     if (!d2 && !DEMO) setStatus("ICON-D2 nicht verfügbar – es werden gröbere Modelle angezeigt.", true);
   } catch (e) {
