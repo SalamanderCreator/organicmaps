@@ -122,10 +122,12 @@ function rateHour(r, foehn) {
   const fog = r.code === 45 || r.code === 48;
   const p = prof(r, Math.max(SITE.alt, r.ground + 10));
   const inCloud = p && p.cc >= RATING.cloudAtStart;
-  if (fog && inCloud) add("Wolken", "Nebel am Start", RATE.RED);
-  else if (fog) add("Wolken", "Nebel im Tal, Start darüber", RATE.YELLOW);
-  else add("Wolken", inCloud ? `Start in den Wolken (${octas(p.cc)}/8)` : r.base ? `Basis ${r.base.lcl} m` : "–",
-    inCloud ? RATE.YELLOW : RATE.GREEN);
+  const atStart = p ? `${octas(p.cc)}/8 auf Starthöhe` : "Starthöhe unbekannt";
+  const base = r.base ? `, Basis ${r.base.lcl} m` : "";
+  if (fog && inCloud) add("Wolken", `Nebel am Start (${atStart})`, RATE.RED);
+  else if (fog) add("Wolken", `Nebel im Tal, Start darüber (${atStart})`, RATE.YELLOW);
+  else if (inCloud) add("Wolken", `Start in den Wolken (${atStart}), kein Nebel`, RATE.YELLOW);
+  else add("Wolken", `Start frei (${atStart}), kein Nebel${base}`, RATE.GREEN);
 
   const side = alpsSide(SITE.lat, SITE.lon), fp = foehn && foehn[r.time];
   if (side && fp) {
@@ -168,17 +170,10 @@ function daylightHours(recs, day) {
   return recs.filter(r => r.date === day && r.hour >= h0 && r.hour <= h1);
 }
 
-// Bewertet alle Stunden eines Tages. Eine Stunde direkt neben einer roten wird höchstens gelb.
+// Bewertet alle Stunden eines Tages, jede nur nach ihren eigenen Kriterien.
 function rateDayHours(recs, day, foehn) {
-  const hrs = daylightHours(recs, day);
-  const rated = hrs.map(r => ({ rec: r, ...(rateHour(r, foehn) || { level: RATE.NONE, star: null, criteria: [], notes: [] }) }));
-  const raw = rated.map(x => x.level);
-  rated.forEach((x, i) => {
-    if (x.level > RATE.YELLOW && (raw[i - 1] === RATE.RED || raw[i + 1] === RATE.RED)) {
-      x.level = RATE.YELLOW; x.star = null; x.notes = [...x.notes, "Direkt neben einer roten Stunde."];
-    }
-  });
-  return rated;
+  return daylightHours(recs, day).map(r =>
+    ({ rec: r, ...(rateHour(r, foehn) || { level: RATE.NONE, star: null, criteria: [], notes: [] }) }));
 }
 
 // Tagesfarbe ab |fromHour|: grün bei 4 h grün am Stück, hellgrün bei 2 h mindestens hellgrün,
