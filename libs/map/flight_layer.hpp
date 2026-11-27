@@ -64,10 +64,14 @@ public:
 
   using ForEachObstacleFn = std::function<void(m2::RectD const & rect, std::function<void(Obstacle &&)> const & fn)>;
 
-  /// Zooms from which takeoffs and landings show up, on the normal map like camp sites and restaurants,
-  /// in the layer from further out. Labels come like the ones of restaurants, obstacles in the layer only.
-  static int constexpr kTakeoffsZoom = 13;
-  static int constexpr kLandingsZoom = 15;
+  /// Zooms from which takeoffs and landings show up, on the normal map like railway stations and camp sites
+  /// (small icons first, medium ones closer), in the layer from further out. Labels come like the ones of
+  /// restaurants, areas from a 500 m scale bar, obstacles in the layer only.
+  static int constexpr kTakeoffsZoom = 12;
+  static int constexpr kMediumTakeoffsZoom = 15;
+  static int constexpr kLandingsZoom = 13;
+  static int constexpr kMediumLandingsZoom = 14;
+  static int constexpr kAreasZoom = 14;
   static int constexpr kLayerTakeoffsZoom = 10;
   static int constexpr kLayerLandingsZoom = 12;
   static int constexpr kLabelsZoom = 16;

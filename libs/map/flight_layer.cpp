@@ -15,6 +15,7 @@ namespace
 std::string_view constexpr kLabelPrefix = "flight_label_";
 
 // The normal map: a colored circle with a white symbol, like the other map icons.
+dp::Color const kIconHaloColor(255, 255, 255, 153);
 dp::Color const kTakeoffCircle(47, 126, 194, 255);
 dp::Color const kLandingCircle(30, 158, 143, 255);
 dp::Color const kWhite(255, 255, 255, 255);
@@ -51,8 +52,12 @@ size_t constexpr kMaxLabels = 150;
 size_t constexpr kMaxObstacleSites = 40;
 size_t constexpr kMaxObstacleLines = 600;
 
-// Symbol sizes in dp.
-double constexpr kIconRadius = 9.5;
+// Symbol sizes in dp. The map icons match the small and medium POI icons of the styles (12 and 18 dp with a
+// light halo), the glyphs were drawn for kGlyphRadius.
+double constexpr kSmallIconRadius = 6.0;
+double constexpr kMediumIconRadius = 9.0;
+double constexpr kIconHalo = 0.75;
+double constexpr kGlyphRadius = 9.5;
 double constexpr kDiscRadius = 14.5;
 // The takeoff directions are a green wreath around the disc, so the paraglider does not hide them.
 double constexpr kSectorRadius = 24.0;
@@ -299,35 +304,48 @@ private:
 
 void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 {
-  Rings takeoffCircles, landingCircles, canopies, risers, pilots, poles, socks;
+  Rings halos, takeoffCircles, landingCircles;
+  // Glyph lines of small and medium icons have different widths.
+  Rings canopies[2], risers[2], pilots, poles[2], socks;
   size_t count = 0;
   for (auto const & site : m_sites)
   {
     if (!IsVisible(site, zoom) || !rect.IsPointInside(site.m_point) || ++count > kMaxSymbols)
       continue;
-    Symbol const s(site.m_point, unit);
-    if (site.m_type == Site::Type::Takeoff)
+    bool const takeoff = site.m_type == Site::Type::Takeoff;
+    bool const medium = zoom >= (takeoff ? kMediumTakeoffsZoom : kMediumLandingsZoom);
+    double const radius = medium ? kMediumIconRadius : kSmallIconRadius;
+    double const k = (radius - kIconHalo) / kGlyphRadius;
+    halos.push_back(MakeCircle(site.m_point, radius * unit));
+    Symbol const s(site.m_point, unit * k);
+    if (takeoff)
     {
-      takeoffCircles.push_back(MakeCircle(site.m_point, kIconRadius * unit));
-      canopies.push_back(s.Arc(0, 0.2, 6.0, 4.0, 12, 168));
-      risers.push_back({s.P(-5.8, 1.0), s.P(0, -4.2), s.P(5.8, 1.0)});
-      pilots.push_back(MakeCircle(s.P(0, -5.0), 1.6 * unit, 8));
+      takeoffCircles.push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
+      canopies[medium].push_back(s.Arc(0, 0.2, 6.0, 4.0, 12, 168));
+      risers[medium].push_back({s.P(-5.8, 1.0), s.P(0, -4.2), s.P(5.8, 1.0)});
+      pilots.push_back(MakeCircle(s.P(0, -5.0), 1.6 * k * unit, 8));
     }
     else
     {
-      landingCircles.push_back(MakeCircle(site.m_point, kIconRadius * unit));
-      poles.push_back({s.P(-4.5, -6.0), s.P(-4.5, 5.5)});
+      landingCircles.push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
+      poles[medium].push_back({s.P(-4.5, -6.0), s.P(-4.5, 5.5)});
       socks.push_back({s.P(-4.5, 5.5), s.P(5.5, 4.3), s.P(5.5, 1.7), s.P(-4.5, 0.5), s.P(-4.5, 5.5)});
     }
   }
 
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
+  e.Fills("icon_halos", std::move(halos), kIconHaloColor);
   e.Fills("icon_takeoffs", std::move(takeoffCircles), kTakeoffCircle);
   e.Fills("icon_landings", std::move(landingCircles), kLandingCircle);
-  e.Lines("icon_canopies", std::move(canopies), kWhite, 2.0);
-  e.Lines("icon_risers", std::move(risers), kWhite, 1.1);
+  for (int m = 0; m < 2; ++m)
+  {
+    double const k = ((m ? kMediumIconRadius : kSmallIconRadius) - kIconHalo) / kGlyphRadius;
+    std::string const size = m ? "_m" : "_s";
+    e.Lines("icon_canopies" + size, std::move(canopies[m]), kWhite, 2.0 * k);
+    e.Lines("icon_risers" + size, std::move(risers[m]), kWhite, 1.1 * k);
+    e.Lines("icon_poles" + size, std::move(poles[m]), kWhite, 1.5 * k);
+  }
   e.Fills("icon_pilots", std::move(pilots), kWhite);
-  e.Lines("icon_poles", std::move(poles), kWhite, 1.5);
   e.Fills("icon_socks", std::move(socks), kWhite);
 }
 
@@ -425,9 +443,11 @@ void FlightLayer::DrawLabels(m2::RectD const & rect, int zoom)
 
 void FlightLayer::DrawAreas(m2::RectD const & rect, int zoom)
 {
+  if (zoom < kAreasZoom)
+    return;
   Rings areas;
   for (auto const & site : m_sites)
-    if (site.m_area.size() > 2 && IsVisible(site, zoom) && rect.IsPointInside(site.m_point))
+    if (site.m_area.size() > 2 && rect.IsPointInside(site.m_point))
       areas.push_back(site.m_area);
   Rings outlines = areas;
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
