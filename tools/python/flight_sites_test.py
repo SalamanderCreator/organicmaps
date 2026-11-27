@@ -48,6 +48,24 @@ class FlightSitesTest(unittest.TestCase):
         self.assertEqual(merged[2]["id"], "osm:n9")
         self.assertEqual(merged[2]["dirs"], (1 << 8) | (1 << 10))
 
+    def test_relation_area_and_cables(self):
+        def way(*points):
+            return {"type": "way", "role": "outer", "geometry": [{"lat": a, "lon": b} for a, b in points]}
+        text = json.dumps({"elements": [
+            # A takeoff area of two ways, one of them reversed.
+            {"type": "relation", "id": 3, "tags": {"type": "multipolygon", "free_flying:site": "takeoff"},
+             "members": [way((47.0, 11.0), (47.0, 11.002), (47.002, 11.002)),
+                         way((47.0, 11.0), (47.002, 11.0), (47.002, 11.002))]},
+            {"type": "way", "id": 4, "tags": {"aerialway": "goods"},
+             "geometry": [{"lat": 47.1, "lon": 11.1}, {"lat": 47.11, "lon": 11.12}]}]})
+        sites = fs.parse_overpass(text)
+        self.assertEqual(len(sites), 1)
+        self.assertEqual(sites[0]["id"], "osm:r3")
+        self.assertEqual(len(sites[0]["area"]), 10)
+        self.assertAlmostEqual(sites[0]["lat"], 47.001)
+        self.assertEqual(fs.parse_cables(text), [{"id": "osm:w4", "line": [47.1, 11.1, 47.11, 11.12]}])
+        self.assertEqual(fs.parse_cables(OSM), [])
+
     def test_bbox(self):
         self.assertTrue(fs.in_bbox({"lat": 47.5, "lon": 11.5}, fs.DEFAULT_BBOX))
         self.assertFalse(fs.in_bbox({"lat": 47.5, "lon": 11.5}, (40, 12, 50, 20)))
