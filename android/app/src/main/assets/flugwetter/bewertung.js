@@ -12,7 +12,6 @@ const RATING = {
   gustYellow: 30, gustRed: 40,        // km/h Böen am Start
   gustSpread: 20,                     // km/h Böe − Mittel, darüber rot
   calm: 4,                            // km/h, darunter zählt eine leicht falsche Richtung nicht
-  wrongDeg: 90,                       // Grad neben der Startrichtung, ab dem es bei Wind rot ist
   upperYellow: 30, upperRed: 45,      // km/h in 700 hPa (etwa 3000 m)
   leeRed: 25,                         // km/h in 700 hPa von hinten
   rainRed: 0.2,                       // mm/h
@@ -103,7 +102,8 @@ function rateHour(r, foehn) {
     let lv;
     if (off.n === 0) lv = RATE.GREEN;
     else if (s.ws < RATING.calm) lv = off.n === 1 ? RATE.GREEN : RATE.YELLOW;
-    else lv = off.deg > RATING.wrongDeg ? RATE.RED : RATE.YELLOW;
+    // Bei Wind: ein Sektor daneben gelb, weiter daneben (ab etwa 45°) rot.
+    else lv = off.n === 1 ? RATE.YELLOW : RATE.RED;
     add("Richtung", dirName(s.wd) + (off.n ? ` (${Math.round(off.deg)}° daneben)` : ""), lv);
   } else add("Richtung", dirName(s.wd) + " (Startrichtung unbekannt)", RATE.NONE);
 
