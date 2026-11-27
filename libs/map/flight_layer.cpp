@@ -681,7 +681,7 @@ void FlightLayer::DrawObstacles()
     Add(std::string("flight_") + std::string(name), data);
   };
   add("obstacle_motorways", std::move(motorways), kMotorway, 9.0, {});
-  add("obstacle_power_lines", std::move(powerLines), kPowerLine, 3.0, {2.0, 2.0});
+  add("obstacle_power_lines", std::move(powerLines), kPowerLine, 4.0, {2.0, 2.0});
   add("obstacle_aerial_lifts", std::move(aerialLifts), kAerialLift, 3.0, {10.0, 3.5});
   if (!points.empty())
   {
