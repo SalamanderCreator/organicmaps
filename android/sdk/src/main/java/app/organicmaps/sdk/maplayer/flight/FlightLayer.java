@@ -68,9 +68,12 @@ public final class FlightLayer
   {
     ThreadPool.getWorker().execute(() -> {
       final List<FlightSite> sites = new ArrayList<>(FlightSources.testSites());
+      final List<double[]> cables = new ArrayList<>();
       try (InputStream in = appContext.getAssets().open(FlightSources.ASSET))
       {
-        sites.addAll(FlightSources.parseFile(readAll(in)));
+        final String json = readAll(in);
+        sites.addAll(FlightSources.parseFile(json));
+        cables.addAll(FlightSources.parseCables(json));
       }
       catch (FileNotFoundException e)
       {
@@ -109,6 +112,7 @@ public final class FlightLayer
         sDhvTakeoffs = dhvTakeoffs;
         sDhvGenerated = dhvGenerated;
         setSites(all);
+        setCables(cables);
       });
     });
   }
@@ -260,6 +264,25 @@ public final class FlightLayer
     nativeSetSites(ids, names, lats, lons, landings, directions, restricted, labeled, areaOffsets, areaLatLons);
   }
 
+  @MainThread
+  private static void setCables(@NonNull List<double[]> cables)
+  {
+    final int[] offsets = new int[cables.size() + 1];
+    int size = 0;
+    for (double[] c : cables)
+      size += c.length;
+    final double[] latLons = new double[size];
+    int pos = 0;
+    for (int i = 0; i < cables.size(); ++i)
+    {
+      offsets[i] = pos / 2;
+      System.arraycopy(cables.get(i), 0, latLons, pos, cables.get(i).length);
+      pos += cables.get(i).length;
+    }
+    offsets[cables.size()] = pos / 2;
+    nativeSetCables(offsets, latLons);
+  }
+
   /** Takes the height of a site without one from the downloaded terrain, if there is terrain. */
   @MainThread
   private static void fillAltitudeFromTerrain(@NonNull FlightSite site)
@@ -296,4 +319,5 @@ public final class FlightLayer
                                             @NonNull int[] directions, @NonNull boolean[] restricted,
                                             @NonNull boolean[] labeled, @NonNull int[] areaOffsets,
                                             @NonNull double[] areaLatLons);
+  private static native void nativeSetCables(@NonNull int[] offsets, @NonNull double[] latLons);
 }

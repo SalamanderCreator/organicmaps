@@ -67,6 +67,26 @@ public final class FlightSources
     return sites;
   }
 
+  /** Cables of the sites file that the maps lack, each as latitude, longitude, latitude, … */
+  @NonNull
+  static List<double[]> parseCables(@NonNull String json) throws Exception
+  {
+    final JSONArray array = new JSONObject(json).optJSONArray("cables");
+    final List<double[]> cables = new ArrayList<>();
+    if (array == null)
+      return cables;
+    for (int i = 0; i < array.length(); ++i)
+    {
+      final JSONArray jLine = array.getJSONObject(i).getJSONArray("line");
+      final double[] line = new double[jLine.length()];
+      for (int k = 0; k < line.length; ++k)
+        line[k] = jLine.getDouble(k);
+      if (line.length >= 4)
+        cables.add(line);
+    }
+    return cables;
+  }
+
   /** The file format of parseFile, for the sites imported on the phone. */
   @NonNull
   static String toFile(@NonNull List<FlightSite> sites, @NonNull String generated) throws Exception

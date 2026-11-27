@@ -2354,12 +2354,17 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
 {
   auto const & c = classif();
   // Lines and points a paraglider can hit or must not land on: power lines, all kinds of aerial lifts,
-  // motorways and wind turbines.
+  // motorways, wind turbines and masts.
   static uint32_t const kAerialway = c.GetTypeByPath({"aerialway"});
+  static uint32_t const kMagicCarpet = c.GetTypeByPathSafe({"aerialway", "magic_carpet"});
   static std::array<uint32_t, 3> const kLevel2 = {c.GetTypeByPathSafe({"power", "line"}),
                                                   c.GetTypeByPathSafe({"power", "minor_line"}),
                                                   c.GetTypeByPathSafe({"highway", "motorway"})};
   static uint32_t const kWindTurbine = c.GetTypeByPathSafe({"power", "generator", "wind"});
+  // Communication towers are a subtype of the tower.
+  static std::array<uint32_t, 3> const kMasts = {c.GetTypeByPathSafe({"man_made", "mast"}),
+                                                 c.GetTypeByPathSafe({"man_made", "tower"}),
+                                                 c.GetTypeByPathSafe({"man_made", "chimney"})};
 
   int constexpr kScale = scales::GetUpperScale();
   m_featuresFetcher.ForEachFeature(rect, [&](FeatureType & ft)
@@ -2372,7 +2377,8 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
       using Kind = FlightLayer::Obstacle::Kind;
       if (geomType == feature::GeomType::Line)
       {
-        if (ftype::Trunc(type, 1) == kAerialway)
+        // A magic carpet is a conveyor belt on the ground.
+        if (ftype::Trunc(type, 1) == kAerialway && ftype::Trunc(type, 2) != kMagicCarpet)
           kind = Kind::AerialLift;
         else if (ftype::Trunc(type, 2) == kLevel2[2])
           kind = Kind::Motorway;
@@ -2382,6 +2388,10 @@ void Framework::ForEachFlightObstacle(m2::RectD const & rect,
       else if (geomType == feature::GeomType::Point && ftype::Trunc(type, 3) == kWindTurbine)
       {
         kind = Kind::WindTurbine;
+      }
+      else if (geomType != feature::GeomType::Line && base::IsExist(kMasts, ftype::Trunc(type, 2)))
+      {
+        kind = Kind::Mast;
       }
     });
     if (!kind)
