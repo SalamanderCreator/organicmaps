@@ -10,22 +10,28 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/margin_base">
+    android:paddingStart="@dimen/margin_half"
+    android:paddingEnd="@dimen/margin_half">
 
-    <TextView
-      android:id="@+id/flight_weather_title"
+    <!-- The page shows the name, height and directions of the site itself. -->
+    <ImageButton
+      android:id="@+id/flight_weather_info"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:background="?selectableItemBackgroundBorderless"
+      android:contentDescription="@string/flight_weather_site_info"
+      android:src="@drawable/ic_info_outline"
+      android:tint="?android:textColorSecondary" />
+
+    <Space
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:ellipsize="end"
-      android:maxLines="1"
-      android:textAppearance="@style/MwmTextAppearance.Body1"
-      android:textStyle="bold" />
+      android:layout_height="1dp"
+      android:layout_weight="1" />
 
     <ImageButton
       android:id="@+id/flight_weather_close"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:background="?selectableItemBackgroundBorderless"
       android:contentDescription="@string/close"
       android:src="@drawable/ic_close_themed" />

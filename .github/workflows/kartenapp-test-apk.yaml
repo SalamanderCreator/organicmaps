@@ -110,11 +110,22 @@ jobs:
           echo "ANDROID_CODE=$(../tools/unix/version.sh android_code)" >> "$GITHUB_ENV"
           ./gradlew -Parm64 assembleFdroidBeta
 
+      # The file name is the artifact name. Builds of master and of a pull request in the same half hour got
+      # the same name, so the commit is part of it.
+      - name: Name the test APK
+        shell: bash
+        env:
+          COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          APK="Kartenapp-${ANDROID_CODE}-${COMMIT::7}.apk"
+          cp "android/app/build/outputs/apk/fdroid/beta/OrganicMaps-${ANDROID_CODE}-fdroid-beta.apk" "$APK"
+          echo "APK=$APK" >> "$GITHUB_ENV"
+
       - name: Upload test APK
         uses: actions/upload-artifact@v7
         with:
-          name: Kartenapp-${{ env.ANDROID_CODE }}-arm64.apk
-          path: android/app/build/outputs/apk/fdroid/beta/OrganicMaps-${{ env.ANDROID_CODE }}-fdroid-beta.apk
+          name: ${{ env.APK }}
+          path: ${{ env.APK }}
           archive: false
           if-no-files-found: error
           retention-days: 30

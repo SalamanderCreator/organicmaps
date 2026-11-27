@@ -5,7 +5,6 @@
 
 #include "geometry/mercator.hpp"
 
-#include <string>
 #include <vector>
 
 // Maps&Fly: the flight sites and the flight preparation layer, see FlightLayer.java. All calls run on the
@@ -30,22 +29,6 @@ JNIEXPORT jdouble Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeGet
   // No NaN: the app is built with fast math, which assumes there is none.
   auto const elevation = frm()->GetTerrainElevation(mercator::FromLatLon(lat, lon));
   return elevation ? *elevation : -1e6;
-}
-
-// "kind\tname\tdistance\tlat\tlon" of the nearest aerial lift station ("cablecar") and parking ("parking").
-JNIEXPORT jobjectArray Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeFindServices(JNIEnv * env, jclass,
-                                                                                             jdouble lat,
-                                                                                             jdouble lon)
-{
-  std::vector<std::string> items;
-  for (auto const & s : frm()->FindFlightServices(mercator::FromLatLon(lat, lon)))
-  {
-    auto const ll = mercator::ToLatLon(s.m_point);
-    items.push_back(std::string(s.m_kind == Framework::FlightService::Kind::CableCarStation ? "cablecar" : "parking") +
-                    "\t" + s.m_name + "\t" + std::to_string(s.m_distanceM) + "\t" + std::to_string(ll.m_lat) + "\t" +
-                    std::to_string(ll.m_lon));
-  }
-  return jni::ToJavaStringArray(env, items);
 }
 
 // void onSiteTapped(String id);
