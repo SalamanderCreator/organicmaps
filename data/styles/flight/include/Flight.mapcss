@@ -800,3 +800,23 @@ area[landuse],
 node[boundary],
 area[boundary],
 {icon-image: none;}
+
+/* Paths and forest tracks help little for orientation from the air: not before zoom 14, then faint. */
+line|z1-13[highway=path],
+line|z1-13[highway=footway],
+line|z1-13[highway=track],
+line|z1-13[highway=bridleway],
+line|z1-13[highway=steps],
+line|z1-13[highway=cycleway],
+line|z1-13[highway=path][bicycle=designated]::cycleline,
+line|z1-13[highway=footway][bicycle=designated]::cycleline,
+{width: 0; text: none;}
+line|z14-[highway=path],
+line|z14-[highway=footway],
+line|z14-[highway=track],
+line|z14-[highway=bridleway],
+line|z14-[highway=steps],
+line|z14-[highway=cycleway],
+line|z14-[highway=path][bicycle=designated]::cycleline,
+line|z14-[highway=footway][bicycle=designated]::cycleline,
+{opacity: 0.35;}
