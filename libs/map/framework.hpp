@@ -245,7 +245,6 @@ protected:
   void ClearAllCaches();
 
   void OnViewportChanged(ScreenBase const & screen);
-  void ForEachFlightObstacle(m2::RectD const & rect, std::function<void(FlightLayer::Obstacle &&)> const & fn) const;
 
   void InitTransliteration();
 

@@ -501,8 +501,6 @@ Framework::Framework(FrameworkParams const & params, bool loadMaps)
     m_distanceOverlay.SetLineEnabled(enabled);
     enabled = false;
     settings::TryGet(kFlightLayerKey, enabled);
-    m_flightLayer.SetForEachObstacleFn([this](m2::RectD const & rect, auto const & fn)
-    { ForEachFlightObstacle(rect, fn); });
     m_flightLayer.SetEnabled(enabled);
   }
 
@@ -2349,64 +2347,6 @@ void Framework::SetFlightLayerEnabled(bool enabled)
   m_flightLayer.SetEnabled(enabled);
 }
 
-void Framework::ForEachFlightObstacle(m2::RectD const & rect,
-                                      std::function<void(FlightLayer::Obstacle &&)> const & fn) const
-{
-  auto const & c = classif();
-  // Lines and points a paraglider can hit or must not land on: power lines, all kinds of aerial lifts,
-  // motorways, wind turbines and masts.
-  static uint32_t const kAerialway = c.GetTypeByPath({"aerialway"});
-  static uint32_t const kMagicCarpet = c.GetTypeByPathSafe({"aerialway", "magic_carpet"});
-  static std::array<uint32_t, 3> const kLevel2 = {c.GetTypeByPathSafe({"power", "line"}),
-                                                  c.GetTypeByPathSafe({"power", "minor_line"}),
-                                                  c.GetTypeByPathSafe({"highway", "motorway"})};
-  static uint32_t const kWindTurbine = c.GetTypeByPathSafe({"power", "generator", "wind"});
-  // Communication towers are a subtype of the tower.
-  static std::array<uint32_t, 3> const kMasts = {c.GetTypeByPathSafe({"man_made", "mast"}),
-                                                 c.GetTypeByPathSafe({"man_made", "tower"}),
-                                                 c.GetTypeByPathSafe({"man_made", "chimney"})};
-
-  int constexpr kScale = scales::GetUpperScale();
-  m_featuresFetcher.ForEachFeature(rect, [&](FeatureType & ft)
-  {
-    // Only the lines themselves, not e.g. the stations of an aerial lift, and wind turbines as points.
-    auto const geomType = ft.GetGeomType();
-    std::optional<FlightLayer::Obstacle::Kind> kind;
-    ft.ForEachType([&](uint32_t type)
-    {
-      using Kind = FlightLayer::Obstacle::Kind;
-      if (geomType == feature::GeomType::Line)
-      {
-        // A magic carpet is a conveyor belt on the ground.
-        if (ftype::Trunc(type, 1) == kAerialway && ftype::Trunc(type, 2) != kMagicCarpet)
-          kind = Kind::AerialLift;
-        else if (ftype::Trunc(type, 2) == kLevel2[2])
-          kind = Kind::Motorway;
-        else if (base::IsExist(kLevel2, ftype::Trunc(type, 2)))
-          kind = Kind::PowerLine;
-      }
-      else if (geomType == feature::GeomType::Point && ftype::Trunc(type, 3) == kWindTurbine)
-      {
-        kind = Kind::WindTurbine;
-      }
-      else if (geomType != feature::GeomType::Line && base::IsExist(kMasts, ftype::Trunc(type, 2)))
-      {
-        kind = Kind::Mast;
-      }
-    });
-    if (!kind)
-      return;
-
-    FlightLayer::Obstacle obstacle;
-    obstacle.m_kind = *kind;
-    if (geomType == feature::GeomType::Line)
-      ft.ForEachPoint([&obstacle](m2::PointD const & p) { obstacle.m_points.push_back(p); }, kScale);
-    else
-      obstacle.m_points.push_back(feature::GetCenter(ft, kScale));
-    fn(std::move(obstacle));
-  }, kScale);
-}
-
 bool Framework::IsTrackRecordingEnabled() const
 {
   return GpsTracker::Instance().IsEnabled();
@@ -3667,6 +3607,10 @@ bool Framework::ParseDrapeDebugCommand(std::string const & query)
     desiredStyle = MapStyleOutdoorsLight;
   else if (query == "?odark" || query == "mapstyle:outdoors_dark")
     desiredStyle = MapStyleOutdoorsDark;
+  else if (query == "?flight" || query == "mapstyle:flight_light")
+    desiredStyle = MapStyleFlightLight;
+  else if (query == "?fdark" || query == "mapstyle:flight_dark")
+    desiredStyle = MapStyleFlightDark;
 
   if (desiredStyle != MapStyleCount)
   {

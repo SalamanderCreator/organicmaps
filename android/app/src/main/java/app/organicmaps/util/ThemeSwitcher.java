@@ -12,6 +12,7 @@ import app.organicmaps.MwmApplication;
 import app.organicmaps.downloader.DownloaderStatusIcon;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.MapStyle;
+import app.organicmaps.sdk.maplayer.flight.FlightLayer;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.util.Config;
 
@@ -131,6 +132,8 @@ public enum ThemeSwitcher
   {
     if (RoutingController.get().isVehicleNavigation())
       return dark ? MapStyle.VehicleDark : MapStyle.VehicleClear;
+    else if (FlightLayer.isEnabled())
+      return dark ? MapStyle.FlightDark : MapStyle.FlightClear;
     else if (Framework.nativeIsOutdoorsLayerEnabled())
       return dark ? MapStyle.OutdoorsDark : MapStyle.OutdoorsClear;
     else

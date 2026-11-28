@@ -19,6 +19,10 @@ MapStyle MapStyleFromSettings(std::string const & str)
     return MapStyleOutdoorsLight;
   else if (str == "MapStyleOutdoorsDark")
     return MapStyleOutdoorsDark;
+  else if (str == "MapStyleFlightLight")
+    return MapStyleFlightLight;
+  else if (str == "MapStyleFlightDark")
+    return MapStyleFlightDark;
 
   return kDefaultMapStyle;
 }
@@ -34,6 +38,8 @@ std::string MapStyleToString(MapStyle mapStyle)
   case MapStyleVehicleLight: return "MapStyleVehicleLight";
   case MapStyleOutdoorsDark: return "MapStyleOutdoorsDark";
   case MapStyleOutdoorsLight: return "MapStyleOutdoorsLight";
+  case MapStyleFlightDark: return "MapStyleFlightDark";
+  case MapStyleFlightLight: return "MapStyleFlightLight";
 
   case MapStyleCount: break;
   }
@@ -48,7 +54,7 @@ std::string DebugPrint(MapStyle mapStyle)
 
 bool MapStyleIsDark(MapStyle mapStyle)
 {
-  for (auto const darkStyle : {MapStyleDefaultDark, MapStyleVehicleDark, MapStyleOutdoorsDark})
+  for (auto const darkStyle : {MapStyleDefaultDark, MapStyleVehicleDark, MapStyleOutdoorsDark, MapStyleFlightDark})
     if (mapStyle == darkStyle)
       return true;
   return false;
@@ -69,6 +75,7 @@ MapStyle GetDarkMapStyleVariant(MapStyle mapStyle)
   case MapStyleDefaultLight: return MapStyleDefaultDark;
   case MapStyleVehicleLight: return MapStyleVehicleDark;
   case MapStyleOutdoorsLight: return MapStyleOutdoorsDark;
+  case MapStyleFlightLight: return MapStyleFlightDark;
   default: CHECK(false, ()); return MapStyleDefaultDark;
   }
 }
@@ -83,6 +90,7 @@ MapStyle GetLightMapStyleVariant(MapStyle mapStyle)
   case MapStyleDefaultDark: return MapStyleDefaultLight;
   case MapStyleVehicleDark: return MapStyleVehicleLight;
   case MapStyleOutdoorsDark: return MapStyleOutdoorsLight;
+  case MapStyleFlightDark: return MapStyleFlightLight;
   default: CHECK(false, ()); return MapStyleDefaultLight;
   }
 }
