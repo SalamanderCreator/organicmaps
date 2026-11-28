@@ -1,0 +1,3 @@
+/* Maps&Fly: style for paragliding, the outdoors style with the obstacles of the flight preparation. */
+@import("../../outdoors/light/style.mapcss");
+@import("../include/Flight.mapcss");

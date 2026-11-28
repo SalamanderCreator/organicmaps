@@ -1,0 +1,66 @@
+/* Maps&Fly: what matters when flying a paraglider, on top of the outdoors style.
+   Obstacles show up earlier and stronger: power lines red, aerial lifts magenta, rail lines with
+   overhead wires dark red. */
+
+/* Power lines */
+line|z12-[power=line],
+{color: #E0201B; width: 1.2; opacity: 0.9;}
+line|z14-[power=line],
+{width: 1.6;}
+line|z16-[power=line],
+{width: 2.2;}
+
+line|z12-[power=line]::dash,
+{color: #E0201B; width: 4.5; opacity: 0.9; dashes: 1,40;}
+line|z15-[power=line]::dash,
+{width: 6; dashes: 1.5,50;}
+
+line|z13-[power=minor_line],
+{color: #E0201B; width: 1.1; opacity: 0.85;}
+line|z13-[power=minor_line]::dash,
+{color: #E0201B; width: 4; opacity: 0.85; dashes: 1,50;}
+
+/* Aerial lifts, from cable cars to drag lifts */
+line|z11-[aerialway=cable_car],
+line|z11-[aerialway=gondola],
+line|z11-[aerialway=mixed_lift],
+line|z12-[aerialway=chair_lift],
+line|z12-[aerialway=drag_lift],
+line|z12-[aerialway=j-bar],
+line|z12-[aerialway=t-bar],
+line|z12-[aerialway=platter],
+line|z12-[aerialway=rope_tow],
+line|z12-[aerialway=zip_line],
+{color: #C8008C; width: 1.4; opacity: 1;}
+line|z15-[aerialway=cable_car],
+line|z15-[aerialway=gondola],
+line|z15-[aerialway=mixed_lift],
+line|z15-[aerialway=chair_lift],
+line|z15-[aerialway=drag_lift],
+line|z15-[aerialway=j-bar],
+line|z15-[aerialway=t-bar],
+line|z15-[aerialway=platter],
+line|z15-[aerialway=rope_tow],
+line|z15-[aerialway=zip_line],
+{width: 2.2;}
+
+line|z11-[aerialway=cable_car]::dash,
+line|z11-[aerialway=gondola]::dash,
+line|z11-[aerialway=mixed_lift]::dash,
+line|z12-[aerialway=chair_lift]::dash,
+line|z12-[aerialway=drag_lift]::dash,
+line|z12-[aerialway=j-bar]::dash,
+line|z12-[aerialway=t-bar]::dash,
+line|z12-[aerialway=platter]::dash,
+line|z12-[aerialway=rope_tow]::dash,
+line|z12-[aerialway=zip_line]::dash,
+{color: #C8008C; opacity: 1;}
+
+/* Rail lines mostly have overhead wires; not in tunnels */
+line|z11-[railway=rail][!tunnel],
+{color: #A0203C; opacity: 1;}
+
+/* Masts and towers earlier */
+node|z12-[man_made=mast],
+node|z12-[man_made=tower],
+{icon-image: mast-s.svg;}

@@ -38,6 +38,9 @@ BuildStyle default  light    "$TMP_DIR/default_light"
 BuildStyle default  dark     "$TMP_DIR/default_dark"
 BuildStyle outdoors light    "$TMP_DIR/outdoors_light"
 BuildStyle outdoors dark     "$TMP_DIR/outdoors_dark"
+# Maps&Fly: the paragliding style, outdoors with stronger obstacles.
+BuildStyle flight   light    "$TMP_DIR/flight_light"
+BuildStyle flight   dark     "$TMP_DIR/flight_dark"
 # Keep vehicle style last to produce the same visibility.txt & classificator.txt.
 BuildStyle vehicle  light    "$TMP_DIR/vehicle_light"
 BuildStyle vehicle  dark     "$TMP_DIR/vehicle_dark"
@@ -48,6 +51,8 @@ python3 "$KOTHIC/merge_variants.py" "$DATA_PATH/drules_default" \
   light "$TMP_DIR/default_light.bin"  dark "$TMP_DIR/default_dark.bin"
 python3 "$KOTHIC/merge_variants.py" "$DATA_PATH/drules_outdoors" \
   light "$TMP_DIR/outdoors_light.bin" dark "$TMP_DIR/outdoors_dark.bin"
+python3 "$KOTHIC/merge_variants.py" "$DATA_PATH/drules_flight" \
+  light "$TMP_DIR/flight_light.bin"   dark "$TMP_DIR/flight_dark.bin"
 python3 "$KOTHIC/merge_variants.py" "$DATA_PATH/drules_vehicle" \
   light "$TMP_DIR/vehicle_light.bin"  dark "$TMP_DIR/vehicle_dark.bin"
 
