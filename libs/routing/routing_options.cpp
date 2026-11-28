@@ -74,7 +74,9 @@ std::optional<RoutingOptions::Road> RoutingOptions::RoadFromId(uint32_t id)
   case Steps:
   case PathDifficult:
   case PathExpert:
-  case Paved: return static_cast<Road>(id);
+  case Paved:
+  case Vignette:
+  case LowClearance: return static_cast<Road>(id);
   default: return {};
   }
 }
@@ -101,6 +103,9 @@ void RoutingOptions::SaveToSettings(VehicleType vehicleType, RoutingOptions opti
 // static
 double RoutingOptions::GetSoftAvoidWeightFactor(RoadType avoidedOnRoad)
 {
+  // A low clearance costs about an hour per 5 m road: only a stop behind it is routed through.
+  if (avoidedOnRoad & LowClearance)
+    return 10000.0;
   // Hard grades are taken only when there is no reasonable other way, asphalt is taken when the
   // natural way is more than twice as long.
   if (avoidedOnRoad & (PathDifficult | PathExpert))
@@ -232,6 +237,8 @@ std::string DebugPrint(RoutingOptions const & routingOptions)
   append(RoutingOptions::Road::PathDifficult);
   append(RoutingOptions::Road::PathExpert);
   append(RoutingOptions::Road::Paved);
+  append(RoutingOptions::Road::Vignette);
+  append(RoutingOptions::Road::LowClearance);
 
   if (wasAppended)
     ss << " | ";
@@ -253,6 +260,8 @@ std::string DebugPrint(RoutingOptions::Road type)
   case RoutingOptions::Road::PathDifficult: return "path_difficult";
   case RoutingOptions::Road::PathExpert: return "path_expert";
   case RoutingOptions::Road::Paved: return "paved";
+  case RoutingOptions::Road::Vignette: return "vignette";
+  case RoutingOptions::Road::LowClearance: return "low_clearance";
   case RoutingOptions::Road::Usual: return "usual";
   case RoutingOptions::Road::Max: return "max";
   }

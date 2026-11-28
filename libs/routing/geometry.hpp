@@ -1,5 +1,6 @@
 #pragma once
 
+#include "routing/car_restrictions.hpp"
 #include "routing/latlon_with_altitude.hpp"
 #include "routing/road_point.hpp"
 #include "routing/routing_options.hpp"
@@ -39,7 +40,8 @@ public:
 
   /// @param[in] altitudes Empty when altitude loading is disabled.
   void Load(VehicleModelInterface const & vehicleModel, FeatureType & feature, geometry::Altitudes const & altitudes,
-            bool hasAltitude, RoadAttrsGetter & attrs, RoutingOptionsClassifier const & optionsClassifier);
+            bool hasAltitude, RoadAttrsGetter & attrs, RoutingOptionsClassifier const & optionsClassifier,
+            RoadRestrictions const & restrictions = {});
 
   SpeedKMpH GetSpeed(bool forward, time_t time = 0) const;
   std::optional<HighwayType> GetHighwayType() const { return m_highwayType; }
@@ -80,8 +82,12 @@ public:
   RoutingOptions GetRoutingOptions() const { return m_routingOptions; }
 
   void SetHighwayTypeForTests(HighwayType type) { m_highwayType = type; }
+  void SetRoutingOptionsForTests(RoutingOptions options) { m_routingOptions = options; }
 
 private:
+  /// Maps&Fly: vignette, separate toll and low clearance of a car road.
+  void ApplyRestrictions(RoadRestrictions const & restrictions);
+
   std::vector<LatLonWithAltitude> m_junctions;
   mutable std::vector<double> m_distances;  ///< as cache, @see GetDistance()
 
@@ -109,7 +115,8 @@ public:
 
   /// @param[in] handle Must be alive. It is stored by reference, so this exact object must outlive the loader.
   static std::unique_ptr<GeometryLoader> Create(MwmSet::MwmHandle const & handle, VehicleType vehicleType,
-                                                VehicleModelPtrT const & vehicleModel, bool loadAltitudes);
+                                                VehicleModelPtrT const & vehicleModel, bool loadAltitudes,
+                                                RoadRestrictions const & restrictions = {});
 
   /// Loads standalone car routing geometry for generator and track tools.
   static std::unique_ptr<GeometryLoader> CreateFromFile(std::string const & filePath,

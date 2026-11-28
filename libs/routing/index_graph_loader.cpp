@@ -27,13 +27,14 @@ public:
   IndexGraphLoaderImpl(VehicleType vehicleType, bool loadAltitudes,
                        std::shared_ptr<VehicleModelFactoryInterface> vehicleModelFactory,
                        std::shared_ptr<EdgeEstimator> estimator, MwmDataSource & dataSource,
-                       RoutingOptions routingOptions, TimeGetterT timeGetter)
+                       RoutingOptions routingOptions, TimeGetterT timeGetter, CarRestrictions carRestrictions)
     : m_vehicleType(vehicleType)
     , m_loadAltitudes(loadAltitudes)
     , m_dataSource(dataSource)
     , m_vehicleModelFactory(std::move(vehicleModelFactory))
     , m_estimator(std::move(estimator))
     , m_avoidRoutingOptions(routingOptions)
+    , m_carRestrictions(std::move(carRestrictions))
   {
     CHECK(m_vehicleModelFactory, ());
     CHECK(m_estimator, ());
@@ -72,6 +73,7 @@ private:
   SpeedCamerasMapT const & ReceiveSpeedCamsFromMwm(NumMwmId numMwmId);
 
   RoutingOptions m_avoidRoutingOptions;
+  CarRestrictions m_carRestrictions;
   std::function<time_t()> m_currentTimeGetter = [time = GetCurrentTimestamp()]() { return time; };
 };
 
@@ -157,7 +159,18 @@ IndexGraphLoaderImpl::GeometryPtrT IndexGraphLoaderImpl::CreateGeometry(MwmSet::
   MwmValue const * value = handle.GetValue();
 
   auto vehicleModel = m_vehicleModelFactory->GetVehicleModelForCountry(value->GetCountryFileName());
-  return std::make_shared<Geometry>(GeometryLoader::Create(handle, m_vehicleType, vehicleModel, m_loadAltitudes));
+
+  RoadRestrictions restrictions;
+  if (m_vehicleType == VehicleType::Car)
+  {
+    restrictions.m_country = FindVignetteCountry(value->GetCountryFileName());
+    restrictions.m_hasVignette = restrictions.m_country && m_carRestrictions.HasVignette(restrictions.m_country->m_code);
+    restrictions.m_heightCm = m_carRestrictions.m_heightCm;
+    if (restrictions.m_heightCm > 0)
+      restrictions.m_maxHeights = &MaxHeights::Instance();
+  }
+  return std::make_shared<Geometry>(
+      GeometryLoader::Create(handle, m_vehicleType, vehicleModel, m_loadAltitudes, restrictions));
 }
 
 void IndexGraphLoaderImpl::Clear()
@@ -211,10 +224,10 @@ bool ReadRoadAccessFromMwm(MwmValue const & mwmValue, VehicleType vehicleType, R
 std::unique_ptr<IndexGraphLoader> IndexGraphLoader::Create(
     VehicleType vehicleType, bool loadAltitudes, std::shared_ptr<VehicleModelFactoryInterface> vehicleModelFactory,
     std::shared_ptr<EdgeEstimator> estimator, MwmDataSource & dataSource, RoutingOptions routingOptions,
-    TimeGetterT timeGetter)
+    TimeGetterT timeGetter, CarRestrictions carRestrictions)
 {
   return std::make_unique<IndexGraphLoaderImpl>(vehicleType, loadAltitudes, vehicleModelFactory, estimator, dataSource,
-                                                routingOptions, std::move(timeGetter));
+                                                routingOptions, std::move(timeGetter), std::move(carRestrictions));
 }
 
 void DeserializeIndexGraph(MwmValue const & mwmValue, VehicleType vehicleType, IndexGraph & graph)

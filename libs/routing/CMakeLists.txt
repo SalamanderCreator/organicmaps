@@ -16,6 +16,8 @@ set(SRC
   base/routing_result.hpp
   base/small_list.hpp
   base/small_list.cpp
+  car_restrictions.cpp
+  car_restrictions.hpp
   lanes/lane_info.cpp
   lanes/lane_info.hpp
   lanes/lane_way.cpp

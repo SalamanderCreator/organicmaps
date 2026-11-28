@@ -1357,11 +1357,20 @@ RouterResultCode IndexRouter::AdjustRoute(Checkpoints const & checkpoints, m2::P
 
 std::unique_ptr<WorldGraph> IndexRouter::MakeWorldGraph()
 {
-  RoutingOptions const routingOptions =
+  RoutingOptions routingOptions =
       m_requestRoutingOptions ? *m_requestRoutingOptions : RoutingOptions::LoadFromSettings(m_vehicleType);
   /// @DebugNote
   // Add avoid roads here for debug purpose.
   // routingOptions.Add(RoutingOptions::Road::Motorway);
+
+  // Maps&Fly: the vehicle height and the bought vignettes of the car settings.
+  CarRestrictions carRestrictions;
+  if (m_vehicleType == VehicleType::Car)
+  {
+    carRestrictions = CarRestrictions::LoadFromSettings();
+    if (carRestrictions.m_heightCm > 0)
+      routingOptions.Add(RoutingOptions::Road::LowClearance);
+  }
   LOG(LINFO, ("Avoid next roads:", routingOptions));
 
   auto crossMwmGraph = std::make_unique<CrossMwmGraph>(
@@ -1370,7 +1379,8 @@ std::unique_ptr<WorldGraph> IndexRouter::MakeWorldGraph()
 
   auto indexGraphLoader = IndexGraphLoader::Create(
       m_vehicleType == VehicleType::Transit ? VehicleType::Pedestrian : m_vehicleType, m_loadAltitudes,
-      m_vehicleModelFactory, m_estimator, m_dataSource, routingOptions, m_currentTimeGetter);
+      m_vehicleModelFactory, m_estimator, m_dataSource, routingOptions, m_currentTimeGetter,
+      std::move(carRestrictions));
 
   if (m_vehicleType != VehicleType::Transit)
   {

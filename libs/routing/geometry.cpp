@@ -68,14 +68,16 @@ namespace
 class RoadGeometryLoader : public GeometryLoader
 {
 protected:
-  RoadGeometryLoader(VehicleType vehicleType, VehicleModelPtrT const & vehicleModel)
+  RoadGeometryLoader(VehicleType vehicleType, VehicleModelPtrT const & vehicleModel,
+                     RoadRestrictions const & restrictions = {})
     : m_vehicleModel(vehicleModel)
     , m_optionsClassifier(RoutingOptionsClassifier::Instance(vehicleType))
+    , m_restrictions(restrictions)
   {}
 
   void LoadRoad(FeatureType & feature, geometry::Altitudes const & altitudes, bool hasAltitude, RoadGeometry & road)
   {
-    road.Load(*m_vehicleModel, feature, altitudes, hasAltitude, m_attrsGetter, m_optionsClassifier);
+    road.Load(*m_vehicleModel, feature, altitudes, hasAltitude, m_attrsGetter, m_optionsClassifier, m_restrictions);
   }
 
   RoadAttrsGetter m_attrsGetter;
@@ -83,14 +85,15 @@ protected:
 private:
   VehicleModelPtrT m_vehicleModel;
   RoutingOptionsClassifier const & m_optionsClassifier;
+  RoadRestrictions const m_restrictions;
 };
 
 class MwmHandleGeometryLoader final : public RoadGeometryLoader
 {
 public:
   MwmHandleGeometryLoader(MwmSet::MwmHandle const & handle, VehicleType vehicleType,
-                          VehicleModelPtrT const & vehicleModel, bool loadAltitudes)
-    : RoadGeometryLoader(vehicleType, vehicleModel)
+                          VehicleModelPtrT const & vehicleModel, bool loadAltitudes, RoadRestrictions const & restrictions)
+    : RoadGeometryLoader(vehicleType, vehicleModel, restrictions)
     , m_source(handle)
     , m_altitudeLoader(*handle.GetValue())
     , m_loadAltitudes(loadAltitudes)
@@ -194,7 +197,7 @@ bool IsUsuallyPaved(HighwayType type)
 
 void RoadGeometry::Load(VehicleModelInterface const & vehicleModel, FeatureType & feature,
                         geometry::Altitudes const & altitudes, bool hasAltitude, RoadAttrsGetter & attrs,
-                        RoutingOptionsClassifier const & optionsClassifier)
+                        RoutingOptionsClassifier const & optionsClassifier, RoadRestrictions const & restrictions)
 {
   size_t const count = feature.GetPointsCount();
   CHECK_GREATER(count, 1, ());
@@ -270,6 +273,9 @@ void RoadGeometry::Load(VehicleModelInterface const & vehicleModel, FeatureType 
   }
   m_distances.assign(count - 1, -1);
 
+  if (m_highwayType && (restrictions.m_country || restrictions.m_maxHeights))
+    ApplyRestrictions(restrictions);
+
   bool const isFerry = m_routingOptions.Has(RoutingOptions::Road::Ferry);
   /// @todo Add RouteShuttleTrain into RoutingOptions?
   if (isFerry || (m_highwayType && *m_highwayType == HighwayType::RouteShuttleTrain))
@@ -300,6 +306,40 @@ void RoadGeometry::Load(VehicleModelInterface const & vehicleModel, FeatureType 
 
   if (m_valid)
     ASSERT(m_forwardS.IsValid() && m_backwardS.IsValid(), (feature.DebugString()));
+}
+
+void RoadGeometry::ApplyRestrictions(RoadRestrictions const & restrictions)
+{
+  using Road = RoutingOptions::Road;
+  std::vector<ms::LatLon> polyline;
+  polyline.reserve(m_junctions.size());
+  for (auto const & junction : m_junctions)
+    polyline.push_back(junction.GetLatLon());
+
+  if (restrictions.m_country)
+  {
+    auto const & country = *restrictions.m_country;
+    if (IsVignetteRoad(country, *m_highwayType, m_routingOptions.Has(Road::Toll), polyline))
+    {
+      m_routingOptions.Add(Road::Vignette);
+      if (restrictions.m_hasVignette)
+        m_routingOptions.Remove(Road::Toll);
+      else
+        m_routingOptions.Add(Road::Toll);
+    }
+    else if (IsSpecialTollRoad(country, *m_highwayType, polyline))
+    {
+      // Tunnels with a separate toll are not always mapped with it.
+      m_routingOptions.Add(Road::Toll);
+    }
+  }
+
+  if (restrictions.m_maxHeights && restrictions.m_heightCm > 0)
+  {
+    uint16_t const maxHeightCm = restrictions.m_maxHeights->GetMaxHeightCm(polyline);
+    if (maxHeightCm > 0 && maxHeightCm < restrictions.m_heightCm)
+      m_routingOptions.Add(Road::LowClearance);
+  }
 }
 
 double RoadGeometry::GetDistance(uint32_t idx) const
@@ -353,11 +393,12 @@ Maxspeed GeometryLoader::GetSavedMaxspeed(uint32_t featureId)
 
 // static
 std::unique_ptr<GeometryLoader> GeometryLoader::Create(MwmSet::MwmHandle const & handle, VehicleType vehicleType,
-                                                       VehicleModelPtrT const & vehicleModel, bool loadAltitudes)
+                                                       VehicleModelPtrT const & vehicleModel, bool loadAltitudes,
+                                                       RoadRestrictions const & restrictions)
 {
   CHECK(handle.IsAlive(), ());
   CHECK(vehicleModel, ());
-  return std::make_unique<MwmHandleGeometryLoader>(handle, vehicleType, vehicleModel, loadAltitudes);
+  return std::make_unique<MwmHandleGeometryLoader>(handle, vehicleType, vehicleModel, loadAltitudes, restrictions);
 }
 
 // static

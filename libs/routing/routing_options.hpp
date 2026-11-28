@@ -30,15 +30,21 @@ public:
     // Maps&Fly: mapped paved surfaces and, without a mapped surface, roads other than tracks and
     // paths. Avoiding it softly prefers natural ways ("schön" instead of "schnell").
     Paved = 1u << 8,
+    // Maps&Fly car roads, set by the routing from the car settings, see CarRestrictions.
+    // A motorway of a vignette country: without a bought vignette it is a toll road too.
+    Vignette = 1u << 9,
+    // A clearance below the vehicle height. Avoided softly with a high penalty, so a route can still
+    // reach a stop behind it and warn.
+    LowClearance = 1u << 10,
 
-    Max = (1u << 8) + 1
+    Max = (1u << 10) + 1
   };
 
   using RoadType = std::underlying_type_t<Road>;
 
   /// Avoided roads of these types stay routable with a weight penalty, so a stop on such a path
   /// can still be reached and the route reports it instead of failing.
-  static RoadType constexpr kSoftAvoidOptions = PathDifficult | PathExpert | Paved;
+  static RoadType constexpr kSoftAvoidOptions = PathDifficult | PathExpert | Paved | LowClearance;
 
   /// Weight factor of a road with the given avoided soft options, 1 without any.
   static double GetSoftAvoidWeightFactor(RoadType avoidedOnRoad);
