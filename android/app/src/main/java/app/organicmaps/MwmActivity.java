@@ -75,6 +75,7 @@ import app.organicmaps.maplayer.MapButtonsController;
 import app.organicmaps.maplayer.MapButtonsViewModel;
 import app.organicmaps.maplayer.FlightImport;
 import app.organicmaps.maplayer.FlightSiteSheet;
+import app.organicmaps.maplayer.FlightRater;
 import app.organicmaps.maplayer.FlightWeatherSheet;
 import app.organicmaps.maplayer.RainRadarPanel;
 import app.organicmaps.maplayer.ToggleMapLayerFragment;
@@ -211,6 +212,8 @@ public class MwmActivity extends BaseMwmFragmentActivity
   private ActivityResultLauncher<String[]> mLocationPermissionRequest;
   // Maps&Fly: the private import of DHV takeoffs.
   private FlightImport mFlightImport;
+  @Nullable
+  private FlightRater mFlightRater;
   private boolean mLocationPermissionRequestedForRecording = false;
 
   @SuppressWarnings("NotNullFieldNotInitialized")
@@ -1134,6 +1137,9 @@ public class MwmActivity extends BaseMwmFragmentActivity
         FlightWeatherSheet.show(this, site, () -> startLocationToPoint(MapObject.createMapObject(
                                                   MapObject.API_POINT, site.mName, "", site.mLat, site.mLon)));
     });
+    // The flight layer colors the takeoffs around by today's weather.
+    mFlightRater = new FlightRater(this);
+    FlightLayer.setViewportListener(mFlightRater::onViewport);
     BookmarkManager.INSTANCE.addLoadingListener(this);
     MwmApplication.from(getApplicationContext()).getIsolinesManager().attach(this::onIsolinesStateChanged);
     updateDrivingOptionCount();
@@ -1150,6 +1156,12 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
     Framework.nativeRemovePlacePageActivationListener(this);
     FlightLayer.setTapListener(null);
+    FlightLayer.setViewportListener(null);
+    if (mFlightRater != null)
+    {
+      mFlightRater.destroy();
+      mFlightRater = null;
+    }
     BookmarkManager.INSTANCE.removeLoadingListener(this);
     MwmApplication.from(this).getLocationHelper().removeListener(this);
     if (mDisplayManager.isDeviceDisplayUsed() && !RoutingController.get().isNavigating())

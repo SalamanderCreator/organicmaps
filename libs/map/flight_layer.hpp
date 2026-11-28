@@ -9,6 +9,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace df
@@ -40,6 +41,11 @@ public:
     uint16_t m_directions = 0;
     /// Drawn gray, e.g. a site for club members only.
     bool m_restricted = false;
+    /// Drawn darker gray: a takeoff known only from OpenStreetMap, not confirmed by a flying site database.
+    bool m_unconfirmed = false;
+    /// How flyable the day is, a Rating, and whether it is especially good: the ring and star in the layer.
+    uint8_t m_rating = 0;
+    bool m_star = false;
     /// Gets a label, e.g. not when the map shows the site's name already.
     bool m_labeled = false;
     /// The closed ring of a known landing or takeoff area, or empty.
@@ -93,8 +99,23 @@ public:
 
   void SetForEachObstacleFn(ForEachObstacleFn fn) { m_forEachObstacle = std::move(fn); }
 
+  /// How flyable a day is, from the weather of the site.
+  enum Rating : uint8_t
+  {
+    kNotRated = 0,
+    kRed,
+    kYellow,
+    kLightGreen,
+    kGreen
+  };
+
   /// Replaces all sites.
   void SetSites(std::vector<Site> && sites);
+  /// Sets the rating of the sites with these ids, keeping the others.
+  void SetRatings(std::vector<std::tuple<std::string, uint8_t, bool>> const & ratings);
+  /// Told the center of the map and the zoom after each redraw in the layer, to rate the sites around.
+  using ViewportFn = std::function<void(m2::PointD const & center, int zoom)>;
+  void SetViewportFn(ViewportFn fn) { m_viewportFn = std::move(fn); }
   /// Aerial lifts missing in the maps, like the cableways for goods, from the flight sites file.
   void SetCables(std::vector<std::vector<m2::PointD>> && cables);
   void SetViewport(ScreenBase const & screen);
@@ -125,7 +146,10 @@ private:
     size_t m_first = 0;
     size_t m_count = 0;
     uint16_t m_directions = 0;
-    bool m_restricted = true;
+    /// 0 colored, 1 gray, 2 dark gray: the lightest of its takeoffs.
+    int m_shade = 2;
+    uint8_t m_rating = 0;
+    bool m_star = false;
   };
 
   bool IsVisible(Site const & site, int zoom) const;
@@ -143,6 +167,7 @@ private:
   df::DrapeApi & m_drapeApi;
   bool m_enabled = false;
   ForEachObstacleFn m_forEachObstacle;
+  ViewportFn m_viewportFn;
   std::vector<Site> m_sites;
   std::vector<std::vector<m2::PointD>> m_cables;
   std::vector<m2::RectD> m_cableRects;

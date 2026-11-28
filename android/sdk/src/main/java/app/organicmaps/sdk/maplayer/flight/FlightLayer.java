@@ -15,6 +15,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,31 @@ public final class FlightLayer
   private static boolean sInitialized;
   @Nullable
   private static Consumer<FlightSite> sTapListener;
+  @Nullable
+  private static ViewportListener sViewportListener;
+  // The weather ratings of the takeoffs, kept when the sites are read again.
+  private static final Map<String, Rating> sRatings = new HashMap<>();
+
+  /** Ratings as in the weather page: 0 none, 1 red, 2 yellow, 3 light green, 4 green. */
+  public static final class Rating
+  {
+    public final int mLevel;
+    public final boolean mStar;
+    public final long mRatedAtMs;
+
+    Rating(int level, boolean star, long ratedAtMs)
+    {
+      mLevel = level;
+      mStar = star;
+      mRatedAtMs = ratedAtMs;
+    }
+  }
+
+  /** After each redraw of the flight layer, on the UI thread: the map center and zoom. */
+  public interface ViewportListener
+  {
+    void onViewport(double lat, double lon, int zoom);
+  }
 
   private FlightLayer() {}
 
@@ -208,8 +235,50 @@ public final class FlightLayer
     return sSites.get(id);
   }
 
+  @MainThread
+  public static void setViewportListener(@Nullable ViewportListener listener)
+  {
+    sViewportListener = listener;
+  }
+
+  /** Shows how flyable the day is at a takeoff, in the flight layer. */
+  @MainThread
+  public static void setRating(@NonNull String id, int level, boolean star)
+  {
+    sRatings.put(id, new Rating(level, star, System.currentTimeMillis()));
+    nativeSetRatings(new String[] {id}, new int[] {level}, new boolean[] {star});
+  }
+
+  @Nullable
+  @MainThread
+  public static Rating getRating(@NonNull String id)
+  {
+    return sRatings.get(id);
+  }
+
+  /** Up to |max| takeoffs within |radiusM| of a point, the nearest first. */
+  @NonNull
+  @MainThread
+  public static List<FlightSite> takeoffsNear(double lat, double lon, double radiusM, int max)
+  {
+    final List<FlightSite> near = new ArrayList<>();
+    for (FlightSite s : sSites.values())
+      if (!s.mLanding && FlightSources.distanceM(lat, lon, s.mLat, s.mLon) <= radiusM)
+        near.add(s);
+    near.sort(Comparator.comparingDouble(s -> FlightSources.distanceM(lat, lon, s.mLat, s.mLon)));
+    return near.size() > max ? new ArrayList<>(near.subList(0, max)) : near;
+  }
+
   private static final class NativeListener
   {
+    // Called by the core on the UI thread.
+    @SuppressWarnings("unused")
+    public void onViewport(double lat, double lon, int zoom)
+    {
+      if (sViewportListener != null)
+        sViewportListener.onViewport(lat, lon, zoom);
+    }
+
     // Called by the core on the UI thread.
     @SuppressWarnings("unused")
     public void onSiteTapped(@NonNull String id)
@@ -236,6 +305,7 @@ public final class FlightLayer
     final boolean[] landings = new boolean[n];
     final int[] directions = new int[n];
     final boolean[] restricted = new boolean[n];
+    final boolean[] unconfirmed = new boolean[n];
     final boolean[] labeled = new boolean[n];
     final int[] areaOffsets = new int[n + 1];
     int areaSize = 0;
@@ -254,6 +324,8 @@ public final class FlightLayer
       landings[i] = s.mLanding;
       directions[i] = s.mDirections;
       restricted[i] = s.mRestricted;
+      // Takeoffs only known from OpenStreetMap are not confirmed by a flying site database.
+      unconfirmed[i] = !s.mLanding && s.mSources == FlightSite.SOURCE_OSM;
       // Only landings get a label, and the map labels the ones from OpenStreetMap already.
       labeled[i] = s.mLanding && (s.mSources & FlightSite.SOURCE_OSM) == 0;
       areaOffsets[i] = areaPos / 2;
@@ -261,7 +333,23 @@ public final class FlightLayer
       areaPos += s.mArea.length;
     }
     areaOffsets[n] = areaPos / 2;
-    nativeSetSites(ids, names, lats, lons, landings, directions, restricted, labeled, areaOffsets, areaLatLons);
+    nativeSetSites(ids, names, lats, lons, landings, directions, restricted, unconfirmed, labeled, areaOffsets,
+                   areaLatLons);
+    // Ratings of sites that are still there.
+    final List<String> ratedIds = new ArrayList<>();
+    for (String id : sRatings.keySet())
+      if (sSites.containsKey(id))
+        ratedIds.add(id);
+    final String[] rIds = ratedIds.toArray(new String[0]);
+    final int[] levels = new int[rIds.length];
+    final boolean[] stars = new boolean[rIds.length];
+    for (int i = 0; i < rIds.length; ++i)
+    {
+      final Rating r = sRatings.get(rIds[i]);
+      levels[i] = r.mLevel;
+      stars[i] = r.mStar;
+    }
+    nativeSetRatings(rIds, levels, stars);
   }
 
   @MainThread
@@ -317,7 +405,9 @@ public final class FlightLayer
   private static native void nativeSetSites(@NonNull String[] ids, @NonNull String[] names, @NonNull double[] lats,
                                             @NonNull double[] lons, @NonNull boolean[] landings,
                                             @NonNull int[] directions, @NonNull boolean[] restricted,
-                                            @NonNull boolean[] labeled, @NonNull int[] areaOffsets,
-                                            @NonNull double[] areaLatLons);
+                                            @NonNull boolean[] unconfirmed, @NonNull boolean[] labeled,
+                                            @NonNull int[] areaOffsets, @NonNull double[] areaLatLons);
+  private static native void nativeSetRatings(@NonNull String[] ids, @NonNull int[] levels,
+                                              @NonNull boolean[] stars);
   private static native void nativeSetCables(@NonNull int[] offsets, @NonNull double[] latLons);
 }

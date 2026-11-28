@@ -31,11 +31,18 @@ JNIEXPORT jdouble Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeGet
   return elevation ? *elevation : -1e6;
 }
 
-// void onSiteTapped(String id);
+// void onSiteTapped(String id); void onViewport(double lat, double lon, int zoom);
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetListener(JNIEnv *, jclass,
                                                                                      jobject listener)
 {
   auto const ref = jni::make_global_ref(listener);
+  frm()->GetFlightLayer().SetViewportFn([ref](m2::PointD const & center, int zoom)
+  {
+    JNIEnv * env = jni::GetEnv();
+    auto const latLon = mercator::ToLatLon(center);
+    jmethodID const method = jni::GetMethodID(env, *ref, "onViewport", "(DDI)V");
+    env->CallVoidMethod(*ref, method, latLon.m_lat, latLon.m_lon, static_cast<jint>(zoom));
+  });
   frm()->SetFlightSiteTapFn([ref](std::string const & id)
   {
     JNIEnv * env = jni::GetEnv();
@@ -49,17 +56,18 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetLis
 // [areaOffsets[i], areaOffsets[i + 1]) of |areaLatLons|.
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSites(
     JNIEnv * env, jclass, jobjectArray ids, jobjectArray names, jdoubleArray lats, jdoubleArray lons,
-    jbooleanArray landings, jintArray directions, jbooleanArray restricted, jbooleanArray labeled,
-    jintArray areaOffsets, jdoubleArray areaLatLons)
+    jbooleanArray landings, jintArray directions, jbooleanArray restricted, jbooleanArray unconfirmed,
+    jbooleanArray labeled, jintArray areaOffsets, jdoubleArray areaLatLons)
 {
   jsize const count = env->GetArrayLength(ids);
   std::vector<jdouble> latV(count), lonV(count);
-  std::vector<jboolean> landingV(count), restrictedV(count), labeledV(count);
+  std::vector<jboolean> landingV(count), restrictedV(count), unconfirmedV(count), labeledV(count);
   std::vector<jint> directionV(count), offsetV(count + 1);
   env->GetDoubleArrayRegion(lats, 0, count, latV.data());
   env->GetDoubleArrayRegion(lons, 0, count, lonV.data());
   env->GetBooleanArrayRegion(landings, 0, count, landingV.data());
   env->GetBooleanArrayRegion(restricted, 0, count, restrictedV.data());
+  env->GetBooleanArrayRegion(unconfirmed, 0, count, unconfirmedV.data());
   env->GetBooleanArrayRegion(labeled, 0, count, labeledV.data());
   env->GetIntArrayRegion(directions, 0, count, directionV.data());
   env->GetIntArrayRegion(areaOffsets, 0, count + 1, offsetV.data());
@@ -78,11 +86,33 @@ JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetSit
     site.m_type = landingV[i] ? FlightLayer::Site::Type::Landing : FlightLayer::Site::Type::Takeoff;
     site.m_directions = static_cast<uint16_t>(directionV[i]);
     site.m_restricted = restrictedV[i];
+    site.m_unconfirmed = unconfirmedV[i];
     site.m_labeled = labeledV[i];
     for (jint j = offsetV[i]; j < offsetV[i + 1]; ++j)
       site.m_area.push_back(mercator::FromLatLon(areaV[2 * j], areaV[2 * j + 1]));
   }
   frm()->GetFlightLayer().SetSites(std::move(sites));
+}
+
+JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetRatings(JNIEnv * env, jclass,
+                                                                                     jobjectArray ids,
+                                                                                     jintArray ratings,
+                                                                                     jbooleanArray stars)
+{
+  jsize const count = env->GetArrayLength(ids);
+  std::vector<jint> ratingV(count);
+  std::vector<jboolean> starV(count);
+  env->GetIntArrayRegion(ratings, 0, count, ratingV.data());
+  env->GetBooleanArrayRegion(stars, 0, count, starV.data());
+  std::vector<std::tuple<std::string, uint8_t, bool>> result;
+  result.reserve(count);
+  for (jsize i = 0; i < count; ++i)
+  {
+    jni::TScopedLocalRef jId(env, env->GetObjectArrayElement(ids, i));
+    result.emplace_back(jni::ToNativeString(env, static_cast<jstring>(jId.get())), static_cast<uint8_t>(ratingV[i]),
+                        static_cast<bool>(starV[i]));
+  }
+  frm()->GetFlightLayer().SetRatings(result);
 }
 
 JNIEXPORT void Java_app_organicmaps_sdk_maplayer_flight_FlightLayer_nativeSetCables(JNIEnv * env, jclass,

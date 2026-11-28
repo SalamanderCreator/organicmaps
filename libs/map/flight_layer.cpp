@@ -49,6 +49,21 @@ Palette const kColors{kRing,      kSector,      kSectorOutline, kWingGreen,   kW
 Palette const kGrays{{150, 154, 160, 255}, {165, 168, 172, 220}, {242, 242, 242, 255}, {185, 188, 192, 255},
                      {145, 148, 152, 255}, {100, 103, 108, 255}, {160, 163, 168, 255}, {110, 113, 118, 255},
                      {160, 163, 168, 255}, {120, 123, 128, 255}};
+// Takeoffs only known from OpenStreetMap.
+Palette const kDarkGrays{{95, 98, 104, 255},  {120, 123, 128, 220}, {228, 228, 228, 255}, {135, 138, 143, 255},
+                         {98, 101, 106, 255}, {60, 62, 66, 255},    {115, 118, 123, 255}, {60, 62, 66, 255},
+                         {115, 118, 123, 255}, {80, 82, 86, 255}};
+dp::Color const kUnconfirmedCircle(108, 111, 116, 255);
+// Ring colors of the ratings: red, yellow, light green, green.
+dp::Color const kRatingColors[] = {{212, 0, 0, 255}, {255, 200, 0, 255}, {140, 215, 90, 255}, {30, 150, 40, 255}};
+dp::Color const kStar(255, 200, 0, 255);
+dp::Color const kStarOutline(150, 100, 0, 255);
+
+int Shade(FlightLayer::Site const & site)
+{
+  return site.m_unconfirmed ? 2 : site.m_restricted ? 1 : 0;
+}
+
 // Turquoise: bluer than the green of meadows and parks, greener than the blue of lakes.
 dp::Color const kAreaOutline(0, 165, 155, 255);
 dp::Color const kAreaFill(0, 190, 175, 80);
@@ -80,6 +95,21 @@ double constexpr kSectorRadius = 24.0;
 // The number of takeoffs in one symbol, at the top right of the disc.
 double constexpr kBadgeOffset = 11.5;
 double constexpr kBadgeRadius = 6.5;
+// The star of an especially good day, at the top left of the disc.
+double constexpr kStarRadius = 6.5;
+
+// A closed five-pointed star with the tip up.
+std::vector<m2::PointD> MakeStar(m2::PointD const & center, double radius)
+{
+  std::vector<m2::PointD> ring;
+  for (int i = 0; i <= 10; ++i)
+  {
+    double const a = math::pi / 2 + (i % 10) * math::pi / 5;
+    double const r = i % 2 == 0 ? radius : radius * 0.42;
+    ring.emplace_back(center.x + r * std::cos(a), center.y + r * std::sin(a));
+  }
+  return ring;
+}
 
 using Rings = std::vector<std::vector<m2::PointD>>;
 
@@ -129,6 +159,25 @@ void FlightLayer::SetSites(std::vector<Site> && sites)
   m_sites = std::move(sites);
   m_drawnClusters.clear();
   Redraw();
+}
+
+void FlightLayer::SetRatings(std::vector<std::tuple<std::string, uint8_t, bool>> const & ratings)
+{
+  std::unordered_map<std::string_view, std::pair<uint8_t, bool>> byId;
+  for (auto const & [id, rating, star] : ratings)
+    byId[id] = {rating, star};
+  bool changed = false;
+  for (auto & site : m_sites)
+  {
+    auto const it = byId.find(site.m_id);
+    if (it == byId.end() || (site.m_rating == it->second.first && site.m_star == it->second.second))
+      continue;
+    site.m_rating = it->second.first;
+    site.m_star = it->second.second;
+    changed = true;
+  }
+  if (changed && m_enabled)
+    Redraw();
 }
 
 void FlightLayer::SetCables(std::vector<std::vector<m2::PointD>> && cables)
@@ -288,7 +337,9 @@ std::vector<FlightLayer::Cluster> FlightLayer::MakeTakeoffClusters(m2::RectD con
     auto & cluster = clusters[*target];
     ++cluster.m_count;
     cluster.m_directions |= site.m_directions;
-    cluster.m_restricted = cluster.m_restricted && site.m_restricted;
+    cluster.m_shade = std::min(cluster.m_shade, Shade(site));
+    cluster.m_rating = std::max(cluster.m_rating, site.m_rating);
+    cluster.m_star = cluster.m_star || site.m_star;
     sums[*target] += site.m_point;
   }
   for (size_t c = 0; c < clusters.size(); ++c)
@@ -396,6 +447,8 @@ void FlightLayer::Redraw()
   for (auto const & id : previousIds)
     if (!m_drawnIds.contains(id))
       m_drapeApi.RemoveLine(id);
+  if (m_enabled && m_viewportFn)
+    m_viewportFn(m_screen->GetOrg(), zoom);
 }
 
 namespace
@@ -434,7 +487,7 @@ private:
 
 void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 {
-  Rings halos, takeoffCircles, landingCircles, restrictedCircles;
+  Rings halos, takeoffCircles, landingCircles, restrictedCircles, unconfirmedCircles;
   // Glyph lines of small and medium icons have different widths.
   Rings canopies[2], risers[2], pilots, poles[2], socks;
   size_t count = 0;
@@ -450,7 +503,9 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
     Symbol const s(site.m_point, unit * k);
     if (takeoff)
     {
-      (site.m_restricted ? restrictedCircles : takeoffCircles)
+      (site.m_unconfirmed  ? unconfirmedCircles
+       : site.m_restricted ? restrictedCircles
+                           : takeoffCircles)
           .push_back(MakeCircle(site.m_point, (radius - kIconHalo) * unit));
       canopies[medium].push_back(s.Arc(0, 0.2, 6.0, 4.0, 12, 168));
       risers[medium].push_back({s.P(-5.8, 1.0), s.P(0, -4.2), s.P(5.8, 1.0)});
@@ -470,6 +525,7 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
   e.Fills("icon_takeoffs", std::move(takeoffCircles), kTakeoffCircle);
   e.Fills("icon_landings", std::move(landingCircles), kLandingCircle);
   e.Fills("icon_restricted", std::move(restrictedCircles), kRestrictedCircle);
+  e.Fills("icon_unconfirmed", std::move(unconfirmedCircles), kUnconfirmedCircle);
   for (int m = 0; m < 2; ++m)
   {
     double const k = ((m ? kMediumIconRadius : kSmallIconRadius) - kIconHalo) / kGlyphRadius;
@@ -484,15 +540,15 @@ void FlightLayer::DrawMapIcons(m2::RectD const & rect, int zoom, double unit)
 
 void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit)
 {
-  // Colored, and gray for members only.
+  // Colored, gray for members only and dark gray for takeoffs only known from OpenStreetMap.
   struct Parts
   {
     Rings discs, rings, sectors, sectorOutlines;
     // The wing has five cells: green, blue, black, blue, green.
     Rings wingOuter, wingMiddle, wingCenter, gliderLines, torsos, heads;
     Rings poles, sockRed, sockWhite, sockOutlines;
-  } parts[2];
-  Rings badges;
+  } parts[3];
+  Rings badges, stars, ratingRings[4];
   std::vector<std::pair<m2::PointD, size_t>> counts;
   m_drawnClusters = MakeTakeoffClusters(rect, zoom, m_drawnScale);
   size_t count = 0;
@@ -500,11 +556,17 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
   {
     if (++count > kMaxSymbols)
       break;
-    auto & p = parts[cluster.m_restricted ? 1 : 0];
+    auto & p = parts[cluster.m_shade];
     m2::PointD const & center = cluster.m_point;
     Symbol const s(center, unit);
     p.discs.push_back(MakeCircle(center, kDiscRadius * unit, 32));
-    p.rings.push_back(p.discs.back());
+    // A rated takeoff has a ring in the color of the day instead of the thin one.
+    if (cluster.m_rating >= kRed && cluster.m_rating <= kGreen)
+      ratingRings[cluster.m_rating - kRed].push_back(p.discs.back());
+    else
+      p.rings.push_back(p.discs.back());
+    if (cluster.m_star)
+      stars.push_back(MakeStar(s.P(-kBadgeOffset, kBadgeOffset), kStarRadius * unit));
     for (auto & sector : MakeSectors(center, cluster.m_directions, kSectorRadius * unit, kDiscRadius * unit))
     {
       p.sectorOutlines.push_back(sector);
@@ -555,11 +617,11 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
 
   Entries e([this](std::string const & id, df::DrapeApiLineData const & d) { Add(id, d); }, m_visualScale);
   // The gray ones below the colored ones.
-  for (int g = 1; g >= 0; --g)
+  for (int g = 2; g >= 0; --g)
   {
     auto & p = parts[g];
-    Palette const & c = g ? kGrays : kColors;
-    std::string const suffix = g ? "_gray" : "";
+    Palette const & c = g == 2 ? kDarkGrays : g == 1 ? kGrays : kColors;
+    std::string const suffix = g == 2 ? "_dark" : g == 1 ? "_gray" : "";
     e.Fills("discs" + suffix, std::move(p.discs), kDisc);
     e.Fills("sectors" + suffix, std::move(p.sectors), c.m_sector);
     e.Lines("sector_outlines" + suffix, std::move(p.sectorOutlines), c.m_sectorOutline, 1.0);
@@ -575,6 +637,11 @@ void FlightLayer::DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit
     e.Fills("sock_white" + suffix, std::move(p.sockWhite), kWhite);
     e.Lines("sock_outlines" + suffix, std::move(p.sockOutlines), c.m_sockOutline, 1.0);
   }
+  for (int r = 0; r < 4; ++r)
+    e.Lines("rating_rings_" + std::to_string(r), std::move(ratingRings[r]), kRatingColors[r], 3.5);
+  Rings starOutlines = stars;
+  e.Fills("stars", std::move(stars), kStar);
+  e.Lines("star_outlines", std::move(starOutlines), kStarOutline, 1.0);
   Rings badgeOutlines = badges;
   e.Fills("badges", std::move(badges), kWhite);
   e.Lines("badge_outlines", std::move(badgeOutlines), kPilot, 1.2);
