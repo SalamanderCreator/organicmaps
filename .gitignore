@@ -110,3 +110,4 @@ AGENTS.override.md
 CLAUDE.local.md
 plans
 android/app/src/main/assets/flight_sites.json
+android/app/src/main/assets/maxheights.bin

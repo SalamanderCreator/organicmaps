@@ -149,7 +149,7 @@ MaxHeights::MaxHeights(std::vector<Entry> && entries) : m_entries(std::move(entr
 // static
 MaxHeights MaxHeights::Read(Reader const & reader)
 {
-  ReaderSource<Reader> src(reader);
+  NonOwningReaderSource src(reader);
   char magic[4];
   src.Read(magic, sizeof(magic));
   if (std::memcmp(magic, "MXH1", sizeof(magic)) != 0)

@@ -65,6 +65,11 @@ jobs:
           key: ${{ github.workflow }}
           save: ${{ github.ref == 'refs/heads/master' }}
 
+      - name: Month of the data files
+        id: month
+        shell: bash
+        run: echo "month=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
+
       # Maps&Fly: the flight sites of the last build, used when no source answers this time.
       - name: Restore the flight sites file
         uses: actions/cache/restore@v4
@@ -95,6 +100,37 @@ jobs:
         with:
           path: android/app/src/main/assets/flight_sites.json
           key: flight-sites-${{ github.run_id }}
+
+      # Maps&Fly: the OpenStreetMap clearances of the car routing, rebuilt once a month.
+      - name: Restore the clearances file
+        id: maxheights_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: android/app/src/main/assets/maxheights.bin
+          key: maxheights-v1-${{ hashFiles('tools/python/maxheights.py') }}-${{ steps.month.outputs.month }}
+          restore-keys: maxheights-v1-
+
+      - name: Build the clearances file
+        id: maxheights
+        if: steps.maxheights_cache.outputs.cache-hit != 'true'
+        shell: bash
+        # Without an answer from Overpass the file of an earlier build stays, or the car routing ignores clearances.
+        run: |
+          if timeout 2400 python3 tools/python/maxheights.py /tmp/maxheights.bin; then
+            cp /tmp/maxheights.bin android/app/src/main/assets/maxheights.bin
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          elif [ -f android/app/src/main/assets/maxheights.bin ]; then
+            echo "::warning::Overpass did not answer, the APK keeps the clearances of an earlier build."
+          else
+            echo "::warning::No clearances file, the car routing ignores clearances."
+          fi
+
+      - name: Save the clearances file
+        if: steps.maxheights.outputs.fresh == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: android/app/src/main/assets/maxheights.bin
+          key: maxheights-v1-${{ hashFiles('tools/python/maxheights.py') }}-${{ steps.month.outputs.month }}
 
       - name: Compile
         shell: bash
