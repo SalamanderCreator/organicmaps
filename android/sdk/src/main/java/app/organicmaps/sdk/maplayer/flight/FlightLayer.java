@@ -94,7 +94,7 @@ public final class FlightLayer
   private static void reload(@NonNull Context appContext)
   {
     ThreadPool.getWorker().execute(() -> {
-      final List<FlightSite> sites = new ArrayList<>(FlightSources.testSites());
+      final List<FlightSite> sites = new ArrayList<>();
       final List<double[]> cables = new ArrayList<>();
       try (InputStream in = appContext.getAssets().open(FlightSources.ASSET))
       {
