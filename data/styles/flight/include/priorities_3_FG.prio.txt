@@ -53,19 +53,19 @@ highway-cycleway                                    # line z11- (also has pathte
 highway-cycleway-bridge                             # line z11- (also has line::bridgeblack z17-, line::bridgewhite z15-, pathtext z13-)
 highway-cycleway-tunnel                             # line z11- (also has line::tunnelBackground z17-, line::tunnelCasing z17-, pathtext z13-)
 highway-footway-crossing                            # line z16-
-highway-ladder                                      # line z12- (also has icon z16-)
+highway-ladder                                      # line z12-
 highway-steps                                       # line z12- (also has pathtext z13-)
 highway-steps-bridge                                # line z12- (also has line::bridgeblack z17-, line::bridgewhite z15-, pathtext z13-)
 highway-steps-tunnel                                # line z12- (also has line::tunnelBackground z17-, line::tunnelCasing z17-, pathtext z13-)
 hwtag-oneway::arrows                                # line::arrows z15-
-waterway-weir                                       # line z14- (also has pathtext z15-)
+waterway-weir                                       # line z14-
 === 330
 
-barrier-city_wall                                   # line z14- (also has pathtext z16-)
+barrier-city_wall                                   # line z14-
 barrier-fence                                       # line z15-
 barrier-guard_rail                                  # line z15-
 barrier-hedge                                       # line z16-
-barrier-jersey_barrier                              # line z15- (also has icon z16-, caption(optional) z16-)
+barrier-jersey_barrier                              # line z15-
 barrier-wall                                        # line z15-
 railway-funicular                                   # line z12-
 railway-funicular-bridge                            # line z12- (also has line::bridgeblack z17-, line::bridgewhite z14-)
@@ -255,7 +255,7 @@ railway-subway-bridge                               # line z13- (also has line::
 public_transport-platform                           # line z16- and area z16- (also has caption z17-)
 === 201
 
-highway-ford                                        # line z13- (also has icon z14-, pathtext z16-)
+highway-ford                                        # line z13-
 highway-pedestrian                                  # line z13- (also has pathtext z14-)
 highway-pedestrian-area                             # line z13 and area z14-
 highway-pedestrian-bridge                           # line z13- (also has line::bridgeblack z14-, line::bridgewhite z13-, pathtext z14-)
@@ -300,7 +300,7 @@ highway-path-bicycle::cycleline                     # line::cycleline z12- (also
 === 170
 
 highway-construction                                # line z11- (also has pathtext z15-)
-leisure-track                                       # line z15- (also has caption z16-)
+leisure-track                                       # line z15-
 railway-abandoned                                   # line z13-
 railway-construction                                # line z13-
 railway-disused                                     # line z13-
@@ -418,12 +418,12 @@ railway-subway-bridge::bridgeblack                  # line::bridgeblack z16- (al
 railway-tram-bridge::bridgeblack                    # line::bridgeblack z17- (also has line z13-, line::bridgewhite z14-)
 === 140
 
-building                                            # area z14- (also has caption z16-)
-building-construction                               # area z14- (also has caption z16-)
-building-garage                                     # area z14- (also has caption z16-)
-building-guardhouse                                 # area z14- (also has icon z17-, caption z16, caption(optional) z17-)
-building-has_parts                                  # area z14- (also has caption z16-)
-building-train_station                              # area z14- (also has caption z16-)
+building                                            # area z14-
+building-construction                               # area z14-
+building-garage                                     # area z14-
+building-guardhouse                                 # area z14-
+building-has_parts                                  # area z14-
+building-train_station                              # area z14-
 === 130
 
 piste:type-connection                               # line z15-
@@ -479,18 +479,18 @@ natural-wetland-marsh                               # area z11- (also has captio
 
 man_made-breakwater                                 # line z14- and area z12- (also has caption z17-)
 man_made-pier                                       # line z14- and area z12- (also has caption z17-)
-waterway-dam                                        # line z14- and area z14- (also has pathtext z15-)
+waterway-dam                                        # line z14- and area z14-
 === 30
 
-landuse-military                                    # area z12- (also has icon z16-, caption(optional) z17-)
-landuse-military-danger_area                        # area z8- (also has icon z16-, caption(optional) z17-)
+landuse-military                                    # area z12- (also has caption z17-)
+landuse-military-danger_area                        # area z8- (also has caption z17-)
 === 25
 
-amenity-prison                                      # area z12- (also has icon z17-, caption(optional) z17-)
+amenity-prison                                      # area z12-
 boundary-aboriginal_lands                           # line z8- and area z8-16 (also has caption z8-16)
-boundary-national_park                              # line z8- and area z8-17 (also has icon z10-17, caption z8-9, caption(optional) z11-17)
-boundary-protected_area-1                           # line z8- and area z8-17 (also has icon z10-17, caption z8-9, caption(optional) z11-17)
-leisure-nature_reserve                              # area z8-17 (also has icon z10-17, caption z9, caption(optional) z11-17)
+boundary-national_park                              # line z8- and area z8-17 (also has caption z8-9,11-17)
+boundary-protected_area-1                           # line z8- and area z8-17 (also has caption z8-9,11-17)
+leisure-nature_reserve                              # area z8-17
 === 20
 
 piste:type-downhill-advanced-area                   # area z13-
