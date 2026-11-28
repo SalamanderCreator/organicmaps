@@ -2086,107 +2086,86 @@ type entrance-main
     symbol name=entrance-main-s priority=220
     caption primary[height=10 color=#0061615A/#008C8C8C dy=1 optional] secondary[height=8 color=#0061615A/#008C8C8C dy=1 optional] priority=-9780
 type highway-bridleway
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[7,1.2] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[9,1.7] priority=180
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[9,1.7] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[9,1.7] priority=180
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[9,1.7] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-bridleway-bridge
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[7,1.2] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
     line width=5 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[9,1.7] priority=180
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[9,1.7] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
     line width=6.2 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[9,1.7] priority=180
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[9,1.7] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=7.6 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-bridleway-tunnel
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[6,1] priority=180
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[7,1.2] priority=180
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[7,1.2] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[9,1.7] priority=180
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[9,1.7] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[9,1.7] priority=180
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[9,1.7] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     line width=7.6 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[12,2.2] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[12,2.2] priority=180
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
@@ -2287,138 +2266,110 @@ type highway-construction
     line width=6 color=#00ABAB9A/#00332F2D join=round cap=round dash=[18,6.2] priority=160
     path_text primary[height=10 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2450
 type highway-cycleway
-  z11
-    line width=0.9 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z12
-    line width=1 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z13
-    line width=1.1 color=#33534DEB/#336E3D47 join=round cap=butt priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z14
-    line width=1.3 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.3 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z15
-    line width=1.5 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.5 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z16
-    line width=1.7 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=1.7 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z17
-    line width=2 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z18
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z19
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z20
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
 type highway-cycleway-bridge
-  z11
-    line width=0.9 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z12
-    line width=1 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z13
-    line width=1.1 color=#33534DEB/#336E3D47 join=round cap=butt priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z14
-    line width=1.3 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.3 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z15
     line width=4 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=1.5 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.5 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z16
     line width=4.4 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=1.7 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=1.7 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z17
     line width=7 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=6 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z18
     line width=9.8 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=8.8 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z19
     line width=10.8 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9.8 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z20
     line width=10.8 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9.8 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
 type highway-cycleway-tunnel
-  z11
-    line width=0.9 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z12
-    line width=1 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=330
-  z13
-    line width=1.1 color=#33534DEB/#336E3D47 join=round cap=butt priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z14
-    line width=1.3 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.3 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z15
-    line width=1.5 color=#00534DEB/#006E3D47 join=round cap=butt priority=330
+    line width=1.5 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2953
   z16
-    line width=1.7 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=1.7 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z17
-    line width=2 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     line width=6 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=7 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z18
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     line width=8.8 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=9.8 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z19
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     line width=9.8 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10.8 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
   z20
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=330
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=330
     line width=9.8 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10.8 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2953
 type highway-footway
-  z11
-    line width=1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=180
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=180
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=180
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z15
-    line width=2 color=#00F2F2F2/#00454545 join=round cap=butt dash=[6,3.5] priority=180
+    line width=2 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[6,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z16
-    line width=2.6 color=#00F2F2F2/#00454545 join=round cap=round dash=[6,3.5] priority=180
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z17
-    line width=3.3 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=180
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z18
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z19
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z20
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
 type highway-footway-area
   z14
@@ -2436,143 +2387,119 @@ type highway-footway-area
   z20
     area color=#00E8E0C8/#00262222 priority=-1840
 type highway-footway-bicycle
-  z11
-    line width=1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=180
-  z12
-    line width=1.1 color=#4DF2F2F2/#4D454545 join=bevel cap=butt dash=[3.5,2.5] priority=180
-  z13
-    line width=1.1 color=#33534DEB/#336E3D47 join=round cap=butt priority=170
-    line width=1.3 color=#33F2F2F2/#33454545 join=round cap=butt dash=[4,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z14
-    line width=1.3 color=#33534DEB/#336E3D47 join=round cap=butt priority=170
-    line width=1.6 color=#33F2F2F2/#33454545 join=round cap=butt dash=[4,3] priority=180
+    line width=1.3 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=170
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z15
-    line width=1.5 color=#33534DEB/#336E3D47 join=round cap=butt priority=170
-    line width=2 color=#33F2F2F2/#33454545 join=round cap=butt dash=[6,4.5] priority=180
+    line width=1.5 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=170
+    line width=2 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[6,4.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z16
-    line width=1.7 color=#33534DEB/#336E3D47 join=round cap=round priority=170
-    line width=2.6 color=#33F2F2F2/#33454545 join=round cap=round dash=[6,4.5] priority=180
+    line width=1.7 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z17
-    line width=2 color=#33534DEB/#336E3D47 join=round cap=round priority=170
-    line width=3.3 color=#33F2F2F2/#33454545 join=round cap=round dash=[8,6] priority=180
+    line width=2 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z18
-    line width=2.4 color=#33534DEB/#336E3D47 join=round cap=round priority=170
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z19
-    line width=2.4 color=#33534DEB/#336E3D47 join=round cap=round priority=170
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z20
-    line width=2.4 color=#33534DEB/#336E3D47 join=round cap=round priority=170
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
 type highway-footway-bridge
-  z11
-    line width=1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=155
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=155
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z15
     line width=5 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2 color=#00F2F2F2/#00454545 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[6,3.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z16
     line width=6.2 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.6 color=#00F2F2F2/#00454545 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,3.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z17
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=7.6 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=3.3 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z18
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z19
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z20
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
 type highway-footway-crossing
   z16
-    line width=2.6 color=#00F2F2F2/#00454545 join=round cap=round dash=[6,3.5] priority=330
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,3.5] priority=330
   z17
-    line width=3.3 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=330
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=330
   z18
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=330
   z19
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=330
   z20
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=330
 type highway-footway-sidewalk
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=155
   z15
-    line width=2 color=#00F2F2F2/#00454545 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[6,3.5] priority=155
   z16
-    line width=2.6 color=#00F2F2F2/#00454545 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,3.5] priority=155
   z17
-    line width=3.3 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
   z18
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
   z19
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
   z20
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
 type highway-footway-tunnel
-  z11
-    line width=1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=155
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=155
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z15
-    line width=2 color=#00F2F2F2/#00454545 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[6,3.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2950
   z16
-    line width=2.6 color=#00F2F2F2/#00454545 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[6,3.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z17
-    line width=3.3 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     line width=7.6 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z18
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z19
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
   z20
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2950
@@ -3050,232 +2977,181 @@ type highway-motorway_link-tunnel
     path_text primary[height=12 color=#00333333/#00919191 stroke=#00FFFFFF/#00060600] priority=6150
     shield height=11 color=#00FFFFFF/#00000000 stroke=#00000000/#00B2B2B2 text_color=#00000000/#00B2B2B2 priority=6140 min_distance=350
 type highway-path
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[3.5,2] priority=180
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[3.5,2] priority=180
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=180
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[4,2.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[6,3.5] priority=180
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[6,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[6,3.5] priority=180
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[6,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=180
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-bicycle
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[3.5,2] priority=180
-  z12
-    line width=1 color=#4D534DEB/#4D6E3D47 join=bevel cap=butt priority=170
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[3.5,2.5] priority=180
-  z13
-    line width=1.1 color=#33534DEB/#336E3D47 join=round cap=butt priority=170
-    line width=1.3 color=#33A05012/#33944A12 join=round cap=butt dash=[4,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.3 color=#00534DEB/#006E3D47 join=round cap=butt priority=170
-    line width=1.6 color=#33A05012/#33944A12 join=round cap=butt dash=[4,3] priority=180
+    line width=1.3 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=170
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[4,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=1.5 color=#00534DEB/#006E3D47 join=round cap=butt priority=170
-    line width=2 color=#33A05012/#33944A12 join=round cap=butt dash=[6,4.5] priority=180
+    line width=1.5 color=#A6534DEB/#A66E3D47 join=round cap=butt priority=170
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[6,4.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=1.7 color=#00534DEB/#006E3D47 join=round cap=round priority=170
-    line width=2.6 color=#33A05012/#33944A12 join=round cap=round dash=[6,4.5] priority=180
+    line width=1.7 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[6,4.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=2 color=#00534DEB/#006E3D47 join=round cap=round priority=170
-    line width=3.3 color=#33A05012/#33944A12 join=round cap=round dash=[8,6] priority=180
+    line width=2 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=170
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=170
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=2.4 color=#00534DEB/#006E3D47 join=round cap=round priority=170
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,6] priority=180
+    line width=2.4 color=#A6534DEB/#A66E3D47 join=round cap=round priority=170
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,6] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-bridge
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[4,2.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
     line width=5 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[6,3.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
     line width=6.2 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[6,3.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=7.6 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-difficult
-  z11
-    line width=1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[1,2] priority=180
-  z12
-    line width=1.1 color=#33A05012/#33944A12 join=bevel cap=butt dash=[1,2] priority=180
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[1.5,2.5] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[1.5,2.5] priority=180
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[1.5,2.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[2.5,4] priority=180
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[2.5,4] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[2.5,4] priority=180
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[2.5,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[3.6,5] priority=180
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[3.6,5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[3.6,5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[3.6,5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[3.6,5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[3.6,5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[3.6,5] priority=180
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[3.6,5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-expert
-  z11
-    line width=1 color=#4D3D2617/#4D523E33 join=bevel cap=butt dash=[1,2] priority=180
-  z12
-    line width=1.1 color=#333D2617/#33523E33 join=bevel cap=butt dash=[1,2] priority=180
-  z13
-    line width=1.3 color=#003D2617/#00523E33 join=round cap=butt dash=[1.4,5] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#003D2617/#00523E33 join=round cap=butt dash=[1.4,5] priority=180
+    line width=1.6 color=#A63D2617/#A6523E33 join=round cap=butt dash=[1.4,5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#003D2617/#00523E33 join=round cap=butt dash=[2.3,9] priority=180
+    line width=2 color=#A63D2617/#A6523E33 join=round cap=butt dash=[2.3,9] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#003D2617/#00523E33 join=round cap=round dash=[2.3,9] priority=180
+    line width=2.6 color=#A63D2617/#A6523E33 join=round cap=round dash=[2.3,9] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#003D2617/#00523E33 join=round cap=round dash=[3.5,11] priority=180
+    line width=3.3 color=#A63D2617/#A6523E33 join=round cap=round dash=[3.5,11] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#003D2617/#00523E33 join=round cap=round dash=[3.5,11] priority=180
+    line width=4 color=#A63D2617/#A6523E33 join=round cap=round dash=[3.5,11] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#003D2617/#00523E33 join=round cap=round dash=[3.5,11] priority=180
+    line width=4 color=#A63D2617/#A6523E33 join=round cap=round dash=[3.5,11] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#003D2617/#00523E33 join=round cap=round dash=[3.5,11] priority=180
+    line width=4 color=#A63D2617/#A6523E33 join=round cap=round dash=[3.5,11] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-horse
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[4,2.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[6,3.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[6,3.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
 type highway-path-tunnel
-  z11
-    line width=1 color=#66A05012/#66944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z12
-    line width=1.1 color=#4DA05012/#4D944A12 join=bevel cap=butt dash=[3.5,2] priority=155
-  z13
-    line width=1.3 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z14
-    line width=1.6 color=#00A05012/#00944A12 join=round cap=butt dash=[4,2.5] priority=155
+    line width=1.6 color=#A6A05012/#A6944A12 join=round cap=butt dash=[4,2.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z15
-    line width=2 color=#00A05012/#00944A12 join=round cap=butt dash=[6,3.5] priority=155
+    line width=2 color=#A6A05012/#A6944A12 join=round cap=butt dash=[6,3.5] priority=155
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2820
   z16
-    line width=2.6 color=#00A05012/#00944A12 join=round cap=round dash=[6,3.5] priority=155
+    line width=2.6 color=#A6A05012/#A6944A12 join=round cap=round dash=[6,3.5] priority=155
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z17
-    line width=3.3 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=3.3 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     line width=7.6 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=8.6 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z18
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z19
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
   z20
-    line width=4 color=#00A05012/#00944A12 join=round cap=round dash=[8,4.5] priority=155
+    line width=4 color=#A6A05012/#A6944A12 join=round cap=round dash=[8,4.5] priority=155
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2820
@@ -4364,101 +4240,86 @@ type highway-services
   z20
     area color=#00F0E2CE/#00262222 priority=-1830
 type highway-steps
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=330
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z15
-    line width=2.4 color=#00F2F2F2/#00454545 join=round cap=butt dash=[1.5,1.3] priority=330
+    line width=2.4 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[1.5,1.3] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z16
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[1.8,1.6] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[1.8,1.6] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z17
-    line width=6 color=#00F2F2F2/#00454545 join=round cap=round dash=[2.5,2.2] priority=330
+    line width=6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[2.5,2.2] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z18
-    line width=8 color=#00F2F2F2/#00454545 join=round cap=round dash=[3.2,2.8] priority=330
+    line width=8 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[3.2,2.8] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z19
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z20
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
 type highway-steps-bridge
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=330
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z15
     line width=0.8 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.4 color=#00F2F2F2/#00454545 join=round cap=butt dash=[1.5,1.3] priority=330
+    line width=2.4 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[1.5,1.3] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z16
     line width=4 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[1.8,1.6] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[1.8,1.6] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z17
     line width=8 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=7 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=6 color=#00F2F2F2/#00454545 join=round cap=round dash=[2.5,2.2] priority=330
+    line width=6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[2.5,2.2] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z18
     line width=11 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=10 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=8 color=#00F2F2F2/#00454545 join=round cap=round dash=[3.2,2.8] priority=330
+    line width=8 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[3.2,2.8] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z19
     line width=14 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=13 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z20
     line width=14 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=13 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
 type highway-steps-tunnel
-  z12
-    line width=1.1 color=#00F2F2F2/#00454545 join=bevel cap=butt dash=[3.5,2] priority=330
-  z13
-    line width=1.3 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z14
-    line width=1.6 color=#00F2F2F2/#00454545 join=round cap=butt dash=[4,2.5] priority=330
+    line width=1.6 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[4,2.5] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z15
-    line width=2.4 color=#00F2F2F2/#00454545 join=round cap=butt dash=[1.5,1.3] priority=330
+    line width=2.4 color=#A6F2F2F2/#A6454545 join=round cap=butt dash=[1.5,1.3] priority=330
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2810
   z16
-    line width=4 color=#00F2F2F2/#00454545 join=round cap=round dash=[1.8,1.6] priority=330
+    line width=4 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[1.8,1.6] priority=330
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z17
-    line width=6 color=#00F2F2F2/#00454545 join=round cap=round dash=[2.5,2.2] priority=330
+    line width=6 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[2.5,2.2] priority=330
     line width=7 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=8 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z18
-    line width=8 color=#00F2F2F2/#00454545 join=round cap=round dash=[3.2,2.8] priority=330
+    line width=8 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[3.2,2.8] priority=330
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z19
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     line width=11 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=12 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
   z20
-    line width=10 color=#00F2F2F2/#00454545 join=round cap=round dash=[4,3.5] priority=330
+    line width=10 color=#A6F2F2F2/#A6454545 join=round cap=round dash=[4,3.5] priority=330
     line width=11 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=12 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2810
@@ -4669,165 +4530,130 @@ type highway-tertiary_link-tunnel
     line width=8.2 color=#00FFFFFF/#00383838 join=round cap=round priority=222
     path_text primary[height=12 color=#00333333/#00919191 stroke=#00FFFFFF/#00060600] priority=2950
 type highway-track
-  z11
-    line width=1.1 color=#66635730/#665F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z12
-    line width=1.3 color=#4D635730/#4D5F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z13
-    line width=1.6 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z14
-    line width=2 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
+    line width=2 color=#A6635730/#A65F532D join=round cap=butt dash=[7,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z15
-    line width=2.5 color=#00635730/#005F532D join=round cap=butt dash=[9,3.5] priority=180
+    line width=2.5 color=#A6635730/#A65F532D join=round cap=butt dash=[9,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z16
-    line width=3.2 color=#00635730/#005F532D join=round cap=round dash=[9,3.5] priority=180
+    line width=3.2 color=#A6635730/#A65F532D join=round cap=round dash=[9,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z17
-    line width=4 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=4 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z18
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z19
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z20
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
 type highway-track-area
-  z11
-    line width=1.1 color=#66635730/#665F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z12
-    line width=1.3 color=#4D635730/#4D5F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z13
-    line width=1.6 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z14
-    line width=2 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
+    line width=2 color=#A6635730/#A65F532D join=round cap=butt dash=[7,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z15
-    line width=2.5 color=#00635730/#005F532D join=round cap=butt dash=[9,3.5] priority=180
+    line width=2.5 color=#A6635730/#A65F532D join=round cap=butt dash=[9,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z16
-    line width=3.2 color=#00635730/#005F532D join=round cap=round dash=[9,3.5] priority=180
+    line width=3.2 color=#A6635730/#A65F532D join=round cap=round dash=[9,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z17
-    line width=4 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=4 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z18
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z19
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z20
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
 type highway-track-bridge
-  z11
-    line width=1.1 color=#66635730/#665F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z12
-    line width=1.3 color=#4D635730/#4D5F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z13
-    line width=1.6 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z14
-    line width=2 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
+    line width=2 color=#A6635730/#A65F532D join=round cap=butt dash=[7,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z15
     line width=6 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=2.5 color=#00635730/#005F532D join=round cap=butt dash=[9,3.5] priority=180
+    line width=2.5 color=#A6635730/#A65F532D join=round cap=butt dash=[9,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z16
     line width=7.4 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=3.2 color=#00635730/#005F532D join=round cap=round dash=[9,3.5] priority=180
+    line width=3.2 color=#A6635730/#A65F532D join=round cap=round dash=[9,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z17
     line width=10 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=9 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=4 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=4 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z18
     line width=12 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=11 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z19
     line width=12 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=11 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z20
     line width=12 color=#4D808080/#4D505050 join=round cap=butt priority=140
     line width=11 color=#33EDEBDB/#332C2C1A join=round cap=butt priority=150
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
 type highway-track-no-access
-  z11
-    line width=1.1 color=#66635730/#665F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z12
-    line width=1.3 color=#4D635730/#4D5F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z13
-    line width=1.6 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z14
-    line width=2 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
+    line width=2 color=#A6635730/#A65F532D join=round cap=butt dash=[7,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z15
-    line width=2.5 color=#00635730/#005F532D join=round cap=butt dash=[9,3.5] priority=180
+    line width=2.5 color=#A6635730/#A65F532D join=round cap=butt dash=[9,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z16
-    line width=3.2 color=#00635730/#005F532D join=round cap=round dash=[9,3.5] priority=180
+    line width=3.2 color=#A6635730/#A65F532D join=round cap=round dash=[9,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z17
-    line width=4 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=4 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z18
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z19
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z20
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
 type highway-track-tunnel
-  z11
-    line width=1.1 color=#66635730/#665F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z12
-    line width=1.3 color=#4D635730/#4D5F532D join=bevel cap=butt dash=[6,2.5] priority=180
-  z13
-    line width=1.6 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
-    path_text primary[height=10 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z14
-    line width=2 color=#00635730/#005F532D join=round cap=butt dash=[7,3] priority=180
+    line width=2 color=#A6635730/#A65F532D join=round cap=butt dash=[7,3] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z15
-    line width=2.5 color=#00635730/#005F532D join=round cap=butt dash=[9,3.5] priority=180
+    line width=2.5 color=#A6635730/#A65F532D join=round cap=butt dash=[9,3.5] priority=180
     path_text primary[height=11 color=#00444444/#00808080 stroke=#33EDEBDB/#33111100] priority=2780
   z16
-    line width=3.2 color=#00635730/#005F532D join=round cap=round dash=[9,3.5] priority=180
+    line width=3.2 color=#A6635730/#A65F532D join=round cap=round dash=[9,3.5] priority=180
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z17
-    line width=4 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=4 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     line width=9 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=10 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z18
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     line width=11 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=12 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z19
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     line width=11 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=12 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
   z20
-    line width=5 color=#00635730/#005F532D join=round cap=round dash=[12,4] priority=180
+    line width=5 color=#A6635730/#A65F532D join=round cap=round dash=[12,4] priority=180
     line width=11 color=#4DEDEBDB/#4D2C2C1A join=round cap=butt priority=154
     line width=12 color=#4D808080/#4D505050 join=round cap=butt dash=[2,2] priority=153
     path_text primary[height=12 color=#00333333/#00919191 stroke=#33FFFFFF/#33060600] priority=2780
