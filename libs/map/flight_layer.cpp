@@ -72,16 +72,12 @@ dp::Color const kTakeoffAreaOutline(47, 126, 194, 255);
 dp::Color const kTakeoffAreaFill(47, 126, 194, 70);
 // Obstacles are thin or translucent, so that the map still shows the kind of line and its name below: power
 // lines dotted red, aerial lifts dashed magenta, motorways a wide orange band, wind turbines red dots.
-dp::Color const kPowerLine(230, 30, 30, 220);
-dp::Color const kAerialLift(200, 0, 130, 220);
-dp::Color const kMotorway(255, 120, 0, 110);
-dp::Color const kWindTurbine(230, 30, 30, 220);
+dp::Color const kAerialLift(200, 0, 140, 255);
 
 // Keeps the geometry small on a crowded screen.
 size_t constexpr kMaxSymbols = 600;
 size_t constexpr kMaxLabels = 150;
-size_t constexpr kMaxObstacleSites = 40;
-size_t constexpr kMaxObstacleLines = 600;
+size_t constexpr kMaxCables = 600;
 
 // Symbol sizes in dp. The map icons match the small and medium POI icons of the styles (12 and 18 dp with a
 // light halo), the glyphs were drawn for kGlyphRadius.
@@ -434,8 +430,8 @@ void FlightLayer::Redraw()
 
   // Bottom up: areas, obstacles, symbols, labels.
   DrawAreas(m_drawnRect, zoom);
-  if (m_enabled && zoom >= kObstaclesZoom)
-    DrawObstacles();
+  if (m_enabled && zoom >= kCablesZoom)
+    DrawCables();
   double const unit = m_drawnScale * m_visualScale;
   m_drawnClusters.clear();
   if (m_enabled)
@@ -691,68 +687,16 @@ void FlightLayer::DrawAreas(m2::RectD const & rect, int zoom)
   e.Lines("takeoff_area_outlines", std::move(takeoffOutlines), kTakeoffAreaOutline, 3.5);
 }
 
-void FlightLayer::DrawObstacles()
+void FlightLayer::DrawCables()
 {
-  if (!m_forEachObstacle)
+  Rings cables;
+  for (size_t i = 0; i < m_cables.size() && cables.size() < kMaxCables; ++i)
+    if (m_cableRects[i].IsIntersect(m_drawnRect))
+      cables.push_back(m_cables[i]);
+  if (cables.empty())
     return;
-
-  // Obstacles near several sites are found more than once.
-  std::set<std::pair<m2::PointD, m2::PointD>> seen;
-  Rings powerLines, aerialLifts, motorways;
-  // Wind turbines and masts.
-  std::vector<m2::PointD> points;
-  size_t sitesCount = 0;
-  size_t linesCount = 0;
-  for (auto const & site : m_sites)
-  {
-    // Close up the site itself may be off the screen, its obstacles not.
-    auto const around = mercator::RectByCenterXYAndSizeInMeters(site.m_point, kObstacleRadiusM * 2);
-    if (!around.IsIntersect(m_drawnRect) || ++sitesCount > kMaxObstacleSites)
-      continue;
-    m_forEachObstacle(around, [&](Obstacle && obstacle)
-    {
-      if (obstacle.m_points.empty() || !seen.emplace(obstacle.m_points.front(), obstacle.m_points.back()).second)
-        return;
-      if (obstacle.m_kind == Obstacle::Kind::WindTurbine || obstacle.m_kind == Obstacle::Kind::Mast)
-      {
-        points.push_back(obstacle.m_points.front());
-        return;
-      }
-      if (obstacle.m_points.size() < 2 || ++linesCount > kMaxObstacleLines)
-        return;
-      auto & lines = obstacle.m_kind == Obstacle::Kind::AerialLift ? aerialLifts
-                   : obstacle.m_kind == Obstacle::Kind::Motorway   ? motorways
-                                                                   : powerLines;
-      lines.push_back(std::move(obstacle.m_points));
-    });
-    for (size_t i = 0; i < m_cables.size(); ++i)
-    {
-      if (m_cableRects[i].IsIntersect(around) && seen.emplace(m_cables[i].front(), m_cables[i].back()).second &&
-          ++linesCount <= kMaxObstacleLines)
-      {
-        aerialLifts.push_back(m_cables[i]);
-      }
-    }
-  }
-
-  auto const add = [this](std::string_view name, Rings && lines, dp::Color const & color, double widthDp,
-                          std::vector<double> const & dashDp)
-  {
-    if (lines.empty())
-      return;
-    df::DrapeApiLineData data({}, color);
-    data.Polylines(std::move(lines)).Width(static_cast<float>(widthDp * m_visualScale));
-    if (!dashDp.empty())
-      data.Dashed(dashDp, 1.0 / m_drawnScale);
-    Add(std::string("flight_") + std::string(name), data);
-  };
-  add("obstacle_motorways", std::move(motorways), kMotorway, 9.0, {});
-  add("obstacle_power_lines", std::move(powerLines), kPowerLine, 5.5, {3.0, 3.0});
-  add("obstacle_aerial_lifts", std::move(aerialLifts), kAerialLift, 3.0, {10.0, 3.5});
-  if (!points.empty())
-  {
-    df::DrapeApiLineData data(points, kWindTurbine);
-    data.PointsOnly().Width(static_cast<float>(3.0 * m_visualScale));
-    Add("flight_obstacle_wind_turbines", data);
-  }
+  // Like the aerial lifts of the flight style.
+  df::DrapeApiLineData data({}, kAerialLift);
+  data.Polylines(std::move(cables)).Width(static_cast<float>(2.2 * m_visualScale));
+  Add("flight_cables", data);
 }

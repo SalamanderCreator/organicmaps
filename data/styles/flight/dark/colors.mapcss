@@ -1,0 +1,2 @@
+/* Maps&Fly: the colors of the outdoors style. */
+@import("../../outdoors/dark/colors.mapcss");

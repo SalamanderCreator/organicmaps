@@ -11,8 +11,6 @@ public final class FlightSite
   public static final int NO_ALTITUDE = Integer.MIN_VALUE;
   public static final int SOURCE_PGE = 1;
   public static final int SOURCE_OSM = 2;
-  /** Fixed test sites of the app, see FlightSources.testSites. */
-  public static final int SOURCE_TEST = 4;
   /** Privately imported from the DHV on this phone, see FlightDhvImport. */
   public static final int SOURCE_DHV = 8;
 

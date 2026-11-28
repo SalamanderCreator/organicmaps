@@ -1,0 +1,2 @@
+/* Maps&Fly: the flight style takes the outdoors rules; changes are in Flight.mapcss. */
+@import("../../outdoors/include/Basemap.mapcss");

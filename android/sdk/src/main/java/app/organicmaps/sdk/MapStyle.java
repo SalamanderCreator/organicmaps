@@ -12,7 +12,10 @@ public enum MapStyle
   VehicleClear(3),
   VehicleDark(4),
   OutdoorsClear(5),
-  OutdoorsDark(6);
+  OutdoorsDark(6),
+  // Maps&Fly: the paragliding style of the flight preparation.
+  FlightClear(7),
+  FlightDark(8);
 
   MapStyle(int value)
   {

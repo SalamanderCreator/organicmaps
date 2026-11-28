@@ -21,7 +21,8 @@ struct DrapeApiLineData;
 /// Maps&Fly: paragliding takeoffs and landings on the map, drawn with the DrapeApi. On the normal map they
 /// look like the other map icons: a colored circle with a white paraglider or windsock. The "Flight
 /// preparation" layer shows colored symbols instead, takeoffs with their direction sectors, from further
-/// out, and highlights obstacles around the sites (power lines, aerial lifts, motorways, wind turbines).
+/// out. The obstacles of the maps are drawn by the flight map style; the layer adds the cableways for goods,
+/// which the maps lack.
 class FlightLayer
 {
 public:
@@ -52,29 +53,9 @@ public:
     std::vector<m2::PointD> m_area;
   };
 
-  struct Obstacle
-  {
-    /// Each kind is drawn differently, so that the map still shows what it is below.
-    enum class Kind : uint8_t
-    {
-      PowerLine,
-      AerialLift,
-      Motorway,
-      WindTurbine,
-      /// Masts, towers and chimneys.
-      Mast
-    };
-
-    Kind m_kind = Kind::PowerLine;
-    /// A line, or a single point for a wind turbine or a mast.
-    std::vector<m2::PointD> m_points;
-  };
-
-  using ForEachObstacleFn = std::function<void(m2::RectD const & rect, std::function<void(Obstacle &&)> const & fn)>;
-
   /// Zooms from which takeoffs and landings show up, on the normal map like railway stations and camp sites
   /// (small icons first, medium ones closer, takeoffs sooner), in the layer from further out. Labels come like
-  /// the ones of restaurants, areas from a 500 m scale bar, obstacles in the layer only.
+  /// the ones of restaurants, areas from a 500 m scale bar, cableways in the layer only like the lifts of the style.
   static int constexpr kTakeoffsZoom = 12;
   static int constexpr kMediumTakeoffsZoom = 13;
   static int constexpr kLandingsZoom = 13;
@@ -83,21 +64,18 @@ public:
   static int constexpr kLayerTakeoffsZoom = 10;
   static int constexpr kLayerLandingsZoom = 12;
   static int constexpr kLabelsZoom = 16;
-  static int constexpr kObstaclesZoom = 13;
+  static int constexpr kCablesZoom = 12;
   /// In the layer, takeoffs whose symbols would overlap are one symbol with their number, up to this zoom.
   static int constexpr kClustersMaxZoom = 15;
-  static double constexpr kObstacleRadiusM = 1500.0;
 
   explicit FlightLayer(df::DrapeApi & drapeApi);
 
   /// Symbol sizes are in density-independent pixels.
   void SetVisualScale(double visualScale) { m_visualScale = visualScale; }
 
-  /// The flight preparation layer: bigger colored symbols with sectors, and obstacles.
+  /// The flight preparation layer: bigger colored symbols with sectors, and cableways for goods.
   void SetEnabled(bool enabled);
   bool IsEnabled() const { return m_enabled; }
-
-  void SetForEachObstacleFn(ForEachObstacleFn fn) { m_forEachObstacle = std::move(fn); }
 
   /// How flyable a day is, from the weather of the site.
   enum Rating : uint8_t
@@ -162,11 +140,10 @@ private:
   void DrawLayerSymbols(m2::RectD const & rect, int zoom, double unit);
   void DrawLabels(m2::RectD const & rect, int zoom);
   void DrawAreas(m2::RectD const & rect, int zoom);
-  void DrawObstacles();
+  void DrawCables();
 
   df::DrapeApi & m_drapeApi;
   bool m_enabled = false;
-  ForEachObstacleFn m_forEachObstacle;
   ViewportFn m_viewportFn;
   std::vector<Site> m_sites;
   std::vector<std::vector<m2::PointD>> m_cables;

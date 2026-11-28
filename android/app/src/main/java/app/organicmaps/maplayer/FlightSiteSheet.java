@@ -115,8 +115,6 @@ public final class FlightSiteSheet
       names.add("ParaglidingEarth");
     if ((site.mSources & FlightSite.SOURCE_OSM) != 0)
       names.add("OpenStreetMap");
-    if ((site.mSources & FlightSite.SOURCE_TEST) != 0)
-      names.add("Test");
     if ((site.mSources & FlightSite.SOURCE_DHV) != 0)
       names.add("DHV");
     return String.join(", ", names);

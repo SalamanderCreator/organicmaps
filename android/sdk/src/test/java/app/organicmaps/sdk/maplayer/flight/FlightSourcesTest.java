@@ -5,9 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -30,14 +28,6 @@ public class FlightSourcesTest
       + "\"url\":\"https://www.openstreetmap.org/node/10\",\"alt\":1700},"
       + "{\"id\":\"osm:n11\",\"name\":\"Weit weg\",\"lat\":47.5,\"lon\":11.0,\"landing\":true,\"dirs\":0,\"src\":2,"
       + "\"url\":\"https://www.openstreetmap.org/node/11\"}]}";
-
-  private static Map<String, FlightSite> byId(List<FlightSite> sites)
-  {
-    final Map<String, FlightSite> map = new LinkedHashMap<>();
-    for (FlightSite s : sites)
-      map.put(s.mId, s);
-    return map;
-  }
 
   @Test
   public void readsTheSitesFile() throws Exception
@@ -67,14 +57,5 @@ public class FlightSourcesTest
     assertEquals(1, cables.size());
     assertEquals(11.12, cables.get(0)[3], 1e-9);
     assertEquals(0, FlightSources.parseCables(FILE).size());
-  }
-
-  @Test
-  public void testSitesBelongTogether()
-  {
-    final Map<String, FlightSite> sites = byId(FlightSources.testSites());
-    final FlightSite takeoff = sites.get("test:liezen");
-    assertEquals(FlightDirections.parse("SW;S;SE"), takeoff.mDirections);
-    assertEquals("test:liezen:landing", takeoff.mLinks[0]);
   }
 }

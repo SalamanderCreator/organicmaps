@@ -11,6 +11,9 @@ enum MapStyle
   MapStyleVehicleDark = 4,
   MapStyleOutdoorsLight = 5,
   MapStyleOutdoorsDark = 6,
+  // Maps&Fly: outdoors with the obstacles for paragliding, for flight preparation and the cockpit.
+  MapStyleFlightLight = 7,
+  MapStyleFlightDark = 8,
   // Add new map style here
 
   // Specifies number of MapStyle enum values, must be last

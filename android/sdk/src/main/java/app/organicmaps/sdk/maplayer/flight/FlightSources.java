@@ -209,27 +209,4 @@ public final class FlightSources
     final String value = o.optString(key, "");
     return value.isEmpty() ? null : value;
   }
-
-  /**
-   * Maps&Fly test sites at Liezen, to test the layer while ParaglidingEarth and Overpass cannot be reached.
-   * Their height comes from the terrain of the map. Remove them once real data shows up.
-   */
-  @NonNull
-  static List<FlightSite> testSites()
-  {
-    final FlightSite takeoff =
-        new FlightSite("test:liezen", "Test-Startplatz Liezen", 47.0 + 34.0 / 60 + 55.09 / 3600,
-                       14.0 + 13.0 / 60 + 55.57 / 3600, false, FlightSite.NO_ALTITUDE,
-                       FlightDirections.parse("SW;S;SE"), FlightSite.SOURCE_TEST, new double[0]);
-    final FlightSite landing =
-        new FlightSite("test:liezen:landing", "Test-Landeplatz Liezen", 47.0 + 33.0 / 60 + 58.39 / 3600,
-                       14.0 + 13.0 / 60 + 52.17 / 3600, true, FlightSite.NO_ALTITUDE, 0, FlightSite.SOURCE_TEST,
-                       new double[0]);
-    takeoff.mLinks = new String[] {landing.mId};
-    landing.mLinks = new String[] {takeoff.mId};
-    final List<FlightSite> sites = new ArrayList<>();
-    sites.add(takeoff);
-    sites.add(landing);
-    return sites;
-  }
 }
